@@ -1,0 +1,132 @@
+<div class="container">
+    <div class="card">
+        <div class="card-content">
+            <div class="titulo">
+                Gestiones
+                <br>
+                <button class="button is-primary" (click)='modal_nueva_gestion()'>Nueva Gestión</button>
+            </div>
+            <div class="select">
+                <select (change)='fase($event)'>
+                    <option>Seleccionar fase</option>
+                    <option value="{{funcion}}" *ngFor='let funcion of FUNCIONES'>{{funcion}}</option>
+                </select>
+            </div>
+
+             <button class="button is-success" (click)="TraerTareasFueraDeFecha()">Otras Gestiones</button>
+            <hr>
+            <div class="subtitulo">
+                Ordenes para el dia de Hoy: <br>
+            </div>
+                <table class="table is-fullwidth">
+                    <thead>
+                        <tr>
+                            <th>Orden</th>
+                            <th>Producto</th>
+                            <th>Maquina</th>
+                            <th>Cant. Hojas</th>
+                            <th>Cant. Productos</th>
+                            <th>Fecha Estimada</th>
+                            <th>Finalizar</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor='let trabajo of TRABAJOS'>
+                            <td>{{trabajo.orden.sort}}</td>
+                            <td>{{trabajo.orden.producto.producto}}</td>
+                            <td>{{trabajo.maquina.nombre}}</td>
+                            <td>{{calcularHojas(trabajo.orden.cantidad, trabajo.orden.producto.ejemplares[trabajo.orden.montaje])}}</td>
+                            <td>{{trabajo.orden.cantidad}}</td>
+                            <td>{{trabajo.fecha}}</td>
+                            <td>
+                                
+                                <ng-container *ngFor='let gestion of GESTIONES;let i = index'>
+                                    <ng-container *ngIf='gestion.orden === trabajo._id'>
+                                        <button class="button is-success" (click)='finalizar_gestion(trabajo._id)' *ngIf="gestion.Rproductos <= 0">Finalizar</button>
+                                        <!-- <ng-container *ngIf="gestion.Rproductos < 0">
+                                            <button class="button is-success" disabled >finalizar</button>
+                                        </ng-container> -->
+                                    </ng-container>
+                                </ng-container>
+                            
+                            
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            <hr>
+            <div class="subtitulo">
+                Gestiones Realizadas: <br>
+            </div>
+            <div *ngFor='let trabajo of TRABAJOS'>
+                ORDEN: <b>{{trabajo.orden.sort}}</b> - {{trabajo.orden.producto.producto}}
+                <table class="table is-fullwidth">
+                    <thead>
+                        <tr>
+                            <th>Fecha</th>
+                            <th>Maquina</th>
+                            <th>Cant. de Hojas</th>
+                            <th>Cant. de Productos</th>
+                            <th>Restante</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <ng-container *ngFor='let gestion of GESTIONES;let i = index'>
+                            <tr *ngIf='gestion.orden === trabajo._id'>
+                                <td>{{gestion.fecha}}</td>
+                                <td>{{gestion.maquina.nombre}}</td>
+                                <td>{{gestion.hojas}}</td>
+                                <td>{{gestion.productos}}</td>
+                                <td>{{gestion.Rhojas}} (Hojas) / {{gestion.Rproductos}} (Productos)</td>
+                            </tr>
+                        </ng-container>
+                    </tbody>
+                </table>
+                <hr>
+                <ng-container *ngFor='let gestion of GESTIONES;let i = index'>
+                    <ng-container *ngIf='gestion.orden === trabajo._id'>
+                        <button class="button is-success" (click)='acelerar(trabajo.orden._id, trabajo.maquina, trabajo.fecha,trabajo._id, trabajo.fechaI)' *ngIf="gestion.Rproductos <= 0">Adelantar Entrega</button>
+                    </ng-container>
+                </ng-container>
+                <button class="button is-danger" (click)='retrasar(trabajo.orden._id, trabajo.maquina, trabajo.fecha,trabajo._id)'>Retrasar entrega</button>
+                <hr>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="modal" [ngClass]="{'is-active':NUEVA_GESTION}">
+    <div class="modal-background" (click)='modal_nueva_gestion()'></div>
+    <div class="modal-card">
+        <div class="modal-card-body">
+            <div class="subtitulo">
+                Gestion
+            </div>
+            <hr>
+            <div class="columns">
+                <div class="column">
+                    <b>Orden:</b><br>
+                    <div class="select">
+                        <select id='orden_selected'>
+                                <option value="#">Seleccionar Orden</option>
+                            <ng-container *ngFor='let trabajo of TRABAJOS'>
+                                <option value="{{trabajo.orden._id}}-{{trabajo._id}}-{{trabajo.maquina.tipo}}-{{trabajo.orden.producto.grupo}}">{{trabajo.orden.sort}}</option>
+                            </ng-container>
+                        </select>
+                    </div>
+                </div>
+                <div class="column">
+                    <b>Gestion Realizada en Hojas:</b><br>
+                    <input type="number" class="input" id='hojas_input' (change)='calcular_Productos($event)'>
+                    <br>
+                    <b>Gestion Realizada en Productos</b>
+                    <input type="number" class="input" id='productos_input' (change)='calcular_Hojas($event)'>
+                </div>
+            </div>
+            <hr>
+            <button class="button is-primary" (click)='finalizar()'>Finalizar</button>
+        </div>
+    </div>
+</div>

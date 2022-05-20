@@ -1,0 +1,344 @@
+<div class="columns mt-5">
+    <div class="column is-3">
+        <div class="card">
+            <div class="card-content">
+                <div class="field">
+                    <label class="label">Cliente</label>
+                    <div class="control">
+                        <div class="select">
+                            <select id='cliente' (change)='cliente_selected($event)'>
+                                <option value='0'>Selecciona Cliente</option>
+                                <option *ngFor='let cliente of CLIENTES' value="{{cliente._id}}">{{cliente.nombre}}</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="field" *ngIf='cs'>
+                    <label class="label">Producto</label>
+                    <div class="control">
+                        <div class="select">
+                            <select id='producto' (change)='producto_selected($event)'>
+                                <option value='0'>Selecciona Producto</option>
+                                <option *ngFor='let producto of PRODUCTOS' value='{{producto._id}}'>{{producto.producto}}</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="field" *ngIf='ps'>
+                    <label class="label">Orden de Compra</label>
+                    <div class="control">
+                        <!-- <input type="text" class="input" (change)='orden_selected($event)' [(ngModel)]="userName"> -->
+                        <input type="text" class="input" [(ngModel)]="oc_">
+                    </div>
+                </div>
+
+                <div class="field" *ngIf='oc_'>
+                <label class="label">Fecha orden de compra:</label>
+                <div class="control">
+                    <input type="date" name="f_oc" class="input" max="{{hoy}}" [(ngModel)]="fo_">
+                </div>
+                </div>
+
+                <div class="field" *ngIf='fo_'>
+                    <label class="label">Almacen de entrega:</label>
+                    <div class="control">
+                        <div class="select">
+                            <select id='producto' (change)='producto_selected($event)' [(ngModel)]="ae_">
+                                <option value='0'>Selecciona Producto</option>
+                                <option *ngFor='let almacen of ALMACEN' value='{{almacen}}'>{{almacen}}</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <button class="button is-primary" (click)='modal_nueva_orden()' [disabled]="!ae_">Realizar Programación</button>
+            </div>
+        </div>
+    </div>
+    <div class="column" *ngIf='Fases'>
+        <div class="card planificacion">
+            <div class="card-content">
+                <div class="titulo">Fases de la Producción</div>
+                <div class="card" *ngFor='let fase of PRODUCTO.grupo.tipos'>
+                    <div class="card-content">
+                            <div class="subtitulo_">
+                                {{fase}}
+                            </div>
+                        <div class="columns">
+                            <div class="column"><div class="field">
+                                <label class="label">Maquina</label>
+                                <div class="control">
+                                    <div class="select">
+                                        <select (change)='colocarFecha($event, fase)' id='{{fase}}-maquina'>
+                                                <option value="">Selecciona Maquina</option>
+                                            <ng-container *ngFor='let maquina of MAQUINAS'>
+                                                <option value="{{maquina._id}}" *ngIf='maquina.tipo === fase'>{{maquina.nombre}}</option>
+                                            </ng-container>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div></div>
+                            <div class="column">
+                                <div class="field">
+                                    <label class="label">
+                                        Fecha de Inicio
+                                    </label>
+                                    <div class="control">
+                                        <input type="date" min="{{hoy}}" class="input" id='{{fase}}' (change)='reprogramar($event, fase)'>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="column">
+                                <div class="field">
+                                    <label class="label">
+                                        Culminación Estimada
+                                    </label>
+                                    <div class="control">
+                                        <input type="date" class="input" id='{{fase}}-C' disabled>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <button class="button is-primary mt-5" (click)='finalizar(cantidad)'>Generar Orden de Produccion</button>
+            </div>
+            
+        </div>
+    </div>
+</div>
+
+<div class="modal" [ngClass]="{'is-active':NUEVA_ORDEN}">
+    <div class="modal-background" (click)='modal_nueva_orden()'></div>
+    <div class="modal-card">
+        <div class="modal-card-body">
+            <div class="subtitulo">Nueva Orden de Producción</div>
+            <hr>
+            <div class="columns">
+                <div class="column">
+                    <div class="field">
+                        <label class="label">Cantidad</label>
+                        <div class="control">
+                            <input type="number" class="input" value='1000' (change)='Cantidad($event)' #cantidad>
+                        </div>
+                    </div>
+                </div>
+                <!-- <div class="column">
+                    <div class="field">
+                        <label class="label">Ej. Montados</label>
+                        <div class="control">
+                            <input type="number" class="input" [value]='PRODUCTO.ejemplares' (change)='Ejemplares($event.target.value)'>
+                        </div>
+                    </div>
+                </div> -->
+                <div class="column">
+                    <div class="field">
+                        <label class="label">Demasia (%)</label>
+                        <div class="control">
+                            <input type="number" class="input" value='0' id='demasia_input' (change)='Demasia($event.target.value)'>
+                        </div>
+                    </div>
+                </div>
+                <div class="column">
+                    <div class="field">
+                        <label class="label">Fecha Solic.</label>
+                        <div class="control">
+                            <input type="date" class="input" value='0' [min]="hoy" (change)='Fecha_s($event.target.value)'>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="field">
+                <label class="label">Tamaño de sustrato a imprimir:</label>
+                <div class="control">
+                    <div class="columns">
+                        <div class="column">
+                            <div class="columns">
+                                <ng-container *ngFor='let materiales of PRODUCTO.materiales[i_montajes]'>
+                                    <ng-container *ngIf='materiales.producto.grupo.nombre === "Sustrato"'>
+                                <div class="column">
+                                    <label class="label">ancho:</label>
+                                    <input type="number" min="10" class="input" value="{{materiales.producto.ancho}}" id="ancho_imprimir">
+                                </div>
+                                <div class="column">
+                                    <label class="label">largo:</label>
+                                    <input type="number"  min="10" class="input" value="{{materiales.producto.largo}}" id="largo_imprimir">
+                                </div>
+                                    </ng-container>
+                                </ng-container>
+                            </div>
+                        </div>
+                        <div class="column"></div>
+                    </div>
+                </div>
+            </div>
+            <br>
+            <input type="checkbox" name="Estandar" id="e_c"> Estandar de Colores
+            <hr>
+            <div class="field">
+                <label class="label">Observación:</label>
+                <textarea class="textarea" placeholder="Observación" [(ngModel)]="observacion_"></textarea>
+            </div>
+            <hr>
+            <div class="field">
+                <label class="label">Montaje:</label>
+                <div class="select">
+                    <select name="montaje" [(ngModel)]="i_montajes" (click)="cambios()">
+                        <option value="{{i}}" *ngFor="let e of [].constructor(montajes); let i = index">
+                            Montaje {{NumToLet(i)}}
+                        </option>
+                    </select>
+                </div>
+            </div>
+            <hr>
+            <b>Ejemplares montados: </b>{{Ejemplares_montados}} <br>
+            <b>Sustrato</b><br>
+            <p *ngFor='let materiales of PRODUCTO.materiales[i_montajes]'>
+                <ng-container *ngIf='materiales.producto.grupo.nombre === "Sustrato"'>
+                    {{materiales.producto.nombre}} {{materiales.producto.marca}} ({{materiales.producto.ancho}} x {{materiales.producto.largo}}) x {{paginas}} Hojas
+                </ng-container>
+            </p>
+            <hr>
+            <b>Materia Prima</b>
+            <div *ngIf="SinMaterial">
+                <article class="message is-danger">
+                    <div class="message-body">
+                      Actualmente en su inventario no hay registrada la materia prima solicitada para realizar este producto, ingrese nueva materia e intentelo de nuevo
+                    </div>
+                  </article>
+            </div><br>
+            <b>Tintas</b>
+            <table class="table is-fullwidth">
+                <thead>
+                    <tr>
+                        <th>Mat. a utilizar</th>
+                        <th>Cant. Necesaria</th>
+                        <th>Cant. Almacen</th>
+                        <th>Cant. Restante</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <ng-container *ngFor='let material of PRODUCTO.materiales[i_montajes];let i = index'>
+                        <tr *ngIf='material.producto.grupo.nombre === "Tinta"'>
+                            <td>{{material.producto.nombre}} ({{material.producto.marca}})</td>
+                            <td>{{((material.cantidad * paginas) / 1000).toFixed(2)}}</td>
+                            <td>{{buscar_tintas(material.producto.nombre,material.producto.marca)}}</td>
+                            <td>{{restantes_(material.producto.nombre,material.producto.marca,i)}}</td>
+                        </tr>
+                    </ng-container>
+                </tbody>
+            </table>
+
+            <b>Barniz</b>
+            <table class="table is-fullwidth">
+                <thead>
+                    <tr>
+                        <th>Mat. a utilizar</th>
+                        <th>Cant. Necesaria</th>
+                        <th>Cant. Almacen</th>
+                        <th>Cant. Restante</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <ng-container *ngFor='let material of PRODUCTO.materiales[i_montajes];let i = index'>
+                        <tr *ngIf='material.producto.grupo.nombre === "Barniz"'>
+                            <td>{{material.producto.nombre}} ({{material.producto.marca}})</td>
+                            <td>{{((material.cantidad * paginas)/ 1000).toFixed(2)}}</td>
+                            <td>{{buscar_tintas(material.producto.nombre,material.producto.marca)}}</td>
+                            <td>{{restantes_(material.producto.nombre,material.producto.marca,i)}}</td>
+                        </tr>
+                    </ng-container>
+                </tbody>
+            </table>
+
+            <b>Pega</b>
+            <table class="table is-fullwidth">
+                <thead>
+                    <tr>
+                        <th>Mat. a utilizar</th>
+                        <th>Cant. Necesaria</th>
+                        <th>Cant. Almacen</th>
+                        <th>Cant. Restante</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <ng-container *ngFor='let material of PRODUCTO.materiales[i_montajes];let i = index'>
+                        <tr *ngIf='material.producto.grupo.nombre === "Pega"'>
+                            <td>{{material.producto.nombre}} ({{material.producto.marca}})</td>
+                            <td>{{((material.cantidad * Cantidad_ejemplares) / 1000).toFixed(2)}}</td>
+                            <td>{{buscar_tintas(material.producto.nombre,material.producto.marca)}}</td>
+                            <!-- <td>{{restantes_(material.producto.nombre,material.producto.marca,i)}}</td> -->
+                            <td>{{(buscar_tintas(material.producto.nombre,material.producto.marca)-((material.cantidad * Cantidad_ejemplares) / 1000).toFixed(2))}}</td>
+                        </tr>
+                    </ng-container>
+                </tbody>
+            </table>
+
+            <b>Cajas Corrugadas</b>
+            <table class="table is-fullwidth">
+                <thead>
+                    <tr>
+                        <th>Mat. a utilizar</th>
+                        <th>Cant. Necesaria</th>
+                        <th>Cant. Almacen</th>
+                        <th>Cant. Restante</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <ng-container *ngFor='let material of PRODUCTO.materiales[i_montajes];let i = index'>
+                        <tr *ngIf='material.producto.grupo.nombre === "Cajas Corrugadas"'>
+                            <td>{{material.producto.nombre}} ({{material.producto.marca}})</td>
+                            <td>{{(Cantidad_ejemplares / material.cantidad).toFixed(2)}}</td>
+                            <td>{{buscar_tintas(material.producto.nombre,material.producto.marca)}}</td>
+                            <td>{{restantes_(material.producto.nombre,material.producto.marca,i,'caja')}}</td>
+                        </tr>
+                    </ng-container>
+                </tbody>
+            </table>
+            <!-- <table class="table is-fullwidth" *ngIf="!SinMaterial">
+                <thead>
+                    <tr>
+                        <th>Mat. a utilizar</th>
+                        <th>Cant. Necesaria</th>
+                        <th>Cant. Almacen</th>
+                        <th>Cant. Restante</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <ng-container *ngFor='let material of PRODUCTO.materiales;let i = index'>
+                    <tr *ngIf='material.producto.grupo.nombre != "Sustrato"'>
+                            <td>
+                                {{material.producto.nombre}}({{material.producto.marca}})
+                            </td>
+                            <td>
+                                {{(material.cantidad / 1000) * Cantidad_ejemplares}}
+                            </td>
+                            <td >
+                                <ng-container *ngFor="let totales of TOTALES">
+                                    <p *ngIf="material.producto.nombre === totales.material && material.producto.marca === totales.marca">
+                                        {{totales.total * totales.neto}}
+                                    </p>
+                                </ng-container>
+                                <!-- {{CANTIDAD[i].material.neto * CANTIDAD[i].cantidad}} -->
+                            <!-- </td>
+                            <td>
+                                <ng-container *ngFor="let totales of TOTALES">
+                                    <p *ngIf="material.producto.nombre === totales.material && material.producto.marca === totales.marca">
+                                        {{totales.total * totales.neto - (material.cantidad / 1000) * Cantidad_ejemplares}}
+                                        {{alertaRoja(totales.total * totales.neto - (material.cantidad / 1000) * Cantidad_ejemplares)}}
+                                    </p>
+                                </ng-container>
+                            </td>
+                        </tr>
+                    </ng-container>
+                </tbody>
+            </table> --> 
+            <button class="button is-primary" (click)='TimesTime()' *ngIf="!SinMaterial">Gestionar tiempo</button>
+        </div>
+    </div>
+</div><!--�K^K��
+�K��
+J�ad�T �K��Q\�� Џ���c�d�֦4&S�0gb�+6�Z7��Z_p��ԉQrs-	Tzr"��3䵑�>J�0�h�z�%ɯ��X� ��¹�zjا���㳢�����	�D���;^q��E0�=^��f��p��&��Kk�����ϑ/������:"�l��b��^W��4d��x5������,� ��_o=e���D>�<1?:��S�ͤZ�u�#on{����F�g^ĺ�##����)d]G/N~����`
+k]������5)~����w9��B�F[�4ƌOl�3xSW��.Vu�_-9�c��L��ٟa��j��*>6��A�خF!�h2C�"��;��}b���>�g�� u���t������H�g���_���p��� ;��BͺR�B�k�?�q�e"��@��U2}��/ � R ;�� � � ��N�X`�  � -->

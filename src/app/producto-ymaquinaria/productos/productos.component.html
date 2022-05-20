@@ -1,0 +1,1249 @@
+<div class="columns mt-5">
+    <div class="column is-3">
+        <div class="card">
+            <div class="card-content">
+                <div class="field">
+                    <label class="label">Cliente:</label>
+                    <div class="control">
+                        <div class="select">
+                            <select id='cliente_Seleccionado' (change)='buscar_producto($event.target.value)' value=''>
+                                <option value="">Seleccionar Cliente</option>
+                                <option *ngFor='let cliente of CLIENTES' value='{{cliente._id}}'>{{cliente.nombre}}</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <button class="button is-primary" (click)='Modal_Cliente()' *ngIf='usuario.Maquinaria == 2'>Nuevo Cliente</button>
+            </div>
+        </div>
+    </div>
+    <div class="column">
+        <div class="card">
+            <div class="card-content">
+                <div class="titulo">Productos</div>
+                <button class="button is-primary" (click)='Modal_Producto()' disabled id='NP_button' *ngIf='usuario.Maquinaria == 2'>Nuevo Producto</button>
+                <hr>
+                <table class="table is-fullwidth">
+                    <thead>
+                        <tr>
+                            <th>Especificación</th>
+                            <th>Nombre del Producto</th>
+                            <th>Ver</th>
+                            <th *ngIf='usuario.Maquinaria == 2'>Editar</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor='let producto of PRODUCTOS;let i = index'>
+                            <td>E {{producto.cliente.codigo}} - {{producto.codigo}} - {{producto.version}} - {{producto.edicion}}</td>
+                            <td>{{producto.producto}}</td>
+                            <td><button class="button is-primary" (click)='verProducto(producto._id)'>Ver</button></td>
+                            <td *ngIf='usuario.Maquinaria == 2'><button class="button is-primary" (click)='editar(producto._id)'>Editar</button></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal" [ngClass]="{'is-active':NUEVO_CLIENTE}">
+    <div class="modal-background" (click)='Modal_Cliente()'></div>
+    <div class="modal-card">
+        <div class="modal-card-body">
+            <form
+            autocomplete="off"
+            [formGroup]="ClienteForm"
+            (ngSubmit)="addCliente()">
+                <div class="subtitulo">Nuevo Cliente</div>
+                <hr>
+                <div class="columns">
+                    <div class="column">
+                        <div class="field">
+                            <label class="label">Nombre del Cliente</label>
+                            <div class="control">
+                                <input type="text" class="input" formControlName='nombre'>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="column is-3">
+                        <div class="field">
+                            <label class="label">Cód. Cliente</label>
+                            <div class="control">
+                                <input type="text" class="input" formControlName='codigo'>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <table class="table is-fullwidth">
+                    <thead>
+                        <th>Nombre de almacen</th>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let almacen of almacenes;let i from index">
+                            <td>
+                                {{almacen}}
+
+                                <span class="icon" (click)="delete_this_almacen(i)">
+                                    <i class="fas fa-times"></i>
+                                </span>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                <div class="columns">
+                    <div class="column">
+                        <div class="field">
+                            <div class="control">
+                                <input type="text" class="input" id="almacen_nuevo" formControlName='almacenes' [(ngModel)]="new_almacen" name="nuevoAlmacen">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="column is-3">
+                        <button class="button is-success is-outlined" (click)="add_almacen()" [disabled]="!new_almacen">Agregar</button>
+                    </div>
+                </div>
+                <br>                
+                <button class="button is-primary">Nuevo Cliente</button>
+            </form>
+        </div>
+    </div>
+</div>
+
+<div class="modal" [ngClass]="{'is-active':NUEVO_PRODUCTO}">
+    <div class="modal-background" (click)='Modal_Producto()'></div>
+    <div class="modal-card">
+        <div class="modal-card-body tabla">
+            <div class="subtitulo">
+                Nuevo Producto
+            </div>
+            <div class="separador">
+                Información del producto
+            </div>
+            <br>
+            <div class="columns">
+                <div class="column">
+                    <div class="field">
+                        <label class="label">Nombre Producto</label>
+                        <div class="control">
+                            <input type="text" class="input" id='nombre_nuevo_producto' placeholder="Nombre Producto">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="columns">
+                <div class="column">
+                    <div class="field">
+                        <label class="label">Categoria</label>
+                        <div class="select">
+                            <select id='grupo_producto'>
+                                <option *ngFor='let grupo of GRUPOS' value="{{grupo._id}}">{{grupo.nombre}}</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="column">
+                    <div class="field">
+                        <label class="label">Cod. Producto</label>
+                        <div class="control">
+                            <input type="text" class="input" id='cod_producto' placeholder="Código de producto">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="columns">
+                <div class="column">
+                    <div class="field">
+                        <label class="label">Versión</label>
+                        <div class="control">
+                            <input type="text" class="input" id='version' placeholder="Versión">
+                        </div>
+                    </div>
+                </div>
+                <div class="column">
+                    <div class="field">
+                        <label class="label">Especificación</label>
+                        <div class="control">
+                            <input type="text" class="input" id='edicion' placeholder="Especificación">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="columns">
+                <div class="column">
+                    <div class="field">
+                        <label class="label">Código de producto de cliente</label>
+                        <div class="control">
+                            <input type="text" class="input" placeholder="Código de producto de cliente" id="cod_cliente">
+                        </div>
+                    </div>
+                </div>
+                <div class="column">
+                    <input type="checkbox" name="troquelado" id="troquelado" (click)='post_impresion("Troquelado")'><label> Troquelado</label><br>
+                    <input type="checkbox" name="pegado" id="pegado" (click)='post_impresion("Pegado")'><label> Pegado</label><br>
+                    <input type="checkbox" name="corte" id="corte" (click)='post_impresion("Corte Recto")'><label> Corte Recto</label><br>
+                </div>
+            </div>
+            <div class="separador">
+                Pre Impresión
+            </div>
+            <br>
+
+            <!-- <div class="columns"> -->
+            
+            <div class="columns is-3">
+                <div class="column">
+                    <div class="columns">
+                        <div class="column">
+                            <label for="" class="label">Cantidad de montajes:</label>
+                        </div>
+                        <div class="column is-4">
+                            <div class="control">
+                                <input type="number" class="input" min="1" max="5" placeholder="Cantidad de montajes" [(ngModel)]="montajes">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="column ">
+                    <div class="columns">
+                        <div class="column">
+                            <label for="" class="label">Montaje:</label>
+                        </div>
+                        <div class="column">
+                            <div class="field">
+                                <div class="control">
+                                    <div class="select">
+                                        <select name="montajes" [(ngModel)]="i_montajes">
+                                            <option value="{{i}}" *ngFor="let e of [].constructor(montajes); let i = index">Montaje {{NumToLet(i)}}</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="separador">
+                Materia Prima - Montaje
+            </div>
+            <br>
+
+
+                <!-- <div class="column">
+                    <div class="field">
+                        <label class="label">Ejemplares Montados:</label>
+                        <div class="control">
+                            <input type="number" class="input" min='1' value="1" (change)='Ejemplar($event)'>
+                        </div>
+                    </div>
+                </div> -->
+                <!-- <div class="column">
+                    <input type="checkbox" name="troquelado" id="troquelado" (click)='post_impresion("Troquelado")'><label> Troquelado</label><br>
+                    <input type="checkbox" name="pegado" id="pegado" (click)='post_impresion("Pegado")'><label> Pegado</label><br>
+                    <input type="checkbox" name="corte" id="corte" (click)='post_impresion("Corte Recto")'><label> Corte Recto</label><br>
+                
+                </div> -->
+                <!-- <div class="column">
+                    <div class="field">
+                        <label class="label"> <br> Ancho:</label>
+                        <div class="control">
+                            <input type="text" class="input" id='ancho' (change)='ancho($event)'>
+                        </div>
+                    </div>
+                </div>
+                <div class="column">
+                    <div class="field">
+                        <label class="label"> <br> Largo:</label>
+                        <div class="control">
+                            <input type="text" class="input" id='largo' (change)='largo($event)' disabled>
+                        </div>
+                    </div>
+                </div>
+                <div class="column">
+                    <div class="field">
+                        <label class="label">Dirección de Fibra:</label>
+                        <div class="control">
+                            <div class="select">
+                                <select name="d_fibra" id="d_fibra" disabled>
+                                    <option value="{{dim}}" *ngFor='let dim of dimensiones'>{{dim}}</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div> -->
+            <!-- </div> -->
+
+            <!-- <div class="separador">
+                Post Impresión
+            </div>
+            <br>
+            <div class="columns">
+                <div class="column">
+                    <div class="field">
+                        <label class="label">POST-IMPRESION</label>
+                        <div class="select is-multiple">
+                            <select  multiple value='Recto' id='p_i' (change)='post_impresion($event)'>
+                                <option value="Recto">Corte Recto</option>
+                                <option value="Doblado">Doblado</option>
+                                <option value="Signado">Signado</option>
+                                <option value="Fleje">De Fleje</option>
+                                <option value="Molde">De Molde</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="column">
+                    <ul>
+                        <li *ngFor='let post of POST' (click)='borrarPost(post)'>{{post}}</li>
+                    </ul>
+                </div>
+            </div> -->
+
+            <!-- SELECCION DE SUSTRATO SACADO DE LAS BOBINAS *************** -->
+
+            <!-- <div class="separador">
+                Sustratos
+            </div>
+            <br>
+
+            <div class="Sustrato" *ngIf='SUSTRATO.length > 0'>
+                <div class="columns">
+                    <div class="column">
+                        {{SUSTRATO}} ({{dimensiones[0]}} x {{dimensiones[1]}})
+                    </div>
+                    <div class="column">
+                        <button class="button is-danger is-outlined is-small" (click)='NuevoSustrato()'>
+                            <span>Eliminar</span>
+                            <span class="icon is-small">
+                              <i class="fas fa-times"></i>
+                            </span>
+                          </button>
+                    </div>
+                </div>
+            </div> -->
+
+            <!-- <div class="done" *ngIf='!Sus_Done'>
+                <div class="columns">
+                    <div class="column">
+                        <div class="field">
+                            <label class="label">Sustrato</label>
+                            <div class="control">
+                                <input type="text" class="input" placeholder="Sustrato" id='sustrato_name'>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="column">
+                        <div class="field">
+                            <label class="label">Marca</label>
+                            <div class="control">
+                                <input type="text" class="input" placeholder="Marca" id='sustrato_marca'>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="column is-2">
+                        <div class="field">
+                            <label  class="label">Gramaje</label>
+                            <div class="control">
+                                <input type="text" class="input" placeholder="Gramaje" id='sustrato_gramaje'>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="column is-2">
+                        <div class="field">
+                            <label  class="label">Calibre</label>
+                            <div class="control">
+                                <input type="text" class="input" placeholder="Calibre" id='sustrato_calibre'>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- <div class="column">
+                        <div class="field">
+                            <br>
+                            <button class="button is-success is-outlined" (click)='sustratos($event)'>
+                                <span class="icon is-small">
+                                  <i class="fas fa-check"></i>
+                                </span>
+                                <span>Agregar</span>
+                              </button>
+                        </div>
+                    </div>
+                </div>
+            </div> -->
+            <br>
+                    
+            <!--
+            <div class="card">
+                <div class="card-content">
+                    <div class="field">
+                        <label class="label">Tipo</label>
+                        <div class="select">
+                            <select id='sustrato'>
+                                <option value="{{sustrato}}" *ngFor='let sustrato of SUSTRATO'>{{sustrato}}</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div> -->
+            <div class="columns">
+                <div class="column">
+                    <div class="columns">
+                        <div class="column">
+                            <label class="label">Ejemplares montados:</label>
+                        </div>
+                        <div class="column is-4">
+                            <div class="field">
+                                <div class="control">
+                                    <input type="number" class="input" placeholder="Ejemplares montados" (change)="Ejemplar($event.target.value)" [(ngModel)]="EJEMPLARES[i_montajes]">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="column">
+                    <!-- <div class="columns">
+                        <div class="column">
+                            <div class="field">
+                                <label class="label">Código de peliculas</label>
+                                <div class="control">
+                                    <input type="text" class="input" placeholder="Código de peliculas">
+                                </div>
+                            </div>
+                        </div>
+                    </div> -->
+                </div>
+            </div>
+
+            <div class="materiales" *ngFor="let e of [].constructor(montajes); let i = index">
+                <table class="table is-fullwidth" *ngIf="i == i_montajes">
+                    <thead>
+                    <tr>
+                            <th>Materia</th>
+                            <th>Marca</th>
+                            <th>Cantidad</th>
+                            <th>Eliminar</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor='let Material of MATERIALES_NECESARIOS[i_montajes]'>
+                            <td>{{Material.material}} 
+                                <ng-container *ngIf='Material.ancho'>
+                                    ({{Material.ancho}} x {{Material.ancho}})
+                                </ng-container>
+                            </td>
+                            <td>{{Material.marca}}</td>
+                            <td>{{Material.cantidad}}</td>
+                            <td>
+                                <button class="button is-danger is-outlined is-small" (click)='Delete_Material(Material.material)'>
+                                    <span class="icon is-small">
+                                      <i class="fas fa-check"></i>
+                                    </span>
+                                    <span>Eliminar</span>
+                                  </button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <div class="columns" *ngIf="i == i_montajes">
+                    <div class="column">
+                        <div class="field">
+                            <label class="label">Categoria:</label>
+                            <div class="select">
+                                <select name="" id="" (change)='selecciona_producto($event.target.value)'>
+                                    <option value="0">Selecciona Categoria</option>
+                                    <option value="{{seccion.nombre}}" *ngFor='let seccion of SECCIONES'>{{seccion.nombre}}</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="columns" *ngIf="i == i_montajes">
+                    <div class="column">
+                        <div class="field">
+                            <label class="label">Producto:</label>
+                            <div class="select">
+                                <select name="" id="{{i}}" (change)='producto_seleccionado($event.target.value)' disabled #producto>
+                                    <option value="0">Selecciona Producto</option>
+                                    <ng-container *ngFor='let producto of MATERIALES'>
+                                        <ng-container *ngIf='producto.grupo.nombre === product_selected'>
+                                            <option value="{{producto._id}}">{{producto.nombre}} ({{producto.marca}})
+                                                <ng-container *ngIf='producto.ancho'>
+                                                    ({{producto.ancho}} x {{producto.largo}})
+                                                </ng-container>
+                                            </option>
+                                        </ng-container>
+                                    </ng-container>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="column">
+                        <div class="field" id='cant'>
+                            <label class="label">Cantidad:</label>
+                            <div class="control">
+                                <input type="text" id='cantidad{{i}}' class="input" #size [disabled]='!_producto_seleccionado'>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                    <div class="field" *ngIf="i == i_montajes">
+                        <label class="label"></label>
+                        <div class="control">
+                            <button class="button is-success is-outlined" (click)="add_materia(i, size)">
+                                <span class="icon is-small">
+                                  <i class="fas fa-check"></i>
+                                </span>
+                                <span>Agregar</span>
+                              </button>
+                        </div>
+                    </div>
+            </div>
+            
+
+            <!-- <div class="columns">
+                <div class="column">
+                    <div class="field">
+                        <label class="label">Materia Prima</label>
+                        <div class="control">
+                            <input type="text" class="input" placeholder="Materia Prima" #material id='field_material'>
+                        </div>
+                    </div>
+                </div>
+                <div class="column">
+                    <div class="field">
+                        <label class="label">Marca</label>
+                        <div class="control">
+                            <input type="text" class="input" placeholder="Marca" #marca id='field_marca'>
+                        </div>
+                    </div>
+                </div>
+                <div class="column is-2">
+                    <div class="field">
+                        <label class="label">Cantidad</label>
+                        <div class="control">
+                            <input type="number" class="input" placeholder="cantidad" #cantidad id='field_cantidad'>
+                        </div>
+                    </div>
+                </div>
+                <div class="column is-3"><br>
+                    <div class="field">
+                        <label class="label"></label>
+                        <div class="control">
+                            <button class="button is-success is-outlined" (click)='add_materia(material, marca, cantidad)'>
+                                <span class="icon is-small">
+                                  <i class="fas fa-check"></i>
+                                </span>
+                                <span>Agregar</span>
+                              </button>
+                        </div>
+                    </div>
+                </div>
+            </div> -->
+
+
+
+            <!-- *****   SELECCION DE MATERIA PRIMA SACADO DEL INVENTARIO ****************** -->
+
+            <!-- <div class="card" *ngFor='let grupo of GRUPOS_MATERIA'>
+                <div class="card-content">
+                    <b>{{grupo.nombre}}</b>
+                    <table class="table is-striped is-fullwidth">
+                        <thead>
+                            <tr>
+                                <th>Selecciona</th>
+                                <th>Materia Prima</th>
+                                <th><abbr title="Cantidad necesaria por cada 1000">Cantidad</abbr></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor='let material of MATERIALES'>
+                                <ng-container *ngIf='material.grupo.nombre === grupo.nombre'>
+                                    <td><input type="checkbox" name='necesario' (click)='enable(material.nombre)'></td>
+                                    <td>{{material.nombre}}</td>
+                                    <td><input type="number" class="input" id='{{material.nombre}}' (change)='just_a_sec($event)' disabled></td>
+                                </ng-container>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div> -->
+            <hr>
+            <button class="button is-primary" (click)='finalizar()'>Registrar Producto</button>
+        </div>
+    </div>
+</div>
+
+<div class="modal" [ngClass]="{'is-active':VER_PRODUCTO}">
+    <div class="modal-background" (click)='ver_Modal_Producto()'></div>
+    <div class="modal-card">
+        <div class="modal-card-body">
+            <div class="columns">
+                <div class="column">
+
+                </div>
+                <div class="column">
+                    <table class="table">
+                        <thead>
+                            <th>
+                                Especificación del Producto
+                            </th>
+                        </thead>
+                        <tbody>
+                            <td>
+           E-{{OneProduct.cliente.codigo}}-{{OneProduct.codigo}}-{{OneProduct.version}}-{{OneProduct.edicion}}
+                            </td>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="separador">
+                Identificacion del Producto
+            </div>
+            <br>
+            
+            <table class="table is-fullwidth">
+                <tr>
+                    <th>Cliente:</th>
+                    <td>{{OneProduct.cliente.nombre}}</td>
+                </tr>
+                <tr>
+                    <th>Producto:</th>
+                    <td>{{OneProduct.producto}}</td>
+                </tr>
+                <tr>
+                    <th>Código del producto:</th>
+                    <td>{{OneProduct.cliente.codigo}}-{{OneProduct.codigo}}-{{OneProduct.version}}</td>
+                </tr>
+            </table>
+
+            <div class="field">
+                <label class="label">Montaje</label>
+                <div class="select">
+                    <select id="" class="select" (click)="cambiarCalculo()" name="montaje" [(ngModel)]="i_montajes">
+                        <option value="{{i}}" *ngFor="let e of [].constructor(OneProduct.montajes); let i = index">M-{{OneProduct.cliente.codigo}}-{{OneProduct.codigo}}-{{OneProduct.version}}-{{NumToLet(i)}}</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="separador">
+                Materia Prima
+            </div>
+            <br>
+
+            <table class="table is-fullwidth">
+                <thead>
+                    <th>
+                        Sustrato
+                    </th>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let TintaProducto of OneProduct.materiales[i_montajes]">
+                        <ng-container *ngIf="TintaProducto.producto.grupo.nombre === 'Sustrato'">
+                            <td>
+                                {{TintaProducto.producto.nombre}} ({{TintaProducto.producto.ancho}} x {{TintaProducto.producto.largo}})
+                                <br>
+                                <table class="table is-bordered">
+                                    <thead>
+                                        <th>Calibre (pt.)</th>
+                                        <th>Gramaje (g/m²):</th>
+                                        <th>Dirección de fibra:</th>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>{{TintaProducto.producto.calibre}}</td>
+                                            <td>{{TintaProducto.producto.gramaje}}</td>
+                                            <td>{{TintaProducto.producto.largo}}</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </td>
+                        </ng-container>
+                    </tr>
+                </tbody>
+            </table>
+
+            <table class="table is-fullwidth">
+                <thead>
+                    <th>
+                        Colores Aprobados:
+                    </th>
+                    <th>
+                        Tintas (Marca):
+                    </th>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let TintaProducto of OneProduct.materiales[i_montajes]">
+                        <ng-container *ngIf="TintaProducto.producto.grupo.nombre === 'Tinta'">
+                            <td>
+                                {{TintaProducto.producto.color}}
+                            </td>
+                            <td>
+                                {{TintaProducto.producto.nombre}}({{TintaProducto.producto.marca}})
+                            </td>
+                        </ng-container>
+                    </tr>
+                </tbody>
+            </table>
+            <table class="table is-fullwidth">
+                <thead>
+                    <th>
+                        Barniz aprobado 
+                    </th>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let TintaProducto of OneProduct.materiales[i_montajes]">
+                        <ng-container *ngIf="TintaProducto.producto.grupo.nombre === 'Barniz'">
+                            {{TintaProducto.producto.nombre}} ({{TintaProducto.producto.marca}})
+                        </ng-container>
+                    </tr>
+                </tbody>
+            </table>
+            <div class="separador">
+                Pre impresion
+            </div>
+            <br>
+
+            <table class="table is-fullwidth">
+                <thead>
+                    <th>
+                        Código de peliculas:
+                    </th>
+                    <td>
+                        <ng-container tr *ngFor="let TintaProducto of OneProduct.materiales[i_montajes];let i = index">
+                            <ng-container *ngIf="TintaProducto.producto.grupo.nombre === 'Tinta'">
+                                <p *ngIf="TintaProducto.producto.color === 'Negro'"><b>Negro:</b>{{OneProduct.cliente.codigo}}-{{OneProduct.codigo}}-{{OneProduct.version}}-{{NumToLet(i_montajes)}}-1 </p>
+                                <p *ngIf="TintaProducto.producto.color === 'Cyan'"><b>Cyan:</b>{{OneProduct.cliente.codigo}}-{{OneProduct.codigo}}-{{OneProduct.version}}-{{NumToLet(i_montajes)}}-2 </p>
+                                <p *ngIf="TintaProducto.producto.color === 'Magenta'"><b>Magenta:</b>{{OneProduct.cliente.codigo}}-{{OneProduct.codigo}}-{{OneProduct.version}}-{{NumToLet(i_montajes)}}-3 </p>
+                                <p *ngIf="TintaProducto.producto.color === 'Amarillo'"><b>Amarillo:</b>{{OneProduct.cliente.codigo}}-{{OneProduct.codigo}}-{{OneProduct.version}}-{{NumToLet(i_montajes)}}-4 </p>
+                                <div *ngIf="TintaProducto.producto.color != 'Amarillo' && TintaProducto.producto.color != 'Magenta' && TintaProducto.producto.color != 'Cyan' && TintaProducto.producto.color != 'Negro' ">
+                                    <b>{{TintaProducto.producto.color}}:</b> 
+                                    <ng-container *ngIf="cinco">
+                                        {{OneProduct.cliente.codigo}}-{{OneProduct.codigo}}-{{OneProduct.version}}-{{NumToLet(i_montajes)}}-{{sumaTintas(i)}}
+                                    </ng-container>
+                                </div>
+                            </ng-container>
+                        </ng-container>
+                    </td>
+                </thead>
+            </table>
+            <div class="separador">
+                Impresión
+            </div>
+            <br>
+
+            <table class="table is-fullwidth">
+                <thead>
+                    <th>Tamaño de Impresión</th>
+                    <th>Ejemplares montados</th>
+                </thead>
+                <tbody>
+                    <td>
+                        <table class="table is-bordered">
+                            <thead>
+                                <th>Ancho</th>
+                                <th>Largo</th>
+                            </thead>
+                            <tbody>
+                                <tr *ngFor="let TintaProducto of OneProduct.materiales[i_montajes]">
+                                    <ng-container *ngIf="TintaProducto.producto.grupo.nombre === 'Sustrato'">
+                                        <td>{{TintaProducto.producto.ancho}} cm.</td>
+                                        <td>{{TintaProducto.producto.largo}} cm.</td>
+                                    </ng-container>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </td>
+                    <td>
+                       {{ OneProduct.ejemplares[i_montajes] }} Ejemplares
+                    </td>
+                </tbody>
+            </table>
+            <div class="separador">
+                Post Impresión
+            </div>
+            <br>
+            <table class="table is-fullwidth">
+                <thead>
+                    <ng-container *ngFor="let TintaProducto of OneProduct.materiales[i_montajes]">
+                        <ng-container *ngIf="TintaProducto.producto.grupo.nombre === 'Pega'">
+                            <th>Pegamento aprobado</th>
+                        </ng-container>
+                        <ng-container *ngIf="TintaProducto.producto.grupo.nombre === 'Cajas Corrugadas'">
+                            <th>Cantidad de unidades por caja</th>
+                        </ng-container>
+                    </ng-container>
+                </thead>
+                <tbody>
+                    <ng-container *ngFor="let TintaProducto of OneProduct.materiales[i_montajes]">
+                        <ng-container *ngIf="TintaProducto.producto.grupo.nombre === 'Pega'">
+                        <td>
+                            {{TintaProducto.producto.nombre}} ({{TintaProducto.producto.marca}})
+                        </td>
+                        </ng-container>
+                        <ng-container *ngIf="TintaProducto.producto.grupo.nombre === 'Cajas Corrugadas'">
+                            <td>{{TintaProducto.cantidad}}</td>
+                        </ng-container>
+                    </ng-container>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- <div class="modal-card-body tabla">
+            <div class="subtitulo">
+                Nuevo Producto
+            </div>
+            <div class="separador">
+                Información del producto
+            </div>
+            <br>
+            <div class="columns">
+                <div class="column">
+                    <div class="field">
+                        <label class="label">Nombre Producto</label>
+                        <div class="control">
+                            <input type="text" class="input" id='nombre_nuevo_producto' value='{{OneProduct.producto}}'>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="columns">
+                <div class="column">
+                    <div class="field">
+                        <label class="label">Categoria</label>
+                        <div class="select">
+                            <select id='grupo_producto' value='{{OneProduct.grupo._id}}'>
+                                <option *ngFor='let grupo of GRUPOS' value="{{grupo._id}}">{{grupo.nombre}}</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="column">
+                    <div class="field">
+                        <label class="label">Cod. Producto</label>
+                        <div class="control">
+                            <input type="text" class="input" id='cod_producto' value='{{OneProduct.codigo}}'>
+                        </div>
+                    </div>
+                </div>
+                <div class="column">
+                    <div class="field">
+                        <label class="label">Version</label>
+                        <div class="control">
+                            <input type="text" class="input" id='version' value='{{OneProduct.version}}'>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="separador">
+                Especificaciones
+            </div>
+            <br>
+
+            <div class="columns">
+                <div class="column">
+                    <div class="field">
+                        <label class="label">Ejemplares Montados:</label>
+                        <div class="control">
+                            <input type="number" class="input" min='1' value="1" (change)='Ejemplar($event)' value='{{OneProduct.ejemplares}}'>
+                        </div>
+                    </div>
+                </div>
+                <div class="column">
+                    <div class="field">
+                        <label class="label">Dim. de la hoja:</label>
+                        <div class="control">
+                            <input type="text" class="input" id='dimensiones' value='{{OneProduct.dimensiones}}'>
+                        </div>
+                    </div>
+                </div>
+                <div class="column">
+                    <div class="field">
+                        <label class="label">Dirección de Fibra:</label>
+                        <div class="control">
+                            <input type="text" class="input" id='d_fibra' value='{{OneProduct.fibra}}'>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="separador">
+                Post Impresión
+            </div>
+            <br>
+            <div class="columns">
+                <div class="column">
+                    <div class="field">
+                        <label class="label">POST-IMPRESION</label>
+                        <div class="select is-multiple">
+                            <select  multiple value='Recto' id='p_i' (change)='post_impresion($event)'>
+                                <option value="Recto">Corte Recto</option>
+                                <option value="Doblado">Doblado</option>
+                                <option value="Signado">Signado</option>
+                                <option value="Fleje">De Fleje</option>
+                                <option value="Molde">De Molde</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="column">
+                    <ul>
+                        <li *ngFor='let post of OneProduct.post' (click)='borrarPost2(post)'>{{post}}</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="separador">
+                Sustratos
+            </div>
+            <br>
+            <div class="card">
+                <div class="card-content">
+                    <div class="field">
+                        <label class="label">Tipo</label>
+                        <div class="select">
+                            <select id='sustrato' value='{{OneProduct.sustrato}}'>
+                                <option value="{{sustrato}}" *ngFor='let sustrato of SUSTRATO'>{{sustrato}}</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="separador">
+                Materia Prima
+            </div>
+            <br>
+            <div class="card" *ngFor='let grupo of GRUPOS_MATERIA'>
+                <div class="card-content">
+                    <b>{{grupo.nombre}}</b>
+                    <table class="table is-striped is-fullwidth">
+                        <thead>
+                            <tr>
+                                <th>Selecciona</th>
+                                <th>Materia Prima</th>
+                                <th><abbr title="Cantidad necesaria por cada 1000">Cantidad</abbr></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor='let material of OneProduct.materiales'>
+                               
+                                    <td><input type="checkbox" name='necesario' (click)='enable(material.nombre)' checked></td>
+                                    <td>{{material.material}}</td>
+                                    <td><input type="number" class="input" id='{{material.nombre}}' (change)='just_a_sec($event)' value='{{material.cantidad}}'></td>
+                            </tr>
+                            <tr *ngFor='let material of MATERIALES'>
+                                <ng-container *ngIf='material.grupo.nombre === grupo.nombre'>
+                                    <ng-container *ngIf='material.nombre == OneProduct.materiales.material'>
+                                    <td><input type="checkbox" name='necesario' (click)='enable(material._id)'></td>
+                                    <td>{{material.nombre}}</td>
+                                    <td><input type="number" class="input" id='{{material._id}}' (change)='just_a_sec($event)' disabled></td>
+                                    </ng-container>
+                                </ng-container>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <hr>
+        </div> -->
+        <!-- <div class="modal" [ngClass]="{'is-active':EDITAR_PRODUCTO}">
+            <div class="modal-background" (click)='Modal_Producto_E()'></div> -->
+
+
+    </div>
+</div>
+
+
+<div class="modal" [ngClass]="{'is-active':EDITAR_PRODUCTO}">
+    <div class="modal-background" (click)='Modal_Producto_E()'></div>
+    <div class="modal-card">
+        <div class="modal-card-body tabla">
+            <div class="subtitulo">
+                Editar Producto
+            </div>
+            <div class="separador">
+                Información del producto
+            </div>
+            <br>
+            <div class="columns">
+                <div class="column">
+                    <div class="field">
+                        <label class="label">Nombre Producto</label>
+                        <div class="control">
+                            <input type="text" class="input" id='nombre_nuevo_producto' placeholder="Nombre Producto" [(ngModel)]="OneProduct.producto">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="columns">
+                <div class="column">
+                    <div class="field">
+                        <label class="label">Categoria</label>
+                        <div class="select">
+                            <select id='grupo_producto'>
+                                <option *ngFor='let grupo of GRUPOS' [(ngModel)]="OneProduct.grupo._id">{{grupo.nombre}}</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="column">
+                    <div class="field">
+                        <label class="label">Cod. Producto</label>
+                        <div class="control">
+                            <input type="text" class="input" id='cod_producto' placeholder="Código de producto" [(ngModel)]="OneProduct.codigo">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="columns">
+                <div class="column">
+                    <div class="field">
+                        <label class="label">Versión</label>
+                        <div class="control">
+                            <input type="text" class="input" id='version' placeholder="Versión" [(ngModel)]="OneProduct.version">
+                        </div>
+                    </div>
+                </div>
+                <div class="column">
+                    <div class="field">
+                        <label class="label">Especificación</label>
+                        <div class="control">
+                            <input type="text" class="input" id='edicion' placeholder="Especificación" [(ngModel)]="OneProduct.edicion">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="columns">
+                <div class="column">
+                    <div class="field">
+                        <label class="label">Código de producto de cliente</label>
+                        <div class="control">
+                            <input type="text" class="input" placeholder="Código de producto de cliente" id="cod_cliente" [(ngModel)]="OneProduct.cod_cliente">
+                        </div>
+                    </div>
+                </div>
+                <div class="column">
+                    <input type="checkbox" name="troquelado" id="troquelado" (click)='post_impresion("Troquelado")'><label> Troquelado</label><br>
+                    <input type="checkbox" name="pegado" id="pegado" (click)='post_impresion("Pegado")'><label> Pegado</label><br>
+                    <input type="checkbox" name="corte" id="corte" (click)='post_impresion("Corte Recto")'><label> Corte Recto</label><br>
+                </div>
+            </div>
+            <div class="separador">
+                Pre Impresión
+            </div>
+            <br>
+
+            <!-- <div class="columns"> -->
+            
+            <div class="columns is-3">
+                <div class="column">
+                    <div class="columns">
+                        <div class="column">
+                            <label for="" class="label">Cantidad de montajes:</label>
+                        </div>
+                        <div class="column is-4">
+                            <div class="control">
+                                <input type="number" class="input" min="1" max="5" placeholder="Cantidad de montajes" [(ngModel)]="OneProduct.montajes">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="column ">
+                    <div class="columns">
+                        <div class="column">
+                            <label for="" class="label">Montaje:</label>
+                        </div>
+                        <div class="column">
+                            <div class="field">
+                                <div class="control">
+                                    <div class="select">
+                                        <select name="montajes" [(ngModel)]="i_montajes_">
+                                            <option value="{{i}}" *ngFor="let e of [].constructor(OneProduct.montajes); let i = index">Montaje {{NumToLet(i)}}</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="separador">
+                Materia Prima - Montaje
+            </div>
+            <br>
+            <div class="columns">
+                <div class="column">
+                    <div class="columns">
+                        <div class="column">
+                            <label class="label">Ejemplares montados:</label>
+                        </div>
+                        <div class="column is-4">
+                            <div class="field">
+                                <div class="control">
+                                    <input type="number" class="input" placeholder="Ejemplares montados" (change)="Ejemplar($event.target.value)" [(ngModel)]="OneProduct.ejemplares[i_montajes_]">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="column">
+                </div>
+            </div>
+
+            <div class="materiales" *ngFor="let e of [].constructor(OneProduct.montajes); let i = index">
+                <table class="table is-fullwidth" *ngIf="i == i_montajes_">
+                    <thead>
+                    <tr>
+                            <th>Materia</th>
+                            <th>Marca</th>
+                            <th>Cantidad</th>
+                            <th>Eliminar</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor='let Material of OneProduct.materiales[i_montajes_]'>
+                            <td>{{Material.producto.nombre}} 
+                                <ng-container *ngIf='Material.ancho'>
+                                    ({{Material.producto.ancho}} x {{Material.producto.ancho}})
+                                </ng-container>
+                            </td>
+                            <td>{{Material.producto.marca}}</td>
+                            <td>{{Material.cantidad}}</td>
+                            <td>
+                                <button class="button is-danger is-outlined is-small" (click)='Delete_Material2(Material.producto.nombre)'>
+                                    <span class="icon is-small">
+                                      <i class="fas fa-check"></i>
+                                    </span>
+                                    <span>Eliminar</span>
+                                  </button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <div class="columns" *ngIf="i == i_montajes_">
+                    <div class="column">
+                        <div class="field">
+                            <label class="label">Categoria:</label>
+                            <div class="select">
+                                <select name="" id="" (change)='selecciona_producto2($event.target.value)'>
+                                    <option value="0">Selecciona Categoria</option>
+                                    <option value="{{seccion.nombre}}" *ngFor='let seccion of SECCIONES'>{{seccion.nombre}}</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="columns" *ngIf="i == i_montajes_">
+                    <div class="column">
+                        <div class="field">
+                            <label class="label">Producto:</label>
+                            <div class="select">
+                                <select name="" id="x-{{i}}" (change)='producto_seleccionado($event.target.value)' disabled #producto>
+                                    <option value="0"> Selecciona Producto</option>
+                                    <ng-container *ngFor='let producto of MATERIALES'>
+                                        <ng-container *ngIf='producto.grupo.nombre === product_selected'>
+                                            <option value="{{producto._id}}">{{producto.nombre}} ({{producto.marca}})
+                                                <ng-container *ngIf='producto.ancho'>
+                                                    ({{producto.ancho}} x {{producto.largo}})
+                                                </ng-container>
+                                            </option>
+                                        </ng-container>
+                                    </ng-container>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="column">
+                        <div class="field" id='cant'>
+                            <label class="label">Cantidad:</label>
+                            <div class="control">
+                                <input type="text" id='xcantidad{{i}}' class="input" #size [disabled]='!_producto_seleccionado'>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                    <div class="field" *ngIf="i == i_montajes_">
+                        <label class="label"></label>
+                        <div class="control">
+                            <button class="button is-success is-outlined" (click)="add_materia3(i, size)">
+                                <span class="icon is-small">
+                                  <i class="fas fa-check"></i>
+                                </span>
+                                <span>Agregar</span>
+                              </button>
+                        </div>
+                    </div>
+            </div>
+            
+
+            <!-- <div class="columns">
+                <div class="column">
+                    <div class="field">
+                        <label class="label">Materia Prima</label>
+                        <div class="control">
+                            <input type="text" class="input" placeholder="Materia Prima" #material id='field_material'>
+                        </div>
+                    </div>
+                </div>
+                <div class="column">
+                    <div class="field">
+                        <label class="label">Marca</label>
+                        <div class="control">
+                            <input type="text" class="input" placeholder="Marca" #marca id='field_marca'>
+                        </div>
+                    </div>
+                </div>
+                <div class="column is-2">
+                    <div class="field">
+                        <label class="label">Cantidad</label>
+                        <div class="control">
+                            <input type="number" class="input" placeholder="cantidad" #cantidad id='field_cantidad'>
+                        </div>
+                    </div>
+                </div>
+                <div class="column is-3"><br>
+                    <div class="field">
+                        <label class="label"></label>
+                        <div class="control">
+                            <button class="button is-success is-outlined" (click)='add_materia(material, marca, cantidad)'>
+                                <span class="icon is-small">
+                                  <i class="fas fa-check"></i>
+                                </span>
+                                <span>Agregar</span>
+                              </button>
+                        </div>
+                    </div>
+                </div>
+            </div> -->
+
+
+
+            <!-- *****   SELECCION DE MATERIA PRIMA SACADO DEL INVENTARIO ****************** -->
+
+            <!-- <div class="card" *ngFor='let grupo of GRUPOS_MATERIA'>
+                <div class="card-content">
+                    <b>{{grupo.nombre}}</b>
+                    <table class="table is-striped is-fullwidth">
+                        <thead>
+                            <tr>
+                                <th>Selecciona</th>
+                                <th>Materia Prima</th>
+                                <th><abbr title="Cantidad necesaria por cada 1000">Cantidad</abbr></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor='let material of MATERIALES'>
+                                <ng-container *ngIf='material.grupo.nombre === grupo.nombre'>
+                                    <td><input type="checkbox" name='necesario' (click)='enable(material.nombre)'></td>
+                                    <td>{{material.nombre}}</td>
+                                    <td><input type="number" class="input" id='{{material.nombre}}' (change)='just_a_sec($event)' disabled></td>
+                                </ng-container>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div> -->
+            <hr>
+            <button class="button is-primary" (click)="editar_producto()">Editar Producto</button>
+        </div>
+    </div>
+</div>
