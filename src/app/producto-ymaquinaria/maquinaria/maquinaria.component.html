@@ -2,13 +2,13 @@
     <div class="card">
         <div class="card-content">
             <div class="titulo">Maquinaria</div>
-            <button class="button is-primary" (click)='Modal_Maquina()' *ngIf='usuario.Maquinaria == 2'>Nueva Maquina</button>
+            <button class="button is-primary" (click)='Modal_Maquina()' *ngIf='usuario.Maquinaria == 2'>Nueva Máquina</button>
             <hr>
             <table class="table is-fullwidth">
                 <thead>
                     <tr>
-                        <th>Nombre Maquina</th>
-                        <th>Función de Maquina</th>
+                        <th>Nombre Máquina</th>
+                        <th>Función de Máquina</th>
                         <th>Cantidad de Colores</th>
                         <th>Trabajos por Hora</th>
                         <th *ngIf='usuario.Maquinaria == 2'>Modificar Máquina</th>
@@ -127,7 +127,7 @@
             autocomplete="off"
             [formGroup]="maquinaForm"
             (ngSubmit)="nuevaMaquina()">
-                <div class="subtitulo">Registrar Maquina</div>
+                <div class="subtitulo">Registrar Máquina</div>
                 <hr>
                 <div class="field">
                     <label class="label">Nombre</label>
@@ -157,7 +157,7 @@
                     </div>
                 </div>
                 
-                <button class="button is-primary">Registrar Nueva Maquina</button>
+                <button class="button is-primary">Registrar Nueva Máquina</button>
             </form>
         </div>
     </div>

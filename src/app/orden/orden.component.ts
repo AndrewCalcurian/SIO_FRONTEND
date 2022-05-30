@@ -433,8 +433,8 @@ export class OrdenComponent implements OnInit {
 
                               new Cell(new Table([
                                 [
-                                  new Cell(new Txt('% DEMASIA').end).fillColor('#dedede').alignment('center').fontSize(9).end,
-                                  new Cell(new Txt('HOJAS DE DEMASIA:').end).fillColor('#dedede').alignment('center').fontSize(9).end,
+                                  new Cell(new Txt('% DEMASÍA').end).fillColor('#dedede').alignment('center').fontSize(9).end,
+                                  new Cell(new Txt('HOJAS DE DEMASÍA:').end).fillColor('#dedede').alignment('center').fontSize(9).end,
                                 ],
                                 [
                                   new Cell(new Txt(PRODUCTO.demasia).end).fontSize(10).alignment('center').end,
@@ -455,7 +455,7 @@ export class OrdenComponent implements OnInit {
                               new Cell(new Table([
                                 [
                                   new Cell(new Txt('BARNIZ').end).alignment('center').fillColor('#dedede').alignment('center').fontSize(9).end,
-                                  new Cell(new Txt('ESTANDAR DE COLOR:').alignment('center').end).fillColor('#dedede').alignment('center').fontSize(7).end,
+                                  new Cell(new Txt('ESTÁNDAR DE COLOR:').alignment('center').end).fillColor('#dedede').alignment('center').fontSize(7).end,
                                 ],
                                 [
                                   new Cell(new Txt(`${barniz[0].producto.nombre} (${barniz[0].producto.marca} - ${cantidad_barniz}${barniz[0].producto.unidad})`).end).fontSize(9).end,

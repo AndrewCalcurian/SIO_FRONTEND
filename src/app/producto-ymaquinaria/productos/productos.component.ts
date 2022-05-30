@@ -3,6 +3,8 @@ import { RestApiService } from 'src/app/services/rest-api.service';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import Swal from 'sweetalert2';
 import { Subscriber, timer } from 'rxjs';
+import { SubirArchivosService } from 'src/app/services/subir-archivos.service';
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-productos',
@@ -11,12 +13,16 @@ import { Subscriber, timer } from 'rxjs';
 })
 export class ProductosComponent implements OnInit {
 
+  baseUrl = environment.api
+
   public NUEVO_CLIENTE:boolean = false;
   public CLIENTES;
   public MATERIALES;
   public MATERIALES_NECESARIOS = [];
   public NUEVO_PRODUCTO:boolean = false;
   public GRUPOS;
+
+  public ImageProducto;
 
   public EJEMPLARES = [];
   public POST = [];
@@ -48,9 +54,12 @@ export class ProductosComponent implements OnInit {
   siete:boolean = true;
   ocho:boolean = true;
 
+  public ImgSubir:File;
+
 
   almacenes = [];
   public new_almacen = ''
+  public cargando = false;
 
   public VER_PRODUCTO:boolean = false;
   OneProduct:any = {producto:'',
@@ -80,6 +89,7 @@ export class ProductosComponent implements OnInit {
   })
 
   constructor(private api:RestApiService,
+              private subirArchivo:SubirArchivosService,
               private fb:FormBuilder) { 
                 this.usuario = api.usuario
               }
@@ -109,6 +119,26 @@ export class ProductosComponent implements OnInit {
         case 8: return "I";
     }
 
+  }
+
+  CambiarImagen( event:any ){
+    this.ImgSubir = (event.target).files[0];
+    document.getElementsByClassName('file-name')[0].innerHTML = this.ImgSubir.name;
+  }
+
+  subirImagen(){
+    this.cargando = true;
+    this.subirArchivo.actualizarFoto(this.ImgSubir, 'producto', this.OneProduct._id )
+    .then(img => {
+      if(img){
+        this.usuario.img = img;
+        document.getElementsByClassName('file-name')[0].innerHTML = 'Sin archivo...';
+        this.ImgSubir = null;
+      }
+      this.verProducto(this.OneProduct._id)
+      this.verProducto(this.OneProduct._id)
+      this.cargando = false;
+      });
   }
 
   producto_seleccionado(e){
@@ -676,7 +706,13 @@ add_materia(producto, cantidad){
     this.api.getOneById(producto)
       .subscribe((resp:any)=>{
         this.OneProduct = resp.producto
-        console.log('AQUIIIIIIIIIIIIII', this.OneProduct)
+
+        if( this.OneProduct.img) {
+          this.ImageProducto =  `${this.baseUrl}/imagen/producto/${this.OneProduct.img}`;
+        }else{
+          this.ImageProducto = `../../../assets/no-picture.png`;
+        }
+
         this.ver_Modal_Producto()
       })
   }
