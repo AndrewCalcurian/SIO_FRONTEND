@@ -34,7 +34,7 @@
                     </thead>
                     <tbody>
                         <tr *ngFor='let producto of PRODUCTOS;let i = index'>
-                            <td>E {{producto.cliente.codigo}} - {{producto.codigo}} - {{producto.version}} - {{producto.edicion}}</td>
+                            <td>E - {{producto.cliente.codigo}} - {{producto.codigo}} - {{producto.version}} - {{producto.edicion}}</td>
                             <td>{{producto.producto}}</td>
                             <td><button class="button is-primary" (click)='verProducto(producto._id)'>Ver</button></td>
                             <td *ngIf='usuario.Maquinaria == 2'><button class="button is-primary" (click)='editar(producto._id)'>Editar</button></td>
@@ -630,7 +630,7 @@
                 </div>
             </div>
             <div class="separador">
-                Identificacion del Producto
+                Identificación del Producto
             </div>
             <br>
             
