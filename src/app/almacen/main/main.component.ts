@@ -99,6 +99,8 @@ export class MainComponent implements OnInit {
   public New_color:boolean = false;
   public caja_:boolean = false;
 
+  solicitud:boolean = false;
+
 
 
   public _Almacenado:boolean = true;
@@ -171,9 +173,19 @@ export class MainComponent implements OnInit {
     this.Gs = (<HTMLInputElement>document.getElementById('selected')).value
     this.Buscar_conversiones()
     this.getbobinas();
+    this.getOrdenes();
   }
 
   public usuario
+
+  public orden;
+  getOrdenes(){
+    this.api.getOrden()
+    .subscribe( (resp:any) => {
+      this.orden = resp;
+    } )
+
+  }
 
   define_color(e){
     if(e != 'Pantone'){
@@ -190,6 +202,14 @@ export class MainComponent implements OnInit {
       this.Editar_NUEVO_PRODUCTO = false;
     }else{
       this.Editar_NUEVO_PRODUCTO = true;
+    }
+  }
+
+  modal_solicitud(){
+    if(this.solicitud){
+      this.solicitud = false
+    }else{
+      this.solicitud = true
     }
   }
 
@@ -980,18 +1000,6 @@ export class MainComponent implements OnInit {
     if(solicitud == 3){
       solicitud = `0${solicitud}`;
     }
-    
-
-
-    // let data = {descuento:this.DESCUENTOS, 
-    //             orden:orden}
-
-    // this.api.modificarMaterialTal(data)
-    //   .subscribe((resp:any) => {
-    //     this.Modal_Mat_Nec()
-    //     this.BuscarAlmacen();
-    //     this.porConfirmar();
-    //   })
 
     let En_Almacen = this.MAT_NECESARIO[0].producto.materiales;
     let Cargados = this.LOTES.length
@@ -1034,6 +1042,7 @@ export class MainComponent implements OnInit {
         this.BuscarAlmacen();
         this.porConfirmar();
         this.getAalmacenado();
+        this.getOrdenes();
       })
 
   }

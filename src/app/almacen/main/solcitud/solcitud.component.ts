@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { RestApiService } from 'src/app/services/rest-api.service';
 
 @Component({
   selector: 'app-solcitud',
@@ -7,9 +8,21 @@ import { Component, OnInit } from '@angular/core';
 })
 export class SolcitudComponent implements OnInit {
 
-  constructor() { }
+  public ordenes:any;
+
+
+  @Input() solicitud:any
+  @Input() orden:any
+  @Output() onCloseModal = new EventEmitter();
+
+  constructor(public api:RestApiService) { }
 
   ngOnInit(): void {
+  }
+
+  onClose(){
+    this.solicitud = false;
+    this.onCloseModal.emit();
   }
 
 }

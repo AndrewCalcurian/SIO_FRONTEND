@@ -1,8 +1,79 @@
-<div class="modal is-active">
-    <div class="modal-background"></div>
-            <div class="modal-card">
-                <div class="modal-card-body">
-                </div>
+<div class="modal" [ngClass]="{'is-active':solicitud}">
+    <div class="modal-background" (click)="onClose()"></div>
+    <div class="modal-card">
+        <div class="modal-card-body">
+            <div class="subtitulo">
+                Solicitud de Material
             </div>
+            <hr>
+                <div class="field" *ngIf="orden.length > 0">
+                    <label class="label">N° de Orden de Producción</label>
+                    <div class="select">
+                        <select>
+                            <option value="">Selecciona OP</option>
+                            <option class="option" *ngFor="let Orden of orden">{{Orden.sort}}</option>
+                        </select>
+                    </div>
+                </div>
+                <p *ngIf="orden.length < 1">No hay ordenes de producción actualmente</p>
+                <hr>
+                <table class="table is-fullwidth" *ngIf="orden.length > 0">
+                    <thead>
+                        <th>Material</th>
+                        <th>Cantidad Solicitada</th>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>
+                                MATERIAL 1 (marca) <br>
+                                LOTE:0000, CÓDIGO:00000
+                            </td>
+                            <td>
+                                <input type="number" class="input" value="0">
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                MATERIAL 1 (marca) <br>
+                                LOTE:0000, CÓDIGO:00000
+                            </td>
+                            <td>
+                                <input type="number" class="input" value="0">
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                MATERIAL 1 (marca) <br>
+                                LOTE:0000, CÓDIGO:00000
+                            </td>
+                            <td>
+                                <input type="number" class="input" value="0">
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                MATERIALMATERIALMATERIAL 1 (marca) <br>
+                                LOTE:0000, CÓDIGO:00000
+                            </td>
+                            <td>
+                                <input type="number" class="input" value="0">
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                MATERIAL 1 (marca) <br>
+                                LOTE:0000, CÓDIGO:00000
+                            </td>
+                            <td>
+                                <input type="number" class="input" value="0">
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <hr>
+
+                <button class="button is-primary">Realizar Solicitud</button>
+        </div>
     </div>
 </div>

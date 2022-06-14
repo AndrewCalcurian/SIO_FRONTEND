@@ -5,10 +5,18 @@
         <button class="button is-primary" (click)='Nuevo_producto()' *ngIf="!_bobina && usuario.Almacen == 2">Agregar Inventario</button>
         <button class="button is-primary" (click)='modal_Conversion()' *ngIf="_bobina && usuario.Almacen == 2">Hacer Conversión</button>
         <button class="button is-primary" (click)='Modal_bobinas()' *ngIf="_bobina && usuario.Almacen == 2">Nueva Bobinas</button>
+        <button class="button is-primary" (click)='modal_solicitud()' >Solicitud de materiales</button>
         <!-- <button class="button is-primary" (click)='check_bobinas()'>Ver Bobinas</button>  -->
         <button class="button is-primary" (click)='Modal_Mat_Nec()' *ngIf="usuario.Almacen == 2">Mat. Necesario ({{MAT_NECESARIO.length}})</button> 
         <!-- <button class="button is-primary" (click)='modal_reporte()'>Resumen Inventario</button> -->
         <hr>
+
+
+        <app-solcitud 
+        [solicitud]="solicitud"
+        [orden]="orden"
+        (onCloseModal)="solicitud = false">
+        </app-solcitud>
 
         <div class="field">
             <div class="select">
@@ -1081,7 +1089,7 @@
                                         </i></label>
                                         <div class="control">
                                             <div class="select">
-                                                <select id="" (change)='Lote($event.target.value, materiales.producto.nombre, i, orden.paginas, materiales.producto.grupo.nombre,orden.cantidad,materiales.cantidad,materiales.productos.unidad,materiales.cinta)'>
+                                                <select id="" (change)='Lote($event.target.value, materiales.producto.nombre, i, orden.paginas, materiales.producto.grupo.nombre,orden.cantidad,materiales.cantidad,materiales.producto.unidad,materiales.cinta)'>
                                                     <option value="#">Seleccionar LOTE</option>
                                                     <ng-container *ngFor='let almacen of Almacenado'>
                                                         <option value="{{almacen.codigo}}-{{almacen.lote}}" *ngIf='almacen.material.nombre == materiales.producto.nombre && almacen.material.marca == materiales.producto.marca && almacen.material.ancho == materiales.producto.ancho && almacen.material.largo == materiales.producto.largo' >
