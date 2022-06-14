@@ -967,7 +967,20 @@ export class MainComponent implements OnInit {
 
   }
 
-  Restar(orden){
+  Restar(orden, solicitud){
+
+    let largo = solicitud.length;
+
+    if(solicitud == 1){
+      solicitud = `000${solicitud}`;
+    }
+    if(solicitud == 2){
+      solicitud = `00${solicitud}`;
+    }
+    if(solicitud == 3){
+      solicitud = `0${solicitud}`;
+    }
+    
 
 
     // let data = {descuento:this.DESCUENTOS, 
@@ -1004,7 +1017,8 @@ export class MainComponent implements OnInit {
 
     let data = {
       lotes:this.LOTES,
-      orden
+      orden,
+      solicitud
     }
     this.api.realizarDescuentoAlmacen(data)
       .subscribe(resp=> {
@@ -1448,7 +1462,7 @@ export class MainComponent implements OnInit {
     this.caja_ = cajas;
   }
 
-  Lote(e, material, i, hojas, grupo, cantidad,m_cantidad,cinta?){
+  Lote(e, material, i, hojas, grupo, cantidad,m_cantidad,unidad,cinta?){
 
     let splited = e.split('-')
     e = splited[1]
@@ -1516,7 +1530,7 @@ export class MainComponent implements OnInit {
       let check = document.getElementById(`fijar_lote-${i}`);
 
       cantidad_solicitada = EnAlmacen.cantidad;
-      check.onclick = () => this.fijalote(e,codigo, 0, i, (EnAlmacen.cantidad*EnAlmacen.material.neto), restante,cantidad_solicitada)
+      check.onclick = () => this.fijalote(e,codigo, 0, i, (EnAlmacen.cantidad*EnAlmacen.material.neto), restante,cantidad_solicitada, unidad)
 
 
       // <input type="checkbox" (click)='fijalote(${e},${EnAlmacen.cantidad})'> Fijar lote
@@ -1528,10 +1542,10 @@ export class MainComponent implements OnInit {
       let existe = this.LOTES.find(x => x.lote === e)
 
       if(!existe){
-        this.LOTES.push({lote:e,codigo:codigo,resta:restante,i,almacenado:EnAlmacen.cantidad,solicitado:cantidad_solicitada})
+        this.LOTES.push({lote:e,codigo:codigo,resta:restante,i,almacenado:EnAlmacen.cantidad,solicitado:cantidad_solicitada,unidad})
       }
       else{
-        this.LOTES.push({lote:e,codigo,resta:restante,i,almacenado:EnAlmacen.cantidad,solicitado:cantidad_solicitada})
+        this.LOTES.push({lote:e,codigo,resta:restante,i,almacenado:EnAlmacen.cantidad,solicitado:cantidad_solicitada,unidad})
         //  let index = this.LOTES.findIndex(x => x.lote === e)
         //  this.LOTES.splice(index , 1);
       }
@@ -1543,16 +1557,16 @@ export class MainComponent implements OnInit {
 
   }
 
-  fijalote(lote,codigo, resto, i, almacenado, restante,solicitado){
+  fijalote(lote,codigo, resto, i, almacenado, restante,solicitado,unidad){
 
     let existe = this.LOTES.find(x => x.lote == lote)
 
       if(!existe){
-        this.LOTES.push({lote,codigo,resta:resto,i,almacenado,restante:restante,solicitado})
+        this.LOTES.push({lote,codigo,resta:resto,i,almacenado,restante:restante,solicitado,unidad})
         console.log(this.LOTES)
       }else{
         let index = this.LOTES.findIndex(x => x.lote == lote)
-        this.LOTES.push({lote,codigo,resta:resto,i,almacenado,restante:restante,solicitado})
+        this.LOTES.push({lote,codigo,resta:resto,i,almacenado,restante:restante,solicitado,unidad})
       }
 
       console.log(this.LOTES)
