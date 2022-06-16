@@ -9,71 +9,44 @@
                 <div class="field" *ngIf="orden.length > 0">
                     <label class="label">N° de Orden de Producción</label>
                     <div class="select">
-                        <select>
+                        <select (change)="TraerMateriales($event.target.value)">
                             <option value="">Selecciona OP</option>
-                            <option class="option" *ngFor="let Orden of orden">{{Orden.sort}}</option>
+                            <option class="option" value='{{Orden.sort}}' *ngFor="let Orden of orden">{{Orden.sort}}</option>
                         </select>
                     </div>
                 </div>
                 <p *ngIf="orden.length < 1">No hay ordenes de producción actualmente</p>
                 <hr>
-                <table class="table is-fullwidth" *ngIf="orden.length > 0">
+                <table class="table is-fullwidth" *ngIf="orden.length > 0 && materiales">
                     <thead>
                         <th>Material</th>
                         <th>Cantidad Solicitada</th>
                     </thead>
                     <tbody>
-                        <tr>
+                        <tr *ngFor="let material of materiales">
                             <td>
-                                MATERIAL 1 (marca) <br>
-                                LOTE:0000, CÓDIGO:00000
+                                {{material.producto.nombre}} 
+                                <ng-container *ngIf="material.producto.ancho">
+                                    {{material.producto.ancho}} x {{material.producto.largo}}
+                                </ng-container>
+                                ({{material.producto.marca}})
                             </td>
                             <td>
-                                <input type="number" class="input" value="0">
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>
-                                MATERIAL 1 (marca) <br>
-                                LOTE:0000, CÓDIGO:00000
-                            </td>
-                            <td>
-                                <input type="number" class="input" value="0">
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>
-                                MATERIAL 1 (marca) <br>
-                                LOTE:0000, CÓDIGO:00000
-                            </td>
-                            <td>
-                                <input type="number" class="input" value="0">
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>
-                                MATERIALMATERIALMATERIAL 1 (marca) <br>
-                                LOTE:0000, CÓDIGO:00000
-                            </td>
-                            <td>
-                                <input type="number" class="input" value="0">
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>
-                                MATERIAL 1 (marca) <br>
-                                LOTE:0000, CÓDIGO:00000
-                            </td>
-                            <td>
-                                <input type="number" class="input" value="0">
+                                <input type="number" class="input" value="0" min="0" max="{{material.cantidad}}">
                             </td>
                         </tr>
                     </tbody>
                 </table>
 
-                <hr>
+                <div class="field" *ngIf="materiales">
+                    <div class="control">
+                      <textarea class="textarea is-small has-fixed-size" placeholder="Motivo de la solicitud"></textarea>
+                    </div>
+                  </div>
 
-                <button class="button is-primary">Realizar Solicitud</button>
+                <hr *ngIf="materiales">
+
+                <button class="button is-primary" disabled>Realizar Solicitud</button>
         </div>
     </div>
 </div>

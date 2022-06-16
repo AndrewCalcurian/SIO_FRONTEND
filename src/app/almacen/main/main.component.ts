@@ -5,9 +5,7 @@ import { PdfMakeWrapper, Txt, Img, Table, Cell, Columns, Stack } from 'pdfmake-w
 import * as pdfFonts from "pdfmake/build/vfs_fonts";
 import * as moment from 'moment';
 
-import * as XLSX from 'xlsx';
 import Swal from 'sweetalert2';
-import { materialize } from 'rxjs/operators';
 
 
 
@@ -61,8 +59,6 @@ export class MainComponent implements OnInit {
   public Mat_Selected;
   public Num_Bobina
 
-  public MAT_NECESARIO;
-
   public MATERIALES_NECESARIOS:boolean = false;
   public _NUEVO_PRODUCTO:boolean = false;
   public EDICION_ALMACEN:boolean = false;
@@ -86,8 +82,6 @@ export class MainComponent implements OnInit {
   public _bobina:boolean = false;
   public descontar_b:boolean = false;
 
-  public cintas_;
-
   codigoID = '';
   loteID = '';
   cantidadID = '';
@@ -100,6 +94,7 @@ export class MainComponent implements OnInit {
   public caja_:boolean = false;
 
   solicitud:boolean = false;
+  asignacion:boolean = false;
 
 
 
@@ -124,7 +119,7 @@ export class MainComponent implements OnInit {
 
   public _bobina_ = ''
   
-  public LOTES = [];
+
   public Almacenado = [];
 
 
@@ -187,6 +182,15 @@ export class MainComponent implements OnInit {
 
   }
 
+  public necesario;
+
+  porConfirmar(){
+    this.api.getMaterialesPorConfirmar()
+      .subscribe((resp:any)=>{
+        this.necesario = resp;
+      })
+  }
+
   define_color(e){
     if(e != 'Pantone'){
       this.InventarioForm.get('color').setValue(e);
@@ -210,6 +214,13 @@ export class MainComponent implements OnInit {
       this.solicitud = false
     }else{
       this.solicitud = true
+    }
+  }
+  modal_asignacion(){
+    if(this.asignacion){
+      this.asignacion = false
+    }else{
+      this.asignacion = true
     }
   }
 
@@ -413,15 +424,6 @@ export class MainComponent implements OnInit {
 
   public Edition__ = '';
   public Edition__2 = '';
-
-  public Modal_Mat_Nec(){
-    if(this.MATERIALES_NECESARIOS){
-      this.MATERIALES_NECESARIOS = false;
-      this.LOTES = [];
-    }else{
-      this.MATERIALES_NECESARIOS = true;
-    }
-  }
 
   public Nuevo_producto(){
     if(this._NUEVO_PRODUCTO){
@@ -952,13 +954,7 @@ export class MainComponent implements OnInit {
     return total;
   }
 
-  porConfirmar(){
-    this.api.getMaterialesPorConfirmar()
-      .subscribe((resp:any)=>{
-        this.MAT_NECESARIO = resp;
-        console.log(this.MAT_NECESARIO, 'this ------------------')
-      })
-  }
+  
 
   BuscarTotal(Material:any, cantidad_Mat:any, cantidad_orden:any){
     let El_Material = this.ALMACEN.find(x=> x.nombre == Material)
@@ -987,65 +983,7 @@ export class MainComponent implements OnInit {
 
   }
 
-  Restar(orden, solicitud){
-
-    let largo = solicitud.length;
-
-    if(solicitud == 1){
-      solicitud = `000${solicitud}`;
-    }
-    if(solicitud == 2){
-      solicitud = `00${solicitud}`;
-    }
-    if(solicitud == 3){
-      solicitud = `0${solicitud}`;
-    }
-
-    let En_Almacen = this.MAT_NECESARIO[0].producto.materiales;
-    let Cargados = this.LOTES.length
-
-    
-    for(let i = 0; i<En_Almacen.length; i++){
-      let existe = this.LOTES.find(x => x.i === i);
-
-      if(!existe){
-        Swal.fire({
-          icon: 'error',
-          title: 'Oops...',
-          text: 'Debes cubrir toda la materia prima para esta orden',
-          showConfirmButton: false,
-          timer:1500
-        })
-        return
-      }
-
-      
-      
-    }
-
-    let data = {
-      lotes:this.LOTES,
-      orden,
-      solicitud
-    }
-    this.api.realizarDescuentoAlmacen(data)
-      .subscribe(resp=> {
-        Swal.fire({
-          icon: 'success',
-          title: 'Excelente!',
-          text: 'La nueva orden ya esta generada',
-          showConfirmButton: false,
-          timer:1500
-        })
-
-        this.MATERIALES_NECESARIOS = false;
-        this.BuscarAlmacen();
-        this.porConfirmar();
-        this.getAalmacenado();
-        this.getOrdenes();
-      })
-
-  }
+  
 
   RestarMaterial(material, total){
     const data = {
@@ -1299,16 +1237,6 @@ export class MainComponent implements OnInit {
 
   totalizar_materiales(){
 
-    // material:null,
-    // marca:null,
-    // // total:null,
-    // grupo:null,
-    // presentacion:null,
-    // neto:null,
-    // unidad:null,
-    // ancho:null,
-    // largo:null
-
     for(let i=0; i<this.Almacenado.length; i++){
       let existe = this.TOTALES.find(x => x.material == this.Almacenado[i].material.nombre && x.marca == this.Almacenado[i].material.marca);
       if(existe){
@@ -1336,104 +1264,10 @@ export class MainComponent implements OnInit {
                       largo:this.Almacenado[i].material.largo,
                       total:this.Almacenado[i].cantidad
                     })
-                    console.log(this.TOTALES, 'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx')
       }
     }
 
   }
-
-  
-  //   for(let i=0; i<this.ALMACEN.length; i++){
-
-  //      let existe = this.TOTALES.find(x => x.material ==  this.ALMACEN[i].nombre && x.marca == this.ALMACEN[i].marca);
-
-  //      if(existe){
-
-  //       if(this.ALMACEN[i].grupo.nombre === 'Sustrato'){
-  //         let Existe = this.TOTALES.find(x => x.ancho == this.ALMACEN[i].ancho && x.largo == this.ALMACEN[i].largo)
-            
-  //         if(Existe){
-  //           let findIndex = this.TOTALES.findIndex(x => x.ancho == this.ALMACEN[i].ancho && x.largo == this.ALMACEN[i].largo && x.material ==  this.ALMACEN[i].nombre && x.marca == this.ALMACEN[i].marca)
-
-  //           // let total = this.TOTALES[findIndex].total;
-  //           let cantidad = this.ALMACEN[i].cantidad
-
-  //           let Almacen = cantidad * this.ALMACEN[i].neto;
-
-
-  
-  //           this.TOTALES[findIndex].neto = this.TOTALES[findIndex].neto + Almacen
-            
-  //           // this.TOTALES[findIndex].total = 1;
-
-  //           // console.log('HEREEEE ',this.TOTALES[findIndex], 'Almacen: ',this.ALMACEN[i])
-
-  //         }else{
-  //           this.TOTALES.push({
-  //             material:this.ALMACEN[i].nombre,
-  //             marca:this.ALMACEN[i].marca,
-  //             // total:this.ALMACEN[i].cantidad,
-  //             grupo:this.ALMACEN[i].grupo.nombre,
-  //             presentacion:this.ALMACEN[i].presentacion,
-  //             neto:this.ALMACEN[i].neto,
-  //             unidad:this.ALMACEN[i].unidad,
-  //             // ancho:this.ALMACEN[i].ancho,
-  //             // largo:this.ALMACEN[i].largo
-  //           })
-  //         }
-  //         // else{
-  //         //   let findIndex = this.TOTALES.findIndex(x => x.material ==  this.ALMACEN[i].nombre && x.marca == this.ALMACEN[i].marca)
-
-  //         // let total = this.TOTALES[findIndex].total;
-  //         // let cantidad = this.ALMACEN[i].cantidad
-
-  //         // if(this.ALMACEN[i].neto != this.TOTALES[findIndex].neto){
-            
-  //         //   let NewNETO = this.ALMACEN[i].neto / this.TOTALES[findIndex].neto
-            
-  //         //   cantidad = this.ALMACEN[i].cantidad * NewNETO;
-
-  //         // }
-          
-  //         // this.TOTALES[findIndex].total = total + cantidad;
-  //         // }
-
-  //       }else{
-
-  //         let findIndex = this.TOTALES.findIndex(x => x.material ==  this.ALMACEN[i].nombre && x.marca == this.ALMACEN[i].marca)
-
-  //         // let total = this.TOTALES[findIndex].total;
-  //         let cantidad = this.ALMACEN[i].cantidad
-
-  //         if(this.ALMACEN[i].neto != this.TOTALES[findIndex].neto){
-            
-  //           let NewNETO = this.ALMACEN[i].neto / this.TOTALES[findIndex].neto
-            
-  //           cantidad = this.ALMACEN[i].cantidad * NewNETO;
-
-  //         }
-          
-  //         this.TOTALES[findIndex].total = total + cantidad;
-
-
-  //       }
-
-  //      }else{
-  //        this.TOTALES.push({
-  //          material:this.ALMACEN[i].nombre,
-  //          marca:this.ALMACEN[i].marca,
-  //         //  total:this.ALMACEN[i].cantidad,
-  //          grupo:this.ALMACEN[i].grupo.nombre,
-  //          presentacion:this.ALMACEN[i].presentacion,
-  //          neto:this.ALMACEN[i].neto,
-  //          unidad:this.ALMACEN[i].unidad,
-  //          ancho:this.ALMACEN[i].ancho,
-  //          largo:this.ALMACEN[i].largo
-  //        })
-  //      }
-
-  //   }
-  // }
 
   changeView(){
 
@@ -1462,164 +1296,29 @@ export class MainComponent implements OnInit {
 
     return materiales_en_almacen;
   }
-  Caja_(caja:number, cinta:number){
-    caja = Math.ceil(caja);
-    this.cintas_= Number(cinta * caja)
-    return caja
-  }
+  
   caja(cajas){
     this.caja_ = cajas;
   }
 
-  Lote(e, material, i, hojas, grupo, cantidad,m_cantidad,unidad,cinta?){
-
-    let splited = e.split('-')
-    e = splited[1]
-    let codigo = splited[0]
-    console.log(splited)
-
-    let EnAlmacen = this.Almacenado.find(x => x.material.nombre === material && x.lote === e && x.codigo === codigo)
-
-    // console.log('******/*/*/*/*/*/*/*/*/*/*/', cantidad)
-    console.log(this.MAT_NECESARIO)
-    let _cantidad
-
-    if(grupo === 'Tinta'){
-      _cantidad = (m_cantidad * hojas) / 1000;
-    }else if(grupo === 'Barniz'){
-      _cantidad = (m_cantidad * hojas) / 1000;
-    }else if(grupo === 'Pega'){
-      _cantidad = (m_cantidad * cantidad) / 1000;
-    }else if(grupo === 'Cajas Corrugadas'){
-      _cantidad = cantidad / m_cantidad;
-      cinta  = cinta * _cantidad;
-    }else if(grupo === 'Cinta de Embalaje'){
-      _cantidad = this.cintas_;
-    }
-
-    let unidad_necesaria = _cantidad / EnAlmacen.material.neto;
-    // alert(_cantidad)
-    // alert(EnAlmacen.material.neto)
-
-
-    unidad_necesaria = Math.ceil(unidad_necesaria)
-    EnAlmacen.cantidad = Math.trunc(EnAlmacen.cantidad)
-
-    let previo = this.LOTES.filter(x => x.i === i)
-
-    if(EnAlmacen.material.grupo.nombre === 'Sustrato'){
-      unidad_necesaria = hojas
-    }
-
-    if(previo.length > 0){
-
-      if(previo[previo.length-1].restante){
-        unidad_necesaria = previo[previo.length-1].restante
-      }
-
-    }
-
-
-    document.getElementById(`Necesario-${i}`).innerHTML = `${unidad_necesaria} ${EnAlmacen.material.presentacion}(s) necesaria(s)`
-    document.getElementById(`Almacenados-${i}`).innerHTML = `${EnAlmacen.cantidad} ${EnAlmacen.material.presentacion}(s) En Almacen`
-    
-    
-    let restante =  EnAlmacen.cantidad - unidad_necesaria;
-    restante = Math.trunc(restante)
-
-    let cantidad_solicitada;
-
-    if(restante < 0){
-      restante = Math.abs(restante);
-      document.getElementById(`Restante-${i}`).innerHTML = `
-      <b>Faltan: </b>${restante} <br>
-      `
-      document.getElementById(`fijar_lote-${i}`).style.display = "block";
-
-      let check = document.getElementById(`fijar_lote-${i}`);
-
-      cantidad_solicitada = EnAlmacen.cantidad;
-      check.onclick = () => this.fijalote(e,codigo, 0, i, (EnAlmacen.cantidad*EnAlmacen.material.neto), restante,cantidad_solicitada, unidad)
-
-
-      // <input type="checkbox" (click)='fijalote(${e},${EnAlmacen.cantidad})'> Fijar lote
-    }else{
-      document.getElementById(`fijar_lote-${i}`).style.display = "none";
-      document.getElementById(`Restante-${i}`).innerHTML = `<b>Restan: </b>${restante} ${EnAlmacen.material.presentacion}(s) En Almacen`
-      
-      cantidad_solicitada = EnAlmacen.cantidad - restante;
-      let existe = this.LOTES.find(x => x.lote === e)
-
-      if(!existe){
-        this.LOTES.push({lote:e,codigo:codigo,resta:restante,i,almacenado:EnAlmacen.cantidad,solicitado:cantidad_solicitada,unidad})
-      }
-      else{
-        this.LOTES.push({lote:e,codigo,resta:restante,i,almacenado:EnAlmacen.cantidad,solicitado:cantidad_solicitada,unidad})
-        //  let index = this.LOTES.findIndex(x => x.lote === e)
-        //  this.LOTES.splice(index , 1);
-      }
-      
-      console.log(this.LOTES)
-    }
-
-
-
+  finalizar_asignacion(){
+        this.BuscarAlmacen()
+        this.porConfirmar()
+        this.getAalmacenado()
+        this.getOrdenes()
   }
 
-  fijalote(lote,codigo, resto, i, almacenado, restante,solicitado,unidad){
+  // existencia(x){
+  //   let lotes = this.LOTES.length;
+  //   let existencia = 0;
+  //   for(let i = 0; i<lotes; i++){
+  //     if(this.LOTES[i].i == x){
+  //       existencia = existencia + this.LOTES[i].almacenado;
+  //     } 
+  //   }
 
-    let existe = this.LOTES.find(x => x.lote == lote)
-
-      if(!existe){
-        this.LOTES.push({lote,codigo,resta:resto,i,almacenado,restante:restante,solicitado,unidad})
-        console.log(this.LOTES)
-      }else{
-        let index = this.LOTES.findIndex(x => x.lote == lote)
-        this.LOTES.push({lote,codigo,resta:resto,i,almacenado,restante:restante,solicitado,unidad})
-      }
-
-      console.log(this.LOTES)
-  
-  }
-
-  Unidad(material){
-    let unidad = this.ALMACEN.find(x => x.nombre === material)
-
-    return unidad.unidad
-  }
-
-  cantidad_lotes(x){
-
-    let lotes = this.LOTES.length;
-    let total = 0;
-    
-    for(let i = 0; i<lotes; i++){
-      if(this.LOTES[i].i == x){
-        total ++
-      } 
-    }
-
-    return total;
-
-  }
-
-  existencia(x){
-    let lotes = this.LOTES.length;
-    let existencia = 0;
-    for(let i = 0; i<lotes; i++){
-      if(this.LOTES[i].i == x){
-        existencia = existencia + this.LOTES[i].almacenado;
-      } 
-    }
-
-    return existencia
-  }
-
-  borrarLote(lote){
-    let index = this.LOTES.findIndex(x => x.lote === lote)
-
-    this.LOTES.splice(index,1)
-  }
+  //   return existencia
+  // }
 
 
 

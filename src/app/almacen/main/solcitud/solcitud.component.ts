@@ -1,5 +1,4 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { RestApiService } from 'src/app/services/rest-api.service';
 
 @Component({
   selector: 'app-solcitud',
@@ -7,17 +6,27 @@ import { RestApiService } from 'src/app/services/rest-api.service';
   styleUrls: ['./solcitud.component.css']
 })
 export class SolcitudComponent implements OnInit {
+  
+  public materiales:any;
 
-  public ordenes:any;
 
 
   @Input() solicitud:any
   @Input() orden:any
   @Output() onCloseModal = new EventEmitter();
 
-  constructor(public api:RestApiService) { }
+  constructor() { }
 
   ngOnInit(): void {
+  }
+
+  TraerMateriales(e){
+    let Orden_seleccionada = this.orden.find(x => x.sort == e)
+    if(Orden_seleccionada){
+      this.materiales = Orden_seleccionada.producto.materiales[Orden_seleccionada.montaje]
+    }else{
+      this.materiales = undefined;
+    }
   }
 
   onClose(){
