@@ -23,7 +23,7 @@
                         <th>Cantidad Solicitada</th>
                     </thead>
                     <tbody>
-                        <tr *ngFor="let material of materiales">
+                        <tr *ngFor="let material of materiales; index as i">
                             <td>
                                 {{material.producto.nombre}} 
                                 <ng-container *ngIf="material.producto.ancho">
@@ -32,7 +32,7 @@
                                 ({{material.producto.marca}})
                             </td>
                             <td>
-                                <input type="number" class="input" value="0" min="0" max="{{material.cantidad}}">
+                                <input type="number" class="input" value="0" min="0" max="{{material.cantidad}}" id="{{i}}" name="{{material.producto._id}}">
                             </td>
                         </tr>
                     </tbody>
@@ -46,7 +46,7 @@
 
                 <hr *ngIf="materiales">
 
-                <button class="button is-primary" disabled>Realizar Solicitud</button>
+                <button class="button is-primary" (click)="FinalizarSolicitud()">Realizar Solicitud</button>
         </div>
     </div>
 </div>

@@ -1,4 +1,6 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { RestApiService } from 'src/app/services/rest-api.service';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-solcitud',
@@ -8,6 +10,7 @@ import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 export class SolcitudComponent implements OnInit {
   
   public materiales:any;
+  public orden_selected;
 
 
 
@@ -15,13 +18,14 @@ export class SolcitudComponent implements OnInit {
   @Input() orden:any
   @Output() onCloseModal = new EventEmitter();
 
-  constructor() { }
+  constructor(private api:RestApiService) { }
 
   ngOnInit(): void {
   }
 
   TraerMateriales(e){
     let Orden_seleccionada = this.orden.find(x => x.sort == e)
+    this.orden_selected = Orden_seleccionada
     if(Orden_seleccionada){
       this.materiales = Orden_seleccionada.producto.materiales[Orden_seleccionada.montaje]
     }else{
@@ -33,5 +37,67 @@ export class SolcitudComponent implements OnInit {
     this.solicitud = false;
     this.onCloseModal.emit();
   }
+
+  FinalizarSolicitud(){
+
+    let iteration = 0
+
+    let requisicion = {
+      sort:this.orden_selected.sort,
+      producto:{
+        materiales:[[]]
+      }
+    }
+
+  for(let i=0;i<this.materiales.length;i++){
+    let _i = i.toString();
+
+    let cantidad = (<HTMLInputElement>document.getElementById(_i)).value;
+    let producto = (<HTMLInputElement>document.getElementById(_i)).name;
+
+    let num = Number(cantidad)
+
+    if(num > 0){
+
+      iteration++
+      requisicion.producto.materiales[0].push({
+        cantidad,
+        producto 
+      })
+    }
+
+
+    console.log(requisicion)
+
+
+  }
+
+  if(iteration>0){
+
+    this.api.postReq(requisicion)
+    .subscribe((resp:any)=>{
+      Swal.fire(
+        'Hecho!',
+        'Se realizó la requisicion correctamente',
+        'success'
+      )
+      this.onClose()
+    })
+    
+  }else{
+    Swal.fire(
+      'Error!',
+      'Debe ingresar al menos una cantidad de cualquier producto',
+      'error'
+    )
+
+    return
+  }
+
+  
+  
+  
+}
+
 
 }

@@ -59,8 +59,8 @@ ___CSS_LOADER_EXPORT___.push([module.i, "/*! @creativebulma/bulma-tooltip v1.2.0
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-__webpack_require__(/*! C:\Users\administrador.POLINDUSTRIAL\Desktop\SIO_UPDATED\SIO_FRONTEND\src\styles.css */"OmL/");
-module.exports = __webpack_require__(/*! C:\Users\administrador.POLINDUSTRIAL\Desktop\SIO_UPDATED\SIO_FRONTEND\src\styles.scss */"+EN/");
+__webpack_require__(/*! C:\Users\administrador\Desktop\SIO\FRONTEND\src\styles.css */"OmL/");
+module.exports = __webpack_require__(/*! C:\Users\administrador\Desktop\SIO\FRONTEND\src\styles.scss */"+EN/");
 
 
 /***/ }),

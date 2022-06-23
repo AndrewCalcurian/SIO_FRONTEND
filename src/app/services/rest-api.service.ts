@@ -337,4 +337,14 @@ export class RestApiService {
     return this.http.put(url,data)
   }
 
+  postReq(data){
+    const url = `${this.api_url}/requi`
+    return this.http.post(url,data)
+  }
+
+  getRequi(){
+    const url = `${this.api_url}/requi`
+    return this.http.get(url)
+  }
+
 }

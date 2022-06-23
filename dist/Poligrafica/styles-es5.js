@@ -89,11 +89,11 @@
     /***/
     function _(module, exports, __webpack_require__) {
       __webpack_require__(
-      /*! C:\Users\administrador.POLINDUSTRIAL\Desktop\SIO_UPDATED\SIO_FRONTEND\src\styles.css */
+      /*! C:\Users\administrador\Desktop\SIO\FRONTEND\src\styles.css */
       "OmL/");
 
       module.exports = __webpack_require__(
-      /*! C:\Users\administrador.POLINDUSTRIAL\Desktop\SIO_UPDATED\SIO_FRONTEND\src\styles.scss */
+      /*! C:\Users\administrador\Desktop\SIO\FRONTEND\src\styles.scss */
       "+EN/");
       /***/
     },

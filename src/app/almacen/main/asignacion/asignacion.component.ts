@@ -15,19 +15,33 @@ export class AsignacionComponent implements OnInit {
   @Input() Almacenado:any
   @Output() onCloseModal = new EventEmitter();
   @Output() onFinalizarAsignacion = new EventEmitter();
+  @Output() onAgregarRequisicioes = new EventEmitter();
 
   public cintas_:any
   public LOTES = [];
+  public Requisiciones = [];
 
   constructor(private api:RestApiService) { }
 
   ngOnInit(): void {
+    this.buscarRequisicion()
   }
 
   onClose(){
     this.LOTES = [];
     this.asignacion = false;
     this.onCloseModal.emit();
+  }
+
+  buscarRequisicion(){
+    console.clear();
+    this.api.getRequi()
+    .subscribe((resp:any)=>{
+      for(let i =0; i<resp.length;i++){
+        this.necesario.push(resp[i])
+      }
+      // this.onAgregarRequisicioes.emit(resp)
+    })
   }
 
   Unidad(material){
@@ -44,10 +58,21 @@ export class AsignacionComponent implements OnInit {
 
   Lote(e, material, i, hojas, grupo, cantidad,m_cantidad,unidad,cinta?){
 
+    console.log({
+      e:e,
+      material,
+      i,
+      hojas,
+      grupo,
+      cantidad,
+      m_cantidad,
+      unidad,
+      cinta
+    })
+
     let splited = e.split('-')
     e = splited[1]
     let codigo = splited[0]
-    console.log(splited)
 
     let EnAlmacen = this.Almacenado.find(x => x.material.nombre === material && x.lote === e && x.codigo === codigo)
     let _cantidad
@@ -196,8 +221,6 @@ export class AsignacionComponent implements OnInit {
         })
         return
       }
-
-      
       
     }
 
@@ -217,7 +240,6 @@ export class AsignacionComponent implements OnInit {
         })
         this.onCloseModal.emit();
         this.onFinalizarAsignacion.emit();
-
       })
 
   }

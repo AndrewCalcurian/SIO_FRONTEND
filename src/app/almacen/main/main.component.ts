@@ -182,6 +182,14 @@ export class MainComponent implements OnInit {
 
   }
 
+  showOrden(){
+    console.log(this.orden)
+  }
+
+  agregarRequisicion(e){
+    this.necesario.push(e)
+  }
+
   public necesario;
 
   porConfirmar(){
