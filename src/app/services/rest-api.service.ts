@@ -347,4 +347,22 @@ export class RestApiService {
     return this.http.get(url)
   }
 
+  getRequiEspera(){
+    const url = `${this.api_url}/requi/espera`
+    return this.http.get(url)
+  }
+
+  DeleteRequi(id){
+    const url = `${this.api_url}/requi/${id}`
+    return this.http.delete(url)
+  }
+
+  UpdateRequi(id){
+    let data = 'nada'
+    const url = `${this.api_url}/requi/${id}`
+    return this.http.put(url,data)
+  }
+
+  
+
 }

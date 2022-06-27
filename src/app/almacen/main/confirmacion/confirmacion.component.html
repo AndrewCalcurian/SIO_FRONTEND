@@ -1,0 +1,33 @@
+
+<div class="modal" [ngClass]="{'is-active':confirmacion}">
+    <div class="modal-background" (click)="onClose()"></div>
+    <div class="modal-card">
+        <div class="modal-card-body">
+            <div class="subtitulo">
+                Requisición de Material
+            </div>
+            <hr>
+            <ng-container *ngFor="let pendiente of Pendiente">
+
+                <p class="orden">Orden: {{pendiente.sort}}</p>
+                <table class="table is-fullwidth" >
+                    <thead>
+                        <tr>
+                            <th>Material</th>
+                            <th>Cantidad</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="necesario of pendiente.producto.materiales[0];index as i">
+                            <td>{{pendiente.producto.materiales[0][i].producto.nombre}} ({{pendiente.producto.materiales[0][i].producto.marca}})</td>
+                            <td>{{pendiente.producto.materiales[0][i].cantidad}}{{pendiente.producto.materiales[0][i].producto.unidad}}</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+            <button class="button is-danger" (click)="rechazar(pendiente._id)">Rechazar Solicitud</button> <button class="button is-success" (click)="aprobar(pendiente._id)">Aprobar Solicitud</button>
+            <hr>
+            </ng-container>
+        </div>
+    </div>
+</div>

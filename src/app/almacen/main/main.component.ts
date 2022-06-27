@@ -95,6 +95,7 @@ export class MainComponent implements OnInit {
 
   solicitud:boolean = false;
   asignacion:boolean = false;
+  confirmacion:boolean = false;
 
 
 
@@ -121,6 +122,7 @@ export class MainComponent implements OnInit {
   
 
   public Almacenado = [];
+  Pendiente;
 
 
   InventarioForm:FormGroup = this.fb.group({
@@ -169,6 +171,7 @@ export class MainComponent implements OnInit {
     this.Buscar_conversiones()
     this.getbobinas();
     this.getOrdenes();
+    this.buscarPendientes();
   }
 
   public usuario
@@ -180,6 +183,18 @@ export class MainComponent implements OnInit {
       this.orden = resp;
     } )
 
+  }
+
+  buscarPendientes(){
+    this.api.getRequiEspera()
+      .subscribe((resp:any)=>{
+        this.Pendiente = resp;
+      })
+  }
+
+
+  Requisicion(){
+    this.confirmacion = true
   }
 
   showOrden(){

@@ -5,12 +5,13 @@ import { AlmacenRoutingModule } from './almacen-routing.module';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { SolcitudComponent } from './main/solcitud/solcitud.component';
 import { AsignacionComponent } from './main/asignacion/asignacion.component';
+import { ConfirmacionComponent } from './main/confirmacion/confirmacion.component';
 
 
 
 
 @NgModule({
-  declarations: [MainComponent, SolcitudComponent, AsignacionComponent],
+  declarations: [MainComponent, SolcitudComponent, AsignacionComponent, ConfirmacionComponent],
   imports: [
     CommonModule,
     AlmacenRoutingModule,

@@ -6,7 +6,8 @@
         <button class="button is-primary" (click)='modal_Conversion()' *ngIf="_bobina && usuario.Almacen == 2">Hacer Conversión</button>
         <button class="button is-primary" (click)='Modal_bobinas()' *ngIf="_bobina && usuario.Almacen == 2">Nueva Bobinas</button>
         <button class="button is-primary" (click)='modal_solicitud()' >Solicitud de materiales</button>
-        <button class="button is-primary" (click)='modal_asignacion()' *ngIf="usuario.Almacen == 2">Mat. Necesario ({{necesario.length}})</button> 
+        <button class="button is-primary" (click)='modal_asignacion()' *ngIf="usuario.Almacen == 2">Mat. Necesario ({{necesario.length}})</button>
+        <button class="button is-primary" (click)="Requisicion()">Requisición Pendiente ({{Pendiente.length}})</button>
         <hr>
 
         <app-solcitud 
@@ -26,7 +27,10 @@
         </app-asignacion>
 
 
-        <button class="button" (click)="showOrden()">mostrar orden</button>
+        <app-confirmacion
+        [confirmacion]="confirmacion"
+        (onCloseModal)="confirmacion = false">
+        </app-confirmacion>
 
         <div class="field">
             <div class="select">
