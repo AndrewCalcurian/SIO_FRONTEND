@@ -7,7 +7,7 @@
         <button class="button is-primary" (click)='Modal_bobinas()' *ngIf="_bobina && usuario.Almacen == 2">Nueva Bobinas</button>
         <button class="button is-primary" (click)='modal_solicitud()' >Solicitud de materiales</button>
         <button class="button is-primary" (click)='modal_asignacion()' *ngIf="usuario.Almacen == 2">Mat. Necesario ({{necesario.length}})</button>
-        <button class="button is-primary" (click)="Requisicion()">Requisición Pendiente ({{Pendiente.length}})</button>
+        <button class="button is-primary" (click)="Requisicion()">Solicitud Pendiente ({{Pendiente.length}})</button>
         <hr>
 
         <app-solcitud 
@@ -29,7 +29,8 @@
 
         <app-confirmacion
         [confirmacion]="confirmacion"
-        (onCloseModal)="confirmacion = false">
+        (onCloseModal)="confirmacion = false"
+        (onReset)="buscarPendientes()">
         </app-confirmacion>
 
         <div class="field">

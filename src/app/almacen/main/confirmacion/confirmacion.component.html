@@ -4,12 +4,12 @@
     <div class="modal-card">
         <div class="modal-card-body">
             <div class="subtitulo">
-                Requisición de Material
+                Solicitud de Material
             </div>
             <hr>
             <ng-container *ngFor="let pendiente of Pendiente">
 
-                <p class="orden">Orden: {{pendiente.sort}}</p>
+                <p class="orden">Orden: {{pendiente.sort}} ({{pendiente.usuario}})</p>
                 <table class="table is-fullwidth" >
                     <thead>
                         <tr>
@@ -25,7 +25,7 @@
                     </tbody>
                 </table>
 
-            <button class="button is-danger" (click)="rechazar(pendiente._id)">Rechazar Solicitud</button> <button class="button is-success" (click)="aprobar(pendiente._id)">Aprobar Solicitud</button>
+            <button class="button is-success" (click)="aprobar(pendiente._id)">Aprobar Solicitud</button> <button class="button is-danger" (click)="rechazar(pendiente._id)">Rechazar Solicitud</button>
             <hr>
             </ng-container>
         </div>

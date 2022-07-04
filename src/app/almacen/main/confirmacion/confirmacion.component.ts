@@ -11,6 +11,7 @@ export class ConfirmacionComponent implements OnInit {
 
   @Input() confirmacion:any
   @Output() onCloseModal = new EventEmitter();
+  @Output() onReset = new EventEmitter();
 
   constructor(private api:RestApiService) { }
 
@@ -39,49 +40,58 @@ export class ConfirmacionComponent implements OnInit {
 
   aprobar(id:any){
     Swal.fire({
-      title: '¿Aprobar Requisición?',
-      text: "No podras revertir esto!",
+      title: '¿Aprobar Solicitud?',
+      text: "No podrás revertir esto!",
       icon: 'warning',
       showCancelButton: true,
       confirmButtonColor: '#3085d6',
       cancelButtonColor: '#d33',
-      confirmButtonText: 'Si, Apronar!',
+      confirmButtonText: 'Sí, Aprobar!',
       cancelButtonText:'Cancelar'
     }).then((result) => {
       if (result.isConfirmed) {
         this.api.UpdateRequi(id)
           .subscribe((resp:any)=>{
             this.buscarPendientes();
+            this.onReset.emit()
           })
         Swal.fire(
-          'Aprobado!',
-          'La requisición fue aprobada',
-          'success'
-        )
+      {
+        showConfirmButton:false,
+        title:'Aprobado!',
+        text:'La solicitud fue aprobada',
+        icon:'success'
+      }
+          )
+
       }
     })
   }
 
   rechazar(id:any){
     Swal.fire({
-  title: '¿Rechazar Requisición?',
-  text: "No podras revertir esto!",
+  title: '¿Rechazar Solicitud?',
+  text: "No podrás revertir esto!",
   icon: 'warning',
   showCancelButton: true,
   confirmButtonColor: '#3085d6',
   cancelButtonColor: '#d33',
-  confirmButtonText: 'Si, Rechazar!',
+  confirmButtonText: 'Sí, Rechazar!',
   cancelButtonText:'Cancelar'
 }).then((result) => {
   if (result.isConfirmed) {
     this.api.DeleteRequi(id)
       .subscribe((resp:any)=>{
         this.buscarPendientes();
+        this.onReset.emit()
       })
     Swal.fire(
-      'Rechazado!',
-      'La requisición fue rechazada',
-      'success'
+      {
+        showConfirmButton:false,
+        title:'Rechazado!',
+        text:'La solicitud fue rechazada',
+        icon:'error'
+      }
     )
   }
 })

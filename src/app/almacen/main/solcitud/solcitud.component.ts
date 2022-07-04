@@ -18,7 +18,10 @@ export class SolcitudComponent implements OnInit {
   @Input() orden:any
   @Output() onCloseModal = new EventEmitter();
 
-  constructor(private api:RestApiService) { }
+  constructor(private api:RestApiService) {
+
+    let usuario = api.usuario
+   }
 
   ngOnInit(): void {
   }
@@ -44,6 +47,8 @@ export class SolcitudComponent implements OnInit {
 
     let requisicion = {
       sort:this.orden_selected.sort,
+      motivo:(<HTMLInputElement>document.getElementById('razon')).value,
+      usuario:`${this.api.usuario.Nombre} ${this.api.usuario.Apellido}`,
       producto:{
         materiales:[[]]
       }
@@ -77,18 +82,25 @@ export class SolcitudComponent implements OnInit {
     this.api.postReq(requisicion)
     .subscribe((resp:any)=>{
       Swal.fire(
-        'Hecho!',
-        'Se realizó la requisicion correctamente',
-        'success'
+        {
+          showConfirmButton:false,
+          title:'Hecho!',
+          text:'Se realizó la requisicion correctamente',
+          icon:'success',
+          timer:5000
+        }
       )
       this.onClose()
     })
     
   }else{
     Swal.fire(
-      'Error!',
-      'Debe ingresar al menos una cantidad de cualquier producto',
-      'error'
+      {
+        showConfirmButton:false,
+        title:'Error!',
+        text:'Debe ingresar al menos una cantidad de cualquier producto',
+        icon:'error'
+      }
     )
 
     return

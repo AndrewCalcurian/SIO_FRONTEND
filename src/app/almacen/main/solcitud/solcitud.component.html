@@ -39,8 +39,19 @@
                 </table>
 
                 <div class="field" *ngIf="materiales">
-                    <div class="control">
-                      <textarea class="textarea is-small has-fixed-size" placeholder="Motivo de la solicitud"></textarea>
+                    <div class="select">
+                      <!-- <textarea class="textarea is-small has-fixed-size" placeholder="Motivo de la solicitud"></textarea> -->
+                        <select name="" id="razon" class="selevt">
+                            <option value="Fallas asociadas al sustrato">Fallas asociadas al sustrato</option>
+                            <option value="Fallas asociadas a la tinta">Fallas asociadas a la tinta</option>
+                            <option value="Inconsistencias en el inventario físico">Inconsistencias en el inventario físico</option>
+                            <option value="Fallas asociadas al operador de impresión">Fallas asociadas al operador de impresión</option>
+                            <option value="Fallas asociadas al operador de corte">Fallas asociadas al operador de corte</option>
+                            <option value="Fallas asociadas al operador de troquelado">Fallas asociadas al operador de troquelado</option>
+                            <option value="Fallas asociadas al operador de Pegado">Fallas asociadas al operador de Pegado</option>
+                            <option value="Fallas del proceso de impresión">Fallas del proceso de impresión </option>
+                            <option value="Fallas del proceso de pegado">Fallas del proceso de pegado</option>
+                        </select>
                     </div>
                   </div>
 
