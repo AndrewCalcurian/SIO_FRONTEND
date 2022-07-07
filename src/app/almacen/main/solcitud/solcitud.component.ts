@@ -85,7 +85,7 @@ export class SolcitudComponent implements OnInit {
         {
           showConfirmButton:false,
           title:'Hecho!',
-          text:'Se realizó la requisicion correctamente',
+          text:'Se realizó la solicitud correctamente',
           icon:'success',
           timer:5000
         }

@@ -56,7 +56,7 @@ export class AsignacionComponent implements OnInit {
     return caja
   }
 
-  Lote(e, material, i, hojas, grupo, cantidad,m_cantidad,unidad,cinta?){
+  Lote(e, orden, material, i, hojas, grupo, cantidad,m_cantidad,unidad,cinta?){
 
     console.log({
       e:e,
@@ -98,8 +98,10 @@ export class AsignacionComponent implements OnInit {
 
     let previo = this.LOTES.filter(x => x.i === i)
 
-    if(EnAlmacen.material.grupo.nombre === 'Sustrato'){
+    if(EnAlmacen.material.grupo.nombre === 'Sustrato' && !orden.motivo){
       unidad_necesaria = hojas
+    }else{
+      unidad_necesaria = m_cantidad;
     }
 
     if(previo.length > 0){

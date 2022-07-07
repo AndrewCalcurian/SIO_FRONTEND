@@ -7050,7 +7050,7 @@
                 sweetalert2__WEBPACK_IMPORTED_MODULE_1___default.a.fire({
                   showConfirmButton: false,
                   title: 'Hecho!',
-                  text: 'Se realizó la requisicion correctamente',
+                  text: 'Se realizó la solicitud correctamente',
                   icon: 'success',
                   timer: 5000
                 });
@@ -14960,7 +14960,7 @@
       /*! @angular/common */
       "ofXK");
 
-      function ConfirmacionComponent_ng_container_7_tr_11_Template(rf, ctx) {
+      function ConfirmacionComponent_ng_container_7_tr_14_Template(rf, ctx) {
         if (rf & 1) {
           _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementStart"](0, "tr");
 
@@ -15006,21 +15006,29 @@
 
           _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementEnd"]();
 
-          _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementStart"](3, "table", 7);
+          _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementStart"](3, "b");
 
-          _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementStart"](4, "thead");
-
-          _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementStart"](5, "tr");
-
-          _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementStart"](6, "th");
-
-          _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵtext"](7, "Material");
+          _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵtext"](4, "Motivo: ");
 
           _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementEnd"]();
 
-          _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementStart"](8, "th");
+          _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵtext"](5);
 
-          _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵtext"](9, "Cantidad");
+          _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementStart"](6, "table", 7);
+
+          _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementStart"](7, "thead");
+
+          _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementStart"](8, "tr");
+
+          _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementStart"](9, "th");
+
+          _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵtext"](10, "Material");
+
+          _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementEnd"]();
+
+          _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementStart"](11, "th");
+
+          _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵtext"](12, "Cantidad");
 
           _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementEnd"]();
 
@@ -15028,17 +15036,17 @@
 
           _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementEnd"]();
 
-          _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementStart"](10, "tbody");
+          _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementStart"](13, "tbody");
 
-          _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵtemplate"](11, ConfirmacionComponent_ng_container_7_tr_11_Template, 5, 4, "tr", 5);
-
-          _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementEnd"]();
+          _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵtemplate"](14, ConfirmacionComponent_ng_container_7_tr_14_Template, 5, 4, "tr", 5);
 
           _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementEnd"]();
 
-          _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementStart"](12, "button", 8);
+          _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementEnd"]();
 
-          _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵlistener"]("click", function ConfirmacionComponent_ng_container_7_Template_button_click_12_listener() {
+          _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementStart"](15, "button", 8);
+
+          _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵlistener"]("click", function ConfirmacionComponent_ng_container_7_Template_button_click_15_listener() {
             _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵrestoreView"](_r6);
 
             var pendiente_r1 = ctx.$implicit;
@@ -15048,15 +15056,15 @@
             return ctx_r5.aprobar(pendiente_r1._id);
           });
 
-          _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵtext"](13, "Aprobar Solicitud");
+          _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵtext"](16, "Aprobar Solicitud");
 
           _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementEnd"]();
 
-          _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵtext"](14, "\xA0");
+          _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵtext"](17, "\xA0");
 
-          _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementStart"](15, "button", 9);
+          _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementStart"](18, "button", 9);
 
-          _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵlistener"]("click", function ConfirmacionComponent_ng_container_7_Template_button_click_15_listener() {
+          _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵlistener"]("click", function ConfirmacionComponent_ng_container_7_Template_button_click_18_listener() {
             _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵrestoreView"](_r6);
 
             var pendiente_r1 = ctx.$implicit;
@@ -15066,11 +15074,11 @@
             return ctx_r7.rechazar(pendiente_r1._id);
           });
 
-          _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵtext"](16, "Rechazar Solicitud");
+          _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵtext"](19, "Rechazar Solicitud");
 
           _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementEnd"]();
 
-          _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelement"](17, "hr");
+          _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelement"](20, "hr");
 
           _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementContainerEnd"]();
         }
@@ -15083,6 +15091,10 @@
           _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵadvance"](2);
 
           _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵtextInterpolate2"]("Orden: ", pendiente_r1.sort, " (", pendiente_r1.usuario, ")");
+
+          _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵadvance"](3);
+
+          _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵtextInterpolate1"]("", pendiente_r1.motivo, " ");
 
           _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵadvance"](9);
 
@@ -15239,7 +15251,7 @@
 
             _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelement"](6, "hr");
 
-            _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵtemplate"](7, ConfirmacionComponent_ng_container_7_Template, 18, 4, "ng-container", 5);
+            _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵtemplate"](7, ConfirmacionComponent_ng_container_7_Template, 21, 5, "ng-container", 5);
 
             _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementEnd"]();
 
@@ -22838,7 +22850,7 @@
 
             var ctx_r33 = _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵnextContext"]();
 
-            return ctx_r33.Lote($event.target.value, materiales_r4.producto.nombre, i_r5, orden_r2.paginas, materiales_r4.producto.grupo.nombre, orden_r2.cantidad, materiales_r4.cantidad, materiales_r4.producto.unidad, materiales_r4.cinta);
+            return ctx_r33.Lote($event.target.value, orden_r2, materiales_r4.producto.nombre, i_r5, orden_r2.paginas, materiales_r4.producto.grupo.nombre, orden_r2.cantidad, materiales_r4.cantidad, materiales_r4.producto.unidad, materiales_r4.cinta);
           });
 
           _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementStart"](15, "option", 18);
@@ -23106,7 +23118,7 @@
           }
         }, {
           key: "Lote",
-          value: function Lote(e, material, i, hojas, grupo, cantidad, m_cantidad, unidad, cinta) {
+          value: function Lote(e, orden, material, i, hojas, grupo, cantidad, m_cantidad, unidad, cinta) {
             var _this78 = this;
 
             console.log({
@@ -23149,8 +23161,10 @@
               return x.i === i;
             });
 
-            if (EnAlmacen.material.grupo.nombre === 'Sustrato') {
+            if (EnAlmacen.material.grupo.nombre === 'Sustrato' && !orden.motivo) {
               unidad_necesaria = hojas;
+            } else {
+              unidad_necesaria = m_cantidad;
             }
 
             if (previo.length > 0) {
