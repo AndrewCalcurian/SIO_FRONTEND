@@ -167,7 +167,7 @@ export class ProductosComponent implements OnInit {
   }
 
   selecciona_producto2(e){
-    let clase = this.i_montajes.toString()
+    let clase = this.i_montajes_.toString()
     if(e == 0){
       (<HTMLInputElement>document.getElementById(`x-${clase}`)).disabled = true;
     }else{
@@ -540,17 +540,16 @@ just_a_sec(e){
   }
 
 add_materia3(producto, cantidad){
-  let i = this.i_montajes.toString();
+  let i = this.i_montajes_.toString();
 
   producto = (<HTMLInputElement>document.getElementById(`x-${i}`)).value
-  cantidad = (<HTMLInputElement>document.getElementById(`xcantidad${this.i_montajes}`)).value
+  cantidad = (<HTMLInputElement>document.getElementById(`xcantidad${this.i_montajes_}`)).value
 
 
   let Material = this.MATERIALES.find(x => x._id == producto)
- 
 
 
-  console.log(Material, '--' )
+  console.log(Material,'/*/*/*/*/*/*/*/*/*/*/*/')
 
   let size = cantidad
   let name = Material.nombre
@@ -560,7 +559,7 @@ add_materia3(producto, cantidad){
   }
 
   if(Material.ancho){
-    name = `${Material.producto.nombre} (${Material.producto.ancho} x ${Material.producto.largo})`;
+    name = `${Material.nombre} (${Material.ancho} x ${Material.largo})`;
   }
 
 
@@ -571,8 +570,12 @@ add_materia3(producto, cantidad){
     producto:producto,
     cantidad: size
   }
+
+  if(!this.OneProduct.materiales[this.i_montajes_]){
+    this.OneProduct.materiales[this.i_montajes_] = [];
+  }
   
-  this.OneProduct.materiales[this.i_montajes].push(productos)
+  this.OneProduct.materiales[this.i_montajes_].push(productos)
 
   this.api.updateProducto(this.OneProduct, this.OneProduct._id)
       .subscribe((resp:any)=>{
@@ -661,10 +664,10 @@ add_materia(producto, cantidad){
   Delete_Material2(material2){
 
     console.log(this.OneProduct.materiales[this.i_montajes])
-    let deleted = this.OneProduct.materiales[this.i_montajes].findIndex(x => x.producto.nombre == material2)
+    let deleted = this.OneProduct.materiales[this.i_montajes_].findIndex(x => x.producto.nombre == material2)
     console.log(deleted)
 
-    this.OneProduct.materiales[this.i_montajes].splice(deleted, 1);
+    this.OneProduct.materiales[this.i_montajes_].splice(deleted, 1);
 
     // let deleted = this.OneProduct.materiales[this.i_montajes].producto.findIndex(x => x.nombre == material2)
 

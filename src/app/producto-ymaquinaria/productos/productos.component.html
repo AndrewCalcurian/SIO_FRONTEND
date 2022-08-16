@@ -226,163 +226,6 @@
                 Materia Prima - Montaje
             </div>
             <br>
-
-
-                <!-- <div class="column">
-                    <div class="field">
-                        <label class="label">Ejemplares Montados:</label>
-                        <div class="control">
-                            <input type="number" class="input" min='1' value="1" (change)='Ejemplar($event)'>
-                        </div>
-                    </div>
-                </div> -->
-                <!-- <div class="column">
-                    <input type="checkbox" name="troquelado" id="troquelado" (click)='post_impresion("Troquelado")'><label> Troquelado</label><br>
-                    <input type="checkbox" name="pegado" id="pegado" (click)='post_impresion("Pegado")'><label> Pegado</label><br>
-                    <input type="checkbox" name="corte" id="corte" (click)='post_impresion("Corte Recto")'><label> Corte Recto</label><br>
-                
-                </div> -->
-                <!-- <div class="column">
-                    <div class="field">
-                        <label class="label"> <br> Ancho:</label>
-                        <div class="control">
-                            <input type="text" class="input" id='ancho' (change)='ancho($event)'>
-                        </div>
-                    </div>
-                </div>
-                <div class="column">
-                    <div class="field">
-                        <label class="label"> <br> Largo:</label>
-                        <div class="control">
-                            <input type="text" class="input" id='largo' (change)='largo($event)' disabled>
-                        </div>
-                    </div>
-                </div>
-                <div class="column">
-                    <div class="field">
-                        <label class="label">Dirección de Fibra:</label>
-                        <div class="control">
-                            <div class="select">
-                                <select name="d_fibra" id="d_fibra" disabled>
-                                    <option value="{{dim}}" *ngFor='let dim of dimensiones'>{{dim}}</option>
-                                </select>
-                            </div>
-                        </div>
-                    </div>
-                </div> -->
-            <!-- </div> -->
-
-            <!-- <div class="separador">
-                Post Impresión
-            </div>
-            <br>
-            <div class="columns">
-                <div class="column">
-                    <div class="field">
-                        <label class="label">POST-IMPRESION</label>
-                        <div class="select is-multiple">
-                            <select  multiple value='Recto' id='p_i' (change)='post_impresion($event)'>
-                                <option value="Recto">Corte Recto</option>
-                                <option value="Doblado">Doblado</option>
-                                <option value="Signado">Signado</option>
-                                <option value="Fleje">De Fleje</option>
-                                <option value="Molde">De Molde</option>
-                            </select>
-                        </div>
-                    </div>
-                </div>
-                <div class="column">
-                    <ul>
-                        <li *ngFor='let post of POST' (click)='borrarPost(post)'>{{post}}</li>
-                    </ul>
-                </div>
-            </div> -->
-
-            <!-- SELECCION DE SUSTRATO SACADO DE LAS BOBINAS *************** -->
-
-            <!-- <div class="separador">
-                Sustratos
-            </div>
-            <br>
-
-            <div class="Sustrato" *ngIf='SUSTRATO.length > 0'>
-                <div class="columns">
-                    <div class="column">
-                        {{SUSTRATO}} ({{dimensiones[0]}} x {{dimensiones[1]}})
-                    </div>
-                    <div class="column">
-                        <button class="button is-danger is-outlined is-small" (click)='NuevoSustrato()'>
-                            <span>Eliminar</span>
-                            <span class="icon is-small">
-                              <i class="fas fa-times"></i>
-                            </span>
-                          </button>
-                    </div>
-                </div>
-            </div> -->
-
-            <!-- <div class="done" *ngIf='!Sus_Done'>
-                <div class="columns">
-                    <div class="column">
-                        <div class="field">
-                            <label class="label">Sustrato</label>
-                            <div class="control">
-                                <input type="text" class="input" placeholder="Sustrato" id='sustrato_name'>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="column">
-                        <div class="field">
-                            <label class="label">Marca</label>
-                            <div class="control">
-                                <input type="text" class="input" placeholder="Marca" id='sustrato_marca'>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="column is-2">
-                        <div class="field">
-                            <label  class="label">Gramaje</label>
-                            <div class="control">
-                                <input type="text" class="input" placeholder="Gramaje" id='sustrato_gramaje'>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="column is-2">
-                        <div class="field">
-                            <label  class="label">Calibre</label>
-                            <div class="control">
-                                <input type="text" class="input" placeholder="Calibre" id='sustrato_calibre'>
-                            </div>
-                        </div>
-                    </div>
-                    <!-- <div class="column">
-                        <div class="field">
-                            <br>
-                            <button class="button is-success is-outlined" (click)='sustratos($event)'>
-                                <span class="icon is-small">
-                                  <i class="fas fa-check"></i>
-                                </span>
-                                <span>Agregar</span>
-                              </button>
-                        </div>
-                    </div>
-                </div>
-            </div> -->
-            <br>
-                    
-            <!--
-            <div class="card">
-                <div class="card-content">
-                    <div class="field">
-                        <label class="label">Tipo</label>
-                        <div class="select">
-                            <select id='sustrato'>
-                                <option value="{{sustrato}}" *ngFor='let sustrato of SUSTRATO'>{{sustrato}}</option>
-                            </select>
-                        </div>
-                    </div>
-                </div>
-            </div> -->
             <div class="columns">
                 <div class="column">
                     <div class="columns">
@@ -399,16 +242,6 @@
                     </div>
                 </div>
                 <div class="column">
-                    <!-- <div class="columns">
-                        <div class="column">
-                            <div class="field">
-                                <label class="label">Código de peliculas</label>
-                                <div class="control">
-                                    <input type="text" class="input" placeholder="Código de peliculas">
-                                </div>
-                            </div>
-                        </div>
-                    </div> -->
                 </div>
             </div>
 
@@ -497,75 +330,6 @@
                         </div>
                     </div>
             </div>
-            
-
-            <!-- <div class="columns">
-                <div class="column">
-                    <div class="field">
-                        <label class="label">Materia Prima</label>
-                        <div class="control">
-                            <input type="text" class="input" placeholder="Materia Prima" #material id='field_material'>
-                        </div>
-                    </div>
-                </div>
-                <div class="column">
-                    <div class="field">
-                        <label class="label">Marca</label>
-                        <div class="control">
-                            <input type="text" class="input" placeholder="Marca" #marca id='field_marca'>
-                        </div>
-                    </div>
-                </div>
-                <div class="column is-2">
-                    <div class="field">
-                        <label class="label">Cantidad</label>
-                        <div class="control">
-                            <input type="number" class="input" placeholder="cantidad" #cantidad id='field_cantidad'>
-                        </div>
-                    </div>
-                </div>
-                <div class="column is-3"><br>
-                    <div class="field">
-                        <label class="label"></label>
-                        <div class="control">
-                            <button class="button is-success is-outlined" (click)='add_materia(material, marca, cantidad)'>
-                                <span class="icon is-small">
-                                  <i class="fas fa-check"></i>
-                                </span>
-                                <span>Agregar</span>
-                              </button>
-                        </div>
-                    </div>
-                </div>
-            </div> -->
-
-
-
-            <!-- *****   SELECCION DE MATERIA PRIMA SACADO DEL INVENTARIO ****************** -->
-
-            <!-- <div class="card" *ngFor='let grupo of GRUPOS_MATERIA'>
-                <div class="card-content">
-                    <b>{{grupo.nombre}}</b>
-                    <table class="table is-striped is-fullwidth">
-                        <thead>
-                            <tr>
-                                <th>Selecciona</th>
-                                <th>Materia Prima</th>
-                                <th><abbr title="Cantidad necesaria por cada 1000">Cantidad</abbr></th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr *ngFor='let material of MATERIALES'>
-                                <ng-container *ngIf='material.grupo.nombre === grupo.nombre'>
-                                    <td><input type="checkbox" name='necesario' (click)='enable(material.nombre)'></td>
-                                    <td>{{material.nombre}}</td>
-                                    <td><input type="number" class="input" id='{{material.nombre}}' (change)='just_a_sec($event)' disabled></td>
-                                </ng-container>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-            </div> -->
             <hr>
             <button class="button is-primary" (click)='finalizar()'>Registrar Producto</button>
         </div>
@@ -744,14 +508,45 @@
                     <td>
                         <ng-container tr *ngFor="let TintaProducto of OneProduct.materiales[i_montajes];let i = index">
                             <ng-container *ngIf="TintaProducto.producto.grupo.nombre === 'Tinta'">
-                                <p *ngIf="TintaProducto.producto.color === 'Negro'"><b>Negro:</b>{{OneProduct.cliente.codigo}}-{{OneProduct.codigo}}-{{OneProduct.version}}-{{NumToLet(i_montajes)}}-1 </p>
-                                <p *ngIf="TintaProducto.producto.color === 'Cyan'"><b>Cyan:</b>{{OneProduct.cliente.codigo}}-{{OneProduct.codigo}}-{{OneProduct.version}}-{{NumToLet(i_montajes)}}-2 </p>
-                                <p *ngIf="TintaProducto.producto.color === 'Magenta'"><b>Magenta:</b>{{OneProduct.cliente.codigo}}-{{OneProduct.codigo}}-{{OneProduct.version}}-{{NumToLet(i_montajes)}}-3 </p>
-                                <p *ngIf="TintaProducto.producto.color === 'Amarillo'"><b>Amarillo:</b>{{OneProduct.cliente.codigo}}-{{OneProduct.codigo}}-{{OneProduct.version}}-{{NumToLet(i_montajes)}}-4 </p>
+                                <p *ngIf="TintaProducto.producto.color === 'Negro'"><b>Negro:</b>{{OneProduct.cliente.codigo}}-{{OneProduct.codigo}}-{{OneProduct.version}}-
+                                    <!-- {{NumToLet(i_montajes)}} -->
+                                    <ng-container *ngIf="i_montajes == 0">A</ng-container>
+                                    <ng-container *ngIf="i_montajes == 1">B</ng-container>
+                                    <ng-container *ngIf="i_montajes == 2">C</ng-container>
+                                    <ng-container *ngIf="i_montajes == 3">D</ng-container>
+                                    <ng-container *ngIf="i_montajes == 4">E</ng-container>
+                                    -1 </p>
+                                <p *ngIf="TintaProducto.producto.color === 'Cyan'"><b>Cyan:</b>{{OneProduct.cliente.codigo}}-{{OneProduct.codigo}}-{{OneProduct.version}}-
+                                    <ng-container *ngIf="i_montajes == 0">A</ng-container>
+                                    <ng-container *ngIf="i_montajes == 1">B</ng-container>
+                                    <ng-container *ngIf="i_montajes == 2">C</ng-container>
+                                    <ng-container *ngIf="i_montajes == 3">D</ng-container>
+                                    <ng-container *ngIf="i_montajes == 4">E</ng-container>
+                                    -2 </p>
+                                <p *ngIf="TintaProducto.producto.color === 'Magenta'"><b>Magenta:</b>{{OneProduct.cliente.codigo}}-{{OneProduct.codigo}}-{{OneProduct.version}}-
+                                    <ng-container *ngIf="i_montajes == 0">A</ng-container>
+                                    <ng-container *ngIf="i_montajes == 1">B</ng-container>
+                                    <ng-container *ngIf="i_montajes == 2">C</ng-container>
+                                    <ng-container *ngIf="i_montajes == 3">D</ng-container>
+                                    <ng-container *ngIf="i_montajes == 4">E</ng-container>
+                                    -3 </p>
+                                <p *ngIf="TintaProducto.producto.color === 'Amarillo'"><b>Amarillo:</b>{{OneProduct.cliente.codigo}}-{{OneProduct.codigo}}-{{OneProduct.version}}-
+                                    <ng-container *ngIf="i_montajes == 0">A</ng-container>
+                                    <ng-container *ngIf="i_montajes == 1">B</ng-container>
+                                    <ng-container *ngIf="i_montajes == 2">C</ng-container>
+                                    <ng-container *ngIf="i_montajes == 3">D</ng-container>
+                                    <ng-container *ngIf="i_montajes == 4">E</ng-container>
+                                    -4 </p>
                                 <div *ngIf="TintaProducto.producto.color != 'Amarillo' && TintaProducto.producto.color != 'Magenta' && TintaProducto.producto.color != 'Cyan' && TintaProducto.producto.color != 'Negro' ">
                                     <b>{{TintaProducto.producto.color}}:</b> 
                                     <ng-container *ngIf="cinco">
-                                        {{OneProduct.cliente.codigo}}-{{OneProduct.codigo}}-{{OneProduct.version}}-{{NumToLet(i_montajes)}}-{{sumaTintas(i)}}
+                                        {{OneProduct.cliente.codigo}}-{{OneProduct.codigo}}-{{OneProduct.version}}-
+                                    <ng-container *ngIf="i_montajes == 0">A</ng-container>
+                                    <ng-container *ngIf="i_montajes == 1">B</ng-container>
+                                    <ng-container *ngIf="i_montajes == 2">C</ng-container>
+                                    <ng-container *ngIf="i_montajes == 3">D</ng-container>
+                                    <ng-container *ngIf="i_montajes == 4">E</ng-container>
+                                        -{{sumaTintas(i)}}
                                     </ng-container>
                                 </div>
                             </ng-container>
@@ -820,168 +615,6 @@
                 </tbody>
             </table>
         </div>
-
-        <!-- <div class="modal-card-body tabla">
-            <div class="subtitulo">
-                Nuevo Producto
-            </div>
-            <div class="separador">
-                Información del producto
-            </div>
-            <br>
-            <div class="columns">
-                <div class="column">
-                    <div class="field">
-                        <label class="label">Nombre Producto</label>
-                        <div class="control">
-                            <input type="text" class="input" id='nombre_nuevo_producto' value='{{OneProduct.producto}}'>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="columns">
-                <div class="column">
-                    <div class="field">
-                        <label class="label">Categoria</label>
-                        <div class="select">
-                            <select id='grupo_producto' value='{{OneProduct.grupo._id}}'>
-                                <option *ngFor='let grupo of GRUPOS' value="{{grupo._id}}">{{grupo.nombre}}</option>
-                            </select>
-                        </div>
-                    </div>
-                </div>
-                <div class="column">
-                    <div class="field">
-                        <label class="label">Cod. Producto</label>
-                        <div class="control">
-                            <input type="text" class="input" id='cod_producto' value='{{OneProduct.codigo}}'>
-                        </div>
-                    </div>
-                </div>
-                <div class="column">
-                    <div class="field">
-                        <label class="label">Version</label>
-                        <div class="control">
-                            <input type="text" class="input" id='version' value='{{OneProduct.version}}'>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="separador">
-                Especificaciones
-            </div>
-            <br>
-
-            <div class="columns">
-                <div class="column">
-                    <div class="field">
-                        <label class="label">Ejemplares Montados:</label>
-                        <div class="control">
-                            <input type="number" class="input" min='1' value="1" (change)='Ejemplar($event)' value='{{OneProduct.ejemplares}}'>
-                        </div>
-                    </div>
-                </div>
-                <div class="column">
-                    <div class="field">
-                        <label class="label">Dim. de la hoja:</label>
-                        <div class="control">
-                            <input type="text" class="input" id='dimensiones' value='{{OneProduct.dimensiones}}'>
-                        </div>
-                    </div>
-                </div>
-                <div class="column">
-                    <div class="field">
-                        <label class="label">Dirección de Fibra:</label>
-                        <div class="control">
-                            <input type="text" class="input" id='d_fibra' value='{{OneProduct.fibra}}'>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="separador">
-                Post Impresión
-            </div>
-            <br>
-            <div class="columns">
-                <div class="column">
-                    <div class="field">
-                        <label class="label">POST-IMPRESION</label>
-                        <div class="select is-multiple">
-                            <select  multiple value='Recto' id='p_i' (change)='post_impresion($event)'>
-                                <option value="Recto">Corte Recto</option>
-                                <option value="Doblado">Doblado</option>
-                                <option value="Signado">Signado</option>
-                                <option value="Fleje">De Fleje</option>
-                                <option value="Molde">De Molde</option>
-                            </select>
-                        </div>
-                    </div>
-                </div>
-                <div class="column">
-                    <ul>
-                        <li *ngFor='let post of OneProduct.post' (click)='borrarPost2(post)'>{{post}}</li>
-                    </ul>
-                </div>
-            </div>
-
-            <div class="separador">
-                Sustratos
-            </div>
-            <br>
-            <div class="card">
-                <div class="card-content">
-                    <div class="field">
-                        <label class="label">Tipo</label>
-                        <div class="select">
-                            <select id='sustrato' value='{{OneProduct.sustrato}}'>
-                                <option value="{{sustrato}}" *ngFor='let sustrato of SUSTRATO'>{{sustrato}}</option>
-                            </select>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="separador">
-                Materia Prima
-            </div>
-            <br>
-            <div class="card" *ngFor='let grupo of GRUPOS_MATERIA'>
-                <div class="card-content">
-                    <b>{{grupo.nombre}}</b>
-                    <table class="table is-striped is-fullwidth">
-                        <thead>
-                            <tr>
-                                <th>Selecciona</th>
-                                <th>Materia Prima</th>
-                                <th><abbr title="Cantidad necesaria por cada 1000">Cantidad</abbr></th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr *ngFor='let material of OneProduct.materiales'>
-                               
-                                    <td><input type="checkbox" name='necesario' (click)='enable(material.nombre)' checked></td>
-                                    <td>{{material.material}}</td>
-                                    <td><input type="number" class="input" id='{{material.nombre}}' (change)='just_a_sec($event)' value='{{material.cantidad}}'></td>
-                            </tr>
-                            <tr *ngFor='let material of MATERIALES'>
-                                <ng-container *ngIf='material.grupo.nombre === grupo.nombre'>
-                                    <ng-container *ngIf='material.nombre == OneProduct.materiales.material'>
-                                    <td><input type="checkbox" name='necesario' (click)='enable(material._id)'></td>
-                                    <td>{{material.nombre}}</td>
-                                    <td><input type="number" class="input" id='{{material._id}}' (change)='just_a_sec($event)' disabled></td>
-                                    </ng-container>
-                                </ng-container>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-            <hr>
-        </div> -->
-        <!-- <div class="modal" [ngClass]="{'is-active':EDITAR_PRODUCTO}">
-            <div class="modal-background" (click)='Modal_Producto_E()'></div> -->
-
-
     </div>
 </div>
 
@@ -1207,75 +840,6 @@
                         </div>
                     </div>
             </div>
-            
-
-            <!-- <div class="columns">
-                <div class="column">
-                    <div class="field">
-                        <label class="label">Materia Prima</label>
-                        <div class="control">
-                            <input type="text" class="input" placeholder="Materia Prima" #material id='field_material'>
-                        </div>
-                    </div>
-                </div>
-                <div class="column">
-                    <div class="field">
-                        <label class="label">Marca</label>
-                        <div class="control">
-                            <input type="text" class="input" placeholder="Marca" #marca id='field_marca'>
-                        </div>
-                    </div>
-                </div>
-                <div class="column is-2">
-                    <div class="field">
-                        <label class="label">Cantidad</label>
-                        <div class="control">
-                            <input type="number" class="input" placeholder="cantidad" #cantidad id='field_cantidad'>
-                        </div>
-                    </div>
-                </div>
-                <div class="column is-3"><br>
-                    <div class="field">
-                        <label class="label"></label>
-                        <div class="control">
-                            <button class="button is-success is-outlined" (click)='add_materia(material, marca, cantidad)'>
-                                <span class="icon is-small">
-                                  <i class="fas fa-check"></i>
-                                </span>
-                                <span>Agregar</span>
-                              </button>
-                        </div>
-                    </div>
-                </div>
-            </div> -->
-
-
-
-            <!-- *****   SELECCION DE MATERIA PRIMA SACADO DEL INVENTARIO ****************** -->
-
-            <!-- <div class="card" *ngFor='let grupo of GRUPOS_MATERIA'>
-                <div class="card-content">
-                    <b>{{grupo.nombre}}</b>
-                    <table class="table is-striped is-fullwidth">
-                        <thead>
-                            <tr>
-                                <th>Selecciona</th>
-                                <th>Materia Prima</th>
-                                <th><abbr title="Cantidad necesaria por cada 1000">Cantidad</abbr></th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr *ngFor='let material of MATERIALES'>
-                                <ng-container *ngIf='material.grupo.nombre === grupo.nombre'>
-                                    <td><input type="checkbox" name='necesario' (click)='enable(material.nombre)'></td>
-                                    <td>{{material.nombre}}</td>
-                                    <td><input type="number" class="input" id='{{material.nombre}}' (change)='just_a_sec($event)' disabled></td>
-                                </ng-container>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-            </div> -->
             <hr>
             <button class="button is-primary" (click)="editar_producto()">Editar Producto</button>
         </div>
