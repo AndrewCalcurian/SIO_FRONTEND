@@ -47,3 +47,7 @@
     color:rgb(79, 196, 64);
     cursor: pointer;
 }
+
+.modal-card{
+    width: 70%;
+}

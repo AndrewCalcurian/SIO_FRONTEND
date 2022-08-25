@@ -1,0 +1,84 @@
+<!-- <div class="modal is-active">
+    <div class="modal-backgroud"></div>
+    <div class="modal-card">
+        <div class="modal-card-body">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Material</th>
+                        <th>Lote</th>
+                        <th>Cantidad</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div> -->
+
+<div class="modal" [ngClass]="{'is-active':devolucion}">
+    <div class="modal-background" (click)="onClose()"></div>
+    <div class="modal-card">
+        <div class="modal-card-body">
+            <div class="subtitulo">
+                Devolución de Material
+            </div>
+            <hr>
+                    <p>Selecciona Orden de Produccion</p>
+
+                    <div class="select">
+                        <select (change)="seleccionarMateriales()" id="ordens">
+                            <option value="·">Seleccionar OP</option>
+                            <ng-container *ngFor="let orden of repeticion">
+                                <option value="{{orden}}">
+                                      {{orden}}
+                                </option>
+                            </ng-container>
+                        </select>
+                    </div>
+                    <hr>
+                    <table class="table is-fullwidth is-striped" *ngFor="materiales of materiales;index as i">
+                        <thead>
+                            <tr>
+                                <th>Material</th>
+                                <th>Cantidad</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let material of materiales[i].material">
+                                <td>{{material.material.nombre}}
+                                    <ng-container *ngIf="material.material.ancho">
+                                        {{material.material.ancho}} x {{material.material.largo}}
+                                    </ng-container>
+                                    ({{material.material.marca}})<br>
+                                <b>Lote: </b>{{material.lote}} - <b>Código: </b>{{material.codigo}}</td>
+                                <td>
+                                    <div class="field has-addons">
+                                        <p class="control">
+                                            <input class="input" type="number" placeholder="Devolución" (change)="agregarMaterial(materiales[i]._id,cantidad,material.material._id,material.lote,material.codigo)" #cantidad>
+                                        </p>
+                                        <p class="control">
+                                            <a class="button is-static">
+                                                {{material.material.unidad}}
+                                            </a>
+                                          </p>
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody> 
+                        <br>
+                        <textarea class="textarea has-fixed-size" row="2" placeholder="Motivo" id="{{materiales[i]._id}}" #Motivo></textarea>
+                        <p class="error" id="{{materiales[i]._id}}_error">Debe ingresar un motivo</p>
+                        <br>
+                        <button class="button is-primary" (click)="finalizarDevolucion(materiales[i]._id,Motivo)">Realizar Devolución</button>
+                    </table>
+
+        </div>
+    </div>
+</div>

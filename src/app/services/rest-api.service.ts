@@ -363,6 +363,23 @@ export class RestApiService {
     return this.http.put(url,data)
   }
 
-  
+  getLotes(){
+    const url = `${this.api_url}/devoluciones`
+    return this.http.get(url)
+  }
 
+  postDevolucion(data){
+    const url = `${this.api_url}/material/devolucion`
+    return this.http.post(url,data)
+  }
+
+  getDevolucion(){
+    const url = `${this.api_url}/devolucion`
+    return this.http.get(url)
+  }
+
+  putDevolucion(id, data){
+    const url = `${this.api_url}/devoluciones/${id}`
+    return this.http.put(url,data)
+  }
 }

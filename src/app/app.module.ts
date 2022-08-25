@@ -24,6 +24,7 @@ import localeES from '@angular/common/locales/es';
 import { registerLocaleData } from '@angular/common';
 import { ReactiveFormsModule } from '@angular/forms';
 import { FormsModule } from '@angular/forms';
+import { UnicosPipe } from './pipe/unicos.pipe';
 registerLocaleData(localeES, 'es')
 
 @NgModule({
@@ -37,7 +38,8 @@ registerLocaleData(localeES, 'es')
     OrdenComponent,
     OrdenesComponent,
     PlanificacionComponent,
-    LoginComponent
+    LoginComponent,
+    UnicosPipe
   ],
   imports: [
     BrowserModule,

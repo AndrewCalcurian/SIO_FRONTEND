@@ -82,6 +82,8 @@ export class MainComponent implements OnInit {
   public _bobina:boolean = false;
   public descontar_b:boolean = false;
 
+  public Devoluciones;
+
   codigoID = '';
   loteID = '';
   cantidadID = '';
@@ -119,6 +121,8 @@ export class MainComponent implements OnInit {
   ];
 
   public _bobina_ = ''
+
+  public Dev_:boolean = false;
   
 
   public Almacenado = [];
@@ -172,11 +176,59 @@ export class MainComponent implements OnInit {
     this.getbobinas();
     this.getOrdenes();
     this.buscarPendientes();
+    this.getDevolucion();
   }
 
   public usuario
 
   public orden;
+
+  confirmarDevolucion(data, id){
+
+    Swal.fire({
+      title:'Cuidado!',
+      text:'Verifica las cantidades que sean correctas antes de confirmar.',
+      icon:'warning',
+      showCancelButton:true,
+      showConfirmButton:true,
+      confirmButtonText:'Confirmar!',
+      cancelButtonText:'Cancelar',
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+    }).then((result) => {
+      if (result.isConfirmed) {
+
+        console.log(data);
+        console.log(id);
+
+        this.api.putDevolucion(id,data)
+          .subscribe((resp:any)=>{
+
+            Swal.fire(
+              {
+                title:'Confirmado!',
+                text:'El material fué agregado al almacén.',
+                icon:'success',
+                showConfirmButton:false
+              })
+
+              this.getDevolucion();
+              this.Modal_Devolucion()
+              this.getAalmacenado();
+          })
+      }
+    })
+  
+  }
+
+  getDevolucion(){
+    this.api.getDevolucion()
+      .subscribe((resp:any) => {
+        this.Devoluciones = resp;
+      })
+  }
+
+
   getOrdenes(){
     this.api.getOrden()
     .subscribe( (resp:any) => {
@@ -221,6 +273,14 @@ export class MainComponent implements OnInit {
     }else{
       (<HTMLInputElement>document.getElementById('color')).value = '';
       (<HTMLInputElement>document.getElementById('color')).disabled = false;
+    }
+  }
+
+  Modal_Devolucion(){
+    if(this.Dev_){
+      this.Dev_ = false;
+    }else{
+      this.Dev_ = true;
     }
   }
 

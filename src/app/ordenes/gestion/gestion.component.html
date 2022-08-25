@@ -1,3 +1,8 @@
+<app-devolucion
+        [devolucion]="devolucion"
+        (onCloseModal)="devolucion = false">
+</app-devolucion>
+
 <div class="container">
     <div class="card">
         <div class="card-content">
@@ -12,8 +17,8 @@
                     <option value="{{funcion}}" *ngFor='let funcion of FUNCIONES'>{{funcion}}</option>
                 </select>
             </div>
-
              <button class="button is-success" (click)="TraerTareasFueraDeFecha()">Otras Gestiones</button>
+             <button class="button is-primary" (click)='modal_Devolucion()' >Devolución de materiales</button>
             <hr>
             <div class="subtitulo">
                 Ordenes para el dia de Hoy: <br>

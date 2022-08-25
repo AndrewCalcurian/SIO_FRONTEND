@@ -22,6 +22,9 @@ export class GestionComponent implements OnInit {
 
   public GRUPOS = [];
 
+
+  devolucion:boolean = false;
+
   constructor(private api:RestApiService) { }
 
   ngOnInit(): void {
@@ -34,6 +37,14 @@ export class GestionComponent implements OnInit {
         this.GRUPOS = resp.grupos
         console.log(this.GRUPOS,'___________________________________________*')
       })
+  }
+
+  modal_Devolucion(){
+    if(this.devolucion){
+      this.devolucion = false
+    }else{
+      this.devolucion = true
+    }
   }
 
   modal_nueva_gestion(){

@@ -375,8 +375,6 @@ export class MainComponent implements OnInit {
 
     this.api.getFechas(e.target.value)
       .subscribe((resp:any)=>{
-
-        console.log(resp,'__________________________')
         let cph = 0
         let HorasAgregadas = 0
         let fecha;
@@ -387,7 +385,22 @@ export class MainComponent implements OnInit {
             // HpC = this.paginas / diasAgregados;
             // let hoymas3 = moment(resp.trabajo[0].fecha).add(HpC, 'hours').format('yyyy-MM-DD');
 
-            fecha = resp.trabajo[0].fecha;
+            let hoy = moment().format('yyyy-MM-DD');
+
+            let fecha_ = resp.trabajo[0].fecha;
+
+            let after = moment(fecha_).isAfter(hoy, 'day');
+
+            console.log(fecha_,'/',hoy,'/',after)
+
+            if(!after){
+              fecha = hoy;
+            }else{
+              fecha = fecha_;
+            }
+
+
+
         }else{
           let hoy = moment().format('yyyy-MM-DD');
           fecha = hoy;
@@ -481,37 +494,5 @@ export class MainComponent implements OnInit {
         this.router.navigate([`/orden-produccion/${resp}`]);
       })
   }
-
-//   totalizar_materiales(){
-
-  
-//     for(let i=0; i<this.ALMACEN.length; i++){
-
-//       let existe = this.TOTALES.find(x => x.material ==  this.ALMACEN[i].nombre && x.marca == this.ALMACEN[i].marca);
-
-//       if(existe){
-//         let findIndex = this.TOTALES.findIndex(x => x.material ==  this.ALMACEN[i].nombre && x.marca == this.ALMACEN[i].marca) 
-
-//        let all = this.TOTALES[findIndex].total
-       
-//        this.TOTALES[findIndex].total = all + this.ALMACEN[i].cantidad
-
-
-//       }else{
-//         this.TOTALES.push({
-//           material:this.ALMACEN[i].nombre,
-//           marca:this.ALMACEN[i].marca,
-//           total:this.ALMACEN[i].cantidad,
-//           grupo:this.ALMACEN[i].grupo.nombre,
-//           presentacion:this.ALMACEN[i].presentacion,
-//           neto:this.ALMACEN[i].neto,
-//           unidad:this.ALMACEN[i].unidad
-//         })
-//       }
-
-//       console.log(this.TOTALES)
-
-//     }
-//  }
 
 }

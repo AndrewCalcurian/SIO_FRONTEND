@@ -8,6 +8,14 @@
         <button class="button is-primary" (click)='modal_solicitud()' >Solicitud de materiales</button>
         <button class="button is-primary" (click)='modal_asignacion()' *ngIf="usuario.Almacen == 2">Mat. Necesario ({{necesario.length}})</button>
         <button class="button is-primary" (click)="Requisicion()">Solicitud Pendiente ({{Pendiente.length}})</button>
+        <ng-container *ngIf="Devoluciones.length > 0">
+            <button class="button is-danger is-outlined" (click)="Modal_Devolucion()">
+                <span>Devolución</span>
+                <span class="icon is-small">
+                    <i class="fa-solid fa-message-exclamation"></i>
+                </span>
+              </button>
+        </ng-container>
         <hr>
 
         <app-solcitud 
@@ -32,6 +40,41 @@
         (onCloseModal)="confirmacion = false"
         (onReset)="buscarPendientes()">
         </app-confirmacion>
+
+        <div class="modal" [ngClass]="{'is-active':Dev_}">
+            <div class="modal-background" (click)="Modal_Devolucion()"></div>
+            <div class="modal-card">
+                <div class="modal-card-body">
+                    <p class="subtitulo">Devoluciones pendientes</p>
+                    <hr>
+                    <ng-container *ngFor="let devolucion of Devoluciones">
+                        <p class="subtitulo">Orden: {{devolucion.orden}}</p>
+                        <table class="table is-fullwidth is-striped">
+                            <thead>
+                                <th>Material</th>
+                                <th>Lote / codigo</th>
+                                <th>Cantidad</th>
+                            </thead>
+                        <tbody>
+                            <tr *ngFor="let material of devolucion.filtrado">
+                                <td>{{material.material.nombre}}
+                                    <ng-container *ngIf="material.material.ancho">
+                                        {{material.material.ancho}}x{{material.material.largo}}
+                                    </ng-container>
+                                     ({{material.material.marca}})</td>
+                                    <td>{{material.lote}} / {{material.codigo}}</td>
+                                    <td>{{material.cantidad}} {{material.material.unidad}}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <br>
+                        <button class="button is-primary" (click)="confirmarDevolucion(devolucion.filtrado, devolucion._id)">Confirmar</button>
+                         <button class="button is-danger">Cancelar</button>
+                        <hr>
+                    </ng-container>
+                </div>
+            </div>
+        </div>
 
         <div class="field">
             <div class="select">

@@ -288,45 +288,7 @@
                         </tr>
                     </ng-container>
                 </tbody>
-            </table>
-            <!-- <table class="table is-fullwidth" *ngIf="!SinMaterial">
-                <thead>
-                    <tr>
-                        <th>Mat. a utilizar</th>
-                        <th>Cant. Necesaria</th>
-                        <th>Cant. Almacen</th>
-                        <th>Cant. Restante</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <ng-container *ngFor='let material of PRODUCTO.materiales;let i = index'>
-                    <tr *ngIf='material.producto.grupo.nombre != "Sustrato"'>
-                            <td>
-                                {{material.producto.nombre}}({{material.producto.marca}})
-                            </td>
-                            <td>
-                                {{(material.cantidad / 1000) * Cantidad_ejemplares}}
-                            </td>
-                            <td >
-                                <ng-container *ngFor="let totales of TOTALES">
-                                    <p *ngIf="material.producto.nombre === totales.material && material.producto.marca === totales.marca">
-                                        {{totales.total * totales.neto}}
-                                    </p>
-                                </ng-container>
-                                <!-- {{CANTIDAD[i].material.neto * CANTIDAD[i].cantidad}} -->
-                            <!-- </td>
-                            <td>
-                                <ng-container *ngFor="let totales of TOTALES">
-                                    <p *ngIf="material.producto.nombre === totales.material && material.producto.marca === totales.marca">
-                                        {{totales.total * totales.neto - (material.cantidad / 1000) * Cantidad_ejemplares}}
-                                        {{alertaRoja(totales.total * totales.neto - (material.cantidad / 1000) * Cantidad_ejemplares)}}
-                                    </p>
-                                </ng-container>
-                            </td>
-                        </tr>
-                    </ng-container>
-                </tbody>
-            </table> --> 
+            </table> 
             <button class="button is-primary" (click)='TimesTime()' *ngIf="!SinMaterial">Gestionar tiempo</button>
         </div>
     </div>
