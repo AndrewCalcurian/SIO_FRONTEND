@@ -21,9 +21,11 @@ export class GestionComponent implements OnInit {
   public FUNCIONES = [];
 
   public GRUPOS = [];
+  public orden = [];
 
 
   devolucion:boolean = false;
+  solicitud:boolean = false;
 
   constructor(private api:RestApiService) { }
 
@@ -31,12 +33,30 @@ export class GestionComponent implements OnInit {
     this.Tarea();
     this.getMaquinas();
     this.getGestiones();
+    this.getOrdenes();
     this.api.getGrupos()
       .subscribe((resp:any)=>{
 
         this.GRUPOS = resp.grupos
         console.log(this.GRUPOS,'___________________________________________*')
       })
+  }
+
+
+  modal_solicitud(){
+    if(this.solicitud){
+      this.solicitud = false
+    }else{
+      this.solicitud = true
+    }
+  }
+
+  getOrdenes(){
+    this.api.getOrden()
+    .subscribe( (resp:any) => {
+      this.orden = resp;
+    } )
+
   }
 
   modal_Devolucion(){
@@ -112,13 +132,14 @@ export class GestionComponent implements OnInit {
     (<HTMLInputElement>document.getElementById('hojas_input')).value = productos;
   }
 
-  retrasar(orden:any, maquina:any, fecha:any, trabajo:any){
+  retrasar(orden:any, maquina:any, fecha:any, trabajo:any, dias){
 
     let data = {
       orden:orden,
       maquina:maquina,
       fecha:fecha,
       trabajo:trabajo,
+      dias
     }
 
     this.api.postRestrasar(data)
@@ -136,7 +157,7 @@ export class GestionComponent implements OnInit {
       });
   }
 
-  acelerar(orden:any, maquina:any, fecha:any, trabajo:any, fechaI:any){
+  acelerar(orden:any, maquina:any, fecha:any, trabajo:any, fechaI:any, dias){
 
     let fecha_lapsos = moment(fecha)
     let fechaI_lapso = moment(fechaI)
@@ -155,6 +176,7 @@ export class GestionComponent implements OnInit {
       maquina:maquina,
       fecha:fecha,
       trabajo:trabajo,
+      dias
     }
 
     this.api.postAcelerar(data)

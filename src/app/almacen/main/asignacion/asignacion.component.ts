@@ -85,12 +85,15 @@ export class AsignacionComponent implements OnInit {
       _cantidad = (m_cantidad * cantidad) / 1000;
     }else if(grupo === 'Cajas Corrugadas'){
       _cantidad = cantidad / m_cantidad;
-      cinta  = cinta * _cantidad;
+      console.log(cantidad,'/////',m_cantidad,'/',grupo,'0',_cantidad)
+      // cinta  = cinta * _cantidad;
     }else if(grupo === 'Cinta de Embalaje'){
       _cantidad = this.cintas_;
     }
 
     let unidad_necesaria = _cantidad / EnAlmacen.material.neto;
+
+    console.log( unidad_necesaria )
 
 
     unidad_necesaria = Math.ceil(unidad_necesaria)
@@ -100,9 +103,10 @@ export class AsignacionComponent implements OnInit {
 
     if(EnAlmacen.material.grupo.nombre === 'Sustrato' && !orden.motivo){
       unidad_necesaria = hojas
-    }else{
-      unidad_necesaria = m_cantidad;
     }
+    // else{
+    //   unidad_necesaria = m_cantidad;
+    // }
 
     if(previo.length > 0){
 
@@ -113,6 +117,9 @@ export class AsignacionComponent implements OnInit {
     }
 
 
+    if(EnAlmacen.material.presentacion === 'PALETA'){
+      EnAlmacen.material.presentacion = 'HOJA'
+    }
     document.getElementById(`Necesario-${i}`).innerHTML = `${unidad_necesaria} ${EnAlmacen.material.presentacion}(s) necesaria(s)`
     document.getElementById(`Almacenados-${i}`).innerHTML = `${EnAlmacen.cantidad} ${EnAlmacen.material.presentacion}(s) En Almacen`
     

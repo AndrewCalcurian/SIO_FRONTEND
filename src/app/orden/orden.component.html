@@ -245,7 +245,13 @@
                                                     </tr>
                                                     <tr>
                                                         <th>TOTAL DE HOJAS POR ASIGNAR</th>
-                                                        <td>{{PRODUCTO.paginas}}</td>
+
+                                                        <ng-container *ngIf="PRODUCTO.montaje == 0">
+                                                            <td>{{PRODUCTO.paginas}}</td>
+                                                        </ng-container>
+                                                        <ng-container *ngIf="PRODUCTO.montaje == 1">
+                                                            <td>{{hojas_demasia + hojas_imprimir}}</td>
+                                                        </ng-container>
                                                     </tr>
                                                 </table>
                                             </div>

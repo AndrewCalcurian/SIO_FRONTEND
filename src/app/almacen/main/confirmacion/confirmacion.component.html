@@ -9,7 +9,12 @@
             <hr>
             <ng-container *ngFor="let pendiente of Pendiente">
 
-                <p class="orden">Orden: {{pendiente.sort}} ({{pendiente.usuario}})</p>
+                <ng-container *ngIf="pendiente.sort === '#'">
+                    <p class="orden">Solicitud de Material por: ({{pendiente.usuario}})</p>
+                </ng-container>
+                <ng-container *ngIf="pendiente.sort != '#'">
+                    <p class="orden">Orden: {{pendiente.sort}} ({{pendiente.usuario}})</p>
+                </ng-container>
                 <b>Motivo: </b>{{pendiente.motivo}}
                 <table class="table is-fullwidth" >
                     <thead>

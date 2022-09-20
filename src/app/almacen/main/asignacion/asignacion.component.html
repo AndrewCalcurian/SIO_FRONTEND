@@ -8,7 +8,12 @@
                 </div>
             </div> 
             <div class="materiales" *ngFor='let orden of necesario' >
-                <p class="subtitulo">{{orden.sort}}</p>
+                <ng-container *ngIf="orden.sort === '#'">
+                    <p class="subtitulo">Solicitud de Material</p>
+                </ng-container>
+                <ng-container *ngIf="orden.sort != '#'">
+                    <p class="subtitulo">{{orden.sort}}</p>
+                </ng-container>
                 <table class="table is-fullwidth is-striped">
                     <thead>
                         <tr>
@@ -45,7 +50,7 @@
                                         </i></label>
                                         <div class="control">
                                             <div class="select">
-                                                <select id="" (change)='Lote($event.target.value,orden, materiales.producto.nombre, i, orden.paginas, materiales.producto.grupo.nombre,orden.cantidad,materiales.cantidad,materiales.producto.unidad,materiales.cinta)'>
+                                                <select id="" (change)='Lote($event.target.value,orden, materiales.producto.nombre, i, orden.paginas, materiales.producto.grupo.nombre,orden.cantidad,materiales.cantidad,materiales.producto.presentacion,materiales.cinta)'>
                                                     <option value="#">Seleccionar LOTE</option>
                                                     <ng-container *ngFor='let almacen of Almacenado'>
                                                         <option value="{{almacen.codigo}}-{{almacen.lote}}" *ngIf='almacen.material.nombre == materiales.producto.nombre && almacen.material.marca == materiales.producto.marca && almacen.material.ancho == materiales.producto.ancho && almacen.material.largo == materiales.producto.largo' >

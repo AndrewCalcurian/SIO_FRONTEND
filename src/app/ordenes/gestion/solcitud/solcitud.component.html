@@ -1,0 +1,120 @@
+<div class="modal" [ngClass]="{'is-active':solicitud}">
+    <div class="modal-background" (click)="onClose()"></div>
+    <div class="modal-card">
+        <div class="modal-card-body">
+            <div class="subtitulo">
+                Solicitud de Material
+            </div>
+            <hr>
+                <div class="field">
+                    <label class="label">Producto / Orden de producción:</label>
+                    <div class="select">
+                        <select (change)="TraerMateriales($event.target.value)">
+                            <option value="">Selecciona OP</option>
+                            <option class="option" value="Otro">Otros Materiales</option>
+                            <option class="option" value='{{Orden.sort}}' *ngFor="let Orden of orden">{{Orden.sort}}</option>
+                        </select>
+                    </div>
+                </div>
+                <hr>
+                <table class="table is-fullwidth" *ngIf="Otro">
+                    <div class="columns">
+                        <div class="column">
+                            <div class="field">
+                                <label class="label">Grupo</label>
+                                <div class="select">
+                                    <select (change)="mostrarMaterial($event.target.value)">
+                                        <option value="#">Grupo</option>
+                                        <option value="{{grupo._id}}" *ngFor="let grupo of grupos">{{grupo.nombre}}</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="column">
+                            <div class="field">
+                                <label class="label">Material</label>
+                                <div class="select">
+                                    <select (change)="AdjuntarMaterial($event.target.value)" id="_material_" disabled>
+                                        <option value="#">Material</option>
+                                        <option value="{{almacen.material._id}}" *ngFor="let almacen of almacenado">{{almacen.material.nombre}} <ng-container *ngIf="almacen.material.ancho">
+                                            {{almacen.material.ancho}} x {{almacen.material.largo}}
+                                        </ng-container> ({{almacen.material.marca}})</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <hr>
+                    <table class="table is-fullwidth">
+                        <thead>
+                            <tr>
+                                <th>Material</th>
+                                <th>Cantidad</th>
+                                <th>Eliminar</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let confirmar of por_confirmar; index as i">
+                                <td>{{confirmar.material.nombre}} <ng-container *ngIf="confirmar.material.ancho">
+                                    {{confirmar.material.ancho}} x {{confirmar.material.largo}}
+                                </ng-container> ({{confirmar.material.marca}})</td>
+                                <td>
+                                    <input type="number" class="input" (change)="cambiarCantidades(i,$event.target.value)">
+                                </td>
+                                <td>
+                                    <button class="button is-danger" (click)="quitarMaterial(i)">Quitar</button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <div class="field">
+                        <label class="label">Motivo</label>
+                        <textarea class="textarea" placeholder="Motivo" rows="2" id="_motivo"></textarea>
+                    </div>
+                    <hr>
+                </table>
+                <table class="table is-fullwidth" *ngIf="orden.length > 0 && materiales && !Otro">
+                    <thead>
+                        <th>Material</th>
+                        <th>Cantidad Solicitada</th>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let material of materiales; index as i">
+                            <td>
+                                {{material.producto.nombre}} 
+                                <ng-container *ngIf="material.producto.ancho">
+                                    {{material.producto.ancho}} x {{material.producto.largo}}
+                                </ng-container>
+                                ({{material.producto.marca}})
+                            </td>
+                            <td>
+                                <input type="number" class="input" value="0" min="0" id="{{i}}" name="{{material.producto._id}}">
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <div class="field" *ngIf="materiales && !Otro">
+                    <div class="select">
+                      <!-- <textarea class="textarea is-small has-fixed-size" placeholder="Motivo de la solicitud"></textarea> -->
+                        <select name="" id="razon" class="selevt">
+                            <option value="Fallas asociadas al sustrato">Fallas asociadas al sustrato</option>
+                            <option value="Fallas asociadas a la tinta">Fallas asociadas a la tinta</option>
+                            <option value="Inconsistencias en el inventario físico">Inconsistencias en el inventario físico</option>
+                            <option value="Fallas asociadas al operador de impresión">Fallas asociadas al operador de impresión</option>
+                            <option value="Fallas asociadas al operador de corte">Fallas asociadas al operador de corte</option>
+                            <option value="Fallas asociadas al operador de troquelado">Fallas asociadas al operador de troquelado</option>
+                            <option value="Fallas asociadas al operador de Pegado">Fallas asociadas al operador de Pegado</option>
+                            <option value="Fallas del proceso de impresión">Fallas del proceso de impresión </option>
+                            <option value="Fallas del proceso de pegado">Fallas del proceso de pegado</option>
+                        </select>
+                    </div>
+                  </div>
+
+                <hr *ngIf="materiales">
+
+                <button class="button is-primary" (click)="FinalizarSolicitu()" *ngIf="Otro">Realizar Solicitud</button>
+                <button class="button is-primary" (click)="FinalizarSolicitud()" *ngIf="!Otro">Realizar Solicitud</button>
+        </div>
+    </div>
+</div>

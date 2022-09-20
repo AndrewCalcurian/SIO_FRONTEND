@@ -28,7 +28,7 @@ export class MainComponent implements OnInit {
 
   oc_ = '';
   fo_ = '';
-  ae_ = '';
+  ae_ = 0;
   observacion_ = '';
 
   x; 
@@ -162,7 +162,10 @@ export class MainComponent implements OnInit {
   cambios(){
 
     this.Ejemplares_montados = this.PRODUCTO.ejemplares[this.i_montajes]
+    // this.paginas = Math.ceil(this.Cantidad_ejemplares / this.Ejemplares_montados)
     this.Ejemplares(this.Ejemplares_montados)
+    // this.Cantidad(this.Cantidad_ejemplares)
+
   }
 
   producto_selected(e){
@@ -223,6 +226,7 @@ export class MainComponent implements OnInit {
 
   Cantidad(e){
     this.Cantidad_ejemplares = e.target.value
+    console.log(e.target.value)
     this.paginas = Math.ceil(this.Cantidad_ejemplares / this.Ejemplares_montados)
     let demasia = (<HTMLInputElement>document.getElementById('demasia_input')).value;
     this.Demasia(demasia)
@@ -231,10 +235,13 @@ export class MainComponent implements OnInit {
   }
 
   Ejemplares(e){
+    // alert(e)
     this.Ejemplares_montados = e
     this.paginas = Math.ceil(this.Cantidad_ejemplares / this.Ejemplares_montados) 
     this.paginas = this.paginas + this.demasia
-    this.paginas = (this.paginas)
+    this.Demasia(this.demasia_)
+    console.log(this.Cantidad_ejemplares, '/', this.Ejemplares_montados, '/ ', this.demasia ,'-', this.paginas)
+    // this.paginas = (this.paginas)
   }
   public demasia_
   Demasia(e){
@@ -243,7 +250,9 @@ export class MainComponent implements OnInit {
     this.demasia = Math.ceil(e * this.paginas / 100)
     this.demasia_ = e
     this.paginas = this.paginas + this.demasia
-    this.paginas = (this.paginas)
+
+    console.log(this.Cantidad_ejemplares, '/', this.Ejemplares_montados, '/ ', this.demasia ,'-', this.paginas)
+    // this.paginas = (this.paginas)
 
   }
 

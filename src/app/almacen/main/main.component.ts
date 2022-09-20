@@ -95,7 +95,6 @@ export class MainComponent implements OnInit {
   public New_color:boolean = false;
   public caja_:boolean = false;
 
-  solicitud:boolean = false;
   asignacion:boolean = false;
   confirmacion:boolean = false;
 
@@ -182,6 +181,39 @@ export class MainComponent implements OnInit {
   public usuario
 
   public orden;
+
+  CancelarDevolucion(id){
+    Swal.fire({
+      title:'Cuidado!',
+      text:'¿Estas seguro que quieres cancelar esta devolución?. No se podrá recuperar esta información luego',
+      icon:'warning',
+      showCancelButton:true,
+      showConfirmButton:true,
+      confirmButtonText:'Si!, Cancelar devolución.',
+      cancelButtonText:'Mantener devolución pendiente.',
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+    }).then((result) => {
+      if (result.isConfirmed) {
+        console.log(id);
+
+        this.api.DeleteDevolucion(id)
+          .subscribe((resp:any)=>{
+            Swal.fire(
+              {
+                title:'Cancelado!',
+                text:'Esta devolución fué cancelada, el almacén no sufrio ningun cambio.',
+                icon:'success',
+                showConfirmButton:false
+              })
+              this.getDevolucion();
+              this.Modal_Devolucion()
+              this.getAalmacenado();
+          })
+      }
+    })
+
+  }
 
   confirmarDevolucion(data, id){
 
@@ -292,13 +324,6 @@ export class MainComponent implements OnInit {
     }
   }
 
-  modal_solicitud(){
-    if(this.solicitud){
-      this.solicitud = false
-    }else{
-      this.solicitud = true
-    }
-  }
   modal_asignacion(){
     if(this.asignacion){
       this.asignacion = false

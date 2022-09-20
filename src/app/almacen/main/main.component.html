@@ -5,7 +5,6 @@
         <button class="button is-primary" (click)='Nuevo_producto()' *ngIf="!_bobina && usuario.Almacen == 2">Agregar Inventario</button>
         <button class="button is-primary" (click)='modal_Conversion()' *ngIf="_bobina && usuario.Almacen == 2">Hacer Conversión</button>
         <button class="button is-primary" (click)='Modal_bobinas()' *ngIf="_bobina && usuario.Almacen == 2">Nueva Bobinas</button>
-        <button class="button is-primary" (click)='modal_solicitud()' >Solicitud de materiales</button>
         <button class="button is-primary" (click)='modal_asignacion()' *ngIf="usuario.Almacen == 2">Mat. Necesario ({{necesario.length}})</button>
         <button class="button is-primary" (click)="Requisicion()">Solicitud Pendiente ({{Pendiente.length}})</button>
         <ng-container *ngIf="Devoluciones.length > 0">
@@ -17,12 +16,6 @@
               </button>
         </ng-container>
         <hr>
-
-        <app-solcitud 
-        [solicitud]="solicitud"
-        [orden]="orden"
-        (onCloseModal)="solicitud = false">
-        </app-solcitud>
 
         <app-asignacion
         [asignacion]="asignacion"
@@ -49,6 +42,7 @@
                     <hr>
                     <ng-container *ngFor="let devolucion of Devoluciones">
                         <p class="subtitulo">Orden: {{devolucion.orden}}</p>
+                        <b>Motivo: </b> {{devolucion.motivo}}
                         <table class="table is-fullwidth is-striped">
                             <thead>
                                 <th>Material</th>
@@ -69,7 +63,7 @@
                         </table>
                         <br>
                         <button class="button is-primary" (click)="confirmarDevolucion(devolucion.filtrado, devolucion._id)">Confirmar</button>
-                         <button class="button is-danger">Cancelar</button>
+                         <button class="button is-danger" (click)="CancelarDevolucion(devolucion._id)">Cancelar</button>
                         <hr>
                     </ng-container>
                 </div>

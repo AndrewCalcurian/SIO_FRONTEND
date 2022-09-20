@@ -45,15 +45,15 @@
                     <label class="label">Almacen de entrega:</label>
                     <div class="control">
                         <div class="select">
-                            <select id='producto' (change)='producto_selected($event)' [(ngModel)]="ae_">
-                                <option value='0'>Selecciona Producto</option>
+                            <select id='producto' [(ngModel)]="ae_">
+                                <option value='0'>Selecciona Almacen</option>
                                 <option *ngFor='let almacen of ALMACEN' value='{{almacen}}'>{{almacen}}</option>
                             </select>
                         </div>
                     </div>
                 </div>
 
-                <button class="button is-primary" (click)='modal_nueva_orden()' [disabled]="!ae_">Realizar Programación</button>
+                <button class="button is-primary" (click)='modal_nueva_orden()' [disabled]="!ae_ || ae_ == 0">Realizar Programación</button>
             </div>
         </div>
     </div>
@@ -177,7 +177,7 @@
             <div class="field">
                 <label class="label">Montaje:</label>
                 <div class="select">
-                    <select name="montaje" [(ngModel)]="i_montajes" (click)="cambios()">
+                    <select name="montaje" [(ngModel)]="i_montajes" (change)="cambios()">
                         <option value="{{i}}" *ngFor="let e of [].constructor(montajes); let i = index">
                             Montaje {{NumToLet(i)}}
                         </option>

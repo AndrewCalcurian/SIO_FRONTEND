@@ -90,8 +90,8 @@ export class OrdenComponent implements OnInit {
     PRODUCTO.fecha_s = moment(PRODUCTO.fecha_s).format('DD/MM/yyyy');
     PRODUCTO.fecha = moment(PRODUCTO.fecha).format('DD/MM/yyyy');
     PRODUCTO.cantidad_ = new Intl.NumberFormat('de-DE').format(PRODUCTO.cantidad)
-
-
+    
+    
     let montajes = this.NumToLet(PRODUCTO.montaje);
     let maquinas = this.Maquinas.maquinasDB
     let maquina = []
@@ -100,7 +100,7 @@ export class OrdenComponent implements OnInit {
     let demasia = this.demasia
 
     let materiales = PRODUCTO.producto.materiales[PRODUCTO.montaje];
-
+    
     let tintas = materiales.filter(x => x.producto.grupo.nombre === 'Tinta')
     let sustrato = materiales.filter(x => x.producto.grupo.nombre === 'Sustrato')
     let barniz = materiales.filter(x => x.producto.grupo.nombre === 'Barniz')
@@ -130,7 +130,7 @@ export class OrdenComponent implements OnInit {
     let Nombre_sustrato = sustrato[0].producto.nombre
     let tintas_color = []
     let tintas_marca = []
-
+    
     let Estandar_de_color = ''
 
     if(PRODUCTO.e_c){
@@ -138,7 +138,7 @@ export class OrdenComponent implements OnInit {
     }else{
       Estandar_de_color = 'NO'
     }
-
+    
     let _i = 5;
     for(let i = 0; i<tintas.length; i++){
       if(tintas[i].producto.color === 'Negro'){
@@ -168,14 +168,17 @@ export class OrdenComponent implements OnInit {
     for(let i=0; i<maquinas.length;i++){
       maquina.push(maquinas[i].maquina.nombre);
     }
-
-
     
-
+    
+    if(PRODUCTO.montaje == 1){
+      PRODUCTO.paginas = hojas_demasia + hojas_imprimir
+    }
+    
+    
     const pdf = new PdfMakeWrapper();
     PdfMakeWrapper.setFonts(pdfFonts);
 
-
+    
     async function generarPDF(){
       pdf.add(
         new Table([

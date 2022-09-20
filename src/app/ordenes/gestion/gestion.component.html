@@ -1,3 +1,9 @@
+<app-solcitud 
+[solicitud]="solicitud"
+[orden]="orden"
+(onCloseModal)="solicitud = false">
+</app-solcitud>
+
 <app-devolucion
         [devolucion]="devolucion"
         (onCloseModal)="devolucion = false">
@@ -19,6 +25,8 @@
             </div>
              <button class="button is-success" (click)="TraerTareasFueraDeFecha()">Otras Gestiones</button>
              <button class="button is-primary" (click)='modal_Devolucion()' >Devolución de materiales</button>
+             <button class="button is-primary" (click)='modal_solicitud()' >Solicitud de materiales</button>
+            
             <hr>
             <div class="subtitulo">
                 Ordenes para el dia de Hoy: <br>
@@ -90,10 +98,10 @@
                 <hr>
                 <ng-container *ngFor='let gestion of GESTIONES;let i = index'>
                     <ng-container *ngIf='gestion.orden === trabajo._id'>
-                        <button class="button is-success" (click)='acelerar(trabajo.orden._id, trabajo.maquina, trabajo.fecha,trabajo._id, trabajo.fechaI)' *ngIf="gestion.Rproductos <= 0">Adelantar Entrega</button>
+                        <button class="button is-success" (click)='acelerar(trabajo.orden._id, trabajo.maquina, trabajo.fecha,trabajo._id, trabajo.fechaI,1)' *ngIf="gestion.Rproductos <= 0">Adelantar Entrega</button>
                     </ng-container>
                 </ng-container>
-                <button class="button is-danger" (click)='retrasar(trabajo.orden._id, trabajo.maquina, trabajo.fecha,trabajo._id)'>Retrasar entrega</button>
+                <button class="button is-danger" (click)='retrasar(trabajo.orden._id, trabajo.maquina, trabajo.fecha,trabajo._id, 1)'>Retrasar entrega</button>
                 <hr>
 
             </div>

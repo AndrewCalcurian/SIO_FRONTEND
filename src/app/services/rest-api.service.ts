@@ -382,4 +382,9 @@ export class RestApiService {
     const url = `${this.api_url}/devoluciones/${id}`
     return this.http.put(url,data)
   }
+
+  DeleteDevolucion(id){
+    const url = `${this.api_url}/devoluciones/${id}`
+    return this.http.delete(url)
+  }
 }
