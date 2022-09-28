@@ -1,6 +1,17 @@
 <app-navbar></app-navbar>
 <div class="container mt-5">
-    <div class="card">
+
+    <div class="card" *ngIf='loading'>
+        <div class="card-content">
+            <div class="loading">
+                <div class="icon">
+                    cargando...<i class="fa-solid fa-loader"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="card" *ngIf='!loading'>
         <div class="card-content">
             <div class="columns">
                 <div class="column is-3">
@@ -101,7 +112,7 @@
                         <td>1</td>
                         <td>{{cantidad}}</td>
                         <td>{{PRODUCTO.fecha_s | date:'dd/MM/yyyy'}}</td>
-                        <td>{{PRODUCTO.cliente.almacenes[PRODUCTO.montaje]}}</td>
+                        <td>{{PRODUCTO.almacen}}</td>
                     </tr>
                     <tr>
                         <th>TOTAL</th>

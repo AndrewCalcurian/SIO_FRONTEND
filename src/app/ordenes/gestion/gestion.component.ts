@@ -22,12 +22,16 @@ export class GestionComponent implements OnInit {
 
   public GRUPOS = [];
   public orden = [];
+  public usuario
+  public jo:boolean = false;
 
 
   devolucion:boolean = false;
   solicitud:boolean = false;
 
-  constructor(private api:RestApiService) { }
+  constructor(private api:RestApiService) { 
+      this.usuario = api.usuario;
+    }
 
   ngOnInit(): void {
     this.Tarea();
@@ -57,6 +61,12 @@ export class GestionComponent implements OnInit {
       this.orden = resp;
     } )
 
+  }
+
+  JustOne(n){
+    if(n <= 0){
+      this.jo = true;
+    }
   }
 
   modal_Devolucion(){
@@ -260,8 +270,10 @@ export class GestionComponent implements OnInit {
       console.log(orden)
       let Actual = this.TRABAJOS.find(x=> x._id == orden)
       console.log(Actual)
-      _productos = Actual.orden.cantidad - Number(productos);
-      _hojas = Actual.orden.paginas - Number(hojas)
+      _productos = Actual.orden.cantidad_o - Number(productos);
+      _hojas = Actual.orden.paginas_o - Number(hojas)
+
+      console.log(Actual.orden.paginas_o,'-',Number(hojas))
     }else{
       _productos = restante[long - 1].Rproductos-Number(productos)
       _hojas = restante[long - 1].Rhojas - Number(hojas)

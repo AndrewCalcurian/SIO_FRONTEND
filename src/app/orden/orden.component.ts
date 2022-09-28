@@ -17,6 +17,7 @@ export class OrdenComponent implements OnInit {
   public PRODUCTO;
   public Maquinas;
   public listo:boolean = true;
+  public loading:boolean = true;
   public necesidad;
   public demasia;
   public cantidad;
@@ -31,7 +32,9 @@ export class OrdenComponent implements OnInit {
   ngOnInit(): void {
     this.api.getOrdenById(this.id)
       .subscribe((resp:any)=>{
+        this.loading = true;
         this.PRODUCTO = resp;
+        this.getMaquinas(this.PRODUCTO._id)
         this.cantidad = new Intl.NumberFormat('de-DE').format(this.PRODUCTO.cantidad)
         this.demasia = Math.ceil(this.PRODUCTO.demasia * 100 / this.PRODUCTO.paginas);
         let ejemplares_montados = this.PRODUCTO.producto.ejemplares[this.PRODUCTO.montaje]
@@ -41,7 +44,7 @@ export class OrdenComponent implements OnInit {
         // this.PRODUCTO.demasia = Math.ceil(this.demasia * paginas_sin_demasia / 100);
         // this.PRODUCTO.demasia = this.PRODUCTO.producto.ejemplares[this.PRODUCTO.montaje]
         console.log(this.PRODUCTO, 'este es el Producto');
-        this.getMaquinas(this.PRODUCTO._id)
+        this.loading = false;
       })
   }
 
@@ -49,8 +52,8 @@ export class OrdenComponent implements OnInit {
     this.api.getMaquinasByOrdens(orden)
       .subscribe((resp:any)=>{
         this.Maquinas = resp;
-        console.log(this.Maquinas, 'Estas son las maquinas')
       })
+
   }
 
   NumToLet(n){
@@ -315,7 +318,7 @@ export class OrdenComponent implements OnInit {
                 new Cell(new Txt(`1`).end).fontSize(9).end,
                 new Cell(new Txt(`${PRODUCTO.cantidad_}`).end).fontSize(9).end,
                 new Cell(new Txt(`${PRODUCTO.fecha_s}`).end).fontSize(9).end,
-                new Cell(new Txt(`${PRODUCTO.cliente.almacenes[PRODUCTO.montaje]}`).end).fontSize(9).end
+                new Cell(new Txt(`${PRODUCTO.almacen}`).end).fontSize(9).end
               ],
               [
                 new Cell(new Txt(`TOTAL`).end).fillColor('#dedede').fontSize(9).end,

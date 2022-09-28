@@ -48,14 +48,17 @@
                             <td>{{trabajo.orden.sort}}</td>
                             <td>{{trabajo.orden.producto.producto}}</td>
                             <td>{{trabajo.maquina.nombre}}</td>
-                            <td>{{calcularHojas(trabajo.orden.cantidad, trabajo.orden.producto.ejemplares[trabajo.orden.montaje])}}</td>
-                            <td>{{trabajo.orden.cantidad}}</td>
+                            <td>{{trabajo.orden.paginas_o}}</td>
+                            <td>{{trabajo.orden.cantidad_o}}</td>
                             <td>{{trabajo.fecha}}</td>
+                            <button class="button is-success" (click)='finalizar_gestion(trabajo._id)' *ngIf="usuario.Role == 'ADMIN' && !jo">Finalizar</button>
                             <td>
                                 
                                 <ng-container *ngFor='let gestion of GESTIONES;let i = index'>
                                     <ng-container *ngIf='gestion.orden === trabajo._id'>
                                         <button class="button is-success" (click)='finalizar_gestion(trabajo._id)' *ngIf="gestion.Rproductos <= 0">Finalizar</button>
+                                        {{JustOne(gestion.Rproductos)}}
+                                        
                                         <!-- <ng-container *ngIf="gestion.Rproductos < 0">
                                             <button class="button is-success" disabled >finalizar</button>
                                         </ng-container> -->
