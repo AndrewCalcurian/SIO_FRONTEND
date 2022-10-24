@@ -320,6 +320,7 @@ export class RestApiService {
   }
 
   updateProducto(data, id){
+    
     const url = `${this.api_url}/producto/${id}`
     return this.http.post(url, data)
   }
@@ -386,5 +387,40 @@ export class RestApiService {
   DeleteDevolucion(id){
     const url = `${this.api_url}/devoluciones/${id}`
     return this.http.delete(url)
+  }
+
+  PostDespacho(data){
+    const url = `${this.api_url}/despacho`
+    return this.http.post(url, data)
+  }
+
+  GetDespacho(){
+    const url = `${this.api_url}/despacho`
+    return this.http.get(url)
+  }
+
+  PutDespacho(id,data){
+    const url = `${this.api_url}/despacho/${id}`
+    return this.http.put(url,data)
+  }
+
+  PutDespachos(id,data){
+    const url = `${this.api_url}/despachos/${id}`
+    return this.http.put(url,data)
+  }
+
+  GetDespachoByOrden(orden){
+    const url = `${this.api_url}/despacho/${orden}`
+    return this.http.get(url)
+  }
+
+  CerrarOrden(id){
+    const url = `${this.api_url}/orden-cerrar/${id}`
+    return this.http.get(url)
+  }
+
+  updateTrabajo(id, data){
+    const url = `${this.api_url}/trabajo/${id}`
+    return this.http.put(url,data)
   }
 }

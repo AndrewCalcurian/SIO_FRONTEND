@@ -35,7 +35,7 @@ export class SolcitudComponent implements OnInit {
     this.api.GetGrupoMp()
       .subscribe((resp:any)=>{
         this.grupos = resp;
-        console.log(this.grupos)
+        // console.log(this.grupos)
       })
   }
 
@@ -46,7 +46,7 @@ export class SolcitudComponent implements OnInit {
 
   cambiarCantidades(i,e){
     this._materiales[i].cantidad = e;
-    console.log(this._materiales)
+    // console.log(this._materiales)
   }
 
   AdjuntarMaterial(e){
@@ -56,25 +56,27 @@ export class SolcitudComponent implements OnInit {
       producto:almacen.material._id,
       cantidad:0
     })
-    console.log(this._materiales)
+    // console.log(this._materiales)
   }
 
   mostrarMaterial(e){
     if(e === "#"){
     (<HTMLInputElement>document.getElementById('_material_')).disabled = true
     }else{
-
       this.api.getAlmacenado()
         .subscribe((resp:any)=>{
           (<HTMLInputElement>document.getElementById('_material_')).disabled = false
           this.almacenado = resp.filter(x => x.material.grupo._id === e)
+          if(e != '61f92a1f2126d717f004cca6'){
+            this.almacenado = [...this.almacenado.reduce((map, obj) => map.set(obj.material.nombre, obj), new Map()).values()];
+          }
         })
     }
   }
 
   TraerMateriales(e){
 
-    console.log(e)
+    // console.log(e)
 
     if(e === 'Otro'){
       this.Otro = true;
@@ -106,9 +108,9 @@ export class SolcitudComponent implements OnInit {
       }
     }
 
-    requisicion.producto.materiales = this._materiales
+    requisicion.producto.materiales[0] = this._materiales
 
-    console.log(requisicion)
+    // console.log(requisicion)
 
     this.api.postReq(requisicion)
      .subscribe((resp:any)=>{
@@ -121,6 +123,7 @@ export class SolcitudComponent implements OnInit {
            timer:5000
          }
        )
+       this._materiales = []
        this.onClose()
      })
 
@@ -157,7 +160,7 @@ export class SolcitudComponent implements OnInit {
     }
 
 
-    console.log(requisicion)
+    // console.log(requisicion)
 
 
   }

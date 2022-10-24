@@ -1,0 +1,89 @@
+<div class="modal" [ngClass]="{'is-active':detalle}">
+    <div class="modal-background" (click)='onClose()'></div>
+    <div class="modal-card">
+        <div class="modal-card-body">
+            <p class="subtitulo">
+                Orden: {{orden_detalle}}
+            </p>
+            <hr>
+            <div class="columns cintillo">
+                <div class="column">
+                    Cantidad solicitada: <b>{{cantidad_d}}</b>
+                </div>
+                <div class="column">
+                    Cantidad a entregar: <b>{{cantidad_do}} ({{((cantidad_do * 100) /cantidad_d).toFixed(2)}}%)</b>
+                </div>
+                <div class="column is-2">
+                    <button class="button is-primary" (click)="gestiones()" >Gestiones</button>
+                </div>
+            </div>
+
+            <div *ngIf="detallado">
+                <hr>
+                <div class="cintillo_" *ngFor="let trabajo of trabajos">
+                    {{trabajo.maquina.tipo}} ({{trabajo.maquina.nombre}}) <ng-container *ngIf="usuario.Role === 'ADMIN' && trabajo.status">   <input type="date" class="fechas" value="{{trabajo.fechaI}}" (change)="cambiarFecha($event.target.value, trabajo._id, 'fechaI')">   <input type="date" class="fechas" value="{{trabajo.fecha}}" (change)="cambiarFecha($event.target.value, trabajo._id, 'fecha')"></ng-container>  <br>
+                        <div class="white">
+                            <table class="table is-fullwidth">
+                                <thead>
+                                    <tr>
+                                        <th>Fecha</th>
+                                        <th>Hojas gestionadas</th>
+                                        <th>Productos gestionados</th>
+                                        <th>Restante</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <ng-container *ngFor="let gestion of gestiones_">
+                                    <tr *ngIf="gestion.maquina.tipo === trabajo.maquina.tipo && gestion.op === orden_id">
+                                        <td>{{gestion.fecha}}</td>
+                                        <td>{{gestion.hojas}}</td>
+                                        <td>{{gestion.productos}}</td>
+                                        <td>{{gestion.Rhojas}}(Hojas) /
+                                            <ng-container *ngIf="gestion.Rproductos > 0">
+                                                {{gestion.Rproductos}}(Productos)
+                                            </ng-container>
+                                            <ng-container *ngIf="gestion.Rproductos < 1">
+                                                0(Productos)
+                                            </ng-container>
+                                        </td>
+                                    </tr>
+                                    </ng-container>
+                                </tbody>
+                            </table>
+                        </div>
+                </div>
+                <div class="cintillo_">
+                    Despachos: {{despacho}} - Restan: {{restan(cantidad_do,despacho)}}
+                    <div class="white">
+                        <table class="table is-fullwidth">
+                            <thead>
+                                <tr>
+                                    <th>Producto</th>
+                                    <th>Cantidad</th>
+                                    <th>OC</th>
+                                    <th>Destino</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <ng-container *ngFor="let despacho of despachos; let even = even;">
+                                    <ng-container *ngIf="even">
+                                        <tr>
+                                            <td>{{despacho.producto}}</td>
+                                            <td>{{despacho.cantidad}}</td>
+                                            <td>{{despacho.oc}}</td>
+                                            <td>{{despacho.destino}}</td>
+                                        </tr>
+                                    </ng-container>
+                                    <ng-container  *ngIf="!even">
+                                            <td>Fecha: <b>{{despacho.fecha}}</b></td>
+                                    </ng-container>
+                                </ng-container>
+                            </tbody>
+                        </table>
+                        <button class="button is-success" *ngIf="cantidad_do - despacho < 1" (click)="cerrarOrden()">Cerrar Orden</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

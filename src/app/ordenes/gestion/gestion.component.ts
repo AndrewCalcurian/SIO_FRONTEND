@@ -24,6 +24,11 @@ export class GestionComponent implements OnInit {
   public orden = [];
   public usuario
   public jo:boolean = false;
+  public despacho:boolean = false;
+
+  public Despachos = [];
+
+  public edit = -1;
 
 
   devolucion:boolean = false;
@@ -38,14 +43,67 @@ export class GestionComponent implements OnInit {
     this.getMaquinas();
     this.getGestiones();
     this.getOrdenes();
+    this.getDespachos();
     this.api.getGrupos()
       .subscribe((resp:any)=>{
 
         this.GRUPOS = resp.grupos
-        console.log(this.GRUPOS,'___________________________________________*')
+        // console.log(this.GRUPOS,'___________________________________________*')
       })
   }
 
+  editado(e,x,y){
+    this.Despachos[x].despacho[y].cantidad = Number(e);
+
+    this.api.PutDespachos(this.Despachos[x]._id, this.Despachos[x])
+    .subscribe((resp:any)=>{
+      // console.log('done')
+    })
+    // console.log(this.Despachos[x])
+  }
+
+  nuevo_despacho(){
+    this.despacho = true;
+  }
+
+  editar_cant(x){
+    this.edit = x
+  }
+
+  listo(){
+    this.edit = -1;
+  }
+
+  Despachado_(id,x){
+    this.api.PutDespacho(id,this.Despachos[x])
+      .subscribe((resp:any)=>{
+        // console.log(resp)
+        if(resp.orden){
+          Swal.fire({
+            title:'Limite excedido',
+            text:`el despacho de la orden ${resp.orden} supera el 110% de la cantidad solicitada`,
+            icon:'error',
+            showConfirmButton:false
+          })
+        }else{
+        Swal.fire({
+          title:'Despacho realizado',
+          text:'Se realizó despacho de productos',
+          icon:'success',
+          showConfirmButton:false
+        })
+      }
+        this.getDespachos();
+      })
+  }
+
+  getDespachos(){
+    this.api.GetDespacho()
+    .subscribe((resp:any)=>{
+      this.Despachos = resp
+      // console.log(this.Despachos)
+    })
+  }
 
   modal_solicitud(){
     if(this.solicitud){
@@ -67,6 +125,11 @@ export class GestionComponent implements OnInit {
     if(n <= 0){
       this.jo = true;
     }
+  }
+
+  format(fecha){
+    let fecha_formateada = moment(fecha).format('DD-MM-yyyy')
+    return fecha_formateada
   }
 
   modal_Devolucion(){
@@ -120,8 +183,8 @@ export class GestionComponent implements OnInit {
 
     const productos:any = value_hojas * Ejemplares.orden.producto.ejemplares[Ejemplares.orden.montaje];
 
-    console.log(value_hojas,'value');
-    console.log(Ejemplares,'Ejemplares');
+    // console.log(value_hojas,'value');
+    // console.log(Ejemplares,'Ejemplares');
 
     (<HTMLInputElement>document.getElementById('productos_input')).value = productos;
   }
@@ -137,7 +200,7 @@ export class GestionComponent implements OnInit {
 
     let Ejemplares = this.TRABAJOS.find(x => x._id == orden);
 
-    const productos:any = value_productos / Ejemplares.orden.producto.ejemplares;
+    const productos:any = Math.ceil(value_productos / Ejemplares.orden.producto.ejemplares[Ejemplares.orden.montaje]);
 
     (<HTMLInputElement>document.getElementById('hojas_input')).value = productos;
   }
@@ -154,7 +217,7 @@ export class GestionComponent implements OnInit {
 
     this.api.postRestrasar(data)
       .subscribe((resp:any)=>{
-        console.log(resp)
+        // console.log(resp)
         Swal.fire({
           icon:'info',
           title:'Se realizó un retraso en la planificación',
@@ -165,6 +228,10 @@ export class GestionComponent implements OnInit {
         this.getMaquinas();
         this.getGestiones();
       });
+  }
+
+  redondear(x,y){
+      return Math.ceil(x/y)
   }
 
   acelerar(orden:any, maquina:any, fecha:any, trabajo:any, fechaI:any, dias){
@@ -204,13 +271,14 @@ export class GestionComponent implements OnInit {
   }
 
   CompararTama(op, fase, grupo, hojas_, productos_,){
-    // console.log(fase,'<>',grupo)
+    // // console.log(fase,'<>',grupo)
     let group = this.GRUPOS.find(x=> x._id === grupo)
 
     let index = group.tipos.findIndex(x => x === fase)
 
     if(index > 0){
       let gest = this.GESTIONES.filter(x => x.maquina.tipo == group.tipos[index -1] && x.op == op)
+      // console.log('gestiones',gest)
       let hojas = 0;
       let productos = 0;
       for(let i =0; i<gest.length; i++){
@@ -218,7 +286,7 @@ export class GestionComponent implements OnInit {
         productos = productos + Number(gest[i].productos);
       }
 
-      console.log(hojas,'<->',productos)
+      // console.log(hojas,'<->',productos)
       if(hojas < hojas_ || productos < productos_){
         Swal.fire({
           title:'Error!',
@@ -242,15 +310,17 @@ export class GestionComponent implements OnInit {
 
     let separator = orden.split('-')
 
-    console.log(separator[3]);
+    // // console.log(separator[3]);
 
 
 
 
     orden = separator[1];
-    console.log(separator[0],'<>',separator[1])
+    // // console.log(separator[0],'<>',separator[1])
 
     let Ejemplares = this.TRABAJOS.find(x => x._id == orden);
+
+    // console.log('EJEM',Ejemplares)
 
     productos = (<HTMLInputElement>document.getElementById('productos_input')).value
     hojas = (<HTMLInputElement>document.getElementById('hojas_input')).value
@@ -267,17 +337,19 @@ export class GestionComponent implements OnInit {
     let _hojas = 0;
 
     if(long <= 0){
-      console.log(orden)
+      // // console.log(orden)
       let Actual = this.TRABAJOS.find(x=> x._id == orden)
-      console.log(Actual)
-      _productos = Actual.orden.cantidad_o - Number(productos);
-      _hojas = Actual.orden.paginas_o - Number(hojas)
+      // // console.log(Actual)
+      _productos = Actual.orden.cantidad - Number(productos);
+      _hojas = this.redondear(Ejemplares.orden.cantidad, Ejemplares.orden.producto.ejemplares[Ejemplares.orden.montaje]) - Number(hojas)
 
-      console.log(Actual.orden.paginas_o,'-',Number(hojas))
+      // // console.log(Actual.orden.paginas_o,'-',Number(hojas))
     }else{
       _productos = restante[long - 1].Rproductos-Number(productos)
       _hojas = restante[long - 1].Rhojas - Number(hojas)
     }
+
+    // alert(_hojas)
 
     let data = {
       op:separator[0],
@@ -290,12 +362,12 @@ export class GestionComponent implements OnInit {
       Rhojas:_hojas
     }
 
-    this.api.postGestion(data)
-      .subscribe((resp:any)=>{
-        (<HTMLInputElement>document.getElementById('productos_input')).value = '';
-        (<HTMLInputElement>document.getElementById('hojas_input')).value = '';
-        this.modal_nueva_gestion();
-        this.getGestiones();
+     this.api.postGestion(data)
+       .subscribe((resp:any)=>{
+         (<HTMLInputElement>document.getElementById('productos_input')).value = '';
+         (<HTMLInputElement>document.getElementById('hojas_input')).value = '';
+         this.modal_nueva_gestion();
+         this.getGestiones();
       })
 
 
@@ -305,6 +377,7 @@ export class GestionComponent implements OnInit {
     this.api.getGestiones()
       .subscribe((resp:any)=>{
         this.GESTIONES = resp
+        // console.log('all gestions', resp)
       })
   }
 
@@ -370,7 +443,7 @@ export class GestionComponent implements OnInit {
               // }
               
               this.TRABAJOS.push(nuevo[i])
-              // console.log(this.GRUPOS)
+              // // console.log(this.GRUPOS)
             }
             
         }

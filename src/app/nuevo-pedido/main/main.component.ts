@@ -114,7 +114,7 @@ export class MainComponent implements OnInit {
       this.restantes.push(aja)
     }
 
-    console.log(this.restantes)
+    // // console.log(this.restantes)
   }
 
   modal_nueva_orden(){
@@ -141,13 +141,13 @@ export class MainComponent implements OnInit {
       let index = this.CLIENTES.find(x => x._id === e.target.value)
       this.ALMACEN = index.almacenes;
 
-      console.log(this.ALMACEN)
+      // // console.log(this.ALMACEN)
     }
 
     this.api.getById(e.target.value)
       .subscribe((resp:any)=>{
         this.PRODUCTOS = resp.productos;
-        console.log(this.PRODUCTOS)
+        // // console.log(this.PRODUCTOS)
       })
   }
 
@@ -179,7 +179,7 @@ export class MainComponent implements OnInit {
     this.api.getOneById(e.target.value)
       .subscribe((resp:any)=>{
         this.PRODUCTO = resp.producto;
-        console.log(this.PRODUCTO,'PRODUCTO')
+        // // console.log(this.PRODUCTO,'PRODUCTO')
         this.montajes = this.PRODUCTO.montajes
         this.Ejemplares_montados = this.PRODUCTO.ejemplares[this.i_montajes];
         this.Ejemplares(this.Ejemplares_montados)
@@ -190,7 +190,7 @@ export class MainComponent implements OnInit {
         for(let i=0; i<x; i++){
           let respuesta = this._CANTIDAD.find(x => x.material.nombre == this.PRODUCTO[this.i_montajes].materiales[i].producto.nombre && x.material.marca == this.PRODUCTO.materiales[i].producto.marca && x.material.grupo.nombre)
           
-          console.log(this.PRODUCTO)
+          // // console.log(this.PRODUCTO)
           if(!respuesta){
             this.SinMaterial = true;
             return
@@ -226,7 +226,7 @@ export class MainComponent implements OnInit {
 
   Cantidad(e){
     this.Cantidad_ejemplares = e.target.value
-    console.log(e.target.value)
+    // // console.log(e.target.value)
     this.paginas = Math.ceil(this.Cantidad_ejemplares / this.Ejemplares_montados)
     let demasia = (<HTMLInputElement>document.getElementById('demasia_input')).value;
     this.Demasia(demasia)
@@ -240,7 +240,7 @@ export class MainComponent implements OnInit {
     this.paginas = Math.ceil(this.Cantidad_ejemplares / this.Ejemplares_montados) 
     this.paginas = this.paginas + this.demasia
     this.Demasia(this.demasia_)
-    console.log(this.Cantidad_ejemplares, '/', this.Ejemplares_montados, '/ ', this.demasia ,'-', this.paginas)
+    // // console.log(this.Cantidad_ejemplares, '/', this.Ejemplares_montados, '/ ', this.demasia ,'-', this.paginas)
     // this.paginas = (this.paginas)
   }
   public demasia_
@@ -251,30 +251,32 @@ export class MainComponent implements OnInit {
     this.demasia_ = e
     this.paginas = this.paginas + this.demasia
 
-    console.log(this.Cantidad_ejemplares, '/', this.Ejemplares_montados, '/ ', this.demasia ,'-', this.paginas)
+    // // console.log(this.Cantidad_ejemplares, '/', this.Ejemplares_montados, '/ ', this.demasia ,'-', this.paginas)
     // this.paginas = (this.paginas)
 
   }
 
   buscar_tintas(tinta, marca){
-    let almacenado:any = this._CANTIDAD.filter(x => x.material.nombre === tinta && x.material.marca === marca)
+    let almacenado:any = this._CANTIDAD.filter(x => x.material.nombre === tinta && x.material.marca === marca && x.cantidad > 0)
     if(almacenado.length < 1){
       return 'No hay producto en inventario'
     }else{
       let cantidades = 0;
+      let neto = 0
       for(let i = 0; i<almacenado.length; i++)
-        {
+      {
 
-          cantidades = cantidades +  Number(almacenado[i].cantidad)
-          // console.log(almacenado[i].material.nombre, ' <> ', cantidades)
-        }
-        cantidades =  cantidades * almacenado[0].material.neto;
+          // cantidades = cantidades +  Number(almacenado[i].cantidad)
+          
+
+          cantidades =  cantidades + (Number(almacenado[i].material.neto) * Number(almacenado[i].cantidad))
+      }
         return cantidades.toFixed(2)
       }
   }
 
   restantes_(tinta, marca,i,caja?){
-    let almacenado:any = this._CANTIDAD.filter(x => x.material.nombre === tinta && x.material.marca === marca)
+    let almacenado:any = this._CANTIDAD.filter(x => x.material.nombre === tinta && x.material.marca === marca && x.cantidad > 0)
     if(almacenado.length < 1){
       return 0
     }else{
@@ -283,9 +285,9 @@ export class MainComponent implements OnInit {
       for(let i = 0; i<almacenado.length; i++)
         {
 
-          cantidades = cantidades +  Number(almacenado[i].cantidad)
+          cantidades =  cantidades + (Number(almacenado[i].material.neto) * Number(almacenado[i].cantidad))
         }
-        cantidades =  cantidades * almacenado[0].material.neto;
+
         //  * this.paginas
         let necesario
         if(caja === 'caja'){
@@ -348,7 +350,7 @@ export class MainComponent implements OnInit {
         }
         resto = Number(resto)
         if(resto < 0){
-          console.log(this.PRODUCTO.materiales[this.i_montajes][i].producto.nombre, '<>', resto)
+          // // console.log(this.PRODUCTO.materiales[this.i_montajes][i].producto.nombre, '<>', resto)
             Swal.fire({
               icon:'error',
               title:'Oops!',
@@ -378,7 +380,7 @@ export class MainComponent implements OnInit {
     this.modal_nueva_orden()
   }
 
-  colocarFecha(e,fase){
+  colocarFecha(e,fase,i){
 
     // CPH = CANTIDAD POR HOJAS
 
@@ -400,7 +402,7 @@ export class MainComponent implements OnInit {
 
             let after = moment(fecha_).isAfter(hoy, 'day');
 
-            console.log(fecha_,'/',hoy,'/',after)
+            // // console.log(fecha_,'/',hoy,'/',after)
 
             if(!after){
               fecha = hoy;
@@ -453,9 +455,9 @@ export class MainComponent implements OnInit {
           (<HTMLInputElement>document.getElementById(`${fase}-C`)).value = hoymas3;
   }
 
-  test(){
-    console.log()
-  }
+  // test(){
+  //   // console.log()
+  // }
 
   
   finalizar(cantidad){
@@ -483,6 +485,7 @@ export class MainComponent implements OnInit {
         for(let x=0; x<fases; x++){
           
           let fase = this.PRODUCTO.grupo.tipos[x]
+          // // console.log(this.PRODUCTO.grupo.tipos[x])
           let maquina = (<HTMLInputElement>document.getElementById(`${fase}-maquina`)).value
           let fechaI = (<HTMLInputElement>document.getElementById(`${fase}`)).value
           let fecha = (<HTMLInputElement>document.getElementById(`${fase}-C`)).value
@@ -491,12 +494,13 @@ export class MainComponent implements OnInit {
             maquina,
             fechaI, 
             fecha,
-            orden:resp
+            orden:resp,
+            pos:x
           }
 
           this.api.postOrden2(Data)
             .subscribe((respuesta:any)=>{
-              console.log(respuesta)
+              // // console.log(respuesta)
             })
 
         }

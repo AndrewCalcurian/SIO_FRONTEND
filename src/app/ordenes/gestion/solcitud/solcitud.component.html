@@ -37,7 +37,7 @@
                                     <select (change)="AdjuntarMaterial($event.target.value)" id="_material_" disabled>
                                         <option value="#">Material</option>
                                         <option value="{{almacen.material._id}}" *ngFor="let almacen of almacenado">{{almacen.material.nombre}} <ng-container *ngIf="almacen.material.ancho">
-                                            {{almacen.material.ancho}} x {{almacen.material.largo}}
+                                            {{almacen.material.ancho}} x {{almacen.material.largo}} - (Cal: {{almacen.material.calibre}}, Gramaje: {{almacen.material.gramaje}})
                                         </ng-container> ({{almacen.material.marca}})</option>
                                     </select>
                                 </div>
@@ -107,6 +107,8 @@
                             <option value="Fallas asociadas al operador de Pegado">Fallas asociadas al operador de Pegado</option>
                             <option value="Fallas del proceso de impresión">Fallas del proceso de impresión </option>
                             <option value="Fallas del proceso de pegado">Fallas del proceso de pegado</option>
+                            <option value="Fallas operativa de maquina">Fallas operativa de maquina</option>
+                            <option value="Error de estimación de material">Error de estimación de material</option>
                         </select>
                     </div>
                   </div>

@@ -8,6 +8,12 @@
         [devolucion]="devolucion"
         (onCloseModal)="devolucion = false">
 </app-devolucion>
+<app-despacho
+[despacho]="despacho"
+(onCloseModal)="despacho = false"
+>
+
+</app-despacho>
 
 <div class="container">
     <div class="card">
@@ -15,23 +21,89 @@
             <div class="titulo">
                 Gestiones
                 <br>
-                <button class="button is-primary" (click)='modal_nueva_gestion()'>Nueva Gestión</button>
+                <button class="button is-primary" (click)='modal_nueva_gestion()' *ngIf="usuario.Almacen != 2 || usuario.Role == 'ADMIN'">Nueva Gestión</button> 
+                <!-- <button class="button is-primary" (click)='nuevo_despacho()'>Despacho</button> -->
             </div>
-            <div class="select">
+            <div class="select" *ngIf="usuario.Almacen != 2 || usuario.Role == 'ADMIN'">
                 <select (change)='fase($event)'>
                     <option>Seleccionar fase</option>
                     <option value="{{funcion}}" *ngFor='let funcion of FUNCIONES'>{{funcion}}</option>
                 </select>
             </div>
-             <button class="button is-success" (click)="TraerTareasFueraDeFecha()">Otras Gestiones</button>
+             <button class="button is-success" (click)="TraerTareasFueraDeFecha()" *ngIf="usuario.Almacen != 2 || usuario.Role == 'ADMIN'">Otras Gestiones</button>
              <button class="button is-primary" (click)='modal_Devolucion()' >Devolución de materiales</button>
              <button class="button is-primary" (click)='modal_solicitud()' >Solicitud de materiales</button>
             
             <hr>
-            <div class="subtitulo">
+            <div class="despachos" *ngIf="usuario.Almacen == 2">
+                <div class="subtitulo">
+                    Despachos pendientes:
+                </div>
+
+                <table class="table is-fullwidth" *ngFor="let despacho of Despachos;index as x">
+                    <thead>
+                        <tr>
+                            <th>Fecha: {{despacho.fecha}}</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                           <td>
+                            <table class="table is-fullwidth is-bordered ">
+                                <thead>
+                                    <tr>
+                                        <th>OP</th>
+                                        <th>Producto</th>
+                                        <th>Cantidad</th>
+                                        <th>OC</th>
+                                        <th>Destino</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr *ngFor="let productos of despacho.despacho;index as y">
+                                        <td>{{productos.op}}</td>
+                                        <td>{{productos.producto}}</td>
+                                        <td>
+                                            <ng-container *ngIf="edit === x">
+                                                <input type="Number" class="input" value="{{productos.cantidad}}" (change)="editado($event.target.value, x,y)">
+                                            </ng-container>
+                                            <ng-container *ngIf="edit != x">
+                                                {{productos.cantidad}}
+                                            </ng-container>
+                                        </td>
+                                        <td>{{productos.oc}}</td>
+                                        <td>{{productos.destino}}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            <button class="button is-success" (click)="editar_cant(x)" *ngIf="edit != x">
+                                <span class="icon is-small">
+                                    <i class="fas fa-edit"></i>
+                                </span>
+                                <span>Editar cantidades</span>
+                            </button> 
+                              <button class="button is-success" (click)="listo()" *ngIf="edit === x">
+                                <span class="icon is-small">
+                                    <i class="fas fa-check"></i>
+                                </span>
+                                <span>Listo</span>
+                              </button> 
+                              <button class="button is-success" *ngIf="edit != x" (click)="Despachado_(despacho._id, x)">
+                                <span class="icon is-small">
+                                    <i class="fas fa-check"></i>
+                                </span>
+                                <span>Despachado</span>
+                              </button>
+                           </td> 
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="subtitulo" *ngIf="usuario.Almacen != 2 || usuario.Role == 'ADMIN'">
                 Ordenes para el dia de Hoy: <br>
             </div>
-                <table class="table is-fullwidth">
+                <table class="table is-fullwidth" *ngIf="usuario.Almacen != 2 || usuario.Role == 'ADMIN'">
                     <thead>
                         <tr>
                             <th>Orden</th>
@@ -45,11 +117,12 @@
                     </thead>
                     <tbody>
                         <tr *ngFor='let trabajo of TRABAJOS'>
+                        <ng-container *ngIf="trabajo.orden.estado === 'activo'">
                             <td>{{trabajo.orden.sort}}</td>
                             <td>{{trabajo.orden.producto.producto}}</td>
                             <td>{{trabajo.maquina.nombre}}</td>
-                            <td>{{trabajo.orden.paginas_o}}</td>
-                            <td>{{trabajo.orden.cantidad_o}}</td>
+                            <td>{{redondear(trabajo.orden.cantidad, trabajo.orden.producto.ejemplares[trabajo.orden.montaje])}}</td>
+                            <td>{{trabajo.orden.cantidad}}</td>
                             <td>{{trabajo.fecha}}</td>
                             <button class="button is-success" (click)='finalizar_gestion(trabajo._id)' *ngIf="usuario.Role == 'ADMIN' && !jo">Finalizar</button>
                             <td>
@@ -67,14 +140,16 @@
                             
                             
                             </td>
+                        </ng-container>
                         </tr>
                     </tbody>
                 </table>
             <hr>
-            <div class="subtitulo">
+            <div class="subtitulo" *ngIf="usuario.Almacen != 2 || usuario.Role == 'ADMIN'">
                 Gestiones Realizadas: <br>
             </div>
             <div *ngFor='let trabajo of TRABAJOS'>
+            <ng-container *ngIf="trabajo.orden.estado === 'activo'">
                 ORDEN: <b>{{trabajo.orden.sort}}</b> - {{trabajo.orden.producto.producto}}
                 <table class="table is-fullwidth">
                     <thead>
@@ -106,7 +181,7 @@
                 </ng-container>
                 <button class="button is-danger" (click)='retrasar(trabajo.orden._id, trabajo.maquina, trabajo.fecha,trabajo._id, 1)'>Retrasar entrega</button>
                 <hr>
-
+            </ng-container>
             </div>
         </div>
     </div>
@@ -128,7 +203,7 @@
                         <select id='orden_selected'>
                                 <option value="#">Seleccionar Orden</option>
                             <ng-container *ngFor='let trabajo of TRABAJOS'>
-                                <option value="{{trabajo.orden._id}}-{{trabajo._id}}-{{trabajo.maquina.tipo}}-{{trabajo.orden.producto.grupo}}">{{trabajo.orden.sort}}</option>
+                                <option value="{{trabajo.orden._id}}-{{trabajo._id}}-{{trabajo.maquina.tipo}}-{{trabajo.orden.producto.grupo}}" *ngIf="trabajo.orden.estado=== 'activo'">{{trabajo.orden.sort}}</option>
                             </ng-container>
                         </select>
                     </div>

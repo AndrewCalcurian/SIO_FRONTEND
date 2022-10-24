@@ -43,7 +43,7 @@ export class OrdenComponent implements OnInit {
         this.hojas_demasia = Math.ceil(this.PRODUCTO.demasia * this.hojas_imprimir / 100)
         // this.PRODUCTO.demasia = Math.ceil(this.demasia * paginas_sin_demasia / 100);
         // this.PRODUCTO.demasia = this.PRODUCTO.producto.ejemplares[this.PRODUCTO.montaje]
-        console.log(this.PRODUCTO, 'este es el Producto');
+        // console.log(this.PRODUCTO, 'este es el Producto');
         this.loading = false;
       })
   }
@@ -87,10 +87,10 @@ export class OrdenComponent implements OnInit {
     let PRODUCTO = this.PRODUCTO
     let hojas_demasia = this.hojas_demasia
     let hojas_imprimir = this.hojas_imprimir
-    console.log(this.PRODUCTO)
+    // console.log(this.PRODUCTO)
     
-    PRODUCTO.fecha_o = moment(PRODUCTO.fecha_o).format('DD/MM/yyyy');
-    PRODUCTO.fecha_s = moment(PRODUCTO.fecha_s).format('DD/MM/yyyy');
+    PRODUCTO.fecha_o = moment(PRODUCTO.fecha_o).utc().format('DD/MM/yyyy');
+    PRODUCTO.fecha_s = moment(PRODUCTO.fecha_s).utc().format('DD/MM/yyyy');
     PRODUCTO.fecha = moment(PRODUCTO.fecha).format('DD/MM/yyyy');
     PRODUCTO.cantidad_ = new Intl.NumberFormat('de-DE').format(PRODUCTO.cantidad)
     
@@ -107,10 +107,27 @@ export class OrdenComponent implements OnInit {
     let tintas = materiales.filter(x => x.producto.grupo.nombre === 'Tinta')
     let sustrato = materiales.filter(x => x.producto.grupo.nombre === 'Sustrato')
     let barniz = materiales.filter(x => x.producto.grupo.nombre === 'Barniz')
-    let cant_barniz = (barniz[0].cantidad * PRODUCTO.paginas)/1000;
-    let cantidad_barniz = cant_barniz.toFixed(2)
+    let cantidad_barniz;
+    let b_name = ''
+    let b_marc = ''
+    let b_und = ''
+
+    if(barniz.length > 0){
+
+      // barniz[0].producto.nombre} (${barniz[0].producto.marca} - ${cantidad_barniz}${barniz[0].producto.unidad
+
+      b_name = barniz[0].producto.nombre;
+      b_marc = barniz[0].producto.marca;
+      b_und = barniz[0].producto.unidad
+      let cant_barniz = (barniz[0].cantidad * PRODUCTO.paginas)/1000;
+      cantidad_barniz = cant_barniz.toFixed(2)
+
+    }else{
+      cantidad_barniz = 'N/A';
+    }
+
     let pega = materiales.filter(x => x.producto.grupo.nombre === 'Pega')
-    console.log(pega,'pegaa')
+    // console.log(pega,'pegaa')
     let cantidad_pega;
     let pega_nombre = '';
     let pega_marca = '';
@@ -126,11 +143,10 @@ export class OrdenComponent implements OnInit {
     }
     let caja = materiales.filter(x => x.producto.grupo.nombre === 'Cajas Corrugadas')
     let cant_cajas = (PRODUCTO.cantidad / caja[0].cantidad)
+    let cinta_ = caja[0].producto.cinta * cant_cajas;
     let cantidad_cajas = Math.ceil(cant_cajas)
-    let cinta_ = caja[0].producto.cinta * cantidad_cajas;
-    cinta_ = Math.ceil(cinta_)
     let cinta = materiales.filter(x => x.producto.grupo.nombre === 'Cinta de Embalaje')
-    let Nombre_sustrato = sustrato[0].producto.nombre
+    let Nombre_sustrato = `${sustrato[0].producto.nombre} ${sustrato[0].producto.marca} (Calibre:${sustrato[0].producto.calibre}, Gramaje:${sustrato[0].producto.gramaje})`
     let tintas_color = []
     let tintas_marca = []
     
@@ -199,7 +215,7 @@ export class OrdenComponent implements OnInit {
           [
             new Cell(new Txt('').end).end,
             new Cell(new Txt('').end).end,
-            new Cell(new Txt('Fecha de Revision: 05/10/2021').end).fillColor('#dedede').fontSize(7).alignment('center').end,
+            new Cell(new Txt('Fecha de Revision: 24/05/2021').end).fillColor('#dedede').fontSize(7).alignment('center').end,
           ],
           [
             new Cell(new Txt('').end).end,
@@ -464,7 +480,8 @@ export class OrdenComponent implements OnInit {
                                   new Cell(new Txt('ESTÁNDAR DE COLOR:').alignment('center').end).fillColor('#dedede').alignment('center').fontSize(7).end,
                                 ],
                                 [
-                                  new Cell(new Txt(`${barniz[0].producto.nombre} (${barniz[0].producto.marca} - ${cantidad_barniz}${barniz[0].producto.unidad})`).end).fontSize(9).end,
+                                  new Cell(new Txt(`${b_name} (${b_marc} - ${cantidad_barniz}${b_und})`).end).fontSize(9).end,
+                                  // new Cell(new Txt(`N/A`).end).fontSize(9).end,
                                   new Cell(new Txt(Estandar_de_color).end).alignment('center').fontSize(9).end
                                 ]
                               ]).widths(['70%','30%']).end
@@ -519,7 +536,7 @@ export class OrdenComponent implements OnInit {
                                   new Cell(new Txt('CINTA DE EMBALAJE').end).alignment('center').fillColor('#dedede').fontSize(9).end,
                                 ],
                                 [
-                                  new Cell(new Txt(`CINTA DE EMBALAJE CORRUGADO RECICLADO 3430(RELA - ${cinta_}Und)`).end).fontSize(9).end
+                                  new Cell(new Txt(`${(cinta_).toFixed(2)}m`).end).fontSize(9).end
                                 ]
                               ]).widths(['100%']).end
                               ).end

@@ -61,7 +61,7 @@
         <div class="card planificacion">
             <div class="card-content">
                 <div class="titulo">Fases de la Producción</div>
-                <div class="card" *ngFor='let fase of PRODUCTO.grupo.tipos'>
+                <div class="card" *ngFor='let fase of PRODUCTO.grupo.tipos;index as i'>
                     <div class="card-content">
                             <div class="subtitulo_">
                                 {{fase}}
@@ -71,7 +71,7 @@
                                 <label class="label">Maquina</label>
                                 <div class="control">
                                     <div class="select">
-                                        <select (change)='colocarFecha($event, fase)' id='{{fase}}-maquina'>
+                                        <select (change)='colocarFecha($event, fase,i)' id='{{fase}}-maquina'>
                                                 <option value="">Selecciona Maquina</option>
                                             <ng-container *ngFor='let maquina of MAQUINAS'>
                                                 <option value="{{maquina._id}}" *ngIf='maquina.tipo === fase'>{{maquina.nombre}}</option>
@@ -96,7 +96,7 @@
                                         Culminación Estimada
                                     </label>
                                     <div class="control">
-                                        <input type="date" class="input" id='{{fase}}-C' disabled>
+                                        <input type="date" class="input" id='{{fase}}-C'>
                                     </div>
                                 </div>
                             </div>

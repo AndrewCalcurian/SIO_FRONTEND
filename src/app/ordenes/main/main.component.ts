@@ -13,20 +13,47 @@ export class MainComponent implements OnInit {
   public ORDENES;
   public ESTADOS;
   public TRABAJOS;
+  public detalle:boolean = false;
+  public orden_detalle;
+  public orden_id;
+  public cantidad_d;
+  public cantidad_do
 
+  public despacho:boolean = false;
+
+  public loading:boolean = true;
+  
+  
   constructor(private api:RestApiService,
-              private router:Router) { }
-
-  ngOnInit(): void {
-    this.getOrdenes();
-    this.obtenerTrabajos();
-  }
+    private router:Router,
+    ) {
+      this.usuario = api.usuario
+    }
+    
+    ngOnInit(): void {
+      this.getOrdenes();
+      this.obtenerTrabajos();
+    }
+    public usuario
 
   getOrdenes(){
     this.api.getOrden()
       .subscribe((resp:any)=>{
         this.ORDENES = resp;
       })
+  }
+
+  detallar(id,sort, x, y){
+    this.detalle = true;
+    this.orden_detalle = sort;
+    this.orden_id = id;
+    this.cantidad_d = x;
+    this.cantidad_do = y;
+    // console.log(y)
+  }
+
+  despacho_(){
+    this.despacho = true;
   }
 
   alert(id){
@@ -37,16 +64,22 @@ export class MainComponent implements OnInit {
     let estado = this.TRABAJOS.find(x => x.orden._id == id && x.maquina.tipo === 'IMPRIMIR')
     let hoy = moment().format('yyyy-MM-DD');
 
-    console.log(estado)
+    // // console.log(estado)
     if(estado){
       if(hoy < estado.fechaI){
+        let date = moment(estado.fechaI).format('yyyy-MM-DD')
+        date = moment('yyyy-MM-DD').format('DD-MM-yyyy')
         return `Impresión Comienza el: ${estado.fechaI}`
       }
     }
 
       let estado2 = this.TRABAJOS.find(x => x.orden._id == id && x.fechaI<= hoy && x.fecha >= hoy)
-      console.log(estado2, 'this is')
-      return `En proceso de: ${estado2.maquina.tipo}`
+    if(estado2){
+      // console.log(estado2, 'this is')
+        return `En proceso de: ${estado2.maquina.tipo}`
+    }else{
+      return `ORDEN FINALIZADA`
+    }
 
   }
 
@@ -54,6 +87,8 @@ export class MainComponent implements OnInit {
     this.api.getTrabajos()
       .subscribe((resp:any)=>{
         this.TRABAJOS = resp;
+        // console.log(this.TRABAJOS)
+        this.loading = false;
       })
   }
 

@@ -7,11 +7,11 @@
         <button class="button is-primary" (click)='Modal_bobinas()' *ngIf="_bobina && usuario.Almacen == 2">Nueva Bobinas</button>
         <button class="button is-primary" (click)='modal_asignacion()' *ngIf="usuario.Almacen == 2">Mat. Necesario ({{necesario.length}})</button>
         <button class="button is-primary" (click)="Requisicion()">Solicitud Pendiente ({{Pendiente.length}})</button>
-        <ng-container *ngIf="Devoluciones.length > 0">
+        <ng-container *ngIf="Devoluciones.length > 0 && usuario.Almacen == 2">
             <button class="button is-danger is-outlined" (click)="Modal_Devolucion()">
                 <span>Devolución</span>
                 <span class="icon is-small">
-                    <i class="fa-solid fa-message-exclamation"></i>
+                    <i class="fas fa-exclamation"></i>
                 </span>
               </button>
         </ng-container>
@@ -229,7 +229,7 @@
                                             <td>{{producto.calibre}}</td>
                                             <td>{{producto.gramaje}}</td>
                                         </ng-container>
-                                    <td>{{(producto.neto * producto.total).toFixed(2)}} {{producto.unidad}}</td>
+                                    <td>{{puntoYcoma((producto.neto * producto.total).toFixed(2))}} {{producto.unidad}}</td>
                                 </ng-container>
                             </tr>
                         </tbody>
@@ -263,7 +263,7 @@
                         <tbody>
                             <tr *ngFor='let producto of Almacenado'>
                                 <ng-container *ngIf='producto.material.grupo.nombre === seccion.nombre && producto.cantidad > 0'>
-                                    <td>{{producto.material.nombre}}
+                                    <td>{{producto.material.nombre}} 
                                     <ng-container *ngIf="seccion.nombre == 'Sustrato'">
                                         ({{producto.material.ancho}} x {{producto.material.largo}})
                                     </ng-container></td>
@@ -275,8 +275,8 @@
                                         <td>{{producto.material.gramaje}}</td>
                                         <td>{{producto.material.calibre}}</td>
                                     </ng-container>
-                                    <td>{{producto.cantidad}}</td>
-                                    <td>{{(producto.material.neto * producto.cantidad).toFixed(2)}} {{producto.material.unidad}}.</td>
+                                    <td>{{puntoYcoma(producto.cantidad)}}</td>
+                                    <td>{{puntoYcoma((producto.material.neto * producto.cantidad).toFixed(2))}} {{producto.material.unidad}}.</td>
                                     <td *ngIf="usuario.Almacen == 2">
                                         <!-- <button class="button is-danger is-outlined is-small" (click)='eliminar_p(Sustrato.material,Sustrato.cantidad,Sustrato._id, "sustrato")'>
                                             <span>Eliminar</span>
@@ -954,7 +954,7 @@
                 <label class="label">Material</label>
                     <div class="select">
                         <select name="" id="" formControlName="material" (change)="buscarGramaje($event.target.value)">
-                            <option value="{{sustrato}}" *ngFor="let sustrato of _sustratos_">{{sustrato}}</option>
+                            <option value="{{sustrato.Nombre}}" *ngFor="let sustrato of _sustratos_">{{sustrato.Marca}}</option>
                         </select>
                     </div>    
                 <!-- <input type="text" class="input" formControlName="material"> -->
@@ -963,8 +963,16 @@
             <div class="field">
                 <label class="label">Gramaje</label>
                 <div class="select">
-                    <select name="" id="" formControlName="gramaje" (change)="buscarAncho($event.target.value)">
+                    <select name="" id="" formControlName="gramaje" (change)="buscarCalibre($event.target.value)">
                         <option value="{{gramaje.gramaje}}" *ngFor="let gramaje of _gramajes_">{{gramaje.gramaje}}</option>
+                    </select>
+                </div>
+            </div>
+            <div class="field">
+                <label class="label">Calibre</label>
+                <div class="select">
+                    <select name="" id="" formControlName="calibre" (change)="buscarAncho($event.target.value)">
+                        <option value="{{calibre.calibre}}" *ngFor="let calibre of _calibre_">{{calibre.calibre}}</option>
                     </select>
                 </div>
             </div>

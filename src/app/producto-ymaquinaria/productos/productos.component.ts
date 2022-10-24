@@ -163,6 +163,10 @@ export class ProductosComponent implements OnInit {
     }else{
       (<HTMLInputElement>document.getElementById(clase)).disabled = false;
       this.product_selected = e;
+      if(this.product_selected != 'Sustrato'){
+        this.MATERIALES = [...this.MATERIALES.reduce((map, obj) => map.set(obj.nombre, obj), new Map()).values()];
+
+      }
     }
   }
 
@@ -173,6 +177,10 @@ export class ProductosComponent implements OnInit {
     }else{
       (<HTMLInputElement>document.getElementById(`x-${clase}`)).disabled = false;
       this.product_selected = e;
+      if(this.product_selected != 'Sustrato'){
+        this.MATERIALES = [...this.MATERIALES.reduce((map, obj) => map.set(obj.nombre, obj), new Map()).values()];
+
+      }
     }
   }
 
@@ -185,7 +193,7 @@ export class ProductosComponent implements OnInit {
       this.POST.splice(i, 1)
     }
 
-    console.log(this.POST)
+    // console.log(this.POST)
   }
 
   troquel(e){
@@ -333,7 +341,7 @@ just_a_sec(e){
     this.api.getAlmacen()
       .subscribe((resp:any)=>{
         this.MATERIALES = resp.materiales
-        console.log(this.MATERIALES)
+        // console.log(this.MATERIALES)
       })
   }
 
@@ -341,7 +349,7 @@ just_a_sec(e){
     this.api.getGrupos()
       .subscribe((resp:any)=>{
         this.GRUPOS = resp.grupos
-        console.log(this.GRUPOS,'GRUPOOOOS')
+        // console.log(this.GRUPOS,'GRUPOOOOS')
       })
   }
 
@@ -361,7 +369,7 @@ just_a_sec(e){
       .subscribe((resp:any)=>{
         this.SECCIONES = resp
         // alert('THIS IS WORKING')
-        console.log(this.SECCIONES,'SECCIONEEEES');
+        // console.log(this.SECCIONES,'SECCIONEEEES');
       })
   }
 
@@ -461,7 +469,7 @@ just_a_sec(e){
     this.api.getById(e)
       .subscribe((resp:any)=>{
         this.PRODUCTOS = resp.productos;
-        console.log(this.PRODUCTOS)
+        // console.log(this.PRODUCTOS)
       });
 
       if(e == ""){
@@ -495,7 +503,7 @@ just_a_sec(e){
 
     let Material = this.MATERIALES.find(x => x._id === producto);
 
-    console.log(Material, '--' )
+    // console.log(Material, '--' )
 
     let size = cantidad
     let name = Material.nombre
@@ -515,10 +523,10 @@ just_a_sec(e){
       cantidad: size
     }
 
-    console.log(productos);
+    // console.log(productos);
 
     this.OneProduct.materiales[this.i_montajes].push(productos)
-    console.log(this.MATERIALES_NECESARIOS, 'this')
+    // console.log(this.MATERIALES_NECESARIOS, 'this')
     // this.MATERIALES_NECESARIOS.push(productos);
 
 
@@ -549,7 +557,7 @@ add_materia3(producto, cantidad){
   let Material = this.MATERIALES.find(x => x._id == producto)
 
 
-  console.log(Material,'/*/*/*/*/*/*/*/*/*/*/*/')
+  // console.log(Material,'/*/*/*/*/*/*/*/*/*/*/*/')
 
   let size = cantidad
   let name = Material.nombre
@@ -579,11 +587,11 @@ add_materia3(producto, cantidad){
 
   this.api.updateProducto(this.OneProduct, this.OneProduct._id)
       .subscribe((resp:any)=>{
-        console.log(resp,'respuesta')
+        // console.log(resp,'respuesta')
         this.editar(this.OneProduct)
         this.api.getOneById(this.OneProduct._id)
           .subscribe((resp:any)=>{
-            console.log('ok')
+            // console.log('ok')
           })
           this.Modal_Producto_E()
           this.Modal_Producto_E()
@@ -605,7 +613,7 @@ add_materia(producto, cantidad){
 
     let Material = this.MATERIALES.find(x => x._id === producto);
 
-    console.log(Material, '--' )
+    // console.log(Material, '--' )
 
     let size = cantidad
     let name = Material.nombre
@@ -625,14 +633,14 @@ add_materia(producto, cantidad){
       cantidad: size
     }
 
-    console.log(productos);
+    // console.log(productos);
     if(!this.MATERIALES_NECESARIOS[this.i_montajes])
     { 
       this.MATERIALES_NECESARIOS[this.i_montajes] = []
     }
 
     this.MATERIALES_NECESARIOS[this.i_montajes].push(productos)
-    console.log(this.MATERIALES_NECESARIOS, 'this')
+    // console.log(this.MATERIALES_NECESARIOS, 'this')
     // this.MATERIALES_NECESARIOS.push(productos);
 
 
@@ -657,21 +665,21 @@ add_materia(producto, cantidad){
 
         let deleted = this.MATERIALES_NECESARIOS[this.i_montajes].findIndex(x => x.material == material2)
 
-        console.log(deleted)
+        // console.log(deleted)
 
         this.MATERIALES_NECESARIOS.splice(deleted, 1);
   }
   Delete_Material2(material2){
 
-    console.log(this.OneProduct.materiales[this.i_montajes])
+    // console.log(this.OneProduct.materiales[this.i_montajes])
     let deleted = this.OneProduct.materiales[this.i_montajes_].findIndex(x => x.producto.nombre == material2)
-    console.log(deleted)
+    // console.log(deleted)
 
     this.OneProduct.materiales[this.i_montajes_].splice(deleted, 1);
 
     // let deleted = this.OneProduct.materiales[this.i_montajes].producto.findIndex(x => x.nombre == material2)
 
-    // console.log(deleted)
+    // // console.log(deleted)
 
     // this.MATERIALES_NECESARIOS.splice(deleted, 1);
 }
@@ -685,12 +693,13 @@ add_materia(producto, cantidad){
   borrarPost2(post){
     let i = this.OneProduct.post.indexOf(post)
 
-    console.log(i)
+    // console.log(i)
 
     this.POST.splice(i, 1)
   }
 
   editar_producto(){
+    
     this.api.updateProducto(this.OneProduct, this.OneProduct._id)
       .subscribe((resp:any)=>{
         Swal.fire({
@@ -736,7 +745,7 @@ add_materia(producto, cantidad){
     this.api.getOneById(producto)
       .subscribe((resp:any)=>{
         this.OneProduct = resp.producto;
-        console.log('AQUIIIIIIIIIIIIII', this.OneProduct);
+        // console.log('AQUIIIIIIIIIIIIII', this.OneProduct);
       })
       if(this.OneProduct){
         this.Modal_Producto_E();

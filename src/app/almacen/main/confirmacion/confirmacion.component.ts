@@ -30,7 +30,7 @@ export class ConfirmacionComponent implements OnInit {
 
   mostrar(){
     this.confirmacion = true;
-    console.log(this.Pendiente)
+    // // console.log(this.Pendiente)
   }
 
   onClose(){

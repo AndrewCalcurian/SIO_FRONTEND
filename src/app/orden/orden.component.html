@@ -28,7 +28,8 @@
                             </tr>
                             <tr>
                                 <td>Fecha de OC:.</td>
-                                <td>{{PRODUCTO.fecha_o | date: 'dd/MM/yyyy'}}</td>
+                                <td>{{PRODUCTO.fecha_o | date: 'dd/MM/yyyy': 'UTC'}}</td>
+                                <!-- <td>{{PRODUCTO.fecha_o | date: 'dd/MM/yyyy'}}</td> -->
                             </tr>
                         </tbody>
                     </table>
@@ -66,6 +67,7 @@
                             </tr>
                             <tr>
                                 <td>FECHA DE EMISIÓN:</td>
+                                <!-- <td>{{PRODUCTO.fecha}}</td> -->
                                 <td>{{PRODUCTO.fecha | date:'dd/MM/yyyy'}}</td>
                             </tr>
                         </tbody>
@@ -111,7 +113,8 @@
                     <tr>
                         <td>1</td>
                         <td>{{cantidad}}</td>
-                        <td>{{PRODUCTO.fecha_s | date:'dd/MM/yyyy'}}</td>
+                        <!-- <td>{{PRODUCTO.fecha_s}}</td> -->
+                        <td>{{PRODUCTO.fecha_s | date:'dd/MM/yyyy': 'UTC'}}</td> 
                         <td>{{PRODUCTO.almacen}}</td>
                     </tr>
                     <tr>
@@ -218,7 +221,7 @@
                                                         <ng-container *ngIf="TintaProducto.producto.grupo.nombre === 'Sustrato'">
                                                     <tr>
                                                         <td>
-                                                            {{TintaProducto.producto.nombre}}
+                                                            {{TintaProducto.producto.nombre}} {{TintaProducto.producto.marca}}  (Calibre:{{TintaProducto.producto.calibre}}, Gramaje:{{TintaProducto.producto.gramaje}})
                                                         </td>
                                                         <td>
                                                             ({{TintaProducto.producto.ancho}} x {{TintaProducto.producto.largo}})
@@ -352,11 +355,11 @@
                                                         <th>CINTA DE EMBALAJE</th>
                                                     </tr>
                                                     <tr>
+
                                                         <ng-container tr *ngFor="let TintaProducto of PRODUCTO.producto.materiales[PRODUCTO.montaje];let i = index">
-                                                            <ng-container *ngIf="TintaProducto.producto.grupo.nombre === 'Cinta de Embalaje'">
-                                                        <td>{{TintaProducto.producto.nombre}}
-                                                            ({{TintaProducto.producto.marca}})
-                                                        </td>
+                                                            <ng-container *ngIf="TintaProducto.producto.grupo.nombre === 'Cajas Corrugadas'">
+                                                        <td>
+                                                            {{((PRODUCTO.cantidad / TintaProducto.cantidad) * TintaProducto.producto.cinta).toFixed(2)}}m                                                       </td>
                                                              </ng-container>
                                                         </ng-container>
                                                     </tr>

@@ -150,6 +150,7 @@ export class MainComponent implements OnInit {
     Nbobina:['', Validators.required],
     material:['CARTON REV. BLANCO', Validators.required],
     gramaje:['', Validators.required],
+    calibre:['', Validators.required],
     ancho:['', Validators.required],
     peso:['', Validators.required],
     lote:['', Validators.required],
@@ -195,7 +196,7 @@ export class MainComponent implements OnInit {
       cancelButtonColor: '#d33',
     }).then((result) => {
       if (result.isConfirmed) {
-        console.log(id);
+        // // console.log(id);
 
         this.api.DeleteDevolucion(id)
           .subscribe((resp:any)=>{
@@ -230,8 +231,8 @@ export class MainComponent implements OnInit {
     }).then((result) => {
       if (result.isConfirmed) {
 
-        console.log(data);
-        console.log(id);
+        // // console.log(data);
+        // // console.log(id);
 
         this.api.putDevolucion(id,data)
           .subscribe((resp:any)=>{
@@ -282,7 +283,7 @@ export class MainComponent implements OnInit {
   }
 
   showOrden(){
-    console.log(this.orden)
+    // // console.log(this.orden)
   }
 
   agregarRequisicion(e){
@@ -295,6 +296,7 @@ export class MainComponent implements OnInit {
     this.api.getMaterialesPorConfirmar()
       .subscribe((resp:any)=>{
         this.necesario = resp;
+        // // console.log( this.necesario ,'AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA')
       })
   }
 
@@ -350,8 +352,20 @@ export class MainComponent implements OnInit {
     for(let i=0; i<sustratos.length; i++){
       let sustrato = this._sustratos_.find(x=> x == sustratos[i].nombre);
       if(!sustrato){
-        this._sustratos_.push(sustratos[i].nombre)
+        this._sustratos_.push({Marca:`${sustratos[i].nombre} (${sustratos[i].marca})`,Nombre:`${sustratos[i].nombre}`})
       }
+    }
+  }
+
+  public _calibre_ = []
+  buscarCalibre(e){
+    let sustratos = this.ALMACEN.filter(x => x.gramaje == e)
+    // // console.log(sustratos,'15515151515151515151515151515151')
+    for(let i=0; i<sustratos.length; i++){
+      let calibre = this._calibre_.find(x=> x.calibre == sustratos[i].calibre);
+      if(!calibre){
+        this._calibre_.push(sustratos[i])
+        }
     }
   }
 
@@ -359,20 +373,20 @@ export class MainComponent implements OnInit {
   buscarGramaje(e){
     this._gramajes_ = []
     let sustratos = this.ALMACEN.filter(x => x.nombre == e)
-    // console.log(sustratos,'15515151515151515151515151515151')
+    // // console.log(sustratos,'15515151515151515151515151515151')
     for(let i=0; i<sustratos.length; i++){
       let gramaje = this._gramajes_.find(x=> x.gramaje == sustratos[i].gramaje);
       if(!gramaje){
         this._gramajes_.push(sustratos[i])
         }
     }
-    console.log(this._gramajes_,'GRAMAGRAMAGRAMA')
+    // // console.log(this._gramajes_,'GRAMAGRAMAGRAMA')
   }
 
   public _ancho_ = []
   buscarAncho(e){
     this._ancho_ = []
-    let sustratos = this.ALMACEN.filter(x => x.gramaje == e)
+    let sustratos = this.ALMACEN.filter(x => x.calibre == e)
     for(let i=0; i<sustratos.length; i++){
       let ancho = this._ancho_.find(x=> x.ancho == sustratos[i].ancho);
       if(!ancho){
@@ -401,7 +415,7 @@ export class MainComponent implements OnInit {
         if(resp.grupo.nombre === 'Cajas Corrugadas'){
           this.caja_ = true;
         }
-        console.log(this.MaterialID,'ok')
+        // // console.log(this.MaterialID,'ok')
       })
   }
 
@@ -410,7 +424,7 @@ export class MainComponent implements OnInit {
 
     this.MaterialID.grupo = grupo;
 
-    console.log(this.MaterialID)
+    // // console.log(this.MaterialID)
 
     this.api.putMaterialID(this.MaterialID._id, this.MaterialID)
           .subscribe((resp:any)=>{
@@ -447,8 +461,8 @@ export class MainComponent implements OnInit {
       material:this.AlmacenadoId.material._id,
       codigo:this.codigoID,
       lote:this.loteID,
-      cantidad:this.cantidadID
-
+      cantidad:this.cantidadID,
+      motivo:this.Edition__
       
     }
     
@@ -498,8 +512,19 @@ export class MainComponent implements OnInit {
     this.api.getAlmacenado()
       .subscribe((resp:any)=>{
         this.Almacenado = resp;
+        this.Almacenado = this.Almacenado.sort(function(a, b) {
+          if(a.material.nombre.toLowerCase() < b.material.nombre.toLowerCase()) return -1
+          if(a.material.nombre.toLowerCase() > b.material.nombre.toLowerCase()) return 1
+          return 0
+
+        })
+        // // console.log(this.Almacenado)
         this.totalizar_materiales();
       })
+  }
+
+  puntoYcoma(n){ 
+   return n = new Intl.NumberFormat('de-DE').format(n)
   }
 
   Cambio_opciones(e){
@@ -713,7 +738,7 @@ export class MainComponent implements OnInit {
 
     }
 
-    console.log(this.InventarioForm.get('color').value)
+    // // console.log(this.InventarioForm.get('color').value)
 
     if(this.InventarioForm.invalid){
       return
@@ -857,7 +882,7 @@ export class MainComponent implements OnInit {
       // (<HTMLInputElement>document.getElementById('_ancho')).value = TheBobina.ancho
       // }
       // if(TheBobina){
-      //   console.log(TheBobina)
+      //   // console.log(TheBobina)
       //   this.Mat_Selected = TheBobina.material;
       //   this.Num_Bobina = TheBobina.Nbobina;
       // }
@@ -1050,7 +1075,7 @@ export class MainComponent implements OnInit {
   // getSustratos(){
   //   this.api.getSustratos()
   //     .subscribe((resp:any)=>{
-  //       console.log(resp)
+  //       // console.log(resp)
   //       if(resp.length>0){
   //         this.boolean_sustrato = true;
   //         this.Sustratos = resp;
@@ -1145,12 +1170,12 @@ export class MainComponent implements OnInit {
         this.getbobinas();
         // this.getSustratos();
         this.porConfirmar();
-        console.log(resp)
+        // // console.log(resp)
       })
     }else{
       this.api.eliminarMaterial(this.id_p_e, motivo)
         .subscribe((resp:any)=>{
-          console.log(resp)
+          // // console.log(resp)
           this.BuscarAlmacen();
           this.porConfirmar();
           this.modal_eliminacion();
@@ -1171,7 +1196,7 @@ export class MainComponent implements OnInit {
       .subscribe((resp:any)=>{
 
 
-        console.log('aqui es la broma:', resp)
+        // // console.log('aqui es la broma:', resp)
 
         const pdf = new PdfMakeWrapper();
         PdfMakeWrapper.setFonts(pdfFonts);

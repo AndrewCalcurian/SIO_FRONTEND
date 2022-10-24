@@ -77,15 +77,117 @@
         border-bottom:solid 1px black;
     }
 
-    .op{
+    .op-0{
         position: relative;
         display: block;
         width: 100%;
-        background-color: rgb(200, 245, 200);
+        background-color: #641E16;
         border: solid 1px white;
+        color:white;
+        text-shadow: #FC0 1px 0 10px;
         padding: 3px;
         font-size: 10px;
     }
+    .op-1{
+      position: relative;
+      display: block;
+      width: 100%;
+      background-color: #E74C3C;
+      border: solid 1px white;
+      color:white;
+      text-shadow: #FC0 1px 0 10px;
+      padding: 3px;
+      font-size: 10px;
+  }
+  .op-2{
+    position: relative;
+    display: block;
+    width: 100%;
+    background-color: #512E5F;
+    border: solid 1px white;
+    color:white;
+    text-shadow: #FC0 1px 0 10px;
+    padding: 3px;
+    font-size: 10px;
+}
+.op-3{
+  position: relative;
+  display: block;
+  width: 100%;
+  background-color: #A569BD;
+  border: solid 1px white;
+  color:white;
+  text-shadow: #FC0 1px 0 10px;
+  padding: 3px;
+  font-size: 10px;
+}
+.op-4{
+  position: relative;
+  display: block;
+  width: 100%;
+  background-color: #154360;
+  border: solid 1px white;
+  color:white;
+  text-shadow: #FC0 1px 0 10px;
+  padding: 3px;
+  font-size: 10px;
+}
+.op-5{
+  position: relative;
+  display: block;
+  width: 100%;
+  background-color: #45B39D;
+  border: solid 1px white;
+  color:white;
+  text-shadow: #FC0 1px 0 10px;
+  padding: 3px;
+  font-size: 10px;
+}
+.op-6{
+  position: relative;
+  display: block;
+  width: 100%;
+  background-color: #0E6251;
+  border: solid 1px white;
+  color:white;
+  text-shadow: #FC0 1px 0 10px;
+  padding: 3px;
+  font-size: 10px;
+}
+.op-7{
+  position: relative;
+  display: block;
+  width: 100%;
+  background-color: #45B39D;
+  border: solid 1px white;
+  color:white;
+  text-shadow: #FC0 1px 0 10px;
+  padding: 3px;
+  font-size: 10px;
+}
+.op-8{
+  position: relative;
+  display: block;
+  width: 100%;
+  background-color: #7D6608;
+  border: solid 1px white;
+  color:white;
+  text-shadow: #FC0 1px 0 10px;
+  padding: 3px;
+  font-size: 10px;
+}
+.op-9{
+  position: relative;
+  display: block;
+  width: 100%;
+  background-color: #DC7633;
+  border: solid 1px white;
+  color:white;
+  text-shadow: #FC0 1px 0 10px;
+  padding: 3px;
+  font-size: 10px;
+}
+
 
     .titulo{
         display: block;
@@ -120,10 +222,28 @@
     margin-top: 5px;
 }
 */
-.op .tooltip {
-    position: absolute;
+.op-0 .tooltip {
+  font-size:13px;
+  position: absolute;
+  visibility: hidden;
+  width: 280px;
+  background-color: black;
+  color: #fff;
+  text-align: center;
+  padding: 5px 0;
+  border-radius: 6px;
+  z-index:1;
+  top: -15px;
+  left: -30px;
+}
+.op-0:hover .tooltip{
+  visibility: visible;
+}
+.op-1 .tooltip {
+  font-size:13px;  
+  position: absolute;
     visibility: hidden;
-    width: 180px;
+    width: 280px;
     background-color: black;
     color: #fff;
     text-align: center;
@@ -133,6 +253,143 @@
     top: -15px;
     left: -30px;
 }
-.op:hover .tooltip{
+.op-1:hover .tooltip{
     visibility: visible;
 }
+.op-2 .tooltip {
+  font-size:13px;
+  position: absolute;
+  visibility: hidden;
+  width: 280px;
+  background-color: black;
+  color: #fff;
+  text-align: center;
+  padding: 5px 0;
+  border-radius: 6px;
+  z-index:1;
+  top: -15px;
+  left: -30px;
+}
+.op-2:hover .tooltip{
+  visibility: visible;
+}
+.op-3 .tooltip {
+  font-size:13px;
+  position: absolute;
+  visibility: hidden;
+  width: 280px;
+  background-color: black;
+  color: #fff;
+  text-align: center;
+  padding: 5px 0;
+  border-radius: 6px;
+  z-index:1;
+  top: -15px;
+  left: -30px;
+}
+.op-3:hover .tooltip{
+  visibility: visible;
+}
+.op-4 .tooltip {
+  font-size:13px;
+  position: absolute;
+  visibility: hidden;
+  width: 280px;
+  background-color: black;
+  color: #fff;
+  text-align: center;
+  padding: 5px 0;
+  border-radius: 6px;
+  z-index:1;
+  top: -15px;
+  left: -30px;
+}
+.op-4:hover .tooltip{
+  visibility: visible;
+}
+.op-5 .tooltip {
+  font-size:13px;
+  position: absolute;
+  visibility: hidden;
+  width: 280px;
+  background-color: black;
+  color: #fff;
+  text-align: center;
+  padding: 5px 0;
+  border-radius: 6px;
+  z-index:1;
+  top: -15px;
+  left: -30px;
+}
+.op-5:hover .tooltip{
+  visibility: visible;
+}
+.op-6 .tooltip {
+  font-size:13px;
+  position: absolute;
+  visibility: hidden;
+  width: 280px;
+  background-color: black;
+  color: #fff;
+  text-align: center;
+  padding: 5px 0;
+  border-radius: 6px;
+  z-index:1;
+  top: -15px;
+  left: -30px;
+}
+.op-6:hover .tooltip{
+  visibility: visible;
+}
+.op-7 .tooltip {
+  font-size:13px;
+  position: absolute;
+  visibility: hidden;
+  width: 280px;
+  background-color: black;
+  color: #fff;
+  text-align: center;
+  padding: 5px 0;
+  border-radius: 6px;
+  z-index:1;
+  top: -15px;
+  left: -30px;
+}
+.op-7:hover .tooltip{
+  visibility: visible;
+}
+.op-8 .tooltip {
+  font-size:13px;
+  position: absolute;
+  visibility: hidden;
+  width: 280px;
+  background-color: black;
+  color: #fff;
+  text-align: center;
+  padding: 5px 0;
+  border-radius: 6px;
+  z-index:1;
+  top: -15px;
+  left: -30px;
+}
+.op-8:hover .tooltip{
+  visibility: visible;
+}
+.op-9 .tooltip {
+  font-size:13px;
+  position: absolute;
+  visibility: hidden;
+  width: 280px;
+  background-color: black;
+  color: #fff;
+  text-align: center;
+  padding: 5px 0;
+  border-radius: 6px;
+  z-index:1;
+  top: -15px;
+  left: -30px;
+}
+.op-9:hover .tooltip{
+  visibility: visible;
+}
+
