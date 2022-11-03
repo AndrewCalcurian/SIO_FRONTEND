@@ -46,14 +46,19 @@
                                                 {{((materiales.cantidad * orden.cantidad)/1000).toFixed(2)}}{{Unidad(materiales.producto.nombre)}}
                                             </ng-container>
                                             <ng-container *ngIf="materiales.producto.grupo.nombre == 'Cajas Corrugadas'">
-                                                {{Caja_((orden.cantidad / materiales.cantidad),materiales.producto.cinta,index)}}{{Unidad(materiales.producto.nombre)}}
+                                                <ng-container *ngIf="orden.motivo">
+                                                    {{materiales.cantidad}}{{Unidad(materiales.producto.nombre)}}
+                                                </ng-container>
+                                                <ng-container *ngIf="!orden.motivo">
+                                                    {{Caja_((orden.cantidad / materiales.cantidad),materiales.producto.cinta,index)}}{{Unidad(materiales.producto.nombre)}}
+                                                </ng-container>
                                             
                                             </ng-container>
                                             <ng-container *ngIf="materiales.producto.grupo.nombre == 'Cinta de Embalaje'">
-                                                <ng-container *ngIf="cintas_[index]">
+                                                <ng-container *ngIf="_cinta_(index)">
                                                     {{cintas_}}{{Unidad(materiales.producto.nombre)}}
                                                 </ng-container>
-                                                <ng-container *ngIf="!cintas_[index]">
+                                                <ng-container *ngIf="!_cinta_(index)">
                                                     {{materiales.cantidad}}{{Unidad(materiales.producto.nombre)}}
                                                 </ng-container>
                                             </ng-container>
@@ -65,7 +70,7 @@
                                                     <option value="#">Seleccionar LOTE</option>
                                                     <ng-container *ngFor='let almacen of Almacenado'>
                                                         <option value="{{almacen.codigo}}*{{almacen.lote}}" *ngIf='almacen.material.nombre == materiales.producto.nombre && almacen.material.marca == materiales.producto.marca && almacen.material.ancho == materiales.producto.ancho && almacen.material.largo == materiales.producto.largo' >
-                                                            {{almacen.codigo}} Lote {{almacen.lote}} ({{almacen.material.presentacion}} {{almacen.material.neto}}{{almacen.material.unidad}})
+                                                       {{almacen.codigo}} Lote {{almacen.lote}} ({{almacen.material.presentacion}} {{almacen.material.neto}}{{almacen.material.unidad}}) Existencia: {{almacen.cantidad}} {{almacen.material.presentacion}}
                                                         </option>
                                                     </ng-container>
                                                 </select>
@@ -105,7 +110,7 @@
                                 </div>
                             </td>
                         </tr>
-                        <tr *ngIf="cintas_.length > 0 && cintas_[index].index === index">
+                        <tr *ngIf="cintas_.length > 0 && _cinta_(index) && !orden.motivo">
                             <td>
 
                                 <div class="material">
@@ -113,12 +118,12 @@
                                         <label class="label"><i>CINTA DE EMBALAJE: {{(cintas_[index].cantidad).toFixed(2)}}</i></label>
                                         <div class="control">
                                             <div class="select">
-                                                <select id="" (change)='Lote($event.target.value,orden,index, "Cinta de embalaje 3430", 100, orden.paginas, "CINTA DE EMBALAJE",orden.cantidad,"Rollo","Rollo",index)'>
+                                                <select id="" (change)='Lote($event.target.value,index,orden, "Cinta de embalaje 3430", 100, orden.paginas, "CINTA DE EMBALAJE",orden.cantidad,"Rollo","Rollo",index)'>
                                                     <option value="#">Seleccionar LOTE</option>
                                                     <ng-container *ngFor='let almacen of Almacenado'>
                                                         <option value="{{almacen.codigo}}*{{almacen.lote}}" *ngIf="almacen.material.grupo.nombre === 'Cinta de Embalaje'">
                                                             <!-- {{almacen.grupo}} -->
-                                                            {{almacen.codigo}} Lote {{almacen.lote}} ({{almacen.material.presentacion}} {{almacen.material.neto}}{{almacen.material.unidad}})
+                                                            {{almacen.codigo}} Lote {{almacen.lote}} ({{almacen.material.presentacion}} PRESENTACIÓN:{{almacen.material.neto}}{{almacen.material.unidad}})
                                                         </option>
                                                     </ng-container>
                                                 </select>

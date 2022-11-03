@@ -1,4 +1,5 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { find } from 'rxjs/operators';
 import { RestApiService } from 'src/app/services/rest-api.service';
 import Swal from 'sweetalert2';
 
@@ -26,6 +27,7 @@ export class AsignacionComponent implements OnInit {
 
   ngOnInit(): void {
     this.buscarRequisicion()
+
   }
 
   onClose(){
@@ -39,6 +41,7 @@ export class AsignacionComponent implements OnInit {
     .subscribe((resp:any)=>{
       for(let i =0; i<resp.length;i++){
         this.necesario.push(resp[i])
+        // console.log(this.Almacenado, 'almacenado')
       }
       // this.onAgregarRequisicioes.emit(resp)
     })
@@ -51,18 +54,29 @@ export class AsignacionComponent implements OnInit {
   }
 
   Caja_(caja:number, cinta:number, index){
+
+    console.log()
     caja = Math.ceil(caja);
     this.cintas_.push({
       cantidad:Number(cinta * caja),
       index
     })
+
+    // console.log(this.cintas_)
     // this.cintas_= Number(cinta * caja)
     // // console.log(this.cintas_.length)
     return caja
   }
 
-  _cinta_(){
-
+  _cinta_(index){
+    let exist = this.cintas_.find(x => x.index == index)
+    // console.log(exist)
+    if(exist){
+      return true
+    }
+    else{
+      return false
+    }
   }
 
   Descuentos(material){
@@ -93,6 +107,7 @@ export class AsignacionComponent implements OnInit {
       index:i
     })
 
+    console.log(this.cintas_[i].cantidad)
     return this.cintas_[i].cantidad
   }
 
@@ -147,7 +162,9 @@ export class AsignacionComponent implements OnInit {
     e = splited[1]
     let codigo = splited[0]
 
+    
     let EnAlmacen = this.Almacenado.find(x => x.material.nombre === material && x.lote === e && x.codigo === codigo)
+    let Mname = EnAlmacen.material._id
     let _cantidad
 
     // alert(grupo)
@@ -161,10 +178,13 @@ export class AsignacionComponent implements OnInit {
       _cantidad = (m_cantidad * cantidad) / 1000;
     }else if(grupo === 'Cajas Corrugadas'){
       _cantidad = cantidad / m_cantidad;
+      if(cantidad === 1){
+        _cantidad = m_cantidad
+      }
       // // console.log(cantidad,'/////',m_cantidad,'/',grupo,'0',_cantidad)
       // cinta  = cinta * _cantidad;
     }else if(grupo === 'CINTA DE EMBALAJE' || grupo === 'Cinta de Embalaje'){
-      if(!this.cintas_[index]){
+      if(!this._cinta_(index)){
         _cantidad = m_cantidad * 100 ;
       }else{
         _cantidad = this.cintas_[cinta].cantidad;
@@ -173,20 +193,22 @@ export class AsignacionComponent implements OnInit {
       _cantidad = 5;
     }
 
-    _cantidad = _cantidad
+    _cantidad = (_cantidad).toFixed(2)
 
-    // alert(m_cantidad)
+    // alert(_cantidad)
 
 
-    let unidad_necesaria = _cantidad / (EnAlmacen.material.neto + this.Descuentos(material));
+    let unidad_necesaria:any = _cantidad / (EnAlmacen.material.neto + this.Descuentos(material));
 
     // // console.log(_cantidad,'-',EnAlmacen.material.neto)
 
     // // console.log( unidad_necesaria )
 
 
-    unidad_necesaria = Math.ceil(unidad_necesaria)
-    EnAlmacen.cantidad = Math.trunc(EnAlmacen.cantidad)
+    unidad_necesaria = (Number(unidad_necesaria)).toFixed(2)
+    EnAlmacen.cantidad = EnAlmacen.cantidad
+
+    let EA_Cantidad = EnAlmacen.cantidad;
 
 
     let previo = this.LOTES.filter(x => x.i === i)
@@ -198,6 +220,14 @@ export class AsignacionComponent implements OnInit {
     else if(EnAlmacen.material.grupo.nombre === 'Sustrato' && !orden.cliente){
         unidad_necesaria = m_cantidad - this.Descuentos(material);
         // // console.log('aqui')
+    }
+    if(EnAlmacen.material.grupo.nombre === 'Tinta'){
+      unidad_necesaria = _cantidad - this.Descuentos(material); 
+      unidad_necesaria = (unidad_necesaria).toFixed(2)
+      // alert(this.Descuentos(material))
+    }
+    if(EnAlmacen.material.unidad == 'Und'){
+      unidad_necesaria = Math.ceil(unidad_necesaria)
     }
 
     // if(previo.length > 0){
@@ -212,12 +242,17 @@ export class AsignacionComponent implements OnInit {
     if(EnAlmacen.material.presentacion === 'PALETA' || EnAlmacen.material.presentacion === 'Paleta'){
       EnAlmacen.material.presentacion = 'HOJA'
     }
+    if(EnAlmacen.material.grupo.nombre === 'Tinta'){
+      EnAlmacen.material.presentacion = 'Kg'
+    }
     document.getElementById(`Necesario-${index}-${i}`).innerHTML = `${unidad_necesaria} ${EnAlmacen.material.presentacion}(s) necesaria(s)`
     document.getElementById(`Almacenados-${index}-${i}`).innerHTML = `${EnAlmacen.cantidad} ${EnAlmacen.material.presentacion}(s) En Almacen`
 
 
-    let restante =  EnAlmacen.cantidad - unidad_necesaria;
-    restante = Math.trunc(restante)
+    let restante:any =  EnAlmacen.cantidad - unidad_necesaria;
+    restante = (restante).toFixed(2);
+    let thisShit = `${EnAlmacen.cantidad}/${unidad_necesaria}/${restante}`
+    // alert(thisShit)
 
     let cantidad_solicitada;
 
@@ -231,7 +266,7 @@ export class AsignacionComponent implements OnInit {
       let check = document.getElementById(`fijar_lote-${index}-${i}`);
 
       cantidad_solicitada = EnAlmacen.cantidad;
-      check.onclick = () => this.fijalote(e,codigo, 0, i, (EnAlmacen.cantidad*EnAlmacen.material.neto), restante,cantidad_solicitada, unidad, _cantidad, material)
+      check.onclick = () => this.fijalote(Mname,EA_Cantidad,e,codigo, 0, i, (EnAlmacen.cantidad*EnAlmacen.material.neto), restante,cantidad_solicitada, unidad, _cantidad, material)
 
     }else{
       document.getElementById(`fijar_lote-${index}-${i}`).style.display = "none";
@@ -241,29 +276,29 @@ export class AsignacionComponent implements OnInit {
       let existe = this.LOTES.find(x => x.lote === e)
 
       if(!existe){
-        this.LOTES.push({lote:e,codigo:codigo,resta:restante,i,almacenado:EnAlmacen.cantidad,solicitado:cantidad_solicitada,unidad})
+        this.LOTES.push({Mname,EA_Cantidad,lote:e,codigo:codigo,resta:restante,i,almacenado:EnAlmacen.cantidad,solicitado:cantidad_solicitada,unidad})
       }
       else{
-        this.LOTES.push({lote:e,codigo,resta:restante,i,almacenado:EnAlmacen.cantidad,solicitado:cantidad_solicitada,unidad})
+        this.LOTES.push({Mname,EA_Cantidad,lote:e,codigo,resta:restante,i,almacenado:EnAlmacen.cantidad,solicitado:cantidad_solicitada,unidad})
       }
 
-      // // console.log(this.LOTES)
+      console.log(this.LOTES)
     }
 
 
 
   }
 
-  fijalote(lote,codigo, resto, i, almacenado, restante,solicitado,unidad,cantidad?,material?){
+  fijalote(Mname,EA_Cantidad,lote,codigo, resto, i, almacenado, restante,solicitado,unidad,cantidad?,material?){
 
     let existe = this.LOTES.find(x => x.lote == lote)
 
       if(!existe){
-        this.LOTES.push({lote,codigo,resta:resto,i,almacenado,restante:restante,solicitado,unidad,cantidad,material})
+        this.LOTES.push({Mname,EA_Cantidad,lote,codigo,resta:resto,i,almacenado,restante:restante,solicitado,unidad,cantidad,material})
         // // console.log(this.LOTES)
       }
      else{
-      this.LOTES.push({lote,codigo,resta:resto,i,almacenado,restante:restante,solicitado,unidad,cantidad,material})
+      this.LOTES.push({Mname,EA_Cantidad,lote,codigo,resta:resto,i,almacenado,restante:restante,solicitado,unidad,cantidad,material})
       //   let index = this.LOTES.findIndex(x => x.lote == lote)
       //   this.LOTES.push({lote,codigo,resta:resto,i,almacenado,restante:restante,solicitado,unidad,cantidad,material})
       }
@@ -316,6 +351,7 @@ export class AsignacionComponent implements OnInit {
       let existe = this.LOTES.find(x => x.i === i);
       // // console.log(En_Almacen.length,'/-',i)
       if(!existe){
+        // alert('1')
         // // console.log(this.LOTES)
         Swal.fire({
           icon: 'error',
@@ -326,8 +362,9 @@ export class AsignacionComponent implements OnInit {
         })
         return
       }else{
+        // alert('2')
         // // console.log(En_Almacen[0][i],'i')
-        if(En_Almacen[i].producto.grupo.nombre === 'Cajas Corrugadas'){
+        if(En_Almacen[i].producto.grupo.nombre === 'Cajas Corrugadas' && !requi){
           let _existe = this.LOTES.find(x => x.i === 100);
           if(!_existe){
             // // console.log(this.LOTES)
@@ -355,18 +392,19 @@ export class AsignacionComponent implements OnInit {
 
     // // console.log('data lotes',data.lotes)
 
+    // alert('asignado')
     this.api.realizarDescuentoAlmacen(data)
-      .subscribe(resp=> {
-        Swal.fire({
-          icon: 'success',
+     .subscribe(resp=> {
+       Swal.fire({
+         icon: 'success',
           title: 'Excelente!',
           text: 'La nueva orden ya esta generada',
           showConfirmButton: false,
           timer:1500
-        })
-        this.onCloseModal.emit();
-        this.onFinalizarAsignacion.emit();
-      })
+       })
+      this.onCloseModal.emit();
+      this.onFinalizarAsignacion.emit();
+    })
 
   }
 

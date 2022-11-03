@@ -25,25 +25,33 @@ export class DevolucionComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.api.getLotes()
-      .subscribe((resp:any)=>{
-        this.devoluciones = resp;
-        for(let i = 0; i< resp.length; i++){
-            this.repeticion.push(resp[i].orden)
-            let final = resp.length - 1
-            if(i == final){
-              const dataArr = new Set(this.repeticion);
-              let result = [...dataArr];
-              this.repeticion = result;
-            }
-        }
-        
-      })
-  }
 
+    
+    this.api.getLotes()
+    .subscribe((resp:any)=>{
+      this.devoluciones = resp;
+      for(let i = 0; i< resp.length; i++){
+        this.repeticion.push(resp[i].orden)
+        let final = resp.length - 1
+        if(i == final){
+          const dataArr = new Set(this.repeticion);
+          let result = [...dataArr];
+          this.repeticion = result;
+        }
+      }
+      
+    })
+  }
+  
   seleccionarMateriales(){
-  let orden_ = (<HTMLInputElement>document.getElementById('ordens')).value
-  this.materiales = this.devoluciones.filter(devoluciones => devoluciones.orden === orden_);
+    let orden_ = (<HTMLInputElement>document.getElementById('ordens')).value
+    this.materiales = this.devoluciones.filter(devoluciones => devoluciones.orden === orden_);
+    let malas = this.materiales.filter(materiales => materiales.material[0].material === null)
+    if(orden_ == '#'){
+    this.materiales = this.materiales.filter(materiales => materiales.material[0].material != null);
+    }
+
+    console.log(malas)
   // this.materiales = this.materiales.material
   
   }

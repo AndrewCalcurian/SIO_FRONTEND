@@ -35,7 +35,7 @@
                                 <tbody>
                                     <ng-container *ngFor="let gestion of gestiones_">
                                     <tr *ngIf="gestion.maquina.tipo === trabajo.maquina.tipo && gestion.op === orden_id">
-                                        <td>{{gestion.fecha}}</td>
+                                        <td>{{gestion.fecha | date:'dd/MM/yyyy':'UTC'}}</td>
                                         <td>{{gestion.hojas}}</td>
                                         <td>{{gestion.productos}}</td>
                                         <td>{{gestion.Rhojas}}(Hojas) /

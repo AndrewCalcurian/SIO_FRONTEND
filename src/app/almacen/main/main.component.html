@@ -3,7 +3,7 @@
         <div class="titulo">Almacen</div>
         <button class="button is-primary" (click)='Modal_Almacen()' *ngIf="!_bobina && usuario.Almacen == 2">Nuevo Material</button>
         <button class="button is-primary" (click)='Nuevo_producto()' *ngIf="!_bobina && usuario.Almacen == 2">Agregar Inventario</button>
-        <button class="button is-primary" (click)='modal_Conversion()' *ngIf="_bobina && usuario.Almacen == 2">Hacer Conversión</button>
+        <button class="button is-primary" (click)='modal_Conversion()' *ngIf="_bobina && usuario.Almacen == 2 || _bobina && usuario.Role == 'ADMIN'" >Hacer Conversión</button>
         <button class="button is-primary" (click)='Modal_bobinas()' *ngIf="_bobina && usuario.Almacen == 2">Nueva Bobinas</button>
         <button class="button is-primary" (click)='modal_asignacion()' *ngIf="usuario.Almacen == 2">Mat. Necesario ({{necesario.length}})</button>
         <button class="button is-primary" (click)="Requisicion()">Solicitud Pendiente ({{Pendiente.length}})</button>
@@ -481,9 +481,9 @@
             <div class="columns" *ngIf="caja_">
                 <div class="column">
                     <div class="control">
-                        <label class="label">Metros de cinta por caja</label>
+                        <label class="label">Metros de cinta por caja {{MaterialID.cinta}}</label>
                         <div class="control">
-                            <input type="number" class="input" placeholder="Metros de cinta por caja" [(ngModel)]="MaterialID.color">
+                            <input type="number" class="input" placeholder="Metros de cinta por caja" [(ngModel)]="MaterialID.cinta" name='cinta'>
                         </div>
                     </div>
                 </div>

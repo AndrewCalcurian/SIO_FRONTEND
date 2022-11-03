@@ -359,6 +359,7 @@
                                                         <ng-container tr *ngFor="let TintaProducto of PRODUCTO.producto.materiales[PRODUCTO.montaje];let i = index">
                                                             <ng-container *ngIf="TintaProducto.producto.grupo.nombre === 'Cajas Corrugadas'">
                                                         <td>
+                                                            <!-- {{PRODUCTO.cantidad}} - {{TintaProducto.cantidad}} * - {{TintaProducto.producto.cinta}} -->
                                                             {{((PRODUCTO.cantidad / TintaProducto.cantidad) * TintaProducto.producto.cinta).toFixed(2)}}m                                                       </td>
                                                              </ng-container>
                                                         </ng-container>

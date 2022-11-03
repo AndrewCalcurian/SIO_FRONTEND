@@ -951,7 +951,7 @@ export class MainComponent implements OnInit {
               [
                 new Cell(new Txt('').end).end,
                 new Cell(new Txt('').end).end,
-                new Cell(new Txt('Fecha de Revision: 18/03/2022').end).fillColor('#dedede').fontSize(9).alignment('center').end,
+                new Cell(new Txt('Fecha de Revision: 3/11/2022').end).fillColor('#dedede').fontSize(9).alignment('center').end,
               ],
               [
                 new Cell(new Txt('').end).end,
