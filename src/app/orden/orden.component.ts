@@ -106,7 +106,7 @@ export class OrdenComponent implements OnInit {
     
     let tintas = materiales.filter(x => x.producto.grupo.nombre === 'Tinta')
     let sustrato = materiales.filter(x => x.producto.grupo.nombre === 'Sustrato')
-    let barniz = materiales.filter(x => x.producto.grupo.nombre === 'Barniz')
+    let barniz = materiales.filter(x => x.producto.grupo.nombre === 'Barniz' || x.producto.grupo.nombre === 'Barniz Acuoso')
     let cantidad_barniz;
     let b_name = ''
     let b_marc = ''
@@ -530,7 +530,7 @@ export class OrdenComponent implements OnInit {
                                   new Cell(new Txt('CÓDIGO DE CAJA').end).alignment('center').fillColor('#dedede').fontSize(9).end,
                                 ],
                                 [
-                                  new Cell(new Txt(`${caja[0].producto.nombre}(${caja[0].producto.marca} - ${cantidad_cajas}${caja[0].producto.unidad})`).end).fontSize(9).end
+                                  new Cell(new Txt(`${caja[0].producto.nombre} (${cantidad_cajas}${caja[0].producto.unidad})`).end).fontSize(9).end
                                 ],
                                 [
                                   new Cell(new Txt('CINTA DE EMBALAJE').end).alignment('center').fillColor('#dedede').fontSize(9).end,

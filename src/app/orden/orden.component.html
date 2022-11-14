@@ -292,7 +292,7 @@
                                             <tr>
                                                 <th>BARNIZ</th>
                                                 <ng-container tr *ngFor="let TintaProducto of PRODUCTO.producto.materiales[PRODUCTO.montaje];let i = index">
-                                                    <ng-container *ngIf="TintaProducto.producto.grupo.nombre === 'Barniz'">
+                                                    <ng-container *ngIf="TintaProducto.producto.grupo.nombre === 'Barniz' || TintaProducto.producto.grupo.nombre === 'Barniz Acuoso'">
                                                 <td colspan="2">{{TintaProducto.producto.nombre}}
                                                     ({{TintaProducto.producto.marca}})
                                                 </td>

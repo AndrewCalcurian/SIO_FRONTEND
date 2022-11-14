@@ -105,7 +105,7 @@ export class DevolucionComponent implements OnInit {
       cantidad:cantidad.value
     }
 
-    let index = this.Data_devolucion.findIndex(x => x.id === id && x.material === material)
+    let index = this.Data_devolucion.findIndex(x => x.id === id && x.material === material && x.lote === lote && x.codigo === codigo)
 
     if(index == -1 ){
       this.Data_devolucion.push(data);

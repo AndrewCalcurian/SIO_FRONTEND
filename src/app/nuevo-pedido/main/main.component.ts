@@ -256,8 +256,13 @@ export class MainComponent implements OnInit {
 
   }
 
-  buscar_tintas(tinta, marca){
-    let almacenado:any = this._CANTIDAD.filter(x => x.material.nombre === tinta && x.material.marca === marca && x.cantidad > 0)
+  buscar_tintas(tinta, marca,sinMarca?){
+    let almacenado = [];
+    if(sinMarca){
+      almacenado = this._CANTIDAD.filter(x => x.material.nombre === tinta && x.cantidad > 0)
+    }else{
+      almacenado = this._CANTIDAD.filter(x => x.material.nombre === tinta && x.material.marca === marca && x.cantidad > 0)
+    }
     if(almacenado.length < 1){
       return 'No hay producto en inventario'
     }else{
@@ -276,7 +281,12 @@ export class MainComponent implements OnInit {
   }
 
   restantes_(tinta, marca,i,caja?){
-    let almacenado:any = this._CANTIDAD.filter(x => x.material.nombre === tinta && x.material.marca === marca && x.cantidad > 0)
+    let almacenado = [];
+    if(caja === 'caja' || caja === 'barniz'){
+      almacenado = this._CANTIDAD.filter(x => x.material.nombre === tinta && x.cantidad > 0)
+    }else{
+      almacenado = this._CANTIDAD.filter(x => x.material.nombre === tinta && x.material.marca === marca && x.cantidad > 0)
+    }
     if(almacenado.length < 1){
       return 0
     }else{
@@ -345,6 +355,8 @@ export class MainComponent implements OnInit {
         let resto;
         if(this.PRODUCTO.materiales[this.i_montajes][i].producto.grupo.nombre === "Cajas Corrugadas"){
           resto = this.restantes_(this.PRODUCTO.materiales[this.i_montajes][i].producto.nombre, this.PRODUCTO.materiales[this.i_montajes][i].producto.marca,i,'caja')
+        }else if(this.PRODUCTO.materiales[this.i_montajes][i].producto.grupo.nombre === "Barniz"){
+          resto = this.restantes_(this.PRODUCTO.materiales[this.i_montajes][i].producto.nombre, this.PRODUCTO.materiales[this.i_montajes][i].producto.marca,i,'barniz')
         }else{
           resto = this.restantes_(this.PRODUCTO.materiales[this.i_montajes][i].producto.nombre, this.PRODUCTO.materiales[this.i_montajes][i].producto.marca,i)
         }

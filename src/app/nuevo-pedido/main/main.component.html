@@ -236,10 +236,10 @@
                 <tbody>
                     <ng-container *ngFor='let material of PRODUCTO.materiales[i_montajes];let i = index'>
                         <tr *ngIf='material.producto.grupo.nombre === "Barniz"'>
-                            <td>{{material.producto.nombre}} ({{material.producto.marca}})</td>
+                            <td>{{material.producto.nombre}}</td>
                             <td>{{((material.cantidad * paginas)/ 1000).toFixed(2)}}</td>
-                            <td>{{buscar_tintas(material.producto.nombre,material.producto.marca)}}</td>
-                            <td>{{restantes_(material.producto.nombre,material.producto.marca,i)}}</td>
+                            <td>{{buscar_tintas(material.producto.nombre,material.producto.marca,true)}}</td>
+                            <td>{{restantes_(material.producto.nombre,material.producto.marca,i,'barniz')}}</td>
                         </tr>
                     </ng-container>
                 </tbody>
@@ -281,9 +281,9 @@
                 <tbody>
                     <ng-container *ngFor='let material of PRODUCTO.materiales[i_montajes];let i = index'>
                         <tr *ngIf='material.producto.grupo.nombre === "Cajas Corrugadas"'>
-                            <td>{{material.producto.nombre}} ({{material.producto.marca}})</td>
+                            <td>{{material.producto.nombre}}</td>
                             <td>{{(Cantidad_ejemplares / material.cantidad).toFixed(2)}}</td>
-                            <td>{{buscar_tintas(material.producto.nombre,material.producto.marca)}}</td>
+                            <td>{{buscar_tintas(material.producto.nombre,material.producto.marca,true)}}</td>
                             <td>{{restantes_(material.producto.nombre,material.producto.marca,i,'caja')}}</td>
                         </tr>
                     </ng-container>

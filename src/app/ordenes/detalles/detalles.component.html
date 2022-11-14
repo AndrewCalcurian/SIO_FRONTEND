@@ -21,7 +21,23 @@
             <div *ngIf="detallado">
                 <hr>
                 <div class="cintillo_" *ngFor="let trabajo of trabajos">
-                    {{trabajo.maquina.tipo}} ({{trabajo.maquina.nombre}}) <ng-container *ngIf="usuario.Role === 'ADMIN' && trabajo.status">   <input type="date" class="fechas" value="{{trabajo.fechaI}}" (change)="cambiarFecha($event.target.value, trabajo._id, 'fechaI')">   <input type="date" class="fechas" value="{{trabajo.fecha}}" (change)="cambiarFecha($event.target.value, trabajo._id, 'fecha')"></ng-container>  <br>
+                    {{trabajo.maquina.tipo}} ( <ng-container *ngIf="usuario.Role === 'ADMIN' && trabajo.status">
+                        <!-- <div class="select"> -->
+                            <select name="maquina" id="maquina" (change)="cambiarFecha($event.target.value, trabajo._id, 'maquina')">
+                                <ng-container *ngFor="let maquina of Maquinas">
+                                    <ng-container *ngIf="maquina.tipo == trabajo.maquina.tipo">
+                                        <ng-container *ngIf="maquina._id === trabajo.maquina._id">
+                                            <option value="{{maquina._id}}" selected *ngIf="maquina.tipo == trabajo.maquina.tipo">{{maquina.nombre}}</option>
+                                        </ng-container>
+                                        <ng-container *ngIf="maquina._id != trabajo.maquina._id">
+                                            <option value="{{maquina._id}}" *ngIf="maquina.tipo == trabajo.maquina.tipo">{{maquina.nombre}}</option>
+                                        </ng-container>
+                                    </ng-container>
+                                </ng-container>
+                            </select>
+                        <!-- </div> -->
+                    </ng-container>
+                    <ng-container *ngIf="usuario.Role != 'ADMIN' || !trabajo.status">{{trabajo.maquina.nombre}}</ng-container>) <ng-container *ngIf="usuario.Role === 'ADMIN' && trabajo.status">   <input type="date" class="fechas" value="{{trabajo.fechaI}}" (change)="cambiarFecha($event.target.value, trabajo._id, 'fechaI')">   <input type="date" class="fechas" value="{{trabajo.fecha}}" (change)="cambiarFecha($event.target.value, trabajo._id, 'fecha')"></ng-container>  <br>
                         <div class="white">
                             <table class="table is-fullwidth">
                                 <thead>
@@ -36,8 +52,8 @@
                                     <ng-container *ngFor="let gestion of gestiones_">
                                     <tr *ngIf="gestion.maquina.tipo === trabajo.maquina.tipo && gestion.op === orden_id">
                                         <td>{{gestion.fecha | date:'dd/MM/yyyy':'UTC'}}</td>
-                                        <td>{{gestion.hojas}}</td>
-                                        <td>{{gestion.productos}}</td>
+                                        <td>{{format(gestion.hojas)}}</td>
+                                        <td>{{format(gestion.productos)}}</td>
                                         <td>{{gestion.Rhojas}}(Hojas) /
                                             <ng-container *ngIf="gestion.Rproductos > 0">
                                                 {{gestion.Rproductos}}(Productos)

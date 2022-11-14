@@ -2,11 +2,14 @@
     <div class="modal-background" (click)='onClose()'></div>
     <div class="modal-card">
         <div class="modal-card-body">
-             <div *ngIf='necesario.length === 0'>
-                <div class="empty">
-                    En estos momentos no hay solicitudes.
-                </div>
-            </div> 
+            <ng-container *ngIf="necesario">
+
+                <div *ngIf='necesario.length === 0'>
+                    <div class="empty">
+                        En estos momentos no hay solicitudes.
+                    </div>
+                </div> 
+            </ng-container>
             <div class="materiales" *ngFor='let orden of necesario;let index = index' >
                 <ng-container *ngIf="orden.sort === '#'">
                     <p class="subtitulo">Solicitud de Material</p>
@@ -69,9 +72,16 @@
                                                 <select id="" (change)='Lote($event.target.value,index,orden, materiales.producto.nombre, i, orden.paginas, materiales.producto.grupo.nombre,orden.cantidad,materiales.cantidad,materiales.producto.presentacion,materiales.cinta)'>
                                                     <option value="#">Seleccionar LOTE</option>
                                                     <ng-container *ngFor='let almacen of Almacenado'>
-                                                        <option value="{{almacen.codigo}}*{{almacen.lote}}" *ngIf='almacen.material.nombre == materiales.producto.nombre && almacen.material.marca == materiales.producto.marca && almacen.material.ancho == materiales.producto.ancho && almacen.material.largo == materiales.producto.largo' >
-                                                       {{almacen.codigo}} Lote {{almacen.lote}} ({{almacen.material.presentacion}} {{almacen.material.neto}}{{almacen.material.unidad}}) Existencia: {{almacen.cantidad}} {{almacen.material.presentacion}}
-                                                        </option>
+                                                        <ng-container *ngIf='materiales.producto.grupo.nombre != "Cajas Corrugadas" && materiales.producto.grupo.nombre != "Barniz"'>
+                                                            <option value="{{almacen.codigo}}*{{almacen.lote}}" *ngIf='almacen.material.nombre == materiales.producto.nombre && almacen.material.marca == materiales.producto.marca && almacen.material.ancho == materiales.producto.ancho && almacen.material.largo == materiales.producto.largo' >
+                                                           {{almacen.codigo}} Lote {{almacen.lote}} ({{almacen.material.presentacion}} {{almacen.material.neto}}{{almacen.material.unidad}}) Existencia: {{almacen.cantidad}} {{almacen.material.presentacion}}
+                                                            </option>
+                                                        </ng-container>
+                                                        <ng-container *ngIf='materiales.producto.grupo.nombre == "Cajas Corrugadas" || materiales.producto.grupo.nombre == "Barniz"'>
+                                                            <option value="{{almacen.codigo}}*{{almacen.lote}}" *ngIf='almacen.material.nombre == materiales.producto.nombre && almacen.material.ancho == materiales.producto.ancho && almacen.material.largo == materiales.producto.largo' >
+                                                                {{almacen.codigo}} Lote {{almacen.lote}} ({{almacen.material.presentacion}} {{almacen.material.neto}}{{almacen.material.unidad}}) Existencia: {{almacen.cantidad}} {{almacen.material.presentacion}}
+                                                            </option>
+                                                        </ng-container>
                                                     </ng-container>
                                                 </select>
                                             </div>

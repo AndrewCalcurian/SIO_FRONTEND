@@ -67,6 +67,7 @@ export class SolcitudComponent implements OnInit {
         .subscribe((resp:any)=>{
           (<HTMLInputElement>document.getElementById('_material_')).disabled = false
           this.almacenado = resp.filter(x => x.material.grupo._id === e)
+          console.log(this.almacenado)
           if(e != '61f92a1f2126d717f004cca6'){
             this.almacenado = [...this.almacenado.reduce((map, obj) => map.set(obj.material.nombre, obj), new Map()).values()];
           }
@@ -87,6 +88,7 @@ export class SolcitudComponent implements OnInit {
       this.Otro = false;
       if(Orden_seleccionada){
         this.materiales = Orden_seleccionada.producto.materiales[Orden_seleccionada.montaje]
+        
       }else{
         this.materiales = undefined;
       }

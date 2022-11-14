@@ -6,6 +6,7 @@ import * as pdfFonts from "pdfmake/build/vfs_fonts";
 import * as moment from 'moment';
 
 import Swal from 'sweetalert2';
+import { zip } from 'rxjs';
 
 
 
@@ -19,8 +20,8 @@ export class MainComponent implements OnInit {
 
   fileName= 'ExcelSheet.xlsx';
 
-  public resumido:boolean = false;
-  public detallado:boolean = true;
+  public resumido:boolean = true;
+  public detallado:boolean = false;
 
   public NUEVO_PRODUCTO:boolean = false;
   public ALMACEN;
@@ -122,10 +123,12 @@ export class MainComponent implements OnInit {
   public _bobina_ = ''
 
   public Dev_:boolean = false;
-  
+
 
   public Almacenado = [];
   Pendiente;
+
+  public Bobillas = false;
 
 
   InventarioForm:FormGroup = this.fb.group({
@@ -148,7 +151,8 @@ export class MainComponent implements OnInit {
 
   BobinaForm:FormGroup = this.fb.group({
     Nbobina:['', Validators.required],
-    material:['CARTON REV. BLANCO', Validators.required],
+    material:['', Validators.required],
+    marca:['', Validators.required],
     gramaje:['', Validators.required],
     calibre:['', Validators.required],
     ancho:['', Validators.required],
@@ -159,7 +163,7 @@ export class MainComponent implements OnInit {
 
 
   constructor(private fb:FormBuilder,
-              private api:RestApiService) { 
+              private api:RestApiService) {
                 this.usuario = api.usuario;
               }
 
@@ -216,6 +220,14 @@ export class MainComponent implements OnInit {
 
   }
 
+  changeView_(){
+    if(this.Bobillas){
+      this.Bobillas = false;
+    }else{
+      this.Bobillas = true;
+    }
+  }
+
   confirmarDevolucion(data, id){
 
     Swal.fire({
@@ -251,7 +263,7 @@ export class MainComponent implements OnInit {
           })
       }
     })
-  
+
   }
 
   getDevolucion(){
@@ -347,19 +359,49 @@ export class MainComponent implements OnInit {
   }
 
   public _sustratos_ = []
+  public Test_UniqueObjectNewMap_valuesAsArr = []
   buscarSustratos(){
+    let x = 0;
     let sustratos = this.ALMACEN.filter(x => x.grupo.nombre == 'Sustrato')
     for(let i=0; i<sustratos.length; i++){
       let sustrato = this._sustratos_.find(x=> x == sustratos[i].nombre);
+      x++
       if(!sustrato){
         this._sustratos_.push({Marca:`${sustratos[i].nombre} (${sustratos[i].marca})`,Nombre:`${sustratos[i].nombre}`})
+      }
+      if(x == sustratos.length)
+      {
+        let newArray_test:any;
+        newArray_test = this._sustratos_
+
+        let UniqueArrayforMarca = [
+          ...new Map(this._sustratos_.map((item) => [item["Marca"], item])).values(),
+        ]
+
+        let Test_UniqueObject = newArray_test.map((item) => [item['Marca'], item]);
+
+        let Test_UniqueObjectNewMap = new Map(Test_UniqueObject)
+
+        let Test_UniqueObjectNewMap_keys = Test_UniqueObjectNewMap.keys()
+        let Test_UniqueObjectNewMap_values = Test_UniqueObjectNewMap.values()
+        this.Test_UniqueObjectNewMap_valuesAsArr = [
+          ...Test_UniqueObjectNewMap_values
+        ]
+
+        // console.log(this.Test_UniqueObjectNewMap_valuesAsArr)
+        // console.log(this._sustratos_)
+
       }
     }
   }
 
   public _calibre_ = []
   buscarCalibre(e){
-    let sustratos = this.ALMACEN.filter(x => x.gramaje == e)
+    let material = (<HTMLInputElement>document.getElementById('Material_Seleccionado')).value
+    let splitted = material.split('_')
+    let e1 = splitted[0];
+    let marca = splitted[1].split('(')
+    let sustratos = this.ALMACEN.filter(x =>x.nombre == e1 && x.marca == marca[1].slice(0,-1) && x.gramaje == e)
     // // console.log(sustratos,'15515151515151515151515151515151')
     for(let i=0; i<sustratos.length; i++){
       let calibre = this._calibre_.find(x=> x.calibre == sustratos[i].calibre);
@@ -370,10 +412,12 @@ export class MainComponent implements OnInit {
   }
 
   public _gramajes_ = []
-  buscarGramaje(e){
+  buscarGramaje(e:string){
+    let splitted = e.split('_')
+    let e1 = splitted[0];
+    let marca = splitted[1].split('(')
     this._gramajes_ = []
-    let sustratos = this.ALMACEN.filter(x => x.nombre == e)
-    // // console.log(sustratos,'15515151515151515151515151515151')
+    let sustratos = this.ALMACEN.filter(x => x.nombre == e1 && x.marca == marca[1].slice(0,-1))
     for(let i=0; i<sustratos.length; i++){
       let gramaje = this._gramajes_.find(x=> x.gramaje == sustratos[i].gramaje);
       if(!gramaje){
@@ -385,8 +429,13 @@ export class MainComponent implements OnInit {
 
   public _ancho_ = []
   buscarAncho(e){
+    let material = (<HTMLInputElement>document.getElementById('Material_Seleccionado')).value
+    let splitted = material.split('_')
+    let e1 = splitted[0];
+    let marca = splitted[1].split('(')
+    let gramaje = (<HTMLInputElement>document.getElementById('Gramaje_Seleccionado')).value
     this._ancho_ = []
-    let sustratos = this.ALMACEN.filter(x => x.calibre == e)
+    let sustratos = this.ALMACEN.filter(x => x.calibre == e && x.nombre == e1 && x.marca == marca[1].slice(0,-1) && x.gramaje == gramaje)
     for(let i=0; i<sustratos.length; i++){
       let ancho = this._ancho_.find(x=> x.ancho == sustratos[i].ancho);
       if(!ancho){
@@ -463,9 +512,9 @@ export class MainComponent implements OnInit {
       lote:this.loteID,
       cantidad:this.cantidadID,
       motivo:this.Edition__
-      
+
     }
-    
+
     this.api.putAlmacenadoID(this.AlmacenadoId._id, body)
     .subscribe((resp:any)=>{
       this.edit_almacen();
@@ -484,9 +533,9 @@ export class MainComponent implements OnInit {
       this.cantidadID = ''
       this.AlmacenadoId = ''
     })
-    
+
   }
-  
+
   public edit_almacen(){
     if(this.EDICION_ALMACEN){
       this.EDICION_ALMACEN = false;
@@ -497,12 +546,21 @@ export class MainComponent implements OnInit {
 
   Almacenes(e){
     if(e == 'Almacenada'){
+      if(!this.resumido){
+        this.resumido = true;
+        this.detallado = false;
+      }
       this._Almacenado = true;
       this._bobina = false;
     }else if(e == 'Bobinas'){
       this._Almacenado = false;
       this._bobina = true;
+      this.getbobinas();
     }else{
+      if(this.resumido){
+        this.resumido = false;
+        this.detallado = true;
+      }
       this._Almacenado = false;
       this._bobina = false;
     }
@@ -523,7 +581,7 @@ export class MainComponent implements OnInit {
       })
   }
 
-  puntoYcoma(n){ 
+  puntoYcoma(n){
    return n = new Intl.NumberFormat('de-DE').format(n)
   }
 
@@ -701,7 +759,7 @@ export class MainComponent implements OnInit {
       this._producto_seleccionado = true
     }
   }
-  
+
 
   Almacenar(){
 
@@ -819,6 +877,11 @@ export class MainComponent implements OnInit {
 
 
   nuevaBobina(){
+    let splited = this.BobinaForm.get('material').value;
+    splited = splited.split('_')
+    let marca = splited[1].split('(')
+    this.BobinaForm.get('material').setValue(splited[0])
+    this.BobinaForm.get('marca').setValue(marca[1].slice(0,-1))
     this.api.postNuevaBobina(this.BobinaForm.value)
       .subscribe((resp:any)=>{
         this.BobinaForm.reset();
@@ -834,27 +897,54 @@ export class MainComponent implements OnInit {
   }
 
   public SUSTRATO_CONVERSION = [];
-
+  public BobinasSencillas = [];
   getbobinas(){
+    this.BobinasSencillas = [];
     this.api.getBobina()
       .subscribe((resp:any)=>{
         this.BOBINAS_ = resp;
+        let Almacen = this.ALMACEN;
         for(let i = 0; i<this.BOBINAS_.length; i++){
           let bobina = this.BOBINAS_[i]
-          // bobinas
-          // material
-          // ancho
-          // largo
-          
-          // material 
-          // nombre
-          // ancho
-          // largo 
 
-          let sustrato = this.ALMACEN.filter(x => x.nombre == bobina.material && x.gramaje == bobina.gramaje && x.ancho == bobina.ancho)
-          if(sustrato){
-            this.SUSTRATO_CONVERSION.push(sustrato)
+          let sumada = this.BobinasSencillas.findIndex(x => x.material === this.BOBINAS_[i].material && x.marca === this.BOBINAS_[i].marca && x.ancho === this.BOBINAS_[i].ancho && x.gramaje === this.BOBINAS_[i].gramaje && x.calibre === this.BOBINAS_[i].calibre && x.convertidora === this.BOBINAS_[i].convertidora)
+
+          if(sumada < 0){
+            let data = {
+              material:this.BOBINAS_[i].material,
+              marca:this.BOBINAS_[i].marca,
+              calibre:this.BOBINAS_[i].calibre,
+              gramaje:this.BOBINAS_[i].gramaje,
+              ancho:this.BOBINAS_[i].ancho,
+              convertidora:this.BOBINAS_[i].convertidora,
+              peso:this.BOBINAS_[i].peso
+            }
+            this.BobinasSencillas.push(data)
           }
+          else{
+              let peso = Number(this.BobinasSencillas[sumada].peso) + Number(this.BOBINAS_[i].peso)
+              this.BobinasSencillas[sumada].peso = peso
+          }
+
+          console.log(this.BobinasSencillas)
+
+          let sustrato = this.ALMACEN.find(x => x.nombre == bobina.material && x.marca == bobina.marca && x.ancho == bobina.ancho && x.gramaje == bobina.gramaje)
+
+          console.log(sustrato)
+          if(sustrato){
+
+            let existe = this.SUSTRATO_CONVERSION.find(x => x._id == sustrato._id)
+            if(!existe){
+              this.SUSTRATO_CONVERSION.push(sustrato)
+            }
+          }
+
+          // let sustrato = this.ALMACEN.find(x => x.nombre == bobina.material && x.gramaje == bobina.gramaje && x.ancho == bobina.ancho)
+          // console.log(sustrato, 'bobina')
+          // if(sustrato){
+          //   console.log( this.SUSTRATO_CONVERSION,'bOBINAS')
+
+          // }
         }
       })
   }
@@ -964,7 +1054,7 @@ export class MainComponent implements OnInit {
           pdf.add(
 
             pdf.ln(2)
-            
+
           )
 
           pdf.add(
@@ -999,14 +1089,14 @@ export class MainComponent implements OnInit {
 
               ]
             ]).widths(['45%','15%','40%']).layout('noBorders').end
-            
+
           )
 
 
           pdf.add(
 
             pdf.ln(2)
-            
+
           )
 
           pdf.add(
@@ -1037,7 +1127,7 @@ export class MainComponent implements OnInit {
           pdf.add(
 
             pdf.ln(2)
-            
+
           )
 
           pdf.add(
@@ -1087,7 +1177,7 @@ export class MainComponent implements OnInit {
     return total;
   }
 
-  
+
 
   BuscarTotal(Material:any, cantidad_Mat:any, cantidad_orden:any){
     let El_Material = this.ALMACEN.find(x=> x.nombre == Material)
@@ -1099,7 +1189,7 @@ export class MainComponent implements OnInit {
       if(Total_en_Presentacion < 1){
         Total_en_Presentacion = 1;
       }
-    
+
       return {total:Total_en_Presentacion,
         presentacion: El_Material.presentacion}
 
@@ -1109,14 +1199,14 @@ export class MainComponent implements OnInit {
       if(Total_en_Presentacion < 1){
         Total_en_Presentacion = 1;
       }
-      
+
       return {total:Total_en_Presentacion,
               presentacion: El_Material.presentacion}
     }
 
   }
 
-  
+
 
   RestarMaterial(material, total){
     const data = {
@@ -1164,7 +1254,7 @@ export class MainComponent implements OnInit {
         this.BuscarAlmacen();
         this.porConfirmar();
         this.modal_eliminacion();
-        
+
         this.BuscarAlmacen();
         this.BuscarGruposEnAlmacen();
         this.getbobinas();
@@ -1184,7 +1274,7 @@ export class MainComponent implements OnInit {
 
   }
 
-  
+
 
   descargarInventario(desde, hasta){
     const data = {
@@ -1217,7 +1307,7 @@ export class MainComponent implements OnInit {
           pdf.add(
 
             pdf.ln(2)
-            
+
           )
 
           pdf.add(
@@ -1231,7 +1321,7 @@ export class MainComponent implements OnInit {
           pdf.add(
 
             pdf.ln(2)
-            
+
           )
           pdf.add(
             new Table([
@@ -1241,7 +1331,7 @@ export class MainComponent implements OnInit {
                 new Cell( new Txt(`CANTIDAD`).end).end,
                 new Cell( new Txt(`CÓDIGO`).end).end,
                 new Cell( new Txt(`LOTE`).end).end,
-                
+
               ]
             ]).widths(['20%','20%','20%', '20%', '20%']).end
           )
@@ -1254,7 +1344,7 @@ export class MainComponent implements OnInit {
                   new Cell( new Txt(`${resp.almacen[i].cantidad}`).end).end,
                   new Cell( new Txt(`${resp.almacen[i].codigo}`).end).end,
                   new Cell( new Txt(`${resp.almacen[i].lote}`).end).end,
-                  
+
                 ]
               ]).widths(['20%','20%','20%', '20%', '20%']).end
             )
@@ -1263,7 +1353,7 @@ export class MainComponent implements OnInit {
           pdf.add(
 
             pdf.ln(2)
-            
+
           )
 
           pdf.add(
@@ -1277,7 +1367,7 @@ export class MainComponent implements OnInit {
           pdf.add(
 
             pdf.ln(2)
-            
+
           )
 
           pdf.add(
@@ -1288,7 +1378,7 @@ export class MainComponent implements OnInit {
                 new Cell( new Txt(`CANTIDAD`).end).end,
                 new Cell( new Txt(`CÓDIGO`).end).end,
                 new Cell( new Txt(`LOTE`).end).end,
-                
+
               ]
             ]).widths(['20%','20%','20%', '20%', '20%']).end
           )
@@ -1301,7 +1391,7 @@ export class MainComponent implements OnInit {
                   new Cell( new Txt(`${resp.ingresos[i].material.cantidad}`).end).end,
                   new Cell( new Txt(`${resp.ingresos[i].material.codigo}`).end).end,
                   new Cell( new Txt(`${resp.ingresos[i].material.lote}`).end).end,
-                  
+
                 ]
               ]).widths(['20%','20%','20%', '20%', '20%']).end
             )
@@ -1310,7 +1400,7 @@ export class MainComponent implements OnInit {
           pdf.add(
 
             pdf.ln(2)
-            
+
           )
 
           pdf.add(
@@ -1324,7 +1414,7 @@ export class MainComponent implements OnInit {
           pdf.add(
 
             pdf.ln(2)
-            
+
           )
 
           pdf.add(
@@ -1335,7 +1425,7 @@ export class MainComponent implements OnInit {
                 new Cell( new Txt(`CANTIDAD`).end).end,
                 new Cell( new Txt(`RAZON`).end).end,
                 new Cell( new Txt(`FECHA`).end).end,
-                
+
               ]
             ]).widths(['20%','20%','20%', '20%', '20%']).end
           )
@@ -1348,7 +1438,7 @@ export class MainComponent implements OnInit {
                   new Cell( new Txt(`${resp.descuentos[i].descuento}`).end).end,
                   new Cell( new Txt(`${resp.descuentos[i].razon}`).end).end,
                   new Cell( new Txt(`${resp.descuentos[i].fecha.slice(0, 10)}`).end).end,
-                  
+
                 ]
               ]).widths(['20%','20%','20%', '20%', '20%']).end
             )
@@ -1357,10 +1447,10 @@ export class MainComponent implements OnInit {
 
 
 
-          
-            
+
+
           pdf.create().download()
-          
+
         }
         generarPDF();
         this.modal_reporte()
@@ -1371,10 +1461,10 @@ export class MainComponent implements OnInit {
   totalizar_materiales(){
 
     for(let i=0; i<this.Almacenado.length; i++){
-      let existe = this.TOTALES.find(x => x.material == this.Almacenado[i].material.nombre && x.marca == this.Almacenado[i].material.marca);
+      let existe = this.TOTALES.find(x => x.material == this.Almacenado[i].material.nombre && x.marca == this.Almacenado[i].material.marca && x.ancho == this.Almacenado[i].material.ancho && x.largo == this.Almacenado[i].material.largo && x.calibre == this.Almacenado[i].material.calibre && x.gramaje == this.Almacenado[i].material.gramaje);
       if(existe){
-          let x = this.TOTALES.findIndex(x => x.material == this.Almacenado[i].material.nombre && x.marca == this.Almacenado[i].material.marca)
-          
+          let x = this.TOTALES.findIndex(x => x.material == this.Almacenado[i].material.nombre && x.marca == this.Almacenado[i].material.marca && x.ancho == this.Almacenado[i].material.ancho && x.largo == this.Almacenado[i].material.largo && x.calibre == this.Almacenado[i].material.calibre && x.gramaje == this.Almacenado[i].material.gramaje)
+
           this.TOTALES[x].total = Number(this.TOTALES[x].total)
           this.Almacenado[i].cantidad = Number(this.Almacenado[i].cantidad)
           this.Almacenado[i].neto = Number(this.Almacenado[i].material.neto)
@@ -1398,6 +1488,9 @@ export class MainComponent implements OnInit {
                       total:this.Almacenado[i].cantidad
                     })
       }
+      if(i === this.Almacenado.length - 1){
+        // console.log(this.TOTALES)
+      }
     }
 
   }
@@ -1414,7 +1507,7 @@ export class MainComponent implements OnInit {
   }
 
   seleccion_inventario(material, marca){
-    
+
     let materiales_en_almacen = [];
 
     for(let i=0; i<this.ALMACEN.length; i++){
@@ -1429,7 +1522,7 @@ export class MainComponent implements OnInit {
 
     return materiales_en_almacen;
   }
-  
+
   caja(cajas){
     this.caja_ = cajas;
   }
@@ -1447,7 +1540,7 @@ export class MainComponent implements OnInit {
   //   for(let i = 0; i<lotes; i++){
   //     if(this.LOTES[i].i == x){
   //       existencia = existencia + this.LOTES[i].almacenado;
-  //     } 
+  //     }
   //   }
 
   //   return existencia

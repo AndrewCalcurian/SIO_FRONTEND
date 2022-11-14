@@ -172,7 +172,7 @@ export class AsignacionComponent implements OnInit {
     if(grupo === 'Tinta'){
       _cantidad = (m_cantidad * hojas) / 1000;
       // // console.log(m_cantidad,'m_cantidad')
-    }else if(grupo === 'Barniz'){
+    }else if(grupo === 'Barniz' || grupo === 'Barniz Acuoso'){
       _cantidad = (m_cantidad * hojas) / 1000;
     }else if(grupo === 'Pega'){
       _cantidad = (m_cantidad * cantidad) / 1000;

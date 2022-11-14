@@ -25,14 +25,13 @@ export class DetallesComponent implements OnInit {
   public despachos = [];
   public despacho = 0;
   public usuario;
-
+  public Maquinas;
 
   constructor(private api:RestApiService) {
     this.usuario = api.usuario;
    }
 
   ngOnInit(): void {
-    
   }
 
   cambiarFecha(dato, trabajo, campo:string){
@@ -42,11 +41,16 @@ export class DetallesComponent implements OnInit {
       })
   }
 
+  format(n){
+    return Math.ceil(n);
+  }
+
   gestiones(){
     this.detallado = true;
     this.buscarTrabajos();
     this.buscarGestiones();
     this.buscarDespachos();
+    this.BuscarMaquinas();
   }
 
   restan(a,b){
@@ -107,11 +111,24 @@ export class DetallesComponent implements OnInit {
       })
   }
 
+  CambioDeMaquina(e){
+    alert(e)
+  }
+
   buscarTrabajos(){
     this.api.getMaquinasByOrdens(this.orden_id)
       .subscribe((resp:any)=>{
         this.trabajos = resp.maquinasDB;
         // this.trabajos = this.trabajos.sort(x => x.fechaI)
+      })
+  }
+
+  BuscarMaquinas(){
+    this.api.GetMaquinas()
+      .subscribe((resp:any)=>{
+        this.Maquinas = resp
+
+        console.log(this.Maquinas)
       })
   }
 

@@ -8,6 +8,7 @@
 }
 
 .cintillo_{
+    padding: 5px;
     background-color: rgb(28, 40, 49);
     color: white;
 }
