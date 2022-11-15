@@ -2,7 +2,7 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule, Routes } from '@angular/router';
 
-import { MainComponent } from './index/main/main.component';
+// import { MainComponent } from './index/main/main.component';
 import { OrdenComponent } from './orden/orden.component';
 import { PlanificacionComponent } from './planificacion/planificacion.component';
 import { LoginComponent } from './login/login.component';
@@ -38,6 +38,11 @@ const routes: Routes = [
     path: 'ordenes',
     canActivate: [AuthGuard],
     loadChildren: ()=> import('./ordenes/ordenes.module').then(m=>m.OrdenesModule)
+  },
+  {
+    path: 'estadisticas',
+    canActivate: [AuthGuard],
+    loadChildren: ()=> import('./estadisticas/estadisticas.module').then(m=>m.EstadisticasModule)
   },
   {
     path: 'planificacion',

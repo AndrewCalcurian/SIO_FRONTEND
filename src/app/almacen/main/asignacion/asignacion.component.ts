@@ -175,7 +175,7 @@ export class AsignacionComponent implements OnInit {
     }else if(grupo === 'Barniz' || grupo === 'Barniz Acuoso'){
       _cantidad = (m_cantidad * hojas) / 1000;
     }else if(grupo === 'Pega'){
-      _cantidad = (m_cantidad * cantidad) / 1000;
+      _cantidad = (m_cantidad * hojas) / 1000;
     }else if(grupo === 'Cajas Corrugadas'){
       _cantidad = cantidad / m_cantidad;
       if(cantidad === 1){

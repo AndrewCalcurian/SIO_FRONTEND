@@ -423,4 +423,14 @@ export class RestApiService {
     const url = `${this.api_url}/trabajo/${id}`
     return this.http.put(url,data)
   }
+
+
+
+
+  EstadisticasOrden(data){
+    const url = `${this.api_url}/estadisticas/ordens`
+    return this.http.post(url,data)
+  }
+
+
 }

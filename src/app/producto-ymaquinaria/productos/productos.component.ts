@@ -234,6 +234,7 @@ export class ProductosComponent implements OnInit {
   }
 
   sumaTintas(n){
+
     if(this.listo){
       this.listo = false;
       this.necesidad = n - 5;

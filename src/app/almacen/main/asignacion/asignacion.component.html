@@ -46,7 +46,7 @@
                                                 {{((materiales.cantidad * orden.paginas)/1000).toFixed(2)}}{{Unidad(materiales.producto.nombre)}}
                                             </ng-container>
                                             <ng-container *ngIf="materiales.producto.grupo.nombre == 'Pega'">
-                                                {{((materiales.cantidad * orden.cantidad)/1000).toFixed(2)}}{{Unidad(materiales.producto.nombre)}}
+                                                {{((materiales.cantidad * orden.paginas)/1000).toFixed(2)}}{{Unidad(materiales.producto.nombre)}}
                                             </ng-container>
                                             <ng-container *ngIf="materiales.producto.grupo.nombre == 'Cajas Corrugadas'">
                                                 <ng-container *ngIf="orden.motivo">

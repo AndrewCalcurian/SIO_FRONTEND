@@ -546,7 +546,12 @@
                                     <ng-container *ngIf="i_montajes == 2">C</ng-container>
                                     <ng-container *ngIf="i_montajes == 3">D</ng-container>
                                     <ng-container *ngIf="i_montajes == 4">E</ng-container>
-                                        -{{sumaTintas(i)}}
+                                    <ng-container *ngIf="i_montajes == 0">
+                                        -{{sumaTintas(i, TintaProducto.producto.color)}}
+                                    </ng-container>    
+                                    <ng-container *ngIf="i_montajes != 0">
+                                        -{{sumaTintas(i, TintaProducto.producto.color) - 2}}
+                                    </ng-container>    
                                     </ng-container>
                                 </div>
                             </ng-container>

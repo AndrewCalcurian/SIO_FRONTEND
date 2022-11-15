@@ -187,7 +187,13 @@
                                                                     <div *ngIf="TintaProducto.producto.color != 'Amarillo' && TintaProducto.producto.color != 'Magenta' && TintaProducto.producto.color != 'Cyan' && TintaProducto.producto.color != 'Negro' ">
                                                                         <b>{{TintaProducto.producto.color}}:</b>
                                                                         <ng-container>
-                                                                            {{PRODUCTO.cliente.codigo}}-{{PRODUCTO.producto.codigo}}-{{PRODUCTO.producto.version}}-{{sumaTintas(i)}}
+                                                                            {{PRODUCTO.cliente.codigo}}-{{PRODUCTO.producto.codigo}}-{{PRODUCTO.producto.version}}-
+                                                                            <ng-container *ngIf="PRODUCTO.montaje == 0">
+                                                                                {{sumaTintas(i)}}
+                                                                            </ng-container>
+                                                                            <ng-container *ngIf="PRODUCTO.montaje != 0">
+                                                                                {{sumaTintas(i)-2}}
+                                                                            </ng-container>
                                                                         </ng-container>
                                                                     </div>
                                                                 </td>

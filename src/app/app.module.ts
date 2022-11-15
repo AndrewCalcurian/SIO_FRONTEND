@@ -19,6 +19,7 @@ import { OrdenesModule } from './ordenes/ordenes.module';
 import { OrdenesComponent } from './ordenes/ordenes.component';
 import { PlanificacionComponent } from './planificacion/planificacion.component';
 import { LoginComponent } from './login/login.component';
+import { EstadisticasModule } from './estadisticas/estadisticas.module';
 
 import localeES from '@angular/common/locales/es';
 import { registerLocaleData } from '@angular/common';
@@ -46,6 +47,7 @@ registerLocaleData(localeES, 'es')
     RouterModule,
     SharedModule,
     AppRoutingModule,
+    EstadisticasModule,
     IndexModule,
     NuevoPedidoModule,
     ProductoYMaquinariaModule,
