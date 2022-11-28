@@ -33,13 +33,100 @@
     font-size: small;
 }
 
-.carga{
-    padding: 5px;
-    background-color: rgb(153, 238, 150);
+.carga_{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    overflow: hidden;
+    background:#001f25 ;
 }
+.loader{
+    position: relative;
+    width: 300px;
+    height: 300px;
+
+}
+.loader span{
+    position: absolute;
+    top:0;
+    left:0;
+    width: 100%;
+    height: 100%;
+    transform: rotate(calc(36deg * var(--i)));
+}
+.loader span:before{
+    content:'';
+    position:absolute;
+    top:0;
+    left: 0;
+    width: 25px;
+    height: 25px;
+    border-radius: 50%;
+    background: transparent;
+    border:4px solid #00efff;
+    box-sizing: border-box;
+    box-shadow: 0 0 20px #00efff,
+    -30px -30px 0 #00efff,
+    -30px -30px 0 #00efff,
+    30px -30px 0 #00efff,
+    30px -30px 0 #00efff,
+    -30px 30px 0 #00efff,
+    -30px 30px 0 #00efff,
+    30px 30px 0 #00efff,
+    30px 30px 0 #00efff;
+    animation: animate 5s linear infinite;
+    animation-delay: calc(-0.25s * var(--i));
+    transform-origin: 20px;
+    transition: 2s;
+}
+
+.loader:hover span:before{
+    box-shadow: 0 0 20px #00efff,
+    -300px -300px 0 #00efff,
+    -300px -300px 0 #00efff,
+    300px -300px 0 #00efff,
+    300px -300px 0 #00efff,
+    -300px 300px 0 #00efff,
+    -300px 300px 0 #00efff,
+    300px 300px 0 #00efff,
+    300px 300px 0 #00efff;
+    transform-origin: 200px;
+}
+.text{
+    top: 250;
+    position: absolute;
+    color: white;
+}
+.link{
+    cursor: pointer;
+}
+.link:hover{
+    cursor: pointer;
+    text-decoration: underline;
+}
+
+@keyframes animate {
+    0%{
+        transform: rotate(0deg);
+        filter: hue-rotate(0deg)
+    }
+    100%{
+        transform: rotate(360deg);
+        filter: hue-rotate(360deg)
+    }
+}
+
 
 .empty{
     padding: 5px;
     background-color: rgb(247, 97, 97);
     color: white;
+}
+
+.impar{
+    background-color: rgb(216, 216, 216);
 }

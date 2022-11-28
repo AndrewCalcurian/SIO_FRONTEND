@@ -128,7 +128,7 @@ export class MainComponent implements OnInit {
   public Almacenado = [];
   Pendiente;
 
-  public Bobillas = false;
+  public Bobillas = true;
 
 
   InventarioForm:FormGroup = this.fb.group({
@@ -896,9 +896,35 @@ export class MainComponent implements OnInit {
       })
   }
 
+  public Convertidora;
+  seleccionar_material(e){
+    (<HTMLInputElement>document.getElementById('bobina_selected')).disabled = false;
+    this.SUSTRATO_CONVERSION = [];
+    this.Convertidora = e;
+    let BobinasEnConvertidora = this.BOBINAS_.filter(x => x.convertidora === e)
+    console.log(BobinasEnConvertidora)
+    for(let i = 0; i<BobinasEnConvertidora.length; i++){
+      let bobina = BobinasEnConvertidora[i]
+      let sustrato = this.ALMACEN.filter(x => x.nombre == bobina.material && x.marca == bobina.marca && x.ancho == bobina.ancho && x.gramaje == bobina.gramaje && x.calibre == bobina.calibre)
+
+          console.log(sustrato,'aja')
+          if(sustrato){
+          for(let i =0; i<sustrato.length;i++){
+  
+              let existe = this.SUSTRATO_CONVERSION.find(x => x._id == sustrato[i]._id)
+              if(!existe){
+                this.SUSTRATO_CONVERSION.push(sustrato[i])
+              }
+            }
+          }
+    }
+  }
+
   public SUSTRATO_CONVERSION = [];
   public BobinasSencillas = [];
   getbobinas(){
+    this.I_f = 0;
+    this.I_r = 0;
     this.BobinasSencillas = [];
     this.api.getBobina()
       .subscribe((resp:any)=>{
@@ -906,7 +932,11 @@ export class MainComponent implements OnInit {
         let Almacen = this.ALMACEN;
         for(let i = 0; i<this.BOBINAS_.length; i++){
           let bobina = this.BOBINAS_[i]
-
+          if(bobina.convertidora === 'Convertidora Finlandia, C.A.'){
+            this.I_f++;
+          }else{
+            this.I_r++;
+          }
           let sumada = this.BobinasSencillas.findIndex(x => x.material === this.BOBINAS_[i].material && x.marca === this.BOBINAS_[i].marca && x.ancho === this.BOBINAS_[i].ancho && x.gramaje === this.BOBINAS_[i].gramaje && x.calibre === this.BOBINAS_[i].calibre && x.convertidora === this.BOBINAS_[i].convertidora)
 
           if(sumada < 0){
@@ -980,6 +1010,9 @@ export class MainComponent implements OnInit {
 
   }
 
+  public I_f = 0;
+  public I_r = 0;
+
   Generar_Conversion(){
     let sustrato = (<HTMLInputElement>document.getElementById('bobina_selected')).value;
     let peso = (<HTMLInputElement>document.getElementById('_peso')).value;
@@ -988,20 +1021,19 @@ export class MainComponent implements OnInit {
     let largo = (<HTMLInputElement>document.getElementById('_largo')).value;
     let observacion = (<HTMLInputElement>document.getElementById('observacion')).value;
     let convertidora = (<HTMLInputElement>document.getElementById('convertidora')).value;
-
     let Material = this.ALMACEN.find(x=> x._id == sustrato)
 
     let data = {
-      material:Material.nombre,
+      material:`${Material.nombre} (${Material.marca})`,
       codigo:this.Num_Bobina,
       peso,
-      sustrato:Material.nombre,
+      sustrato:`${Material.nombre} (${Material.marca})`,
       hojas:this.HOJAS,
     }
 
     let solicitado = [
-      'Jaime San Juan',
-      'Gerente de Operaciones',
+      `${this.usuario.Nombre} ${this.usuario.Apellido}`,
+      // 'Gerente de Operaciones',
       'Poligráfica Industrial, C.A.'
     ]
 

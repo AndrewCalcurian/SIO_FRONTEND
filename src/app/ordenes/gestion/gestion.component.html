@@ -21,21 +21,27 @@
             <div class="titulo">
                 Gestiones
                 <br>
+            <ng-container *ngIf="!usuario.Despacho">
                 <button class="button is-primary" (click)='modal_nueva_gestion()' *ngIf="usuario.Almacen != 2 || usuario.Role == 'ADMIN'">Nueva Gestión</button> 
+            </ng-container>    
                 <!-- <button class="button is-primary" (click)='nuevo_despacho()'>Despacho</button> -->
             </div>
+            <ng-container *ngIf="!usuario.Despacho">
             <div class="select" *ngIf="usuario.Almacen != 2 || usuario.Role == 'ADMIN'">
-                <select (change)='fase($event)'>
-                    <option>Seleccionar fase</option>
-                    <option value="{{funcion}}" *ngFor='let funcion of FUNCIONES'>{{funcion}}</option>
-                </select>
-            </div>
-             <button class="button is-success" (click)="TraerTareasFueraDeFecha()" *ngIf="usuario.Almacen != 2 || usuario.Role == 'ADMIN'">Otras Gestiones</button>
-             <button class="button is-primary" (click)='modal_Devolucion()' >Devolución de materiales</button>
-             <button class="button is-primary" (click)='modal_solicitud()' >Solicitud de materiales</button>
+                    <select (change)='fase($event)'>
+                        <option>Seleccionar fase</option>
+                        <option value="{{funcion}}" *ngFor='let funcion of FUNCIONES'>{{funcion}}</option>
+                    </select>
+                </div>
+            </ng-container>
+            <ng-container *ngIf="!usuario.Despacho">
+             <button class="button is-success" (click)="TraerTareasFueraDeFecha()" *ngIf="usuario.Almacen != 2 ||usuario.Role == 'ADMIN'">Otras Gestiones</button>
+            </ng-container>
+             <button class="button is-primary" (click)='modal_Devolucion()' *ngIf="usuario.Despacho != 1">Devolución de materiales</button>
+             <button class="button is-primary" (click)='modal_solicitud()' *ngIf="usuario.Despacho != 1">Solicitud de materiales</button>
             
             <hr>
-            <div class="despachos" *ngIf="usuario.Almacen == 2">
+            <div class="despachos" *ngIf="usuario.Almacen == 2 || usuario.Despacho == 1">
                 <div class="subtitulo">
                     Despachos pendientes:
                 </div>
@@ -100,9 +106,12 @@
                 </table>
             </div>
 
+            <ng-container *ngIf="!usuario.Despacho">
             <div class="subtitulo" *ngIf="usuario.Almacen != 2 || usuario.Role == 'ADMIN'">
                 Ordenes para el dia de Hoy: <br>
             </div>
+            </ng-container>
+            <ng-container *ngIf="!usuario.Despacho">
                 <table class="table is-fullwidth" *ngIf="usuario.Almacen != 2 || usuario.Role == 'ADMIN'">
                     <thead>
                         <tr>
@@ -144,7 +153,9 @@
                         </tr>
                     </tbody>
                 </table>
+            </ng-container>
             <hr>
+            <ng-container *ngIf="!usuario.Despacho">
             <div class="subtitulo" *ngIf="usuario.Almacen != 2 || usuario.Role == 'ADMIN'">
                 Gestiones Realizadas: <br>
             </div>
@@ -183,6 +194,7 @@
                 <hr>
             </ng-container>
             </div>
+        </ng-container>
         </div>
     </div>
 </div>

@@ -124,10 +124,9 @@
                 <table class="table is-fullwidth" *ngIf="Bobillas">
                     <tr>
                         <th>Material</th>
-                        <th>Gramaje</th>
-                        <th>Ancho de Bobina</th>
-                        <th>Peso</th>
-                        <th *ngIf="usuario.Almacen == 2">Descontar</th>
+                        <th>Gramaje (g/m²)</th>
+                        <th>Ancho de Bobina (cm)</th>
+                        <th>Peso (t)</th>
                     </tr>
                     <tr *ngFor='let bobina of BobinasSencillas'>
                         <ng-container *ngIf="bobina.convertidora === 'Convertidora Finlandia, C.A.'">
@@ -135,25 +134,20 @@
                             <td>{{bobina.gramaje}}</td>
                             <td>{{bobina.ancho}}</td>
                             <td>{{bobina.peso}}</td>
-                            <td *ngIf="usuario.Almacen == 2">
-                                <button class="button is-danger is-outlined is-small" (click)='descontar_bobina(bobina._id)'>
-                                    <span>Descontar</span>
-                                    <span class="icon is-small">
-                                        <i class="fas fa-times"></i>
-                                    </span>
-                                </button>
-                            </td>
                         </ng-container>
                     </tr>
                 </table>
                 <table class="table is-fullwidth" *ngIf="!Bobillas">
+                    <div class="contador">
+                        <strong>Cantidad de bobinas: </strong>{{I_f}}
+                    </div>
                     <tr>
                         <th>Nº Bobina</th>
                         <th>Material</th>
-                        <th>Gramaje</th>
+                        <th>Gramaje (g/m²)</th>
                         <th>Calibre</th>
-                        <th>Ancho de Bobina</th>
-                        <th>Peso</th>
+                        <th>Ancho de Bobina (cm)</th>
+                        <th>Peso (t)</th>
                         <th>Lote</th>
                         <th *ngIf="usuario.Almacen == 2">Descontar</th>
                     </tr>
@@ -166,7 +160,7 @@
                             <td>{{bobina.ancho}}</td>
                             <td>{{bobina.peso}}</td>
                             <td>{{bobina.lote}}</td>
-                            <td *ngIf="usuario.Almacen == 2">
+                         <td *ngIf="usuario.Almacen == 2">
                                 <button class="button is-danger is-outlined is-small" (click)='descontar_bobina(bobina._id)'>
                                     <span>Descontar</span>
                                     <span class="icon is-small">
@@ -185,10 +179,9 @@
                 <table class="table is-fullwidth" *ngIf="Bobillas">
                     <tr>
                         <th>Material</th>
-                        <th>Gramaje</th>
-                        <th>Ancho de Bobina</th>
-                        <th>Peso</th>
-                        <th *ngIf="usuario.Almacen == 2">Descontar</th>
+                        <th>Gramaje (g/m²)</th>
+                        <th>Ancho de Bobina (cm)</th>
+                        <th>Peso (t)</th>
                     </tr>
                     <tr *ngFor='let bobina of BobinasSencillas'>
                         <ng-container *ngIf="bobina.convertidora === 'Redispaca Distribuidora de Papel, C.A.'">
@@ -196,25 +189,20 @@
                             <td>{{bobina.gramaje}}</td>
                             <td>{{bobina.ancho}}</td>
                             <td>{{bobina.peso}}</td>
-                            <td *ngIf="usuario.Almacen == 2">
-                                <button class="button is-danger is-outlined is-small" (click)='descontar_bobina(bobina._id)'>
-                                    <span>Descontar</span>
-                                    <span class="icon is-small">
-                                        <i class="fas fa-times"></i>
-                                    </span>
-                                </button>
-                            </td>
                         </ng-container>
                     </tr>
                 </table>
                 <table class="table is-fullwidth" *ngIf="!Bobillas">
+                    <div class="contador">
+                        <strong>Cantidad de bobinas: </strong>{{I_r}}
+                    </div>
                     <tr>
                         <th>Nº Bobina</th>
                         <th>Material</th>
-                        <th>Gramaje</th>
+                        <th>Gramaje (g/m²)</th>
                         <th>Calibre</th>
-                        <th>Ancho de Bobina</th>
-                        <th>Peso</th>
+                        <th>Ancho de Bobina (cm)</th>
+                        <th>Peso (t)</th>
                         <th>Lote</th>
                         <th *ngIf="usuario.Almacen == 2">Descontar</th>
                     </tr>
@@ -1073,7 +1061,7 @@
 
             </div>
             <div class="field">
-                <label class="label">Gramaje</label>
+                <label class="label">Gramaje (g/m²)</label>
                 <div class="select">
                     <select name="" id="Gramaje_Seleccionado" formControlName="gramaje" (change)="buscarCalibre($event.target.value)">
                         <option value="{{gramaje.gramaje}}" *ngFor="let gramaje of _gramajes_">{{gramaje.gramaje}}</option>
@@ -1089,7 +1077,7 @@
                 </div>
             </div>
             <div class="field">
-                <label class="label">Ancho de bobina</label>
+                <label class="label">Ancho de bobina (cm)</label>
                     <div class="select">
                         <select name="" id="" formControlName="ancho">
                             <option value="{{ancho.ancho}}" *ngFor="let ancho of _ancho_">{{ancho.ancho}}</option>
@@ -1097,7 +1085,7 @@
                     </div>
             </div>
             <div class="field">
-                <label class="label">Peso</label>
+                <label class="label">Peso (t)</label>
                     <input type="text" class="input" formControlName="peso">
             </div>
             <div class="field">
@@ -1130,13 +1118,22 @@
             </div>
             <br>
             <div class="field">
+                <label class="label">Convertidora</label>
+                <div class="select">
+                    <select name="" id="convertidora" formControlName="convertidora" (change)="seleccionar_material($event.target.value)">
+                        <option value="Convertidora Finlandia, C.A.">Convertidora Finlandia, C.A.</option>
+                        <option value="Redispaca Distribuidora de Papel, C.A.">Redispaca Distribuidora de Papel, C.A.</option>
+                    </select>
+                </div>
+            </div>
+            <div class="field">
                 <label class="label">Material</label>
                 <div class="select">
-                    <select (change)='Buscar_Bobina($event)' id='bobina_selected'>
+                    <select (change)='Buscar_Bobina($event)' id='bobina_selected' disabled>
                         <option value="null">Selecciona Sustrato</option>
                         <ng-container *ngFor='let producto of SUSTRATO_CONVERSION'>
 
-                            <option value='{{producto._id}}'>{{producto.nombre}} {{producto.ancho}} x {{producto.largo}} ({{producto.marca}}) - Gram.{{producto.gramaje}} - Calibre.{{producto.calibre}}</option>
+                            <option value='{{producto._id}}'>{{producto.convertidora}}{{producto.nombre}} {{producto.ancho}} x {{producto.largo}} ({{producto.marca}}) - Gram.{{producto.gramaje}} - Calibre.{{producto.calibre}}</option>
                         </ng-container>
                     </select>
                 </div>
@@ -1166,15 +1163,6 @@
                 </div>
             </div>
             <hr>
-            <div class="field">
-                <label class="label">Convertidora</label>
-                <div class="select">
-                    <select name="" id="convertidora" formControlName="convertidora">
-                        <option value="Convertidora Finlandia, C.A.">Convertidora Finlandia, C.A.</option>
-                        <option value="Redispaca Distribuidora de Papel, C.A.">Redispaca Distribuidora de Papel, C.A.</option>
-                    </select>
-                </div>
-            </div>
             <div class="field">
                 <label class="label">Observación</label>
                 <textarea class="textarea" id="observacion" placeholder="Observacion"></textarea>

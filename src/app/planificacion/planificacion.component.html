@@ -19,7 +19,7 @@
                 <b class="titulo">{{funcion}}</b>
                 <!-- * -->
                 <ng-container *ngFor="let id of getFechas(day?.value, funcion);index as i">
-                    <div class="op-{{id.orden.sort.charAt(id.orden.sort.length - 1)}}">
+                    <div style="--i:{{id.orden.sort.charAt(id.orden.sort.length - 1)}}" class="op-{{id.orden.sort.charAt(id.orden.sort.length - 1)}} color">
                         <span class="tooltip">
                             <b>Producto: </b>{{id.orden.producto.producto}} <br>
                            <b>Numero de Orden: </b>{{id.orden.sort}} <br>

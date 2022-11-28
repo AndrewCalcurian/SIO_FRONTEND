@@ -215,9 +215,9 @@ export class RestApiService {
     }).pipe(
       tap( (resp:any) =>{
 
-        const {estado,_id ,Nombre ,Apellido, Correo ,Departamento, Role,Nueva_orden,Consulta,Almacen,Maquinaria, Planificacion,Gestiones } = resp.usuario;
+        const {estado,_id ,Nombre ,Apellido, Correo ,Departamento, Role,Nueva_orden,Consulta,Almacen,Maquinaria, Planificacion,Gestiones,Despacho } = resp.usuario;
 
-        this.usuario = new Usuario(estado, _id, Nombre, Apellido, Correo, Departamento,Role,Nueva_orden, Consulta, Almacen,Maquinaria,Planificacion,Gestiones);
+        this.usuario = new Usuario(estado, _id, Nombre, Apellido, Correo, Departamento,Role,Nueva_orden, Consulta, Almacen,Maquinaria,Planificacion,Gestiones,Despacho);
         localStorage.setItem('token', resp.token);
         localStorage.setItem('menu', JSON.stringify( resp.menu) );
       }),

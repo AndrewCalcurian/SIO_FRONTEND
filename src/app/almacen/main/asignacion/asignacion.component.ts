@@ -178,6 +178,7 @@ export class AsignacionComponent implements OnInit {
       _cantidad = (m_cantidad * hojas) / 1000;
     }else if(grupo === 'Cajas Corrugadas'){
       _cantidad = cantidad / m_cantidad;
+                  // alert(m_cantidad)
       if(cantidad === 1){
         _cantidad = m_cantidad
       }
@@ -199,7 +200,6 @@ export class AsignacionComponent implements OnInit {
 
 
     let unidad_necesaria:any = _cantidad / (EnAlmacen.material.neto + this.Descuentos(material));
-
     // // console.log(_cantidad,'-',EnAlmacen.material.neto)
 
     // // console.log( unidad_necesaria )
@@ -213,7 +213,9 @@ export class AsignacionComponent implements OnInit {
 
     let previo = this.LOTES.filter(x => x.i === i)
 
-    if(EnAlmacen.material.grupo.nombre === 'Sustrato' && orden.cliente){
+    if(EnAlmacen.material.grupo.nombre === 'Cajas Corrugadas' && orden.cliente){
+      unidad_necesaria =_cantidad - this.Descuentos(material);
+    }else if(EnAlmacen.material.grupo.nombre === 'Sustrato' && orden.cliente){
       unidad_necesaria = hojas - this.Descuentos(material)
       // alert(this.Descuentos(material))
     }

@@ -1,0 +1,18 @@
+<div class="modal" [ngClass]="{'is-active':modal_consumos}">
+    <div class="modal-background" (click)="closemodal()"></div>
+    <div class="modal-card">
+        <div class="modal-card-body">
+            <table class="table is-fullwidth">
+                <tr>
+                    <th>Material</th>
+                    <th>Cantidad</th>
+                    <th>Devolución</th>
+                    <th>Total</th>
+                </tr>
+                <tr *ngFor="let material of lote_mayor.material">
+                    <td>{{material.material.nombre}}</td>
+                </tr>
+            </table>
+        </div>
+    </div>
+</div>

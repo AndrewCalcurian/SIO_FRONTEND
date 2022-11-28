@@ -12,6 +12,10 @@
     }
 }
 
+.contador{
+    font-size: large;
+}
+
 .button{
     margin-right: 5px;
 }

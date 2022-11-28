@@ -1,3 +1,14 @@
+<app-gestiones
+[modal_gestiones]='modal_gestiones'
+[g_trabajos]="g_trabajos"
+[g_gestiones]="g_gestiones"
+(onCloseModal) = "modal_gestiones = false"></app-gestiones>
+<app-consumo
+[modal_consumos]="modal_consumos"
+[c_lotes]="c_lotes"
+[lote_mayor] = "lote_mayor"
+(onCloseModal)="modal_consumos = false">
+</app-consumo>
 <div class="container mt-5">
     <div class="subtitulo">
         Estadísticas
@@ -38,9 +49,20 @@
                 No se ha realizado ninguna consulta aun
                 <i class="far fa-clock"></i>
             </div>
-            <div class="carga" *ngIf="cargando">
-                Cargando información por favor espere...
-                <i class="fas fa-circle-notch"></i>
+            <div class="carga_" *ngIf="cargando">
+                <div class="loader">
+                    <span style="--i:2"></span>
+                    <span style="--i:3"></span>
+                    <span style="--i:1"></span>
+                    <span style="--i:4"></span>
+                    <span style="--i:5"></span>
+                    <span style="--i:6"></span>
+                    <span style="--i:7"></span>
+                    <span style="--i:8"></span>
+                    <span style="--i:9"></span>
+                    <span style="--i:10"></span>
+                </div>
+                <span class="text">Cargando, esto puede tomar un tiempo.</span>
             </div>
             <div class="empty" *ngIf="vacio">
                 No hay ordenes en la fecha indicada 
@@ -52,11 +74,16 @@
                     <b>Cantidad de Ordenes:</b> {{Ordenes.length}}
                 </div>
                 <div class="orden">
-                    <table class="table is-fullwidth">
-                        <tr *ngFor="let orden of Ordenes">
+                    <table class="table is-fullwidth" *ngFor="let orden of Ordenes;let impar = odd;let par = even;" [ngClass]="{impar:impar}">
+                        <tr>
+                            <th colspan="3">
+                                {{orden.producto.producto}} <br>
+                            </th>
+                        </tr>
+                        <tr>
                             <td>{{orden.sort}} <i class="far fa-eye" (click)='alert(orden._id)'></i></td>
-                            <td>Gestiones <i class="fas fa-question-circle"></i></td>
-                            <td>Consumo <i class="fas fa-chart-bar"></i></td>
+                            <td class="link" (click)="gestiones_(orden._id, orden.sort)">Gestiones <i class="fas fa-question-circle"></i></td>
+                            <td class="link" (click)="consumos(orden._id, orden.sort)">Consumo <i class="fas fa-chart-bar"></i></td>
                             <td>Adicionales <i class="fas fa-calculator"></i></td>
                             <td><b>Inicio: </b>{{orden.fecha | date: 'dd/MM/yyyy': 'UTC'}}</td>
                             <td><b>Despachado:</b> {{GetDespacho(orden.sort)}}</td>

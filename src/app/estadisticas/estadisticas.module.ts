@@ -6,13 +6,16 @@ import { EstadisticasComponent } from './estadisticas.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { SharedModule } from '../shared/shared.module';
 import { RouterModule } from '@angular/router';
+import { GestionesComponent } from './gestiones/gestiones.component';
+import { ConsumoComponent } from './consumo/consumo.component';
+import { AdicionalesComponent } from './adicionales/adicionales.component';
 
 
 
 
 
 @NgModule({
-  declarations: [MainComponent,EstadisticasComponent],
+  declarations: [MainComponent,EstadisticasComponent, GestionesComponent, ConsumoComponent, AdicionalesComponent],
   imports: [
     SharedModule,
     CommonModule,

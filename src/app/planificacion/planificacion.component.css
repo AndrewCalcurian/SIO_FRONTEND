@@ -77,11 +77,12 @@
         border-bottom:solid 1px black;
     }
 
+
     .op-0{
         position: relative;
         display: block;
         width: 100%;
-        background-color: #641E16;
+        background-color: #634AED;
         border: solid 1px white;
         color:white;
         text-shadow: #FC0 1px 0 10px;
@@ -158,7 +159,7 @@
   position: relative;
   display: block;
   width: 100%;
-  background-color: #f343aa;
+  background-color: #00492b;
   border: solid 1px white;
   color:white;
   text-shadow: #FC0 1px 0 10px;
@@ -169,7 +170,7 @@
   position: relative;
   display: block;
   width: 100%;
-  background-color: #7D6608;
+  background-color: #1AA163;
   border: solid 1px white;
   color:white;
   text-shadow: #FC0 1px 0 10px;
