@@ -9,8 +9,18 @@
                     <th>Devolución</th>
                     <th>Total</th>
                 </tr>
-                <tr *ngFor="let material of lote_mayor.material">
-                    <td>{{material.material.nombre}}</td>
+                <tr *ngFor="let material of lote_mayor">
+                    <ng-container *ngIf="material.ancho">
+                        <td>{{material.nombre}} {{material.ancho}} x {{material.largo}} ({{material.marca}})</td>
+                    </ng-container>
+                    <ng-container *ngIf="!material.ancho">
+                        <td>{{material.nombre}} ({{material.marca}})</td>
+                    </ng-container>
+                    <td>{{material.cantidad}}</td>
+                    <td>{{devoluciones_(material.id,material.op)}}</td>
+                    <td>
+                        {{(material.cantidad - devoluciones_(material.id,material.op)).toFixed(2)}}
+                    </td>
                 </tr>
             </table>
         </div>

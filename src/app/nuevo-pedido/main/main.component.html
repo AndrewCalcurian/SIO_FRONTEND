@@ -187,12 +187,35 @@
             <hr>
             <b>Ejemplares montados: </b>{{Ejemplares_montados}} <br>
             <b>Sustrato</b><br>
-            <p *ngFor='let materiales of PRODUCTO.materiales[i_montajes]'>
-                <ng-container *ngIf='materiales.producto.grupo.nombre === "Sustrato"'>
-                    {{materiales.producto.nombre}} {{materiales.producto.marca}} ({{materiales.producto.ancho}} x {{materiales.producto.largo}}) x {{paginas}} Hojas
-                </ng-container>
-            </p>
-            <hr>
+            <table class="table is-fullwidth">
+                <thead>
+                    <tr>
+                        <th>Mat. a utilizar</th>
+                        <th>Cant. Necesaria</th>
+                        <th>Cant. Almacén</th>
+                        <th>Cant. Restante</th>
+                    </tr>
+                </thead>
+                <tbody>
+                        <ng-container *ngFor='let materiales of PRODUCTO.materiales[i_montajes]'>
+                            <tr *ngIf='materiales.producto.grupo.nombre === "Sustrato"'>
+                                <td>
+                                    {{materiales.producto.nombre}} {{materiales.producto.marca}} ({{materiales.producto.ancho}} x {{materiales.producto.largo}})
+                                </td>
+                                <td>
+                                    {{paginas}}
+                                </td>
+                                <td>
+                                    {{buscar_tintas(materiales.producto.nombre,materiales.producto.marca,'NA',materiales.producto.ancho,materiales.producto.largo,materiales.producto.calibre)}}
+                                </td>
+                                <td>
+                                    {{buscar_tintas(materiales.producto.nombre,materiales.producto.marca,'NA',materiales.producto.ancho,materiales.producto.largo,materiales.producto.calibre) - paginas}}
+                                </td>
+                            </tr>
+                        </ng-container>
+                        </tbody>
+                    </table>
+                    <hr>
             <b>Materia Prima</b>
             <div *ngIf="SinMaterial">
                 <article class="message is-danger">

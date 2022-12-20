@@ -3,6 +3,7 @@ import * as moment from 'moment';
 import { RestApiService } from 'src/app/services/rest-api.service';
 import { Router } from '@angular/router';
 import Swal from 'sweetalert2';
+import { iif } from 'rxjs';
 
 @Component({
   selector: 'app-main',
@@ -256,12 +257,15 @@ export class MainComponent implements OnInit {
 
   }
 
-  buscar_tintas(tinta, marca,sinMarca?){
+  buscar_tintas(tinta, marca,sinMarca?,ancho?,largo?,calibre?){
     let almacenado = [];
     if(sinMarca){
       almacenado = this._CANTIDAD.filter(x => x.material.nombre === tinta && x.cantidad > 0)
     }else{
       almacenado = this._CANTIDAD.filter(x => x.material.nombre === tinta && x.material.marca === marca && x.cantidad > 0)
+    }
+    if(ancho){
+      almacenado = this._CANTIDAD.filter(x => x.material.nombre === tinta && x.material.marca === marca && x.material.ancho === ancho && x.material.largo === largo && x.material.calibre === calibre && x.cantidad > 0)
     }
     if(almacenado.length < 1){
       return 'No hay producto en inventario'
@@ -371,6 +375,19 @@ export class MainComponent implements OnInit {
               // timer:2500
             })
             return
+        }
+      }else{
+        let SUSTRATO_EN_ALMACEN = this.buscar_tintas(this.PRODUCTO.materiales[this.i_montajes][i].producto.nombre,this.PRODUCTO.materiales[this.i_montajes][i].producto.marca,'NA',this.PRODUCTO.materiales[this.i_montajes][i].producto.ancho,this.PRODUCTO.materiales[this.i_montajes][i].producto.largo,this.PRODUCTO.materiales[this.i_montajes][i].producto.calibre)
+        let resta = Number(SUSTRATO_EN_ALMACEN) - this.paginas;
+        if(resta <0){
+          Swal.fire({
+            icon:'error',
+            title:'Oops!',
+            text:'No posees los materiales necesarios para realizar este producto',
+            showConfirmButton:false,
+            // timer:2500
+          })
+          return
         }
       }
     }

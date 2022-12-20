@@ -67,9 +67,21 @@ export class SolcitudComponent implements OnInit {
         .subscribe((resp:any)=>{
           (<HTMLInputElement>document.getElementById('_material_')).disabled = false
           this.almacenado = resp.filter(x => x.material.grupo._id === e)
-          console.log(this.almacenado)
+          let bs_= this.almacenado;
           if(e != '61f92a1f2126d717f004cca6'){
             this.almacenado = [...this.almacenado.reduce((map, obj) => map.set(obj.material.nombre, obj), new Map()).values()];
+            for(let i=0;i<bs_.length;i++){
+              let index = this.almacenado.find(x=> x.material.nombre === bs_[i].material.nombre && x.material.marca === bs_[i].material.marca)
+              if(!index){
+                this.almacenado.push(bs_[i])
+              }
+            }
+            this.almacenado.sort(function(a, b) {
+              if(a.material.nombre.toLowerCase() < b.material.nombre.toLowerCase()) return -1
+              if(a.material.nombre.toLowerCase() > b.material.nombre.toLowerCase()) return 1
+              return 0
+    
+            })
           }
         })
     }

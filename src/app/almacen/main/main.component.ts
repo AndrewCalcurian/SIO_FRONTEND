@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { RestApiService } from 'src/app/services/rest-api.service';
 import { PdfMakeWrapper, Txt, Img, Table, Cell, Columns, Stack } from 'pdfmake-wrapper';
+import bulmaCollapsible from '@creativebulma/bulma-collapsible';
 import * as pdfFonts from "pdfmake/build/vfs_fonts";
 import * as moment from 'moment';
 

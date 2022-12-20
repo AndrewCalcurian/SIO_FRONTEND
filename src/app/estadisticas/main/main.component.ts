@@ -59,18 +59,39 @@ export class MainComponent implements OnInit {
 
   public c_lotes = []
   public c_devoluciones = []
-  public lote_mayor = {material:[]};
+  public lote_mayor:any = [];
   public modal_consumos = false;
   consumos(id,op){
+    this.lote_mayor = []
+    this.c_devoluciones = []
+    this.c_devoluciones = this.devoluciones.filter(x=> x.orden === op)
     this.c_lotes = this.Lotes.filter(x => x.orden === op)
     for(let i=0; i<this.c_lotes.length;i++){
-      let n = this.c_lotes[i].material.length
-      console.log(n)
-      if(n > this.lote_mayor.material.length){
-        this.lote_mayor = this.c_lotes[i]
+      for(let n=0; n<this.c_lotes[i].material.length;n++)
+      {
+
+        let index = this.lote_mayor.find(x=> x.nombre === this.c_lotes[i].material[n].material.nombre)
+        
+        if(!index){
+          let marca = this.c_lotes[i].material[n].material.marca
+          let id = this.c_lotes[i].material[n].material._id
+          let cant = this.c_lotes[i].material[n].cantidad
+          // cant = cant.toFixed(2)
+          if(this.c_lotes[i].material[n].material.ancho){
+            let ancho = this.c_lotes[i].material[n].material.ancho
+            let largo = this.c_lotes[i].material[n].material.largo
+            this.lote_mayor.push({op,id,marca,nombre:this.c_lotes[i].material[n].material.nombre, cantidad:cant,ancho,largo})
+          }else{
+            this.lote_mayor.push({op,id,marca,nombre:this.c_lotes[i].material[n].material.nombre, cantidad:cant})
+          }
+        }else{
+          let b = this.lote_mayor.findIndex(x=> x.nombre === this.c_lotes[i].material[n].material.nombre)
+          this.lote_mayor[b].cantidad = Number(this.lote_mayor[b].cantidad) + Number(this.c_lotes[i].material[n].cantidad)
+        }
+
+
       }
     }
-    console.log(this.lote_mayor)
     this.modal_consumos = true;
   }
 

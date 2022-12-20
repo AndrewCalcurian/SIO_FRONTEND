@@ -7,6 +7,7 @@
 [modal_consumos]="modal_consumos"
 [c_lotes]="c_lotes"
 [lote_mayor] = "lote_mayor"
+[c_devoluciones] = "c_devoluciones"
 (onCloseModal)="modal_consumos = false">
 </app-consumo>
 <div class="container mt-5">
@@ -84,7 +85,6 @@
                             <td>{{orden.sort}} <i class="far fa-eye" (click)='alert(orden._id)'></i></td>
                             <td class="link" (click)="gestiones_(orden._id, orden.sort)">Gestiones <i class="fas fa-question-circle"></i></td>
                             <td class="link" (click)="consumos(orden._id, orden.sort)">Consumo <i class="fas fa-chart-bar"></i></td>
-                            <td>Adicionales <i class="fas fa-calculator"></i></td>
                             <td><b>Inicio: </b>{{orden.fecha | date: 'dd/MM/yyyy': 'UTC'}}</td>
                             <td><b>Despachado:</b> {{GetDespacho(orden.sort)}}</td>
                         </tr>
