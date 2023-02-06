@@ -164,17 +164,26 @@ export class AsignacionComponent implements OnInit {
 
     
     let EnAlmacen = this.Almacenado.find(x => x.material.nombre === material && x.lote === e && x.codigo === codigo)
+    console.log(EnAlmacen, 'aqui')
     let Mname = EnAlmacen.material._id
-    let _cantidad
+    let _cantidad;
 
     // alert(grupo)
 
     if(grupo === 'Tinta'){
       _cantidad = (m_cantidad * hojas) / 1000;
+      // if(m_cantidad < 1){
+      //   _cantidad = 0;
+      // }
       // // console.log(m_cantidad,'m_cantidad')
     }else if(grupo === 'Barniz' || grupo === 'Barniz Acuoso'){
       _cantidad = (m_cantidad * hojas) / 1000;
-    }else if(grupo === 'Pega'){
+    }else if(grupo === 'Pega' || grupo === 'Quimicos'){
+      _cantidad = (m_cantidad * hojas) / 1000;
+      if(m_cantidad < 1){
+        _cantidad = 0;
+      }
+    }else if(grupo === 'Otros materiales'){
       _cantidad = (m_cantidad * hojas) / 1000;
     }else if(grupo === 'Cajas Corrugadas'){
       _cantidad = cantidad / m_cantidad;
@@ -194,7 +203,7 @@ export class AsignacionComponent implements OnInit {
       _cantidad = 5;
     }
 
-    _cantidad = (_cantidad).toFixed(2)
+    _cantidad = Number(_cantidad).toFixed(2)
 
     // alert(_cantidad)
 
@@ -210,6 +219,13 @@ export class AsignacionComponent implements OnInit {
 
     let EA_Cantidad = EnAlmacen.cantidad;
 
+    if(grupo === 'Pega'){
+      EA_Cantidad = EnAlmacen.material.neto
+      if(m_cantidad < 1){
+        EA_Cantidad = 0;
+      }
+    }
+
 
     let previo = this.LOTES.filter(x => x.i === i)
 
@@ -223,10 +239,18 @@ export class AsignacionComponent implements OnInit {
         unidad_necesaria = m_cantidad - this.Descuentos(material);
         // // console.log('aqui')
     }
-    if(EnAlmacen.material.grupo.nombre === 'Tinta'){
+    if(EnAlmacen.material.grupo.nombre === 'Tinta' || EnAlmacen.material.grupo.nombre === 'Quimicos'){
       unidad_necesaria = _cantidad - this.Descuentos(material); 
       unidad_necesaria = (unidad_necesaria).toFixed(2)
       // alert(this.Descuentos(material))
+    }
+
+    if(EnAlmacen.material.grupo.nombre === 'Pega'){
+      if(m_cantidad < 1){
+        unidad_necesaria = 0;
+      }else{
+        unidad_necesaria = Math.ceil(unidad_necesaria)
+      }
     }
     if(EnAlmacen.material.unidad == 'Und'){
       unidad_necesaria = Math.ceil(unidad_necesaria)

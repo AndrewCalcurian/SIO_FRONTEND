@@ -24,6 +24,7 @@ export class MainComponent implements OnInit {
   public gestiones = []
   public requisiciones = []
   public trabajos = []
+  public adicionales = []
 
 
   public cargando = false;
@@ -133,8 +134,9 @@ export class MainComponent implements OnInit {
           this.Lotes = resp.lotes
           this.requisiciones = resp.requisiciones
           this.trabajos = resp.trabajos
+          this.adicionales = resp.Adicionales
+          console.log(this.adicionales)
           this.cargando = false
-
         })
 
   }

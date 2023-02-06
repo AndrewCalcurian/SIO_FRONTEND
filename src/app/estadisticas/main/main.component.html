@@ -99,75 +99,32 @@
 <div class="columns" *ngIf="!vacio && !cargando && !sinBusqueda">
     <div class="column">
         <div class="card">
-            <div class="card-content">
+            <div class="card-content adicionales">
                 <p class="subtitulos">
                     <i class="fas fa-comments-dollar"></i> Solicitudes Realizadas
                 </p>
                 <table class="table is-fullwidth">
                     <tr>
                         <th>Material</th>
+                        <th>Cant.</th>
                         <th>Fecha</th>
                     </tr>
-                    <tr>
-                        <td>material Solicitado</td>
-                        <td>DD/MM/yyyy</td>
-                    </tr>
-                    <tr>
-                        <td>material Solicitado</td>
-                        <td>DD/MM/yyyy</td>
-                    </tr>
-                    <tr>
-                        <td>material Solicitado</td>
-                        <td>DD/MM/yyyy</td>
-                    </tr>
-                    <tr>
-                        <td>material Solicitado</td>
-                        <td>DD/MM/yyyy</td>
-                    </tr>
-                    <tr>
-                        <td>material Solicitado</td>
-                        <td>DD/MM/yyyy</td>
-                    </tr>
-                    <tr>
-                        <td>material Solicitado</td>
-                        <td>DD/MM/yyyy</td>
-                    </tr>
-                    <tr>
-                        <td>material Solicitado</td>
-                        <td>DD/MM/yyyy</td>
-                    </tr>
-                    <tr>
-                        <td>material Solicitado</td>
-                        <td>DD/MM/yyyy</td>
-                    </tr>
-                    <tr>
-                        <td>material Solicitado</td>
-                        <td>DD/MM/yyyy</td>
-                    </tr>
-                    <tr>
-                        <td>material Solicitado</td>
-                        <td>DD/MM/yyyy</td>
-                    </tr>
-                    <tr>
-                        <td>material Solicitado</td>
-                        <td>DD/MM/yyyy</td>
-                    </tr>
-                    <tr>
-                        <td>material Solicitado</td>
-                        <td>DD/MM/yyyy</td>
-                    </tr>
-                    <tr>
-                        <td>material Solicitado</td>
-                        <td>DD/MM/yyyy</td>
-                    </tr>
-                    <tr>
-                        <td>material Solicitado</td>
-                        <td>DD/MM/yyyy</td>
-                    </tr>
-                    <tr>
-                        <td>material Solicitado</td>
-                        <td>DD/MM/yyyy</td>
-                    </tr>
+                    <!-- <div class="adicionales"> -->
+                        <ng-container *ngFor="let adicional of adicionales">
+                            <ng-container *ngFor="let material of adicional.material">
+                                <tr>
+                                    <td>{{material.material.nombre}} ({{material.material.marca}})</td>
+                                    <ng-container *ngIf="material.material.grupo != '61fd54e2d9115415a4416f17'">
+                                        <td>{{material.cantidad}} {{material.material.unidad}}</td>
+                                    </ng-container>
+                                    <ng-containe *ngIf="material.material.grupo == '61fd54e2d9115415a4416f17'">
+                                        <td>{{material.EA_Cantidad}} {{material.material.unidad}}</td> 
+                                    </ng-containe>
+                                    <td>{{adicional.fecha | date: 'dd/MM/yyyy': 'UTC'}}</td>
+                                </tr>
+                            </ng-container>
+                        </ng-container>
+                    <!-- </div> -->
                 </table>
             </div>
         </div>

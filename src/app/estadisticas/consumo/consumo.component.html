@@ -16,7 +16,14 @@
                     <ng-container *ngIf="!material.ancho">
                         <td>{{material.nombre}} ({{material.marca}})</td>
                     </ng-container>
-                    <td>{{material.cantidad}}</td>
+                    <td>
+                        {{dec(material.cantidad)}}
+                        <!-- <ng-container *ngIf="material.cantidad == 0">
+                            {{material.cantidad}} m
+                        </ng-container>
+                        <ng-container *ngIf="material.cantidad != 0">
+                        </ng-container> -->
+                    </td>
                     <td>{{devoluciones_(material.id,material.op)}}</td>
                     <td>
                         {{(material.cantidad - devoluciones_(material.id,material.op)).toFixed(2)}}

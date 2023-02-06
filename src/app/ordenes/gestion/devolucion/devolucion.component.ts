@@ -113,6 +113,8 @@ export class DevolucionComponent implements OnInit {
       this.Data_devolucion[index] = data
     }
 
+    console.log(data)
+
     // console.log(this.Data_devolucion)
 
   }

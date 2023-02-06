@@ -73,4 +73,8 @@ export class ConsumoComponent implements OnInit {
     // }
   }
 
+  dec(n){
+    return Number(n).toFixed(2)
+  }
+
 }

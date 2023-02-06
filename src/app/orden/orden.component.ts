@@ -215,7 +215,7 @@ export class OrdenComponent implements OnInit {
           [
             new Cell(new Txt('').end).end,
             new Cell(new Txt('').end).end,
-            new Cell(new Txt('Fecha de Revision: 24/05/2021').end).fillColor('#dedede').fontSize(7).alignment('center').end,
+            new Cell(new Txt('Fecha de Revision: 24/05/2022').end).fillColor('#dedede').fontSize(7).alignment('center').end,
           ],
           [
             new Cell(new Txt('').end).end,
@@ -530,7 +530,7 @@ export class OrdenComponent implements OnInit {
                                   new Cell(new Txt('CÓDIGO DE CAJA').end).alignment('center').fillColor('#dedede').fontSize(9).end,
                                 ],
                                 [
-                                  new Cell(new Txt(`${caja[0].producto.nombre} (${cantidad_cajas}${caja[0].producto.unidad})`).end).fontSize(9).end
+                                  new Cell(new Txt(`${caja[0].producto.nombre} (${caja[0].cantidad} Unidades por Caja / ${cantidad_cajas} Cajas necesarias)`).end).fontSize(9).end
                                 ],
                                 [
                                   new Cell(new Txt('CINTA DE EMBALAJE').end).alignment('center').fillColor('#dedede').fontSize(9).end,

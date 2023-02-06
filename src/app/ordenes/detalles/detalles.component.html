@@ -96,7 +96,7 @@
                                 </ng-container>
                             </tbody>
                         </table>
-                        <button class="button is-success" *ngIf="cantidad_do - despacho < 1" (click)="cerrarOrden()">Cerrar Orden</button>
+                        <button class="button is-success" *ngIf="cantidad_do - despacho < 1 && usuario.Role === 'ADMIN'" (click)="cerrarOrden()">Cerrar Orden</button>
                     </div>
                 </div>
             </div>
