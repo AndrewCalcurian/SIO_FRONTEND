@@ -26,6 +26,7 @@ import { registerLocaleData } from '@angular/common';
 import { ReactiveFormsModule } from '@angular/forms';
 import { FormsModule } from '@angular/forms';
 import { UnicosPipe } from './pipe/unicos.pipe';
+import { BarChartComponent } from './bar-chart/bar-chart.component';
 registerLocaleData(localeES, 'es')
 
 @NgModule({
@@ -40,7 +41,8 @@ registerLocaleData(localeES, 'es')
     OrdenesComponent,
     PlanificacionComponent,
     LoginComponent,
-    UnicosPipe
+    UnicosPipe,
+    BarChartComponent
   ],
   imports: [
     BrowserModule,

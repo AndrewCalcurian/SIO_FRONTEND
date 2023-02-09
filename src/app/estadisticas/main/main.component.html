@@ -10,30 +10,59 @@
 [c_devoluciones] = "c_devoluciones"
 (onCloseModal)="modal_consumos = false">
 </app-consumo>
-<div class="container mt-5">
+<div class="containe mt-5">
     <div class="subtitulo">
         Estadísticas
     </div>
     <div class="card">
-        <div class="card-content">
-
+        <div class="card-content is-primary">
             <div class="columns">
-                <div class="column">
+                <div class="column is-2">
                     <div class="control">
-                        <label class="label">Desde:</label>
-                        <input type="date" class="input" #desde>
+                        <span class="select is-small">
+                            <select id="">
+                                <option value="#">Alimentos Polar Comercial, C.A</option>
+                            </select>
+                        </span>
                     </div>
                 </div>
-                <div class="column">
+                <div class="column is-2">
+                    <div class="control">
+                        <span class="select is-small">
+                            <select id="">
+                                <option value="#">Etiq. Mayonesa Mavesa 445g Pet Ecuador</option>
+                            </select>
+                        </span>
+                    </div>
+                </div>
+                <div class="column is-2">
+                    <div class="control">
+                        <input type="text" class="input is-small" placeholder="Orden de Producción">
+                    </div>
+                </div>
+                <div class="column is-2">
+                    <div class="control">
+                        <input type="text" class="input is-small" placeholder="Orden de compra">
+                    </div>
+                </div>
+            </div>
+            <div class="columns">
+                <div class="column is-2">
+                    <div class="control">
+                        <label class="label">Desde:</label>
+                        <input type="date" class="input is-small" #desde>
+                    </div>
+                </div>
+                <div class="column is-2">
                     <div class="control">
                         <label class="label">Hasta:</label>
-                        <input type="date" class="input" #hasta>
+                        <input type="date" class="input is-small" #hasta>
                     </div>
                 </div>
                 <div class="column">
                     <div class="control">
                         <label class="label"> </label>
-                        <button class="button is-primary" (click)="Buscar_estadisticas(desde.value, hasta.value)">Buscar</button>
+                        <button class="button is-primary is-small" (click)="Buscar_estadisticas(desde.value, hasta.value)">Buscar</button>
                     </div>
                 </div>
             </div>
@@ -69,28 +98,166 @@
                 No hay ordenes en la fecha indicada 
                 <i class="fas fa-folder-open"></i>
             </div>
-
-            <div class="info" *ngIf="!vacio && !cargando && !sinBusqueda">
-                <div class="subtitulos">
-                    <b>Cantidad de Ordenes:</b> {{Ordenes.length}}
+            
+            <div class="columns">
+                <div class="column is-three-fifths">
+                    <div class="info" *ngIf="!vacio && !cargando && !sinBusqueda">
+                        <div class="subtitulos">
+                            <b>Cantidad de Ordenes:</b> {{Ordenes.length}}
+                        </div>
+                        <div class="orden">
+                            <table class="table is-fullwidth" *ngFor="let orden of Ordenes;let impar = odd;let par = even;" [ngClass]="{impar:impar}">
+                                <tr>
+                                    <th colspan="3">
+                                        {{orden.producto.producto}} <br>
+                                    </th>
+                                </tr>
+                                <tr>
+                                    <td>{{orden.sort}} <i class="far fa-eye" (click)='alert(orden._id)'></i></td>
+                                    <td class="link" (click)="gestiones_(orden._id, orden.sort)">Gestiones <i class="fas fa-question-circle"></i></td>
+                                    <td class="link" (click)="consumos(orden._id, orden.sort)">Consumo <i class="fas fa-chart-bar"></i></td>
+                                    <td><b>Inicio: </b>{{orden.fecha | date: 'dd/MM/yyyy': 'UTC'}}</td>
+                                    <td><b>Despachado:</b> {{GetDespacho(orden.sort)}}</td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
                 </div>
-                <div class="orden">
-                    <table class="table is-fullwidth" *ngFor="let orden of Ordenes;let impar = odd;let par = even;" [ngClass]="{impar:impar}">
-                        <tr>
-                            <th colspan="3">
-                                {{orden.producto.producto}} <br>
+                <div class="column" *ngIf="!vacio && !cargando && !sinBusqueda">
+                    <div class="subtitulos">
+                        <i class="fas fa-chart-line"></i> Total Consumo:
+                    </div>
+                        <article class="message is-info">
+                            <div class="message-body">
+                                <strong> <i class="fas fa-sticky-note"></i> Sustrato:</strong>
+                                <br>
+                                <div *ngIf='Sustrato_load'>
+                                    <i class="fas fa-circle-notch"></i> Calculando...
+                                </div>
+                                <table class="table is-fullwidth" *ngIf="!Sustrato_load">
+                                    <thead>
+                                        <tr>
+                                            <th>Descripción</th>
+                                            <th>Cant.</th>
+                                            <th>Peso</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr *ngFor="let sustrato of Sustratos_suma;let i as index">
+                                            <td>{{sustrato.Nombre}} {{sustrato.Ancho}}x{{sustrato.Largo}} ({{sustrato.Marca}})
+                                                <br>
+                                                <strong>Calibre:</strong>{{sustrato.Calibre}}, <strong>Gramaje:</strong>{{sustrato.Gramaje}}
+                                            </td>
+                                            <td>{{sustrato.Cantidad}}Und</td>
+
+                                            <!-- let all = this.HOJAS_ * this.GRAMAJE_*this.ANCHO_*this.LARGO_
+                                            this.PESO_ = all / 10000000000; -->
+                                            <td>{{MostrarPeso(sustrato.Cantidad,sustrato.Gramaje,sustrato.Ancho,sustrato.Largo)}}t</td>
+                                        </tr>
+                                        <tr class="is-selected">
+                                            <td>Peso Total</td>
+                                            <td><strong>Papel: </strong>{{peso_hojas.toFixed(2)}}t</td>
+                                            <td>
+                                                <strong>Cartón: </strong>{{peso_carton.toFixed(2)}}t
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </article>
+                        
+                        <article class="message is-info">
+                            <div class="message-body">
+                                <strong><i class="fas fa-swatchbook"></i> Tinta:</strong>
+                                <br>
+                                <div *ngIf="Tinta_load">
+                                    <i class="fas fa-circle-notch"></i> Calculando...
+                                </div>
+                                <div *ngIf="!Tinta_load">
+                                    <table class="table is-fullwidth">
+                                        <tbody>
+                                            <tr>
+                                                <td>Amarillo</td>
+                                                <td>{{(Amarillo).toFixed(2)}}Kg</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Cyan</td>
+                                                <td>{{(Cyan).toFixed(2)}}Kg</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Magenta</td>
+                                                <td>{{(Magenta).toFixed(2)}}Kg</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Negro</td>
+                                                <td>{{(Negro).toFixed(2)}}Kg</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Pantone</td>
+                                                <td>{{(Otros_c).toFixed(2)}}Kg</td>
+                                            </tr>
+                                            <tr class="is-selected">
+                                                <th>Total</th>
+                                                <th>{{(Tinta).toFixed(2)}}Kg</th>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                    <a (click)="modalTintas()">Ver Detalles</a>
+<div class="modal is-active" [ngClass]="{'is-active':DetallesTinta}">
+    <div class="modal-background" (click)="modalTintas()"></div>
+    <div class="modal-card detalles">
+        <div class="modal-card-body">
+            <div class="columns">
+                <div class="column columna_izquierda">
+                    <table class="table is-fullwidth">
+                        <thead>
+                            <th>
+                                Material
                             </th>
-                        </tr>
-                        <tr>
-                            <td>{{orden.sort}} <i class="far fa-eye" (click)='alert(orden._id)'></i></td>
-                            <td class="link" (click)="gestiones_(orden._id, orden.sort)">Gestiones <i class="fas fa-question-circle"></i></td>
-                            <td class="link" (click)="consumos(orden._id, orden.sort)">Consumo <i class="fas fa-chart-bar"></i></td>
-                            <td><b>Inicio: </b>{{orden.fecha | date: 'dd/MM/yyyy': 'UTC'}}</td>
-                            <td><b>Despachado:</b> {{GetDespacho(orden.sort)}}</td>
-                        </tr>
+                            <th>Cant.</th>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let tinta of Suma_Tintas;let i as index">
+                                        <td>
+                                            {{tinta.Nombre}} ({{tinta.Marca}})
+                                        </td>
+                                        <td>
+                                            {{tinta.Cantidad.toFixed(2)}}Kg
+                                        </td>
+                                </tr>
+                        </tbody>
                     </table>
                 </div>
             </div>
+        </div>
+    </div>
+</div>
+                                </div>
+                            </div>
+                        </article>
+                        <article class="message is-info">
+                            <div class="message-body">
+                                <strong><i class="fas fa-air-freshener"></i> Barniz:</strong>
+                            </div>
+                        </article>
+                        <article class="message is-info">
+                            <div class="message-body">
+                                <strong><i class="fas fa-fill-drip"></i> Pega:</strong>
+                            </div>
+                        </article>
+                        <article class="message is-info">
+                            <div class="message-body">
+                                <strong><i class="fas fa-boxes"></i> Cajas corrugadas:</strong>
+                            </div>
+                        </article>
+                        <article class="message is-info">
+                            <div class="message-body">
+                                <strong><i class="fas fa-pallet"></i> Otros:</strong>
+                            </div>
+                        </article>
+                </div>
+            </div>
+            
             <br>
         </div>
     </div>
@@ -129,48 +296,9 @@
             </div>
         </div>
     </div>
-    <div class="column">
-        <div class="card">
-            <div class="card-content">
-                <div class="subtitulos">
-                    <i class="fas fa-chart-line"></i> Total Consumo:
-                    <article class="message is-info">
-                        <div class="message-body">
-                            <strong> <i class="fas fa-sticky-note"></i> Sustrato:</strong>
-                        </div>
-                    </article>
-                    <article class="message is-info">
-                        <div class="message-body">
-                            <strong><i class="fas fa-swatchbook"></i> Tinta:</strong>
-                        </div>
-                    </article>
-                    <article class="message is-info">
-                        <div class="message-body">
-                            <strong><i class="fas fa-air-freshener"></i> Barniz:</strong>
-                        </div>
-                    </article>
-                    <article class="message is-info">
-                        <div class="message-body">
-                            <strong><i class="fas fa-fill-drip"></i> Pega:</strong>
-                        </div>
-                    </article>
-                    <article class="message is-info">
-                        <div class="message-body">
-                            <strong><i class="fas fa-boxes"></i> Cajas corrugadas:</strong>
-                        </div>
-                    </article>
-                    <article class="message is-info">
-                        <div class="message-body">
-                            <strong><i class="fas fa-pallet"></i> Otros:</strong>
-                        </div>
-                    </article>
-                </div>
-            </div>
-        </div>
-    </div>
 </div>
 
-    <!-- **************************************************************
+<!-- **************************************************************
     ORDENES ENCONTRADAS EN LA FECHA ESTIMADA
     ******************************************************************** -->
 </div>
