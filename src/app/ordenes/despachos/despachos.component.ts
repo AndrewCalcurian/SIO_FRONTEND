@@ -67,6 +67,36 @@ export class DespachosComponent implements OnInit {
       this.date = e;
     }
   }
+  public observacion;
+  Observar(e){
+    this.observacion = e;
+    console.log(this.observacion)
+  }
+
+  public Almacenes_edicion = []
+  public Almacen__:boolean = false;
+  public Selected;
+  BuscarAlmacen(producto, i){
+    this.Almacenes_edicion = [];
+    this.Almacen__ = true;
+    this.Selected = i;
+    this.api.BuscarAlmacenes(producto)
+      .subscribe((resp:any)=>{
+        console.log(resp)
+        this.Almacenes_edicion.push(resp.almacenes)
+        console.log(this.Almacenes_edicion)
+        return resp;
+      })
+  }
+
+  SeleccionarAlmacen(e,i){
+    if(e != '#'){
+      this.Ordenes_seleccionadas[i].destino = e
+      this.Almacen__ = false
+    }else{
+      return
+    }
+  }
 
   despachar(){
     Swal.fire({
@@ -82,7 +112,8 @@ export class DespachosComponent implements OnInit {
         let fecha_m = moment(this.date).format('DD-MM-yyyy')
 
         this.api.PostDespacho({fecha:fecha_m,
-                               despacho:this.Ordenes_seleccionadas})
+                               despacho:this.Ordenes_seleccionadas,
+                               observacion:this.observacion})
           .subscribe((resp:any)=>{
 
             this.date = '';

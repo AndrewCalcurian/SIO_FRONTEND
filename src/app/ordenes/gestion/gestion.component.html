@@ -22,23 +22,27 @@
                 Gestiones
                 <br>
             <ng-container *ngIf="!usuario.Despacho">
-                <button class="button is-primary" (click)='modal_nueva_gestion()' *ngIf="usuario.Almacen != 2 || usuario.Role == 'ADMIN'">Nueva Gestión</button> 
+                <ng-container *ngIf="usuario.Gestiones != 5">
+                    <button class="button is-primary" (click)='modal_nueva_gestion()' *ngIf="usuario.Almacen != 2 || usuario.Role == 'ADMIN'">Nueva Gestión</button> 
+                </ng-container>
             </ng-container>    
                 <!-- <button class="button is-primary" (click)='nuevo_despacho()'>Despacho</button> -->
             </div>
             <ng-container *ngIf="!usuario.Despacho">
-            <div class="select" *ngIf="usuario.Almacen != 2 || usuario.Role == 'ADMIN'">
-                    <select (change)='fase($event)'>
-                        <option>Seleccionar fase</option>
-                        <option value="{{funcion}}" *ngFor='let funcion of FUNCIONES'>{{funcion}}</option>
-                    </select>
-                </div>
+                <ng-container *ngIf="usuario.Gestiones != 5">
+                    <div class="select" *ngIf="usuario.Almacen != 2 || usuario.Role == 'ADMIN'">
+                        <select (change)='fase($event)'>
+                            <option>Seleccionar fase</option>
+                            <option value="{{funcion}}" *ngFor='let funcion of FUNCIONES'>{{funcion}}</option>
+                        </select>
+                    </div>
+                </ng-container>
             </ng-container>
-            <ng-container *ngIf="!usuario.Despacho">
+            <ng-container *ngIf="!usuario.Despacho && usuario.Gestiones != 5">
              <button class="button is-success" (click)="TraerTareasFueraDeFecha()" *ngIf="usuario.Almacen != 2 ||usuario.Role == 'ADMIN'">Otras Gestiones</button>
             </ng-container>
-             <button class="button is-primary" (click)='modal_Devolucion()' *ngIf="usuario.Despacho != 1">Devolución de materiales</button>
              <button class="button is-primary" (click)='modal_solicitud()' *ngIf="usuario.Despacho != 1">Solicitud de materiales</button>
+             <button class="button is-primary" (click)='modal_Devolucion()' *ngIf="usuario.Despacho != 1">Devolución de materiales</button>
             
             <hr>
             <div class="despachos" *ngIf="usuario.Almacen == 2 || usuario.Despacho == 1">
@@ -51,6 +55,9 @@
                         <tr>
                             <th>Fecha: {{despacho.fecha}}</th>
                         </tr>
+                        <tr>
+                            <th>{{despacho.observacion}}</th>
+                        </tr>
                     </thead>
                     <tbody>
                         <tr>
@@ -62,56 +69,114 @@
                                         <th>Producto</th>
                                         <th>Cantidad</th>
                                         <th>OC</th>
+                                        <th>N° Certificado de análisis</th>
+                                        <th>Documento</th>
                                         <th>Destino</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr *ngFor="let productos of despacho.despacho;index as y">
-                                        <td>{{productos.op}}</td>
-                                        <td>{{productos.producto}}</td>
-                                        <td>
-                                            <ng-container *ngIf="edit === x">
-                                                <input type="Number" class="input" value="{{productos.cantidad}}" (change)="editado($event.target.value, x,y)">
+                                    <ng-container *ngFor="let productos of despacho.despacho;index as y">
+                                    <tr *ngIf="!productos.parcial">
+                                        <ng-container>
+                                            <td>{{productos.op}}</td>
+                                            <td>{{productos.producto}}</td>
+                                            <td>
+                                                <ng-container *ngIf="edit === x">
+                                                    <input type="Number" class="input" value="{{productos.cantidad}}" (change)="editado($event.target.value, x,y)">
+                                                </ng-container>
+                                                <ng-container *ngIf="edit != x">
+                                                    {{productos.cantidad}}
+                                                </ng-container>
+                                            </td>
+                                            <td>{{productos.oc}}</td>
+                                            <td>
+                                                <ng-container *ngIf="edit === x">
+                                                    <input type="string" class="input" value="{{productos.certificado}}" (change)="certificado($event.target.value, x,y)">
+                                                </ng-container>
+                                                <ng-container *ngIf="edit != x">
+                                                    {{productos.certificado}}
+                                                </ng-container>
+                                            </td>
+                                            <td>
+                                                <ng-container *ngIf="edit === x">
+                                                    <div class="control">
+                                                    <label class="radio">
+                                                    <input type="radio" name="{{x}}_{{y}}" [checked]="!verificacion(productos.documento)">
+                                                    N.E.
+                                                </label>
+                                                <label class="radio">
+                                                    <input type="radio" name="{{x}}_{{y}}" id="{{x}}_{{y}}" [checked]="verificacion(productos.documento)">
+                                                    Fact.
+                                                </label>
+                                            </div>
+                                            <input type="text" class="input" value="" (change)="documento($event.target.value, x,y)">
+                                        </ng-container>
+                                        <ng-container *ngIf="edit != x">
+                                            {{productos.documento}}
+                                        </ng-container>
+                                    </td>
+                                    <td>
+                                        <ng-container *ngIf="edit === x">
+                                                <ng-container *ngIf="almacen__">
+                                                <select name="almacen" class="select" value="{{productos.destino}}" (change)="cambiarAlmacenes($event.target.value, x,y)">
+                                                    <ng-container *ngFor="let almacen of Almacenes_edicion[y].almacenes">
+                                                        <ng-container *ngIf="productos.destino === almacen">
+                                                            <option value="{{almacen}}" selected>{{almacen}}</option>
+                                                        </ng-container>
+                                                        <ng-container *ngIf="productos.destino != almacen">
+                                                            <option value="{{almacen}}">{{almacen}}</option>
+                                                        </ng-container>
+                                                    </ng-container>
+                                                </select>
                                             </ng-container>
-                                            <ng-container *ngIf="edit != x">
-                                                {{productos.cantidad}}
-                                            </ng-container>
+                                            <!-- {{BuscarAlmacen(productos.producto)}} -->
+                                        </ng-container>
+                                        <ng-container *ngIf="edit != x">
+                                            {{productos.destino}}
+                                        </ng-container>
+                                    </td>
+                                    <td>
+                                        <button class="button" (click)="despachar(x,y,productos.op)">
+                                            <span class="icon is-small">
+                                                <i class="fas fa-truck"></i>
+                                            </span>
+                                            </button>
                                         </td>
-                                        <td>{{productos.oc}}</td>
-                                        <td>{{productos.destino}}</td>
+                                    </ng-container>
                                     </tr>
+                                    </ng-container>
                                 </tbody>
                             </table>
-                            <button class="button is-success" (click)="editar_cant(x)" *ngIf="edit != x">
+                            <button class="button is-info" (click)="editar_cant(x)" *ngIf="edit != x">
                                 <span class="icon is-small">
                                     <i class="fas fa-edit"></i>
                                 </span>
-                                <span>Editar cantidades</span>
+                                <span>Editar despacho</span>
                             </button> 
-                              <button class="button is-success" (click)="listo()" *ngIf="edit === x">
+                            <button class="button is-success" (click)="listo()" *ngIf="edit === x">
                                 <span class="icon is-small">
                                     <i class="fas fa-check"></i>
                                 </span>
                                 <span>Listo</span>
-                              </button> 
-                              <button class="button is-success" *ngIf="edit != x" (click)="Despachado_(despacho._id, x)">
+                            </button> 
+                            <button class="button is-success" *ngIf="edit != x" (click)="Despachado_(despacho._id, x)">
                                 <span class="icon is-small">
                                     <i class="fas fa-check"></i>
                                 </span>
                                 <span>Despachado</span>
-                              </button>
-                           </td> 
-                        </tr>
+                            </button>
+                        </td> 
+                    </tr>
                     </tbody>
                 </table>
             </div>
 
-            <ng-container *ngIf="!usuario.Despacho">
+            <ng-container *ngIf="!usuario.Despacho && usuario.Gestiones != 5">
             <div class="subtitulo" *ngIf="usuario.Almacen != 2 || usuario.Role == 'ADMIN'">
                 Ordenes para el dia de Hoy: <br>
             </div>
             </ng-container>
-            <ng-container *ngIf="!usuario.Despacho">
+            <ng-container *ngIf="!usuario.Despacho && usuario.Gestiones != 5">
                 <table class="table is-fullwidth" *ngIf="usuario.Almacen != 2 || usuario.Role == 'ADMIN'">
                     <thead>
                         <tr>
@@ -155,7 +220,7 @@
                 </table>
             </ng-container>
             <hr>
-            <ng-container *ngIf="!usuario.Despacho">
+            <ng-container *ngIf="!usuario.Despacho && usuario.Gestiones != 5">
             <div class="subtitulo" *ngIf="usuario.Almacen != 2 || usuario.Role == 'ADMIN'">
                 Gestiones Realizadas: <br>
             </div>

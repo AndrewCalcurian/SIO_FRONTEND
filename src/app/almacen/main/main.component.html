@@ -31,6 +31,7 @@
                 </button>
             </ng-container>
         </ng-containe>
+        
         <hr>
 
         <app-asignacion
@@ -85,6 +86,14 @@
             </div>
         </div>
 
+        <!-- <div class="field">
+            <p class="control has-icons-left">
+                <input type="text" class="input" placeholder="Buscar" (keyup)="searchTerm$.next($event.target.value)">
+                <span class="icon is-small is-left">
+                    <i class="fas fa-search"></i>
+                </span>
+            </p>
+        </div> -->
         <div class="field">
             <div class="select">
                 <select (change)='Almacenes($event.target.value)'>
@@ -355,12 +364,12 @@
                                     <th>Calibre</th>
                                 </ng-container>
                                 <th>Cantidad</th>
-                                <th>TOTAL</th>
+                                <th> Total</th>
                                 <th *ngIf="usuario.Almacen == 2">Editar</th>
                             </tr>
                         </thead>
                         <tbody>
-                            <tr *ngFor='let producto of Almacenado'>
+                            <tr *ngFor='let producto of listFiltered'>
                                 <ng-container *ngIf='producto.material.grupo.nombre === seccion.nombre && producto.cantidad > 0'>
                                     <td>{{producto.material.nombre}} 
                                     <ng-container *ngIf="seccion.nombre == 'Sustrato'">

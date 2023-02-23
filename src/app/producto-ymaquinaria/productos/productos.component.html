@@ -771,14 +771,16 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr *ngFor='let Material of OneProduct.materiales[i_montajes_]'>
+                        <tr *ngFor='let Material of OneProduct.materiales[i_montajes_];index as x'>
                             <td>{{Material.producto.nombre}} 
                                 <ng-container *ngIf='Material.ancho'>
                                     ({{Material.producto.ancho}} x {{Material.producto.ancho}})
                                 </ng-container>
                             </td>
                             <td>{{Material.producto.marca}}</td>
-                            <td>{{Material.cantidad}}</td>
+                            <td>
+                                <input type="text" class="input" [(ngModel)]="OneProduct.materiales[i_montajes_][x].cantidad">
+                            </td>
                             <td>
                                 <button class="button is-danger is-outlined is-small" (click)='Delete_Material2(Material.producto.nombre)'>
                                     <span class="icon is-small">

@@ -12,7 +12,9 @@
                         <select (change)="TraerMateriales($event.target.value)">
                             <option value="">Selecciona OP</option>
                             <option class="option" value="Otro">Otros Materiales</option>
-                            <option class="option" value='{{Orden.sort}}' *ngFor="let Orden of orden">{{Orden.sort}}</option>
+                            <ng-container *ngIf="usuario.Gestiones != 5">
+                                <option class="option" value='{{Orden.sort}}' *ngFor="let Orden of orden.reverse()">{{Orden.sort}}</option>
+                            </ng-container>
                         </select>
                     </div>
                 </div>
@@ -89,6 +91,12 @@
                             </td>
                             <td>
                                 <input type="number" class="input" value="0" min="0" id="{{i}}" name="{{material.producto._id}}">
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Cinta de embalaje 3430 (Rela)</td>
+                            <td>
+                                <input type="number" class="input" value="0" min="0" id="100" name="61fd721fd9115415a4416f66">
                             </td>
                         </tr>
                     </tbody>

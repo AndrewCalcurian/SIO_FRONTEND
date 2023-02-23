@@ -79,9 +79,10 @@ export class MainComponent implements OnInit {
   public restantes = [];
   public almacenes = [];
   public hoy;
+  public usuario;
 
   constructor(public api:RestApiService,
-              private router: Router) { }
+              private router: Router) { this.usuario = api.usuario }
 
   ngOnInit(): void {
     this.obtenerClientes();
@@ -492,6 +493,7 @@ export class MainComponent implements OnInit {
   finalizar(cantidad){
 
     let data = {
+      usuario:`${this.usuario.Nombre} ${this.usuario.Apellido}`,
       fecha_o:this.fo_,
       montaje:this.i_montajes,
       cliente:this.CLIENTE,

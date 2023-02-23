@@ -11,10 +11,15 @@
                     <div class="select">
                         <select (change)="seleccionarMateriales()" id="ordens">
                             <option value="·">Seleccionar OP</option>
-                            <ng-container *ngFor="let orden of repeticion">
-                                <option value="{{orden}}">
-                                      {{orden}}
-                                </option>
+                            <option value="#">Otros materiales</option>
+                            <ng-container *ngIf="usuario.Gestiones != 5">
+                                <ng-container *ngFor="let orden of repeticion">
+                                    <ng-container *ngIf="orden != '#'">
+                                        <option value="{{orden}}">
+                                              {{orden}}
+                                        </option>
+                                    </ng-container>
+                                </ng-container>
                             </ng-container>
                         </select>
                     </div>

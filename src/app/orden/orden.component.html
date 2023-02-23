@@ -366,7 +366,9 @@
                                                             <ng-container *ngIf="TintaProducto.producto.grupo.nombre === 'Cajas Corrugadas'">
                                                         <td>
                                                             <!-- {{PRODUCTO.cantidad}} - {{TintaProducto.cantidad}} * - {{TintaProducto.producto.cinta}} -->
-                                                            {{((PRODUCTO.cantidad / TintaProducto.cantidad) * TintaProducto.producto.cinta).toFixed(2)}}m                                                       </td>
+                                                            {{(Aprox(PRODUCTO.cantidad,TintaProducto.cantidad) * TintaProducto.producto.cinta).toFixed(2)}}m
+                                                        <br>
+                                                        </td>
                                                              </ng-container>
                                                         </ng-container>
                                                     </tr>

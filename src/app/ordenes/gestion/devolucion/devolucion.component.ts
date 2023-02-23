@@ -36,7 +36,7 @@ export class DevolucionComponent implements OnInit {
         if(i == final){
           const dataArr = new Set(this.repeticion);
           let result = [...dataArr];
-          this.repeticion = result;
+          this.repeticion = result.reverse();
         }
       }
       
@@ -46,6 +46,14 @@ export class DevolucionComponent implements OnInit {
   seleccionarMateriales(){
     let orden_ = (<HTMLInputElement>document.getElementById('ordens')).value
     this.materiales = this.devoluciones.filter(devoluciones => devoluciones.orden === orden_);
+    for(let i=0;i<this.materiales.length;i++){
+      this.materiales[i].material.sort(function(a, b) {
+        if(a.material.nombre.toLowerCase() < b.material.nombre.toLowerCase()) return -1
+        if(a.material.nombre.toLowerCase() > b.material.nombre.toLowerCase()) return 1
+        return 0
+
+      })
+    }
     let malas = this.materiales.filter(materiales => materiales.material[0].material === null)
     if(orden_ == '#'){
     this.materiales = this.materiales.filter(materiales => materiales.material[0].material != null);

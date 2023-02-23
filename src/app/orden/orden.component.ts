@@ -72,6 +72,13 @@ export class OrdenComponent implements OnInit {
 
   }
 
+  Aprox(x,y){
+    let z = x/y;
+    Number(z)
+    z = Math.ceil(z)
+    return z;
+  }
+
   sumaTintas(n){
     if(this.listo){
       this.listo = false;
@@ -93,6 +100,10 @@ export class OrdenComponent implements OnInit {
     PRODUCTO.fecha_s = moment(PRODUCTO.fecha_s).utc().format('DD/MM/yyyy');
     PRODUCTO.fecha = moment(PRODUCTO.fecha).format('DD/MM/yyyy');
     PRODUCTO.cantidad_ = new Intl.NumberFormat('de-DE').format(PRODUCTO.cantidad)
+
+    if(!PRODUCTO.usuario){
+      PRODUCTO.usuario = ' '
+    }
     
     
     let montajes = this.NumToLet(PRODUCTO.montaje);
@@ -142,7 +153,7 @@ export class OrdenComponent implements OnInit {
       pega_unidad =pega[0].producto.unidad
     }
     let caja = materiales.filter(x => x.producto.grupo.nombre === 'Cajas Corrugadas')
-    let cant_cajas = (PRODUCTO.cantidad / caja[0].cantidad)
+    let cant_cajas = Math.ceil(PRODUCTO.cantidad / caja[0].cantidad)
     let cinta_ = caja[0].producto.cinta * cant_cajas;
     let cantidad_cajas = Math.ceil(cant_cajas)
     let cinta = materiales.filter(x => x.producto.grupo.nombre === 'Cinta de Embalaje')
@@ -571,9 +582,9 @@ export class OrdenComponent implements OnInit {
           [
             new Cell(new Stack(maquina).end).fontSize(9).end,
             new Cell(new Txt(PRODUCTO.observacion).end).fontSize(9).end,
-            new Cell(new Txt(`Firma:
+            new Cell(new Txt(`Firma:${PRODUCTO.usuario}
           
-            Fecha:`).end).fontSize(9).end
+            Fecha:${PRODUCTO.fecha}`).end).fontSize(9).end
           ]
 
         ]).widths(['34%','33%','33%']).end

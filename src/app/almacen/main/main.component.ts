@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { RestApiService } from 'src/app/services/rest-api.service';
 import { PdfMakeWrapper, Txt, Img, Table, Cell, Columns, Stack } from 'pdfmake-wrapper';
@@ -7,7 +7,8 @@ import * as pdfFonts from "pdfmake/build/vfs_fonts";
 import * as moment from 'moment';
 
 import Swal from 'sweetalert2';
-import { zip } from 'rxjs';
+import { BehaviorSubject, Subject, zip } from 'rxjs';
+import { debounceTime, distinctUntilChanged, takeUntil } from 'rxjs/operators';
 
 
 
@@ -105,6 +106,8 @@ export class MainComponent implements OnInit {
   public _Almacenado:boolean = true;
   public Editar_NUEVO_PRODUCTO:boolean = false;
 
+  public listFiltered = []
+
   public TOTALES = [
     {
       material:null,
@@ -130,6 +133,9 @@ export class MainComponent implements OnInit {
   Pendiente;
 
   public Bobillas = true;
+  
+  searchTerm$ = new BehaviorSubject<string>('')
+  private OnDestroy$ = new Subject();
 
 
   InventarioForm:FormGroup = this.fb.group({
@@ -182,11 +188,29 @@ export class MainComponent implements OnInit {
     this.getOrdenes();
     this.buscarPendientes();
     this.getDevolucion();
+    this.filterList();
+  }
+
+  ngOnDestroy(): void {
+    this.OnDestroy$.next();
   }
 
   public usuario
 
   public orden;
+
+  filterList(): void {
+    this.searchTerm$
+    .pipe(
+      debounceTime(400),
+      distinctUntilChanged(),
+      takeUntil(this.OnDestroy$)
+    )
+    .subscribe(term => {
+      this.listFiltered = this.Almacenado
+        .filter(item => item.material.nombre.toLowerCase().indexOf(term.toLowerCase()) >= 0);
+    });
+  }
 
   CancelarDevolucion(id){
     Swal.fire({
@@ -578,6 +602,7 @@ export class MainComponent implements OnInit {
 
         })
         // // console.log(this.Almacenado)
+        // this.listFiltered = this.Almacenado
         this.totalizar_materiales();
       })
   }

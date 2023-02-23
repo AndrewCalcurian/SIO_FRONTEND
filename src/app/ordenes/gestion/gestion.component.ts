@@ -52,7 +52,125 @@ export class GestionComponent implements OnInit {
       })
   }
 
+  verificacion(cadena){
+    let factura = cadena.substr(0,1)
+    if(factura == "F"){
+      return true
+    }else{
+      return false
+    }
+  }
+
+  public Almacenes_edicion = []
+  public almacen__ = false;
+  BuscarAlmacen(producto){
+    console.log(producto)
+    this.api.BuscarAlmacenes(producto)
+      .subscribe((resp:any)=>{
+        // console.log(resp)
+        this.Almacenes_edicion.push(resp)
+        this.almacen__ = true;
+        return resp;
+      })
+  }
+
+  cambiarAlmacenes(e,x,y){
+
+    this.Despachos[x].despacho[y].destino = e;
+    this.api.PutDespachos(this.Despachos[x]._id, this.Despachos[x])
+    .subscribe((resp:any)=>{
+      // console.log('done')
+    })
+  }
+
+  documento(e,x,y){
+    
+    let factura = (<HTMLInputElement>document.getElementById(`${x}_${y}`)).checked
+    if(factura){
+      this.Despachos[x].despacho[y].documento = `F - ${e}`
+    }else{
+      this.Despachos[x].despacho[y].documento = `N - ${e}`
+    }
+
+    this.api.PutDespachos(this.Despachos[x]._id, this.Despachos[x])
+    .subscribe((resp:any)=>{
+      // console.log('done')
+    })
+
+  }
+
+  despachar(x,y,op){
+
+    Swal.fire({
+      title: 'Cuidado',
+      text: `¿Quieres realizar el despacho sólo de la orden ${op} sin tomar en cuenta las otras?`,
+      icon: 'warning',
+      showCancelButton: true,
+      cancelButtonText:'Cancelar',
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Si, despachar'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        if(this.Despachos[x].despacho[y].documento == "" || this.Despachos[x].despacho[y].certificado == ""){
+          Swal.fire({
+            icon: 'error',
+            title: 'Debes llenar todos los campos',
+            text: 'Es necesario que el despacho cuente con un número de certificado y un documento para poder proceder.',
+            showConfirmButton:false
+          })
+          return
+        }
+        let hoy = moment().format('DD-MM-yyyy');
+        this.Despachos[x].despacho[y].parcial = hoy;
+        this.api.PutDespachos(this.Despachos[x]._id, this.Despachos[x])
+          .subscribe((resp:any)=>{
+      // console.log('done')
+      let iterator = 0;
+      for(let i=0;i<this.Despachos[x].despacho.length;i++){
+        // console.log(i,'iterator', this.Despachos[x].despacho.length)
+        console.log(this.Despachos[x].despacho[i].parcial)
+        if(!this.Despachos[x].despacho[i].parcial){
+          iterator++
+
+        }
+
+        if(i == this.Despachos[x].despacho.length -1){
+          if(iterator < 1){
+            this.Despachos[x].fecha = hoy
+            this.Despachos[x].estado = 'despachado'
+            this.api.PutDespachos(this.Despachos[x]._id, this.Despachos[x])
+              .subscribe((resp:any)=>{
+                 this.getDespachos();
+            })
+          }
+        }
+      }
+        })
+        Swal.fire(
+          {
+            title:'Despachado',
+            text:`Se realizó el despacho de la orden ${op}`,
+            icon:'success',
+            showConfirmButton:false
+          }
+        )
+      }
+    })
+  }
+
+  certificado(e,x,y){
+    this.Despachos[x].despacho[y].certificado = e;
+
+    this.api.PutDespachos(this.Despachos[x]._id, this.Despachos[x])
+    .subscribe((resp:any)=>{
+      // console.log('done')
+    })
+
+  }
+
   editado(e,x,y){
+    this.Almacenes_edicion = []
     this.Despachos[x].despacho[y].cantidad = Number(e);
 
     this.api.PutDespachos(this.Despachos[x]._id, this.Despachos[x])
@@ -68,13 +186,30 @@ export class GestionComponent implements OnInit {
 
   editar_cant(x){
     this.edit = x
+    console.log(this.Despachos[x])
+    for(let i=0;i<this.Despachos[x].despacho.length;i++){
+      let almacenes = this.BuscarAlmacen(this.Despachos[x].despacho[i].producto)
+    }
   }
 
   listo(){
+    this.almacen__ = false;
+    this.Almacenes_edicion = []
     this.edit = -1;
   }
 
   Despachado_(id,x){
+    for(let i=0;i<this.Despachos[x].despacho.length;i++){
+      if(this.Despachos[x].despacho[i].certificado == "" || this.Despachos[x].despacho[i].documento == ""){
+        Swal.fire({
+          icon: 'error',
+          title: 'Debes llenar todos los campos',
+          text: 'Es necesario que todos los despachos cuenten con un número de certificado y un documento para poder proceder.',
+          showConfirmButton:false
+        })
+        return
+      }
+    }
     this.api.PutDespacho(id,this.Despachos[x])
       .subscribe((resp:any)=>{
         // console.log(resp)

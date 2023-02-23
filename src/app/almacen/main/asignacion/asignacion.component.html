@@ -73,9 +73,9 @@
                                                     <option value="#">Seleccionar LOTE</option>
                                                     <ng-container *ngFor='let almacen of Almacenado'>
                                                         <ng-container *ngIf='materiales.producto.grupo.nombre != "Cajas Corrugadas" && materiales.producto.grupo.nombre != "Barniz"'>
-                                                            <option value="{{almacen.codigo}}*{{almacen.lote}}" *ngIf='almacen.material.nombre == materiales.producto.nombre && almacen.material.marca == materiales.producto.marca && almacen.material.ancho == materiales.producto.ancho && almacen.material.largo == materiales.producto.largo' >
+                                                            <option value="{{almacen.codigo}}*{{almacen.lote}}" *ngIf='almacen.material.nombre == materiales.producto.nombre && almacen.material.marca == materiales.producto.marca && almacen.material.ancho == materiales.producto.ancho && almacen.material.largo == materiales.producto.largo && almacen.material.calibre == materiales.producto.calibre' >
                                                            {{almacen.codigo}} Lote {{almacen.lote}} ({{almacen.material.presentacion}} {{almacen.material.neto}}{{almacen.material.unidad}}) Existencia: {{almacen.cantidad}} {{almacen.material.presentacion}}
-                                                            </option>
+                                                        </option>
                                                         </ng-container>
                                                         <ng-container *ngIf='materiales.producto.grupo.nombre == "Cajas Corrugadas" || materiales.producto.grupo.nombre == "Barniz"'>
                                                             <option value="{{almacen.codigo}}*{{almacen.lote}}" *ngIf='almacen.material.nombre == materiales.producto.nombre && almacen.material.ancho == materiales.producto.ancho && almacen.material.largo == materiales.producto.largo' >

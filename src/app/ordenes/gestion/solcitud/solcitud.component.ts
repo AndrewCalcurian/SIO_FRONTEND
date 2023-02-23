@@ -16,6 +16,7 @@ export class SolcitudComponent implements OnInit {
   public almacenado
   public por_confirmar = []
   public _materiales = []
+  public usuario
 
 
 
@@ -25,7 +26,7 @@ export class SolcitudComponent implements OnInit {
 
   constructor(private api:RestApiService) {
 
-    let usuario = api.usuario
+    this.usuario = api.usuario
    }
 
   ngOnInit(): void {
@@ -100,7 +101,12 @@ export class SolcitudComponent implements OnInit {
       this.Otro = false;
       if(Orden_seleccionada){
         this.materiales = Orden_seleccionada.producto.materiales[Orden_seleccionada.montaje]
-        
+        this.materiales.sort(function(a, b) {
+          if(a.material.nombre.toLowerCase() < b.material.nombre.toLowerCase()) return -1
+          if(a.material.nombre.toLowerCase() > b.material.nombre.toLowerCase()) return 1
+          return 0
+
+        })
       }else{
         this.materiales = undefined;
       }
@@ -118,6 +124,7 @@ export class SolcitudComponent implements OnInit {
       motivo:(<HTMLInputElement>document.getElementById('_motivo')).value,
       usuario:`${this.api.usuario.Nombre} ${this.api.usuario.Apellido}`,
       producto:{
+        producto:'N/A',
         materiales:[[]]
       }
     }
@@ -152,9 +159,11 @@ export class SolcitudComponent implements OnInit {
       motivo:(<HTMLInputElement>document.getElementById('razon')).value,
       usuario:`${this.api.usuario.Nombre} ${this.api.usuario.Apellido}`,
       producto:{
+        producto:this.orden_selected.producto.producto,
         materiales:[[]]
       }
     }
+
 
   for(let i=0;i<this.materiales.length;i++){
     let _i = i.toString();
@@ -179,8 +188,21 @@ export class SolcitudComponent implements OnInit {
 
   }
 
-  if(iteration>0){
+  let cantidad = (<HTMLInputElement>document.getElementById('100')).value;
+  let producto = (<HTMLInputElement>document.getElementById('100')).name;
 
+  let num = Number(cantidad)
+
+    if(num > 0){
+
+      iteration++
+      requisicion.producto.materiales[0].push({
+        cantidad,
+        producto 
+      })
+    }
+
+  if(iteration>0){
     this.api.postReq(requisicion)
     .subscribe((resp:any)=>{
       Swal.fire(

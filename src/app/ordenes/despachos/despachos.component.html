@@ -51,11 +51,25 @@
                             <input type="number" class="input" (change)="change_value($event.target.value, i)" value="{{despachos.cantidad}}" max="{{despachos.cantidad}}" >
                         </td>
                         <td>{{despachos.oc}}</td>
-                        <td>{{despachos.destino}}</td>
+                        <td>
+                            <ng-container *ngIf="!Almacen__ || Selected != i">
+                                {{despachos.destino}}
+                                <i class="fas fa-map-marker-alt" (click)="BuscarAlmacen(despachos.producto, i)"></i>
+                            </ng-container>
+                            <ng-container *ngIf="Almacen__ && Selected === i">
+                                <div class="select">
+                                    <select name="" id="" (change)="SeleccionarAlmacen($event.target.value, i)">
+                                        <option value="#">Seleccionar Almacen</option>
+                                        <option value="{{almacen}}" *ngFor="let almacen of Almacenes_edicion[0]">{{almacen}}</option>
+                                    </select>
+                                </div>
+                            </ng-container>
+                        </td>
                         <td>   <i class="fas fa-trash-alt" (click)="eliminar_Selected(despachos.op)"></i></td>
                     </tr>
                 </tbody>
             </table>
+            <textarea class="textarea is-info" placeholder="Observación" rows="2" (change)="Observar($event.target.value)"></textarea>
         </div>
     </div>
 </div>
