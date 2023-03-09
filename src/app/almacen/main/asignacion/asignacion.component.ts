@@ -185,7 +185,7 @@ export class AsignacionComponent implements OnInit {
       }
     }else if(grupo === 'Otros materiales'){
       _cantidad = (m_cantidad * hojas) / 1000;
-    }else if(grupo === 'Cajas Corrugadas'){
+    }else if(grupo === 'Cajas Corrugadas' || grupo === 'Insumos'){
       _cantidad = cantidad / m_cantidad;
                   // alert(m_cantidad)
       if(cantidad === 1){

@@ -26,6 +26,7 @@
     "chart.js": "^3.9.1",
     "exceljs": "^4.3.0",
     "moment": "^2.29.1",
+    "ng2-charts": "^4.1.1",
     "pdfmake": "^0.2.2",
     "pdfmake-wrapper": "^2.1.2",
     "rxjs": "~6.6.0",

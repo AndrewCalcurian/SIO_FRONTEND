@@ -158,3 +158,48 @@
     height: 600px;
     overflow-y: auto;
 }
+
+.info_sustratos{
+    display: none;
+}
+
+.titulo_sustrato{
+    font-size:larger
+}
+.xlarge{
+    font-size: xx-large;
+}
+.icono:hover{
+    cursor: pointer;
+    color: #FFFFFF;
+text-shadow: 0 0 5px #FFF, 0 0 10px #FFF, 0 0 15px #FFF, 0 0 20px #49ff18, 0 0 30px #49FF18, 0 0 40px #49FF18, 0 0 55px #49FF18, 0 0 75px #49ff18;
+}
+
+.chart-container canvas{
+    width: 500px;
+    height: 300px;
+}
+
+#Sustrato_chart{
+    width: 500px;
+    height: 300px; 
+}
+
+.ordenes_button{
+    position: absolute;
+    right: 15px;
+    padding: 15px;
+    border: none;
+    background:none;
+}
+
+.titulo{
+    font-size: 50px;
+    font-family: Roboto;
+}
+
+.chart-container_cajas{
+    display: block;
+    width: 350px;
+    height: 50%;
+}

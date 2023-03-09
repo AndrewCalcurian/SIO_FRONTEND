@@ -44,10 +44,316 @@ export class MainComponent implements OnInit {
   public Otros_c = 0;
 
   public chart: any;
+  public sustrato_char:any
+  public barniz_char:any
+  public Caja_chart:any
+  public Pega_chart:any
 
+  public Barniz_load:boolean = true;
+  public Cajas_loading:boolean = true;
+  public Pega_loading:boolean = true;
+
+  rolltoorders(){
+    document.getElementById('orders').scrollIntoView();
+  }
+
+  puntoYcoma(n){
+    return n = new Intl.NumberFormat('de-DE').format(n)
+  }
+
+  PegaChart(){
+
+    let pega = this.data.Pega.Pega
+    let labels = []
+    let cantidades = []
+
+    for(let i=0;i<pega.length;i++){
+      labels.push(pega[i].Nombre)
+      cantidades.push(pega[i].Cantidad)
+    }
+    if(this.Pega_chart){
+      this.Pega_chart.destroy();
+    }
+
+    this.Pega_chart = new Chart("Pega_chart",{
+      type:'pie',
+      data:{
+        labels:labels,
+        datasets: [{
+          label: 'Sustrato consumido',
+          data: cantidades,
+          backgroundColor: [
+            'rgb(255, 99, 132,0.2)',
+            'rgb(54, 162, 235,0.2)',
+          ],
+          borderColor: [
+            'rgb(255, 99, 132)',
+            'rgb(54, 162, 235)',
+          ],
+          hoverOffset: 4
+        }]
+      }
+    })
+  }
+
+  CajasChart(){
+    let cajas = []
+    let cantidad =[]
+
+    for(let i=0;i<this.data.Caja.Caja.length;i++){
+      cajas.push(this.data.Caja.Caja[i].Nombre)
+      cantidad.push(this.data.Caja.Caja[i].Cantidad)
+    }
+
+    if(this.Caja_chart){
+      this.Caja_chart.destroy();
+    }
+
+    this.Caja_chart = new Chart("Caja_chart",{
+      type:'bar',
+      data:{
+        labels:cajas,
+        datasets: [{
+          label: 'Cajas consumidas',
+          data: cantidad,
+          maxBarThickness:30,
+          backgroundColor: [
+            'rgba(255, 205, 86, 0.2)',
+            'rgba(75, 192, 192, 0.2)',
+            'rgba(54, 162, 235, 0.2)',
+            'rgba(153, 102, 255, 0.2)',
+            'rgba(201, 203, 207, 0.2)'
+          ],
+          borderColor: [
+            'rgb(255, 205, 86)',
+            'rgb(75, 192, 192)',
+            'rgb(54, 162, 235)',
+            'rgb(153, 102, 255)',
+            'rgb(201, 203, 207)'
+          ],
+          borderWidth: 1,
+          xAxisID:'x'
+        }]
+      },
+      
+      options: {
+        indexAxis: 'y',
+        plugins: {
+          legend: {
+              display: false,
+              labels: {
+                  color: 'rgb(255, 99, 132)'
+              }
+          },
+          title:{
+            display:true,
+            text:'Cajas consumidas'
+          }
+      },
+        scales: {
+            y: {
+                beginAtZero: true,
+                ticks: {
+                  maxTicksLimit: 10,
+                },
+                title:{
+                  display:true,
+                  text:'Cajas'
+                }
+            },
+            'x':{
+              title:{
+                display:true,
+                text:'Cantidad de cajas consumidas (Und)'                  
+              }
+            }
+        }
+    }
+    })
+  }
+
+  BarnizChart(){
+
+    if(this.barniz_char){
+      this.barniz_char.destroy();
+    }
+
+    this.barniz_char = new Chart("Barniz_chart",{
+      type:'pie',
+      data:{
+        labels:['Barniz S/Impresión','Barniz acuoso'],
+        datasets: [{
+          label: 'Sustrato consumido',
+          data: [this.data.Barniz.Total_Barniz,this.data.Barniz.Total_barniz_acuoso],
+          backgroundColor: [
+            'rgb(255, 99, 132,0.2)',
+            'rgb(54, 162, 235,0.2)',
+          ],
+          borderColor: [
+            'rgb(255, 99, 132)',
+            'rgb(54, 162, 235)',
+          ],
+          hoverOffset: 4
+        }]
+      }
+    })
+  }
+
+  SustratoChar(){
+    if(this.sustrato_char){
+      this.sustrato_char.destroy();
+    }
+    this.sustrato_char = new Chart("Sustrato_chart",{
+      type:'doughnut',
+      data:{
+        labels:['Papel','Cartón'],
+        datasets: [{
+          label: 'Sustrato consumido',
+          data: [this.data.asignados.Papel,this.data.asignados.Carton],
+          backgroundColor: [
+            'rgb(255, 99, 132,0.2)',
+            'rgb(54, 162, 235,0.2)',
+          ],
+          borderColor: [
+            'rgb(255, 99, 132)',
+            'rgb(54, 162, 235)',
+          ],
+          hoverOffset: 4
+        }]
+      }
+    })
+  }
+
+
+  public producto_form:boolean = false;
+  public Productos_by_client;
+  Cliente_Selected(e){
+    this.api.getById(e)
+    .subscribe((resp:any)=>{
+      console.log(resp)
+      this.producto_form = true;
+      this.Productos_by_client = resp
+      })
+  }
+
+  public busqueda_clientes;
+  public busqueda_orden;
+  public clientes_form:boolean = false;
+  busquedaInteligente(e){
+    if(e === 'cliente'){
+      this.api.GetClientes()
+        .subscribe((resp:any)=>{
+          this.busqueda_clientes = resp;
+          this.clientes_form = true
+        })
+    }else{
+      this.clientes_form = false;
+      this.producto_form = false;
+    }
+    if(e === 'orden'){
+      this.busqueda_orden = true;
+    }else{
+      this.busqueda_orden = false;
+    }
+  }
 
   // test grafica
+  createChart(){
 
+    if(this.chart){
+      this.chart.destroy();
+    }
+
+    let Amarillo = this.data.asignados.detalle_tintas.Amarillo;
+    Amarillo = Number(Amarillo) + Number(this.data.adicionales.detalle_tintas.Amarillo)
+    Amarillo = Amarillo.toFixed(2)
+    Amarillo = Number(Amarillo)-Number(this.data.Colores_devueltos.Amarillo)
+    Amarillo = Amarillo.toFixed(2)
+
+    let Magenta = this.data.asignados.detalle_tintas.Magenta;
+    Magenta = Number(Magenta) + Number(this.data.adicionales.detalle_tintas.Magenta)
+    Magenta = Magenta.toFixed(2)
+    Magenta = Number(Magenta)-Number(this.data.Colores_devueltos.Magenta)
+    Magenta = Magenta.toFixed(2)
+
+    let Cyan = this.data.asignados.detalle_tintas.Cyan;
+    Cyan = Number(Cyan) + Number(this.data.adicionales.detalle_tintas.Cyan)
+    Cyan = Cyan.toFixed(2)
+    Cyan = Number(Cyan)-Number(this.data.Colores_devueltos.Cyan)
+    Cyan = Cyan.toFixed(2)
+
+    let Negro = this.data.asignados.detalle_tintas.Negro;
+    Negro = Number(Negro) + Number(this.data.adicionales.detalle_tintas.Negro)
+    Negro = Negro.toFixed(2)
+    Negro = Number(Negro)-Number(this.data.Colores_devueltos.Negro)
+    Negro = Negro.toFixed(2)
+
+    let Pantone = this.data.asignados.detalle_tintas.Pantone;
+    Pantone = Number(Pantone) + Number(this.data.adicionales.detalle_tintas.Pantone)
+    Pantone = Pantone.toFixed(2)
+    Pantone = Number(Pantone)-Number(this.data.Colores_devueltos.Pantone)
+    Pantone = Pantone.toFixed(2)
+  
+    this.chart = new Chart("MyChart", {
+      type: 'bar', //this denotes tha type of chart
+
+      data: {// values on X-Axis
+        labels: ['Amarillo','Magenta','Cyan','Negro','Pantone'], 
+        datasets: [{
+          label: 'Colores',
+          data: [Amarillo, Magenta, Cyan,Negro,Pantone],
+          backgroundColor: [
+            'rgb(255, 255, 0,0.2)',
+            'rgb(228, 0, 120,0.2)',
+            'rgb(0, 255, 255,0.2)',
+            'rgb(0, 0, 0,0.2)',
+            'rgb(0, 115, 54,0.2)',
+          ],
+          borderColor: [
+            'rgb(255, 255, 0)',
+            '#e40078',
+            'rgb(0, 255, 255)',
+            'rgb(0, 0, 0)',
+            'rgb(0, 115, 54)',
+          ],
+          borderWidth: 1,
+        }]
+      },
+      options: {
+        aspectRatio:2.5,
+        plugins: {
+          legend: {
+              display: false,
+              labels: {
+                  color: 'rgb(255, 99, 132)'
+              }
+          },
+          title:{
+            display:true,
+            text:'Tintas consumidas'
+          }
+      },
+        scales:{
+          yAxisID:{
+            beginAtZero:true,
+            display:true,
+            title:{
+              display:true,
+              text:'Cantidad de tinta consumida (kg)'
+            }
+          },
+          xAxisID:{
+            title:{
+              display:true,
+              text:'Colores'
+            }
+          }
+        }
+      }
+      
+    });
+
+  }
 
   // test grafica
 
@@ -89,7 +395,7 @@ export class MainComponent implements OnInit {
 
           if(existe < 0){
             this.Sustratos_suma.push(data)
-            console.log(this.Sustratos_suma)
+            // console.log(this.Sustratos_suma)
           }else{
             this.Sustratos_suma[existe].Cantidad = Number(this.Sustratos_suma[existe].Cantidad) + Number(data.Cantidad)
           }
@@ -97,6 +403,24 @@ export class MainComponent implements OnInit {
       }
     }
     this.Sustrato_load=false;
+  }
+
+  detalles_sustratos:boolean = false;
+  detalles_sustrato(){
+    if(!this.detalles_sustratos){
+      this.detalles_sustratos = true
+    }else{
+      this.detalles_sustratos = false
+    }
+  }
+
+  detalles_tintas:boolean = false
+  detalles_tinta(){
+    if(!this.detalles_tintas){
+      this.detalles_tintas = true
+    }else{
+      this.detalles_tintas = false
+    }
   }
 
   public peso_carton = 0;
@@ -118,30 +442,49 @@ export class MainComponent implements OnInit {
 
   public Tinta_load:boolean = true
   public Suma_Tintas = [];
+  aMASa(a,b){
+    let c = (Number(a)+Number(b)).toFixed(2);
+    return c
+  }
+  aMENOSa(a,b){
+    let c = (Number(a)-Number(b)).toFixed(2);
+    return c
+  }
+
+  devuelto__(Nombre, Marca){
+    let devoluciones = this.data.devoluciones_totales.find(x=> x.Nombre === Nombre && x.Marca === Marca)
+    console.log(devoluciones)
+    return devoluciones[0].Cantidad
+  }
   sumaTinta(){
     this.Tinta = 0;
     this.Suma_Tintas = []
-    for(let i=0;i<this.Lotes.length;i++){
-      for(let x=0;x<this.Lotes[i].material.length;x++){
-        if(this.Lotes[i].material[x].material.grupo === '61fd54e2d9115415a4416f17')
+    this.Amarillo = 0;
+    this.Cyan = 0;
+    this.Magenta = 0;
+    this.Negro = 0;
+    this.Otros_c = 0;
+    for(let i=0;i<this.data.Lotes.length;i++){
+      for(let x=0;x<this.data.Lotes[i].material.length;x++){
+        if(this.data.Lotes[i].material[x].material.grupo === '61fd54e2d9115415a4416f17')
         {
-          this.Tinta = this.Tinta + this.Lotes[i].material[x].EA_Cantidad
-          
+          this.Tinta = this.Tinta + this.data.Lotes[i].material[x].EA_Cantidad
+
           switch(this.Lotes[i].material[x].material.color){
             case 'Amarillo':
-              this.Amarillo = this.Amarillo + this.Lotes[i].material[x].EA_Cantidad
+              this.Amarillo = this.Amarillo + this.data.Lotes[i].material[x].EA_Cantidad
               break;
             case 'Cyan':
-              this.Cyan = this.Cyan + this.Lotes[i].material[x].EA_Cantidad
+              this.Cyan = this.Cyan + this.data.Lotes[i].material[x].EA_Cantidad
               break;
             case 'Magenta':
-              this.Magenta = this.Magenta + this.Lotes[i].material[x].EA_Cantidad
+              this.Magenta = this.Magenta + this.data.Lotes[i].material[x].EA_Cantidad
               break;
             case 'Negro':
-              this.Negro = this.Negro + this.Lotes[i].material[x].EA_Cantidad
+              this.Negro = this.Negro + this.data.Lotes[i].material[x].EA_Cantidad
               break;
             default:
-              this.Otros_c = this.Otros_c + this.Lotes[i].material[x].EA_Cantidad
+              this.Otros_c = this.Otros_c + this.data.Lotes[i].material[x].EA_Cantidad
               break;
           }
           // console.log(this.Lotes[i].material[x].material.color)
@@ -160,7 +503,7 @@ export class MainComponent implements OnInit {
           }
         }
       }
-      if(i == this.Lotes.length - 1){
+      if(i == this.data.Lotes.length - 1){
         this.Tinta_load = false;
       }
     }
@@ -183,10 +526,12 @@ export class MainComponent implements OnInit {
   public g_gestiones = []
   public modal_gestiones = false;
   gestiones_(id,op){
-    this.g_trabajos = this.trabajos.filter(x => x.orden === id)
-    this.g_gestiones = this.gestiones.filter(x => x.op === id)
+    this.g_trabajos = this.data.Trabajos.filter(x => x.orden === id)
+    this.g_gestiones = this.data.Gestiones.filter(x => x.op === id)
     this.modal_gestiones = true;
-    
+
+    console.log(this.g_trabajos)
+
   }
 
   public c_lotes = []
@@ -196,14 +541,17 @@ export class MainComponent implements OnInit {
   consumos(id,op){
     this.lote_mayor = []
     this.c_devoluciones = []
-    this.c_devoluciones = this.devoluciones.filter(x=> x.orden === op)
-    this.c_lotes = this.Lotes.filter(x => x.orden === op)
+    this.c_devoluciones = this.data.devoluciones.filter(x=> x.orden === op)
+
+    this.c_lotes = this.data.Lotes.filter(x => x.orden === op)
+
     for(let i=0; i<this.c_lotes.length;i++){
       for(let n=0; n<this.c_lotes[i].material.length;n++)
       {
 
-        let index = this.lote_mayor.find(x=> x.nombre === this.c_lotes[i].material[n].material.nombre)
-        
+        // console.log(this.c_lotes[i].material[n].material.calibre)
+        let index = this.lote_mayor.find(x=> x.nombre === this.c_lotes[i].material[n].material.nombre && x.ancho === this.c_lotes[i].material[n].material.ancho && x.largo === this.c_lotes[i].material[n].material.largo && x.calibre === this.c_lotes[i].material[n].material.calibre && x.gramaje === this.c_lotes[i].material[n].material.gramaje)
+
         if(!index){
           let marca = this.c_lotes[i].material[n].material.marca
           let id = this.c_lotes[i].material[n].material._id
@@ -212,9 +560,11 @@ export class MainComponent implements OnInit {
           if(this.c_lotes[i].material[n].material.ancho){
             let ancho = this.c_lotes[i].material[n].material.ancho
             let largo = this.c_lotes[i].material[n].material.largo
-            this.lote_mayor.push({op,id,marca,nombre:this.c_lotes[i].material[n].material.nombre, cantidad:cant,ancho,largo})
+            let calibre = this.c_lotes[i].material[n].material.calibre
+            let gramaje = this.c_lotes[i].material[n].material.gramaje
+            this.lote_mayor.push({op,id,marca,nombre:this.c_lotes[i].material[n].material.nombre, cantidad:cant,ancho,largo,calibre,gramaje})
           }else{
-            this.lote_mayor.push({op,id,marca,nombre:this.c_lotes[i].material[n].material.nombre, cantidad:cant})
+            this.lote_mayor.push({op,id,marca,nombre:this.c_lotes[i].material[n].material.nombre, cantidad:cant,ancho:null,largo:null,calibre:null,gramaje:null})
           }
         }else{
           let b = this.lote_mayor.findIndex(x=> x.nombre === this.c_lotes[i].material[n].material.nombre)
@@ -227,10 +577,148 @@ export class MainComponent implements OnInit {
     this.modal_consumos = true;
   }
 
+  public detalles_pega:boolean = false;
+  detalle_pega(){
+    if(!this.detalles_pega){
+      this.detalles_pega = true;
+    }else{
+      this.detalles_pega = false;
+    }
+  }
+
+  public detalles_barniz:boolean = false;
+  detalle_barniz(){
+    if(!this.detalles_barniz){
+      this.detalles_barniz = true;
+    }else{
+      this.detalles_barniz = false;
+    }
+  }
+  
+  public data;
   Buscar_estadisticas(desde, hasta){
     this.vacio = false;
     this.sinBusqueda = false;
     this.cargando = true;
+    if(desde === 'orden' && hasta === 'orden'){
+      let op = (<HTMLInputElement>document.getElementById('OP')).value
+      if(!op){
+        Swal.fire({
+          title:'Debes llenar los campos',
+          text:'Debes introducir un número de orden de producción',
+          icon:'error',
+          showConfirmButton:false,
+        })
+        return
+      }
+      this.api.EstadisticasOrden({op})
+        .subscribe((resp:any)=>{
+          if(resp.length < 1){
+            this.vacio = true;
+          }
+          if(resp.mensaje){
+            Swal.fire({
+              title:'Error',
+              text:resp.mensaje,
+              icon:'error',
+              showConfirmButton:false
+            })
+            return
+          }
+          this.data = resp;
+          this.Tinta_load = false
+          this.Ordenes = resp.orden
+          this.Despachos = resp.despachos
+          this.devoluciones = resp.devoluciones
+          this.gestiones = resp.gestiones
+          this.Lotes = resp.lotes
+          this.requisiciones = resp.requisiciones
+          this.trabajos = resp.trabajos
+          this.adicionales = resp.Adicionales
+          // console.log(resp)
+          this.cargando = false
+          this.Sustrato_load = false;
+          this.Barniz_load = false;
+          this.Cajas_loading = false;
+          this.Pega_loading = false;
+          // this.sumaTinta();
+          // this.sumaSustrato();
+          this.sumaDevoluciones(this.devoluciones)
+          this.createChart()
+          this.SustratoChar()
+          this.BarnizChart()
+          this.CajasChart()
+          this.PegaChart()
+        })
+      return
+    }
+
+    if(this.clientes_form){
+      let data;
+      let cliente = (<HTMLInputElement>document.getElementById('cliente_select')).value
+      if(cliente === '#'){
+        Swal.fire({
+          title:'Seleccione un cliente',
+          text:'Debe indicar un cliente para realizar la busqueda especifica',
+          icon:'error',
+          showConfirmButton:false
+        })
+        return
+      }else{
+        const client = {cliente}
+        let producto = (<HTMLInputElement>document.getElementById('producto_select')).value
+        if(producto != "#"){
+          data = {cliente:client,producto}
+        }else{
+          data = {cliente:client}
+        }
+
+        // TEST
+        this.api.EstadisticasOrden(data)
+        .subscribe((resp:any)=>{
+          if(resp.length < 1){
+            this.vacio = true;
+          }
+          if(resp.mensaje){
+            Swal.fire({
+              title:'Error',
+              text:resp.mensaje,
+              icon:'error',
+              showConfirmButton:false
+            })
+            return
+          }
+          this.data = resp;
+          this.Tinta_load = false
+          this.Ordenes = resp.orden
+          this.Despachos = resp.despachos
+          this.devoluciones = resp.devoluciones
+          this.gestiones = resp.gestiones
+          this.Lotes = resp.lotes
+          this.requisiciones = resp.requisiciones
+          this.trabajos = resp.trabajos
+          this.adicionales = resp.Adicionales
+          console.log(resp)
+          this.cargando = false
+          this.Sustrato_load = false;
+          this.Barniz_load = false;
+          this.Cajas_loading = false;
+          this.Pega_loading = false;
+          // this.sumaTinta();
+          // this.sumaSustrato();
+          this.sumaDevoluciones(this.devoluciones)
+          this.createChart()
+          this.SustratoChar()
+          this.BarnizChart()
+          this.CajasChart()
+          this.PegaChart()
+        })
+      return
+        // TEST
+
+      }
+    }
+
     if(!desde || !hasta){
       this.cargando = false;
       this.sinBusqueda = true;
@@ -258,6 +746,9 @@ export class MainComponent implements OnInit {
           if(resp.length < 1){
             this.vacio = true;
           }
+
+          this.data = resp;
+          this.Tinta_load = false
           this.Ordenes = resp.orden
           this.Despachos = resp.despachos
           this.devoluciones = resp.devoluciones
@@ -266,13 +757,81 @@ export class MainComponent implements OnInit {
           this.requisiciones = resp.requisiciones
           this.trabajos = resp.trabajos
           this.adicionales = resp.Adicionales
-          console.log(this.Lotes)
           this.cargando = false
-          this.sumaTinta();
-          this.sumaSustrato();
+          this.Sustrato_load = false;
+          this.Barniz_load = false;
+          this.Cajas_loading = false;
+          this.Pega_loading = false;
+          console.log(this.data)
+          // this.sumaTinta();
+          // this.sumaSustrato();
+          this.sumaDevoluciones(this.devoluciones)
+          this.createChart()
+          this.SustratoChar()
+          this.BarnizChart()
+          this.CajasChart()
+          this.PegaChart()
+        },err => {
+          alert(err)
+          console.log(err)
         })
 
   }
+
+
+  // VARIABLES DE DEVOLUCION
+  public D_Negro = 0
+  public D_Amarillo = 0
+  public D_Cyan = 0
+  public D_Magenta = 0
+  public D_Pantone = 0
+  public D_Tintas = []
+
+  sumaDevoluciones(dev){
+  this.D_Negro = 0
+  this.D_Amarillo = 0
+  this.D_Cyan = 0
+  this.D_Magenta = 0
+  this.D_Pantone = 0
+  this.D_Tintas = []
+    for(let i=0;i<dev.length;i++){
+      for(let x=0;x<dev[i].filtrado.length;x++){
+        let material = dev[i].filtrado[x]
+        let color = material.material.color
+        let grupo = material.material.grupo
+        if(color && grupo == "61fd54e2d9115415a4416f17"){
+          switch(color){
+            case 'Amarillo':
+              this.D_Amarillo = this.D_Amarillo + Number(material.cantidad)
+              break;
+            case 'Cyan':
+              this.D_Cyan = this.D_Cyan + Number(material.cantidad)
+              break;
+            case 'Magenta':
+              this.D_Magenta = this.D_Magenta + Number(material.cantidad)
+              break;
+            case 'Negro':
+              this.D_Negro = this.D_Negro + Number(material.cantidad)
+              break;
+            default:
+              this.D_Pantone = this.D_Pantone + Number(material.cantidad)
+              break;
+          }
+        }
+
+        let index = this.D_Tintas.findIndex(x => x.color == material.material.nombre && x.marca == material.marca)
+        if(index == -1){
+          this.D_Tintas.push({color:material.nombre, marca:material.marca,cantidad:material.cantidad})
+          // alert(index)
+        }else{
+          this.D_Tintas[index].cantidad = this.D_Tintas[index].cantidad + Number(material.cantidad)
+          // alert('aja')
+        }
+
+      }
+    }
+  }
+
 
   devoluciones_(id,op){
     let data = 0;
@@ -297,7 +856,7 @@ export class MainComponent implements OnInit {
           }
         }
       }
-  
+
       // let dev_filtered = this.c_devoluciones.filter(x=> x.filtrado.material === id)
       // console.log(dev_filtered)
       // if(dev_filtered.length > 0){
@@ -305,14 +864,14 @@ export class MainComponent implements OnInit {
       // }else{
       //   return '0'
       // }
-  
+
       // for(let i=0;i<this.c_devoluciones.length;i++){
       //   let len = this.c_devoluciones[i].filtrado
       //   for(let n=0;n<len.length;n++){
       //     if(this.c_devoluciones[i].filtrado[n].material === id){
       //       let duplicado = this.devoluc.find(x => x.material == id);
       //       if(duplicado){
-      //         let index_ = this.devoluc.findIndex(x=> x.material == id) 
+      //         let index_ = this.devoluc.findIndex(x=> x.material == id)
       //         this.devoluc[index_].cantidad = this.devoluc[index_].cantidad + this.c_devoluciones[i].filtrado[n].cantidad
       //       }else{
       //         this.devoluc.push({material:id, cantidad:this.c_devoluciones[i].filtrado[n].cantidad})

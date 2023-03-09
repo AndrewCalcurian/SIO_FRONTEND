@@ -19,7 +19,7 @@
                         <div class="select">
                             <select name="" id="" (change)="Orden_Selected($event.target.value)">
                                 <option value="0" >Seleccionar Orden</option>
-                                <option value="{{orden.sort}}" *ngFor="let orden of ORDENES">{{orden.sort}}</option>
+                                <option value="{{orden.sort}}" *ngFor="let orden of ORDENES.reverse()">{{orden.sort}}</option>
                             </select>
                         </div>
                     </div>

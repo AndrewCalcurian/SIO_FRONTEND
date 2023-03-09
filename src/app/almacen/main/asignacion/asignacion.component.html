@@ -57,6 +57,9 @@
                                                 </ng-container>
                                             
                                             </ng-container>
+                                            <ng-container *ngIf="materiales.producto.grupo.nombre == 'Insumos'">
+                                                {{materiales.cantidad}}{{Unidad(materiales.producto.nombre)}}
+                                            </ng-container>
                                             <ng-container *ngIf="materiales.producto.grupo.nombre == 'Cinta de Embalaje'">
                                                 <ng-container *ngIf="_cinta_(index)">
                                                     {{cintas_}}{{Unidad(materiales.producto.nombre)}}
@@ -64,6 +67,9 @@
                                                 <ng-container *ngIf="!_cinta_(index)">
                                                     {{materiales.cantidad}}{{Unidad(materiales.producto.nombre)}}
                                                 </ng-container>
+                                            </ng-container>
+                                            <ng-container>
+                                                
                                             </ng-container>
 
                                         </i></label>

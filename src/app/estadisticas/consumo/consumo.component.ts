@@ -24,18 +24,33 @@ export class ConsumoComponent implements OnInit {
     this.onCloseModal.emit();
   }
 
+  Formatear(a,b){
+    let c = (a-b).toFixed(2)
+    return c
+  }
+
   public devoluc = []
-  devoluciones_(id,op){
+  devoluciones_(nombre, id,op){
   let data = 0;
   let x = 0
   let y = 0
-    for(let i=0;i<this.c_devoluciones.length;i++){
+    for(let i=0;i<this.c_devoluciones.length;i++){ 
       x++
       y = 0
       let len = this.c_devoluciones[i].filtrado
       for(let n=0;n<len.length;n++){
         y++;
-        if(this.c_devoluciones[i].filtrado[n].material == id){
+        // console.log(this.c_devoluciones[i].filtrado[n].material.grupo)
+        if(this.c_devoluciones[i].filtrado[n].material.grupo === '63625feecd436f1a90a1ea7d'){
+          if(this.c_devoluciones[i].filtrado[n].material.nombre === nombre){
+            data = data + this.c_devoluciones[i].filtrado[n].cantidad;
+          }
+        }else if(this.c_devoluciones[i].filtrado[n].material.grupo === '61fd7a8ed9115415a4416f74' || this.c_devoluciones[i].filtrado[n].material.grupo === '61fd6300d9115415a4416f60'){
+          // console.log(this.c_devoluciones[i].filtrado[n].material)
+          if(this.c_devoluciones[i].filtrado[n].material.nombre === nombre){
+            data = data + this.c_devoluciones[i].filtrado[n].cantidad;
+          }
+        }else if(this.c_devoluciones[i].filtrado[n].material._id == id){
           data = data + this.c_devoluciones[i].filtrado[n].cantidad;
           // console.log(this.c_devoluciones[i].filtrado[n])
         }
@@ -43,7 +58,7 @@ export class ConsumoComponent implements OnInit {
           if(data > 0){
             return data.toFixed(2);
           }else{
-            return data
+            return data.toFixed(2)
           }
         }
       }

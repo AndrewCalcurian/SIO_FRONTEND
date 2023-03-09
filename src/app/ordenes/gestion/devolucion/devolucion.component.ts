@@ -46,6 +46,7 @@ export class DevolucionComponent implements OnInit {
   seleccionarMateriales(){
     let orden_ = (<HTMLInputElement>document.getElementById('ordens')).value
     this.materiales = this.devoluciones.filter(devoluciones => devoluciones.orden === orden_);
+    console.log(this.materiales)
     for(let i=0;i<this.materiales.length;i++){
       this.materiales[i].material.sort(function(a, b) {
         if(a.material.nombre.toLowerCase() < b.material.nombre.toLowerCase()) return -1
@@ -84,21 +85,52 @@ export class DevolucionComponent implements OnInit {
       orden,
       filtrado,
       motivo:motivo.value,
+      id,
       usuario:`${this.usuario.Nombre} ${this.usuario.Apellido}`
+    }
+
+
+    let lote = this.devoluciones.find(x=> x._id == data.id)
+
+    
+    
+    
+    for(let iter=0;iter<data.filtrado.length;iter++){
+      
+      let material = data.filtrado[iter].material
+      let _lote = data.filtrado[iter].lote
+      let _codigo = data.filtrado[iter].codigo
+
+
+      let comparativa = lote.material.findIndex(x=> x.material._id == material && x.lote == _lote && x.codigo == _codigo);
+      
+    
+      console.log(data.filtrado[iter].cantidad,'>',lote.material[comparativa].cantidad)
+
+      if(data.filtrado[iter].cantidad > Number(lote.material[comparativa].cantidad)){
+        Swal.fire({
+          title:'Error',
+          text:'La cantidad de material devuelto no puede ser mayor a la asignada',
+          icon:'error',
+          showConfirmButton:false
+        })
+
+        return
+      }
     }
 
     this.api.postDevolucion(data)
       .subscribe((resp:any)=>{
-        Swal.fire({
-          title:'Devolución',
-          text: 'Se realizó la devolución de materiales',
-          icon:'success',
-          timer:3000,
-          showConfirmButton:false
-        }),
-        (<HTMLInputElement>document.getElementById('ordens')).value = "·"
-        this.onClose();
-      })
+       Swal.fire({
+        title:'Devolución',
+        text: 'Se realizó la devolución de materiales',
+        icon:'success',
+        timer:3000,
+        showConfirmButton:false
+    }),
+    (<HTMLInputElement>document.getElementById('ordens')).value = "·"
+    this.onClose();
+    })
 
   }
 

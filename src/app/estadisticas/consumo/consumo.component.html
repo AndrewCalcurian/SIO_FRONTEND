@@ -11,7 +11,7 @@
                 </tr>
                 <tr *ngFor="let material of lote_mayor">
                     <ng-container *ngIf="material.ancho">
-                        <td>{{material.nombre}} {{material.ancho}} x {{material.largo}} ({{material.marca}})</td>
+                        <td>{{material.nombre}} {{material.ancho}} x {{material.largo}} ({{material.marca}})  - cal:{{material.calibre}}</td>
                     </ng-container>
                     <ng-container *ngIf="!material.ancho">
                         <td>{{material.nombre}} ({{material.marca}})</td>
@@ -24,9 +24,9 @@
                         <ng-container *ngIf="material.cantidad != 0">
                         </ng-container> -->
                     </td>
-                    <td>{{devoluciones_(material.id,material.op)}}</td>
+                    <td>{{devoluciones_(material.nombre,material.id,material.op)}}</td>
                     <td>
-                        {{(material.cantidad - devoluciones_(material.id,material.op)).toFixed(2)}}
+                        {{Formatear(material.cantidad,(devoluciones_(material.nombre,material.id,material.op)))}}
                     </td>
                 </tr>
             </table>

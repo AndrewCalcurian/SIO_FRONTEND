@@ -603,6 +603,7 @@ export class MainComponent implements OnInit {
         })
         // // console.log(this.Almacenado)
         // this.listFiltered = this.Almacenado
+        this.filterList();
         this.totalizar_materiales();
       })
   }
@@ -733,6 +734,7 @@ export class MainComponent implements OnInit {
     this.api.getAlmacen()
       .subscribe((resp:any) => {
         this.ALMACEN = resp.materiales;
+        this.filterList();
         this.totalizar_materiales()
         this.loading = false;
       })
