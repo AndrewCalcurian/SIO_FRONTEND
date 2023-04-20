@@ -215,9 +215,9 @@ export class RestApiService {
     }).pipe(
       tap( (resp:any) =>{
 
-        const {estado,_id ,Nombre ,Apellido, Correo ,Departamento, Role,Nueva_orden,Consulta,Almacen,Maquinaria, Planificacion,Gestiones,Despacho } = resp.usuario;
+        const {estado,_id ,Nombre ,Apellido, Correo ,Departamento, Role,Nueva_orden,Consulta,Almacen,Maquinaria, Planificacion,Gestiones,Despacho,Estadisticas } = resp.usuario;
 
-        this.usuario = new Usuario(estado, _id, Nombre, Apellido, Correo, Departamento,Role,Nueva_orden, Consulta, Almacen,Maquinaria,Planificacion,Gestiones,Despacho);
+        this.usuario = new Usuario(estado, _id, Nombre, Apellido, Correo, Departamento,Role,Nueva_orden, Consulta, Almacen,Maquinaria,Planificacion,Gestiones,Despacho,Estadisticas);
         localStorage.setItem('token', resp.token);
         localStorage.setItem('menu', JSON.stringify( resp.menu) );
       }),
@@ -436,6 +436,74 @@ export class RestApiService {
   EstadisticasOrden(data){
     const url = `${this.api_url}/estadisticas/ordens`
     return this.http.post(url,data)
+  }
+
+  putCliente(data, id){
+    const url = `${this.api_url}/cliente/${id}`
+    return this.http.put(url,data)
+  }
+
+  putOrden(data, id){
+    const url = `${this.api_url}/orden/${id}`
+    return this.http.put(url,data)
+  }
+
+  getOrdenesTodas(){
+    const url = `${this.api_url}/orden-todo`
+    return this.http.get(url)
+  }
+  putBobinas(id,data){
+
+    delete data._id
+
+    const url = `${this.api_url}/sustrato/${id}`
+    return this.http.put(url,data)
+  }
+
+
+  getOrdensByCliente(cliente){
+    const url = `${this.api_url}/orden-cliente/${cliente}`
+    return this.http.get(url)
+  }
+
+  getDespachosbyOrden(orden){
+    const url = `${this.api_url}/despachos-pendientes/${orden}`
+    return this.http.get(url)
+  }
+
+  postEscala(data){
+    const url = `${this.api_url}/cotizacion/intervalo`
+    return this.http.post(url,data)
+  }
+
+  getEscala(producto){
+    const url = `${this.api_url}/cotizacion/intervalo/${producto}`
+    return this.http.get(url)
+  }
+
+  DeleteEscala(id){
+    const url = `${this.api_url}/cotizacion/intervalo/${id}`
+    return this.http.delete(url)
+  }
+
+  GetOneEscala(producto,cantidad){
+    const url = `${this.api_url}/cotizacion/intervalo/producto/${producto}`
+    return this.http.post(url,cantidad)
+  }
+  GetEscalaByCliente(cliente){
+    const url = `${this.api_url}/cotizacion/intervalo-todos/${cliente}`
+    return this.http.get(url)
+  }
+
+  putIntervalo(data){
+    const url = `${this.api_url}/cotizacion/intervalos`
+    return this.http.put(url, data)
+  }
+
+
+  getDespachosYOrdenes(){
+    const url = `${this.api_url}/despachos/pre-facturacion`
+    return this.http.get(url)
   }
 
 

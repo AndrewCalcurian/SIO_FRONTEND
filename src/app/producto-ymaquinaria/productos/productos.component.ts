@@ -85,7 +85,10 @@ export class ProductosComponent implements OnInit {
   ClienteForm:FormGroup = this.fb.group({
     nombre:['',Validators.required],
     codigo:['',Validators.required],
-    almacenes:['', Validators.required]
+    rif:['J-',Validators.required],
+    direccion:['',Validators.required],
+    almacenes:['', Validators.required],
+    contactos:['',Validators.required]
   })
 
   constructor(private api:RestApiService,
@@ -126,6 +129,21 @@ export class ProductosComponent implements OnInit {
     document.getElementsByClassName('file-name')[0].innerHTML = this.ImgSubir.name;
   }
 
+  public contactos = []
+  public contactoInput:boolean = false;
+  agregarContactoNuevo(a,b,c,d){
+    this.contactoInput = true;
+    this.contactos.push({nombre:a,cargo:b,email:c,trato:d});
+    (<HTMLInputElement>document.getElementById('Nombre_cn')).value = '';
+    (<HTMLInputElement>document.getElementById('Cargo_cn')).value = '';
+    (<HTMLInputElement>document.getElementById('Email_cn')).value = '';
+    return
+  }
+
+  contact_delete(i){
+    this.contactos.splice(i,1)
+  }
+
   subirImagen(){
     this.cargando = true;
     this.subirArchivo.actualizarFoto(this.ImgSubir, 'producto', this.OneProduct._id )
@@ -141,10 +159,12 @@ export class ProductosComponent implements OnInit {
       });
   }
 
+  public item_Selected = null
   producto_seleccionado(e){
     if(e === 0){
       this._producto_seleccionado = false;
     }else{
+      this.item_Selected = e
       this._producto_seleccionado = true;
       if(this.product_selected == 'Sustrato'){
         this._producto_seleccionado = false;
@@ -158,10 +178,11 @@ export class ProductosComponent implements OnInit {
 
   selecciona_producto(e){
     let clase = this.i_montajes.toString()
-    if(e == 0){
+    if(e === "#"){
       (<HTMLInputElement>document.getElementById(clase)).disabled = true;
     }else{
       (<HTMLInputElement>document.getElementById(clase)).disabled = false;
+      // alert(clase)
       this.product_selected = e;
       if(this.product_selected != 'Sustrato'){
         this.MATERIALES = [...this.MATERIALES.reduce((map, obj) => map.set(obj.nombre, obj), new Map()).values()];
@@ -304,9 +325,44 @@ just_a_sec(e){
       })
   }
 
+  public Nombre_contact:boolean = false;
+  nombre_cont(e){
+    if(e === ''){
+      this.Nombre_contact = false
+    }
+    else{
+      this.Nombre_contact = true
+    }
+  }
+
+  public enable_contact:boolean = false
+  email_cont(e){
+    if(e === ''){
+      this.enable_contact = false
+    }
+    else{
+      this.enable_contact = true
+    }
+  }
+
+  public Cargo_contact:boolean = false
+  cargo_cont(e){
+    if(e === ''){
+      this.Cargo_contact = false
+    }else{
+      this.Cargo_contact = true
+    }
+  }
+
   addCliente(){
 
+    if(this.contactoInput){
+      this.contactoInput = false;
+      return
+    }
+
     this.ClienteForm.get('almacenes').setValue(this.almacenes)
+    this.ClienteForm.get('contactos').setValue(this.contactos)
 
     if(this.ClienteForm.invalid) {
       Swal.fire({
@@ -326,6 +382,7 @@ just_a_sec(e){
           this.ClienteForm.reset();
           this.NUEVO_CLIENTE = false;
           this.almacenes = []
+          this.contactos = []
           Swal.fire({
             title:'Excelente!',
             text:'Se registro nuevo cliente',
@@ -465,7 +522,45 @@ just_a_sec(e){
 
   }
 
+  public Edit_cliente:boolean = false;
+  public cliente_selected
+  Modal_Edit_cliente(){
+    if(this.Edit_cliente){
+      this.Edit_cliente = false
+    }else{
+      this.Edit_cliente = true
+    }
+  }
+
+  ElminarAlmacen(i){
+    this.cliente_selected.almacenes.splice(i,1)
+    console.log(this.cliente_selected)
+    // delete(this.cliente_selected.almacenes[i])
+    var x = document.getElementById(i)
+    x.style.display = "none";  
+    (<HTMLInputElement>document.getElementById(i)).disabled;
+    document.getElementById(i).addEventListener('change', (event) => {
+      (<HTMLInputElement>document.getElementById(i)).disabled;
+    })
+  }
+
+  AgregarAlmacen(almacen){
+    this.cliente_selected.almacenes.push(almacen)
+  }
+
+  Editar_Cliente(){
+    this.api.putCliente(this.cliente_selected, this.cliente_selected._id)
+      .subscribe((resp:any)=>{
+        Swal.fire({
+          title:'Editado',
+          text:'Se realizó la actualización de información de este cliente',
+          icon:'success',
+          showConfirmButton:false
+        })
+      })
+  }
   
+  public edicion:boolean = false
   buscar_producto(e){
     this.api.getById(e)
       .subscribe((resp:any)=>{
@@ -475,8 +570,13 @@ just_a_sec(e){
 
       if(e == ""){
         (<HTMLInputElement>document.getElementById('NP_button')).disabled = true;
+        this.edicion = false
       }else{
         (<HTMLInputElement>document.getElementById('NP_button')).disabled = false;
+        console.log(e)
+        this.cliente_selected = this.CLIENTES.find(x=> x._id === e)
+        console.log( this.cliente_selected)
+        this.edicion = true
       }
   }
 
@@ -604,17 +704,36 @@ add_materia3(producto, cantidad){
 
   // this.verProducto(producto)
 }
+
+eliminarContacto(i){
+  this.cliente_selected.contactos.splice(i,1)
+}
+
+
+AgregarContacto(a,b,c,d){
+
+  this.cliente_selected.contactos.push({nombre:a,
+    cargo:b,
+    email:c,
+    trato:d });
+
+  (<HTMLInputElement>document.getElementById('Name_c')).value = '';
+  (<HTMLInputElement>document.getElementById('Cargo_c')).value = '';
+  (<HTMLInputElement>document.getElementById('Email_c')).value = '';
   
-add_materia(producto, cantidad){
+}
+  
+add_materia(producto, cantidad, id){
+
+
+  console.log(this.item_Selected)
 
     let i = this.i_montajes.toString();
 
-    producto = (<HTMLInputElement>document.getElementById(i)).value
+    // producto = (<HTMLInputElement>document.getElementById(producto)).value
     cantidad = (<HTMLInputElement>document.getElementById(`cantidad${this.i_montajes}`)).value
 
-    let Material = this.MATERIALES.find(x => x._id === producto);
-
-    // console.log(Material, '--' )
+    let Material = this.MATERIALES.find(x => x._id === this.item_Selected);
 
     let size = cantidad
     let name = Material.nombre
@@ -630,17 +749,19 @@ add_materia(producto, cantidad){
     let productos = {
       material:name,
       marca:Material.marca,
-      producto:producto,
+      producto:this.item_Selected,
       cantidad: size
     }
 
+    
     // console.log(productos);
     if(!this.MATERIALES_NECESARIOS[this.i_montajes])
     { 
       this.MATERIALES_NECESARIOS[this.i_montajes] = []
     }
-
+    
     this.MATERIALES_NECESARIOS[this.i_montajes].push(productos)
+    console.log(this.MATERIALES_NECESARIOS[this.i_montajes])
     // console.log(this.MATERIALES_NECESARIOS, 'this')
     // this.MATERIALES_NECESARIOS.push(productos);
 
@@ -666,9 +787,9 @@ add_materia(producto, cantidad){
 
         let deleted = this.MATERIALES_NECESARIOS[this.i_montajes].findIndex(x => x.material == material2)
 
-        // console.log(deleted)
+        console.log(this.MATERIALES_NECESARIOS)
 
-        this.MATERIALES_NECESARIOS.splice(deleted, 1);
+        this.MATERIALES_NECESARIOS[this.i_montajes].splice(deleted, 1);
   }
   Delete_Material2(material2){
 
@@ -735,7 +856,6 @@ add_materia(producto, cantidad){
       this.EDITAR_PRODUCTO = false
     }else{
       this.EDITAR_PRODUCTO = true
-      this.EDITAR_PRODUCTO = false
       if(this.OneProduct.materiales[this.i_montajes_].length > 0){
         this.EDITAR_PRODUCTO = true
       }

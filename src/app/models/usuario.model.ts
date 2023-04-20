@@ -16,5 +16,6 @@ export class Usuario {
         public Planificacion:Number,
         public Gestiones:Number,
         public Despacho:Number,
+        public Estadisticas:Number
     ) {}
 }

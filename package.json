@@ -24,6 +24,7 @@
     "babel-preset-es2015": "^6.24.1",
     "bulma": "^0.9.3",
     "chart.js": "^3.9.1",
+    "consulta-dolar-venezuela": "^1.0.4",
     "exceljs": "^4.3.0",
     "moment": "^2.29.1",
     "ng2-charts": "^4.1.1",

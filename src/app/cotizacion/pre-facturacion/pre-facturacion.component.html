@@ -1,0 +1,189 @@
+<div class="containe">
+    <div class="titulo">
+        Pre-facturación
+    </div>
+
+    <div class="card">
+        <div class="card-content">
+            <div class="subtitulo">
+                Despachos pendientes:
+            </div>
+            <hr>
+            <table class="table is-fullwidth is-bordered" *ngFor="let despacho of Despachos;index as i">
+                <thead>
+                    <tr>
+                        <td class="is-selected" colspan="2">
+                            <b>Fecha: </b>{{despacho.fecha}}
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>OP</th>
+                        <th>Cliente</th>
+                        <th>Producto</th>
+                        <th>OC</th>
+                        <th>Cantidad</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>{{despacho.orden.sort}}</td>
+                        <td>{{despacho.orden.cliente.nombre}}</td>
+                        <td>{{despacho.despacho.producto}}</td>
+                        <td>{{despacho.orden.orden}}</td>
+                        <td>{{despacho.despacho.cantidad}}</td>
+                        <td>
+                            <button class="button is-info is-small" (click)="ValidarDatos(i)">
+                            <div class="icon">
+                                <i class="far fa-calendar-check"></i>
+                            </div>
+                            <span>
+                                Validar Datos
+                            </span>
+                            </button>
+                    </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+
+
+<!-- MODAL DE VALIDACION DE DATOS -->
+<div class="modal" [ngClass]="{'is-active':Validacion}">
+    <div class="modal-background" (click)="closeModal()"></div>
+    <div class="modal-card">
+        <div class="modal-card-body">
+            <span class="subtitulo_">
+                Validación de datos
+            </span>
+            <hr>
+            <div class="columns">
+                <div class="column is-three-quarters">
+                    <span>
+                        <b>Cliente: </b>{{Despachos[INDEX].orden.cliente.nombre}}
+                    </span><br>
+                    <span>
+                        <b>Producto: </b>{{Despachos[INDEX].despacho.producto}}
+                    </span><br>
+                    <span>
+                        <b>OC: </b>{{Despachos[INDEX].orden.orden}}  
+                        <div class="field has-addons">
+                            <div class="control">
+                                <b>Cantidad en OC: </b> 
+                              <input class="input is-small corto" type="text" disabled id="Cantidad_en_OC" (change)="buscarEscala(Despachos[INDEX].orden.cantidad)" [(ngModel)]="Despachos[INDEX].orden.cantidad">
+                            </div>
+                            <div class="control">
+                              <a class="button is-success is-small" (click)="Editar_Cantidad_en_OC()">
+                                <i class="fas fa-edit"></i>
+                              </a>
+                            </div>
+                        </div>
+                    </span><br>
+                    <span>
+                        <div class="field has-addons">
+                            <div class="control">
+                              <b>Cantidad despachada: </b> 
+                              <input class="input is-small corto" type="text" disabled id="Cantidad_Despachada" [(ngModel)]="Despachos[INDEX].despacho.cantidad">
+                            </div>
+                            <div class="control">
+                              <a class="button is-success is-small" (click)="Editar_Cantidad_despachada()">
+                                <i class="fas fa-edit"></i>
+                              </a>
+                            </div>
+                        </div>
+                    </span>
+                </div>
+                <div class="column">
+                    <span class="subtitulo_">
+                        <b>OP: </b>{{Despachos[INDEX].despacho.op}}
+                    </span>
+                </div>
+            </div>
+
+            <hr>
+
+            <table class="table is-fullwidth">
+                <thead>
+                    <tr>
+                        <th>Tabla</th>
+                        <th>Escala (Und)</th>
+                        <th>Precio (USD)</th>
+                        <th>Tasa BCV</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>1</td>
+                        <td>{{puntoYcoma(Escala.cantidad)}} <a (click)="modificarModal('escala')"><i class="fas fa-edit" style="color: #48c78e;"></i></a></td>
+                        <td>{{puntoYcoma(Escala.precio)}} <a (click)="modificarModal('precio')"><i class="fas fa-edit" style="color: #48c78e;"></i></a></td>
+                        <td>{{Tasa}} <a href="https://www.bcv.org.ve/" target="_blank"><i class="fas fa-globe"></i></a></td>
+                        <td>
+                            <button class="button is-small is-info">
+                                <div class="icon">
+                                    <i class="fas fa-eye"></i>
+                                </div>
+                                <span>Ver Resumen</span>
+                            </button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+            <hr>
+            <b>Resumen:</b><br>
+            {{Despachos[INDEX].despacho.producto}} <br>
+            <b>Precio por millar (USD): {{puntoYcoma(Despachos[INDEX].despacho.cantidad / 1000 * Escala.precio)}} </b><br>
+            <b>Precio por millar (Bs): {{puntoYcoma((Despachos[INDEX].despacho.cantidad / 1000 * Escala.precio)*Tasa)}}</b><br>
+
+            <br>
+            <button class="button is-success" (click)="descargarPDF()">
+                <div class="icon">
+                    <i class="fas fa-download"></i>
+                </div>
+                <span>
+                    Descargar
+                </span>
+            </button>
+
+        </div>
+    </div>
+</div>
+
+
+<!-- modal modificaciones pequeñas -->
+<div class="modal" [ngClass]="{'is-active':Modificacion}">
+    <div class="modal-background" (click)="Modificacion_close()"></div>
+    <div class="modal-card">
+        <div class="modal-card-body modificacion">
+            <div class="escala" *ngIf="ModificaciondeEscala">
+                <span>
+                    <span class="subtitulo_">
+                        Escala Nueva
+                    </span><br>
+                    <div class="select is-small">
+                        <select #escalanueva placeholder="Seleccionar nueva escala">
+                            <option value="">Nueva escala</option>
+                            <option value="{{escala.cantidad}}" *ngFor="let escala of this.Despachos[this.INDEX].escala.escalas">{{puntoYcoma(escala.cantidad)}}</option>
+                        </select>
+                    </div>
+                </span><br><br>
+                <button class="button is-success is-small" (click)="buscarEscala_(escalanueva.value)">
+                    Confirmar
+                </button> 
+                <button class="button is-danger is-small" (click)="Modificacion_close()">
+                    Cancelar
+                </button>
+            </div>
+
+
+            <div class="escala" *ngIf="ModificaciondePrecio">
+                <span class="subtitulo_">
+                    Precio (USD)
+                </span><br>
+                <input type='number' class="input is-small" [(ngModel)]="Escala.precio">
+            </div>
+
+        </div>
+    </div>
+</div>

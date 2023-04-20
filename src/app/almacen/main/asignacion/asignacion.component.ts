@@ -205,10 +205,19 @@ export class AsignacionComponent implements OnInit {
 
     _cantidad = Number(_cantidad).toFixed(2)
 
+    console.log(cantidad)
+
+
     // alert(_cantidad)
 
-
     let unidad_necesaria:any = _cantidad / (EnAlmacen.material.neto + this.Descuentos(material));
+    if(grupo === 'Barniz' || grupo === 'Barniz Acuoso'){
+      unidad_necesaria = _cantidad - this.Descuentos(material)
+    }
+    console.log(_cantidad)
+    console.log(EnAlmacen.material.neto)
+    console.log(this.Descuentos(material))
+    console.log(unidad_necesaria)
     // // console.log(_cantidad,'-',EnAlmacen.material.neto)
 
     // // console.log( unidad_necesaria )
@@ -329,7 +338,7 @@ export class AsignacionComponent implements OnInit {
       //   this.LOTES.push({lote,codigo,resta:resto,i,almacenado,restante:restante,solicitado,unidad,cantidad,material})
       }
 
-      // // console.log(this.LOTES)
+      console.log(this.LOTES)
 
   }
 
@@ -417,7 +426,6 @@ export class AsignacionComponent implements OnInit {
     }
 
     // // console.log('data lotes',data.lotes)
-
     // alert('asignado')
     this.api.realizarDescuentoAlmacen(data)
      .subscribe(resp=> {

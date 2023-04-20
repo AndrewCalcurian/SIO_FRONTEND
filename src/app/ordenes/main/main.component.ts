@@ -40,6 +40,7 @@ export class MainComponent implements OnInit {
     this.api.getOrden()
       .subscribe((resp:any)=>{
         this.ORDENES = resp;
+        this.ORDENES = this.ORDENES.reverse();
       })
   }
 

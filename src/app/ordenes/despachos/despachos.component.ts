@@ -120,7 +120,7 @@ export class DespachosComponent implements OnInit {
             this.dated = false;
             this.Ordenes_seleccionadas = [];
             this.onClose();
-            Swal.fire('Generado!', '', 'success')
+            Swal.fire({title:'Generado!', text:'', icon:'success',showConfirmButton:false,})
           })
       } else if (result.isDenied) {
         Swal.fire({

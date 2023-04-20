@@ -5,6 +5,7 @@ import { RestApiService } from '../services/rest-api.service';
 import { PdfMakeWrapper, Txt, Img, Table, Cell, Columns, Stack } from 'pdfmake-wrapper';
 import * as pdfFonts from "pdfmake/build/vfs_fonts";
 import * as moment from 'moment';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-orden',
@@ -21,9 +22,11 @@ export class OrdenComponent implements OnInit {
   public necesidad;
   public demasia;
   public cantidad;
+  public usuario;
 
   constructor(private route:ActivatedRoute,
               private api:RestApiService) { 
+    this.usuario = api.usuario
     this.id = this.route.snapshot.paramMap.get('id');
   }
 
@@ -45,7 +48,51 @@ export class OrdenComponent implements OnInit {
         // this.PRODUCTO.demasia = this.PRODUCTO.producto.ejemplares[this.PRODUCTO.montaje]
         // console.log(this.PRODUCTO, 'este es el Producto');
         this.loading = false;
+        console.log(this.PRODUCTO)
       })
+  }
+
+  cancelarOrden(){
+    Swal.fire({
+      icon:'info',
+      title: `¿Cancelar Orden ${this.PRODUCTO.sort}?` ,
+      text:'Describe brevemente el motivo',
+      input: 'textarea',
+      inputAttributes: {
+        autocapitalize: 'off'
+      },
+      showCancelButton: true,
+      confirmButtonText: 'Cancelar orden',
+      cancelButtonText:'No cancelar',
+      showLoaderOnConfirm: true,
+      cancelButtonColor:'#f14668',
+      confirmButtonColor:'#48c78e',
+      preConfirm: (login) => {
+        return fetch(`//localhost:8080/api/orden/cancelar/${this.PRODUCTO._id}/${login}`)
+          .then(response => {
+            if (!response.ok) {
+              console.log(response)
+              throw new Error('Debes indicar un motivo')
+            }
+            return response.json()
+          })
+          .catch(error => {
+            Swal.showValidationMessage(
+              `No se pudo cancelar: ${error}`
+            )
+          })
+      },
+      allowOutsideClick: () => !Swal.isLoading()
+    }).then((result) => {
+      if (result.isConfirmed) {
+        Swal.fire({
+          title: `${result.value}`,
+          text:`La orden ${this.PRODUCTO.sort} fué cancelada`,
+          icon:'success',
+          showConfirmButton:false
+        })
+      }
+    })
   }
 
   getMaquinas(orden){
@@ -54,6 +101,22 @@ export class OrdenComponent implements OnInit {
         this.Maquinas = resp;
       })
 
+  }
+
+  FinalizarEdicion(){
+    this.api.putOrden(this.PRODUCTO, this.PRODUCTO._id)
+      .subscribe((resp:any)=>{
+        this.EditarOrden()
+      })
+  }
+
+  public edicion:boolean = false;
+  EditarOrden(){
+    if(!this.edicion){
+      this.edicion = true;
+    }else{
+      this.edicion = false
+    }
   }
 
   NumToLet(n){

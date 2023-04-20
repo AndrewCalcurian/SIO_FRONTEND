@@ -53,11 +53,91 @@ export class MainComponent implements OnInit {
   public Cajas_loading:boolean = true;
   public Pega_loading:boolean = true;
 
+  public modal_despacho:boolean = false;
+
+  goto(id){
+    this.router.navigateByUrl(`orden-produccion/${id}`)
+  }
+
   rolltoorders(){
     document.getElementById('orders').scrollIntoView();
   }
 
+  public despachos_filtrado = []
+  public despachos_orden;
+  public Ej_montados;
+  despachos_porcentaje(op,montaje){
+    this.Ej_montados = montaje;
+    this.consumos('0',op)
+    this.modal_consumos = false;
+    this.modal_despacho = true;
+    this.api.GetDespachoByOrden(op)
+      .subscribe((resp:any)=>{
+        this.despachos_filtrado = resp;
+        this.despachos_orden = op
+        console.log(this.despachos_filtrado)
+      })
+  }
+
+  Devolucion_Barniz:number = 0;
+  sumarDescuentos(descuento){
+    this.Devolucion_Barniz = Number(this.Devolucion_Barniz) + Number(descuento);
+  }
+
+  public Producto_select;
+  Producto_Selected(e){
+    if(e === '#'){
+      this.Producto_select = undefined
+    }else{
+      this.api.getOneById(e)
+        .subscribe((resp:any)=>{
+          this.Producto_select = resp.producto.producto
+          return
+        })
+    }
+    console.log(this.Producto_select)
+  }
+
+  descuento(grupo,Nombre,Marca){
+    if(grupo === 'Barniz'){
+      let descuento = this.data.Barniz.Devolucion_Barniz.find(x=> x.Nombre === Nombre && x.Marca === Marca)
+      if(!descuento){
+        return 0
+      }
+      return descuento.Cantidad
+    }
+    if(grupo === 'Pega'){
+      let descuento = this.data.Pega.Devolucion_Pega.find(x=> x.Nombre === Nombre && x.Marca === Marca)
+      if(!descuento){
+        return 0
+      }
+      return descuento.Cantidad
+    }
+    if(grupo === 'Caja'){
+      let descuento = this.data.Caja.Devolucion_Caja.find(x=> x.Nombre === Nombre)
+      if(!descuento){
+        return 0
+      }
+      return descuento.Cantidad
+    }
+
+  }
+
+  restar__(nombre,marca,cantidad){
+    let descuento = this.data.devoluciones_totales.find(x=> x.Nombre === nombre && x.Marca === marca)
+    if(descuento){
+      let salida = cantidad - descuento.Cantidad
+      return salida.toFixed(2)
+    }else{
+      return cantidad.toFixed(2)
+    }
+  }
+
   puntoYcoma(n){
+    if(!n){
+      return 0
+    }
+    n = Number(n).toFixed(2)
     return n = new Intl.NumberFormat('de-DE').format(n)
   }
 
@@ -69,7 +149,7 @@ export class MainComponent implements OnInit {
 
     for(let i=0;i<pega.length;i++){
       labels.push(pega[i].Nombre)
-      cantidades.push(pega[i].Cantidad)
+      cantidades.push(pega[i].Cantidad-this.descuento('Pega',pega[i].Nombre,pega[i].Marca))
     }
     if(this.Pega_chart){
       this.Pega_chart.destroy();
@@ -102,7 +182,7 @@ export class MainComponent implements OnInit {
 
     for(let i=0;i<this.data.Caja.Caja.length;i++){
       cajas.push(this.data.Caja.Caja[i].Nombre)
-      cantidad.push(this.data.Caja.Caja[i].Cantidad)
+      cantidad.push(this.data.Caja.Caja[i].Cantidad-this.descuento('Caja',this.data.Caja.Caja[i].Nombre,0))
     }
 
     if(this.Caja_chart){
@@ -184,7 +264,7 @@ export class MainComponent implements OnInit {
         labels:['Barniz S/Impresión','Barniz acuoso'],
         datasets: [{
           label: 'Sustrato consumido',
-          data: [this.data.Barniz.Total_Barniz,this.data.Barniz.Total_barniz_acuoso],
+          data: [this.data.Barniz.Total_Barniz-this.data.Barniz.Devolucion_Total_barniz,this.data.Barniz.Total_barniz_acuoso*0.868],
           backgroundColor: [
             'rgb(255, 99, 132,0.2)',
             'rgb(54, 162, 235,0.2)',
@@ -654,6 +734,7 @@ export class MainComponent implements OnInit {
     }
 
     if(this.clientes_form){
+      console.log(desde,'/',hasta)
       let data;
       let cliente = (<HTMLInputElement>document.getElementById('cliente_select')).value
       if(cliente === '#'){
@@ -668,11 +749,20 @@ export class MainComponent implements OnInit {
         const client = {cliente}
         let producto = (<HTMLInputElement>document.getElementById('producto_select')).value
         if(producto != "#"){
-          data = {cliente:client,producto}
+          if(desde && hasta){
+            data = {cliente:client,producto:this.Producto_select,desde,hasta}
+          }else{
+            data = {cliente:client,producto:this.Producto_select}
+          }
         }else{
-          data = {cliente:client}
-        }
+          if(desde && hasta){
+            data = {cliente:client,desde,hasta}
 
+          }else{
+
+            data = {cliente:client}
+          }
+        }
         // TEST
         this.api.EstadisticasOrden(data)
         .subscribe((resp:any)=>{

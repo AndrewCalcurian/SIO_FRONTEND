@@ -357,6 +357,7 @@ export class GestionComponent implements OnInit {
           icon:'info',
           title:'Se realizó un retraso en la planificación',
           text:'se agregó 1 dia mas a esta gestión y a todas las ordenes que utilicen estos mismos equipos',
+          showConfirmButton:false,
         });
         this.TRABAJOS = [];
         this.Tarea();
@@ -379,6 +380,7 @@ export class GestionComponent implements OnInit {
       Swal.fire({
         icon:'error',
         text:'Esta gestión termina hoy',
+        showConfirmButton:false,
       });
       return
     }
@@ -397,6 +399,7 @@ export class GestionComponent implements OnInit {
           icon:'success',
           title:'Fue adelantada la planificación',
           text:'se adelantó 1 dia mas a esta gestión y a todas las ordenes que utilizen estos mismos equipos',
+          showConfirmButton:false,
         });
         this.TRABAJOS = [];
         this.Tarea();

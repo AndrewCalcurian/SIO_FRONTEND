@@ -9,13 +9,14 @@ import { RouterModule } from '@angular/router';
 import { GestionesComponent } from './gestiones/gestiones.component';
 import { ConsumoComponent } from './consumo/consumo.component';
 import { AdicionalesComponent } from './adicionales/adicionales.component';
+import { DespachosComponent } from './despachos/despachos.component';
 
 
 
 
 
 @NgModule({
-  declarations: [MainComponent,EstadisticasComponent, GestionesComponent, ConsumoComponent, AdicionalesComponent],
+  declarations: [MainComponent,EstadisticasComponent, GestionesComponent, ConsumoComponent, AdicionalesComponent, DespachosComponent],
   imports: [
     SharedModule,
     CommonModule,

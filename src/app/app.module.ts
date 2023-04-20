@@ -27,6 +27,7 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { FormsModule } from '@angular/forms';
 import { UnicosPipe } from './pipe/unicos.pipe';
 import { BarChartComponent } from './bar-chart/bar-chart.component';
+import { CotizacionModule } from './cotizacion/cotizacion.module';
 registerLocaleData(localeES, 'es')
 
 @NgModule({
@@ -55,6 +56,7 @@ registerLocaleData(localeES, 'es')
     ProductoYMaquinariaModule,
     AlmacenModule,
     OrdenesModule,
+    CotizacionModule,
     ReactiveFormsModule,
     FormsModule
   ],

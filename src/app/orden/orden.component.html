@@ -13,6 +13,12 @@
     
     <div class="card" *ngIf='!loading'>
         <div class="card-content">
+            <ng-container *ngIf="usuario.Role === 'ADMIN'">
+                <button class="button is-small is-danger" (click)="cancelarOrden()" *ngIf="usuario.Role === 'ADMIN'">Cancelar Orden</button> 
+                <button class="button is-small is-success" (click)="EditarOrden()" *ngIf="!edicion && usuario.Role === 'ADMIN'">Editar Orden</button>
+                <button class="button is-small is-success" (click)="FinalizarEdicion()" *ngIf="edicion">Finalizar</button>  <br><br>
+            </ng-container>
+
             <div class="columns">
                 <div class="column is-3">
                     <table class="table is-bordered is-fullwidth">
@@ -24,11 +30,20 @@
                         <tbody>
                             <tr>
                                 <td>Nº</td>
-                                <td>{{PRODUCTO.orden}}</td>
+                                <td *ngIf="!edicion">
+                                    {{PRODUCTO.orden}}
+                                </td>
+                                <td *ngIf="edicion">
+                                    <input type="text" class="input" [(ngModel)]="PRODUCTO.orden">
+                                </td>
                             </tr>
                             <tr>
                                 <td>Fecha de OC:.</td>
-                                <td>{{PRODUCTO.fecha_o | date: 'dd/MM/yyyy': 'UTC'}}</td>
+                                <td *ngIf="!edicion">{{PRODUCTO.fecha_o | date: 'dd/MM/yyyy': 'UTC'}}
+                                </td>
+                                <td *ngIf="edicion">
+                                    <input type="date" class="input" [(ngModel)]="PRODUCTO.fecha_o">
+                                </td>
                                 <!-- <td>{{PRODUCTO.fecha_o | date: 'dd/MM/yyyy'}}</td> -->
                             </tr>
                         </tbody>
@@ -114,8 +129,24 @@
                         <td>1</td>
                         <td>{{cantidad}}</td>
                         <!-- <td>{{PRODUCTO.fecha_s}}</td> -->
-                        <td>{{PRODUCTO.fecha_s | date:'dd/MM/yyyy': 'UTC'}}</td> 
-                        <td>{{PRODUCTO.almacen}}</td>
+                        <td *ngIf="!edicion">
+                            {{PRODUCTO.fecha_s | date:'dd/MM/yyyy': 'UTC'}}
+                        </td>
+                        <td *ngIf="edicion">
+                            <div class="columns">
+                                <div class="column is-7">
+                                    <input type="date" class="input" [(ngModel)]="PRODUCTO.fecha_s" width="150px">
+                                </div>
+                            </div>
+                        </td> 
+                        <td *ngIf="!edicion">
+                            {{PRODUCTO.almacen}}
+                        </td>
+                        <td *ngIf="edicion">
+                            <select class="select" [(ngModel)]="PRODUCTO.almacen">
+                                <option value="{{almacen}}" *ngFor="let almacen of PRODUCTO.cliente.almacenes">{{almacen}}</option>
+                            </select>
+                        </td>
                     </tr>
                     <tr>
                         <th>TOTAL</th>
@@ -245,7 +276,19 @@
                                                     </ng-container>
                                                     <tr>
                                                         <th>TAMAÑO DE SUSTRATO A IMPRIMIR (cm)</th>
-                                                        <td>{{PRODUCTO.i_ancho}} x {{PRODUCTO.i_largo}}</td>
+                                                        <td *ngIf="!edicion">
+                                                            {{PRODUCTO.i_ancho}} x {{PRODUCTO.i_largo}}
+                                                        </td>
+                                                        <td *ngIf="edicion">
+                                                            <div class="columns">
+                                                                <div class="column is-6">
+                                                                    <input type="Number" class="input" [(ngModel)]="PRODUCTO.i_ancho">
+                                                                </div>
+                                                                <div class="column is-6">
+                                                                    <input type="Number" class="input" [(ngModel)]="PRODUCTO.i_largo">
+                                                                </div>
+                                                            </div>
+                                                        </td>
                                                     </tr>
                                                 </table>
                                             </div>
@@ -307,8 +350,12 @@
                                             </tr>
                                             <tr>
                                                 <th>ESTÁNDAR DE COLORES:</th>
-                                                <td *ngIf="PRODUCTO.e_c === true">Si</td>
-                                                <td *ngIf="PRODUCTO.e_c != true">No</td>
+                                                <td *ngIf="PRODUCTO.e_c === true && !edicion">Si</td>
+                                                <td *ngIf="PRODUCTO.e_c != true && !edicion">No</td>
+                                                <td *ngIf="edicion"><select class="select" [(ngModel)]="PRODUCTO.e_c">
+                                                    <option value="true">Si</option>
+                                                    <option value="false">No</option>
+                                                </select></td>
                                             <tr>
                                         </table>
                                     </td>
@@ -622,11 +669,14 @@
                                 <th colspan="2">ELABORADO POR</th>
                             </tr>
                             <tr>
-                                <td colspan="6">
+                                <td colspan="6" *ngIf="!edicion">
                                 {{this.PRODUCTO.observacion}}
                                     <br>
                                     <br>
                                     <br>
+                                </td> 
+                                <td colspan="6" *ngIf="edicion">
+                                    <textarea cols="30" rows="3" class="textarea" [(ngModel)]="this.PRODUCTO.observacion"></textarea>
                                 </td>
                                 <td colspan="2">
                                     Firma:
@@ -640,7 +690,13 @@
                 </tr>
             </table>
             <hr>
-            <button class="button is-primary" (click)='descargarPDF()'>Descargar</button>
+            <button class="button is-success" (click)='descargarPDF()'>
+                <span class="icon">
+                    <i class="fas fa-download"></i>
+                </span>
+                <span>Descargar</span>
+              </button>
+            <!-- <button class="button is-primary" (click)='descargarPDF()'>Descargar</button> -->
         </div>
     </div>
 </div>

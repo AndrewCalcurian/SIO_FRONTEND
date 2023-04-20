@@ -1,37 +1,24 @@
 import { Component, OnInit } from '@angular/core';
+import { RestApiService } from 'src/app/services/rest-api.service';
 import Swal from 'sweetalert2';
-import { RestApiService } from '../services/rest-api.service';
-import { PdfMakeWrapper, Txt, Img, Table, Cell, Columns, Stack } from 'pdfmake-wrapper';
-
-import * as pdfFonts from "pdfmake/build/vfs_fonts";
-import * as moment from 'moment';
-
-// const consultaDolar = require('consulta-dolar-venezuela');
 
 @Component({
-  selector: 'app-bar-chart',
-  templateUrl: './bar-chart.component.html',
-  styleUrls: ['./bar-chart.component.css']
+  selector: 'app-gestion',
+  templateUrl: './gestion.component.html',
+  styleUrls: ['./gestion.component.css']
 })
-export class BarChartComponent implements OnInit {
+export class GestionComponent implements OnInit {
+
 
   constructor(private api:RestApiService) { }
-
-
+  
   public escalas = false;
-
-
   public clientes = []
   public carga_clientes:boolean = true
 
   public nueva_columna_:boolean = false;
 
-
   ngOnInit(): void {
-
-
-    // consultaDolar.$monitor().then($=>{console.log($)})
-
     this.api.GetClientes()
       .subscribe((resp:any)=>{
         this.clientes = resp.clientes
@@ -244,7 +231,7 @@ export class BarChartComponent implements OnInit {
 
   public escala = []
   nueva_escala(a,b){
-    this.escala.push({cantidad:a,precio:b})
+    this.escala.push({cantidad:Number(a),precio:Number(b)})
   }
 
   public agregar:boolean = true;
@@ -421,22 +408,4 @@ export class BarChartComponent implements OnInit {
     return n = new Intl.NumberFormat('de-DE').format(n)
   }
 
-  generarPDF(){
-    const pdf = new PdfMakeWrapper();
-    PdfMakeWrapper.setFonts(pdfFonts);
-
-    let fecha = moment().format('lll')
-    console.log(fecha)
-    
-    async function generarPDF_(){
-      pdf.add(
-        await new Img('../../assets/poli_cintillo.png').width(120).margin([20, 5]).build()
-      )
-      pdf.create().download(`test`)
-    }
-    generarPDF_()
-  }
-
-
 }
-

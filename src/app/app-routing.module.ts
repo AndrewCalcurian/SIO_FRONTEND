@@ -6,6 +6,7 @@ import { RouterModule, Routes } from '@angular/router';
 import { OrdenComponent } from './orden/orden.component';
 import { PlanificacionComponent } from './planificacion/planificacion.component';
 import { LoginComponent } from './login/login.component';
+import { BarChartComponent} from './bar-chart/bar-chart.component';
 import { AuthGuard } from './Auth/auth-guard.guard';
 
 const routes: Routes = [
@@ -45,9 +46,18 @@ const routes: Routes = [
     loadChildren: ()=> import('./estadisticas/estadisticas.module').then(m=>m.EstadisticasModule)
   },
   {
+    path: 'precios',
+    canActivate: [AuthGuard],
+    loadChildren: ()=> import('./cotizacion/cotizacion.module').then(m=>m.CotizacionModule)
+  },
+  {
     path: 'planificacion',
     canActivate: [AuthGuard],
     component:PlanificacionComponent
+  },
+  {
+    path: 'pruebas',
+    component:BarChartComponent
   },
   {
     path: 'login',

@@ -101,6 +101,7 @@ export class SolcitudComponent implements OnInit {
       this.Otro = false;
       if(Orden_seleccionada){
         this.materiales = Orden_seleccionada.producto.materiales[Orden_seleccionada.montaje]
+        console.log(this.materiales,'este')
         this.materiales.sort(function(a, b) {
           if(a.material.nombre.toLowerCase() < b.material.nombre.toLowerCase()) return -1
           if(a.material.nombre.toLowerCase() > b.material.nombre.toLowerCase()) return 1

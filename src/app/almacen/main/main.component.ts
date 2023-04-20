@@ -94,6 +94,7 @@ export class MainComponent implements OnInit {
   codigo = '';
   lote = '';
   cantidad = '';
+  pedido = '';
 
   public New_color:boolean = false;
   public caja_:boolean = false;
@@ -750,12 +751,65 @@ export class MainComponent implements OnInit {
     }
   }
 
+  public ButtonsEdit:boolean = false;
+  public Bobina_index = null;
+  EditarBobina(i,n){
+    this.Bobina_index = i;
+    this.ButtonsEdit = true
+    document.getElementById(`${i}${n}1`).style.display = 'block'
+    document.getElementById(`${i}${n}2`).style.display = 'block'
+    document.getElementById(`${i}${n}3`).style.display = 'block'
+    document.getElementById(`${i}${n}4`).style.display = 'block'
+    document.getElementById(`${i}${n}5`).style.display = 'block'
+    document.getElementById(`${i}${n}6`).style.display = 'block'
+
+    document.getElementById(`1${i}${n}`).style.display = 'none'
+    document.getElementById(`2${i}${n}`).style.display = 'none'
+    document.getElementById(`3${i}${n}`).style.display = 'none'
+    document.getElementById(`4${i}${n}`).style.display = 'none'
+    document.getElementById(`5${i}${n}`).style.display = 'none'
+    document.getElementById(`6${i}${n}`).style.display = 'none'
+
+  }
+
+  DoneEdit(i,n){
+    this.Bobina_index = null;
+    this.ButtonsEdit = false;
+    document.getElementById(`${i}${n}1`).style.display = 'none'
+    document.getElementById(`${i}${n}2`).style.display = 'none'
+    document.getElementById(`${i}${n}3`).style.display = 'none'
+    document.getElementById(`${i}${n}4`).style.display = 'none'
+    document.getElementById(`${i}${n}5`).style.display = 'none'
+    document.getElementById(`${i}${n}6`).style.display = 'none'
+
+    document.getElementById(`1${i}${n}`).style.display = 'block'
+    document.getElementById(`2${i}${n}`).style.display = 'block'
+    document.getElementById(`3${i}${n}`).style.display = 'block'
+    document.getElementById(`4${i}${n}`).style.display = 'block'
+    document.getElementById(`5${i}${n}`).style.display = 'block'
+    document.getElementById(`6${i}${n}`).style.display = 'block'
+
+    console.log(this.BOBINAS_[i]._id,'/',this.BOBINAS_[i])
+
+    this.api.putBobinas(this.BOBINAS_[i]._id, this.BOBINAS_[i])
+      .subscribe((resp:any)=>{
+        Swal.fire({
+          title:'Editado',
+          text:'Bobina editada correctamente',
+          icon:'success',
+          showConfirmButton:false
+        })
+      })
+
+  }
+
   almacenar(producto){
     let data = {
       material:producto.value,
       codigo:this.codigo,
       lote:this.lote,
-      cantidad:this.cantidad
+      cantidad:this.cantidad,
+      pedido:this.pedido
     }
 
     this.api.postAlmacenado(data)
@@ -774,6 +828,14 @@ export class MainComponent implements OnInit {
         this.lote = '';
         this.cantidad ='';
         (<HTMLInputElement>document.getElementById('Nuevoproducto')).value = "0";
+      }, err =>{
+        Swal.fire({
+          position:'center',
+          icon:'error',
+          title:'Lote y código ya existe',
+          text:'Este N° de Lote, junto a este código ya se encuentra registrado en Sio. Es necesario que cada producto almacenado sea único en el sistema.',
+          showConfirmButton: false,
+        })
       })
   }
 

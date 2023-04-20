@@ -41,8 +41,11 @@
         <div class="column" *ngIf="usuario.Planificacion === 0">
             <img src="../../../assets/BANNER-PLANIFICACION-BN.png" alt="">
         </div>
-        <div class="column">
+        <div class="column" *ngIf="usuario.Estadisticas === 0">
             <img src="../../../assets/BANNER-ESTADISTICAS-BN.png" alt="">
+        </div>
+        <div class="column" *ngIf="usuario.Estadisticas === 1">
+            <img src="../../../assets/BANNER-ESTADISTICAS.png" routerLink="/estadisticas">
         </div>
     </div>
 </div>

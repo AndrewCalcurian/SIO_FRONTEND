@@ -30,7 +30,7 @@
     font-weight: bold;
 }
 
-.icon{
+/* .icon{
     color: rgb(196, 194, 194);
     display: block;
     float: right;
@@ -38,7 +38,7 @@
 .icon:hover{
     cursor: pointer;
     color: gray;
-}
+} */
 
 img{
     width: 500px;

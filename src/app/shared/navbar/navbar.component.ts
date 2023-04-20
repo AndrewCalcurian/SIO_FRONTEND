@@ -47,7 +47,8 @@ export class NavbarComponent implements OnInit {
         Swal.fire({
           title:'Contraseña Cambiada',
           text:'Se realizó el cambio de contraseña',
-          icon:'success'
+          icon:'success',
+          showConfirmButton:false,
         })
         this.pass1 = ''
         this.pass2 = ''

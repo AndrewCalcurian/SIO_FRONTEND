@@ -11,6 +11,15 @@
 (onCloseModal)="modal_consumos = false">
 </app-consumo>
 
+<app-despachos
+[modal_despacho]="modal_despacho"
+[despachos_filtrado]="despachos_filtrado"
+[despachos_orden]="despachos_orden"
+[lote_mayor] = "lote_mayor"
+[Ej_montados]="Ej_montados"
+(onCloseModal)="modal_despacho = false">
+</app-despachos>
+
 <button class="ordenes_button" *ngIf="!vacio && !cargando && !sinBusqueda">
     <button class="is-primary button" (click)="rolltoorders()">
         Ordenes
@@ -31,6 +40,7 @@
                                 <option value="fecha">Por fecha</option>
                                 <option value="cliente">Por cliente</option>
                                 <option value="orden">Por orden de producción</option>
+                                <option value="maquina">Por Maquina</option>
                                 <!-- <option value="oCompra">Por orden de compra</option> -->
                             </select>
                         </span>
@@ -49,7 +59,7 @@
                 <div class="column is-2" *ngIf="producto_form">
                     <div class="control">
                         <span class="select is-small">
-                            <select id="producto_select">
+                            <select id="producto_select" (change)="Producto_Selected($event.target.value)">
                                 <option value="#">Todos los productos</option>
                                 <option value="{{producto._id}}" *ngFor="let producto of Productos_by_client.productos">{{producto.producto}}</option>
                             </select>
@@ -100,6 +110,33 @@
     <!-- *******************************************************************************
     ORDENES ENCONTRADAS EN LA FECHA ESTIMADA
     ******************************************************************** -->
+    <div class="card">
+        <div class="card-content">
+            <div class="carga" *ngIf="sinBusqueda">
+                No se ha realizado ninguna consulta aun
+                <i class="far fa-clock"></i>
+            </div>
+            <div class="carga_" *ngIf="cargando">
+                <div class="loader">
+                    <span style="--i:2"></span>
+                    <span style="--i:3"></span>
+                    <span style="--i:1"></span>
+                    <span style="--i:4"></span>
+                    <span style="--i:5"></span>
+                    <span style="--i:6"></span>
+                    <span style="--i:7"></span>
+                    <span style="--i:8"></span>
+                    <span style="--i:9"></span>
+                    <span style="--i:10"></span>
+                </div>
+                <span class="text">Cargando, esto puede tomar un tiempo.</span>
+            </div>
+            <div class="empty" *ngIf="vacio">
+                No hay ordenes en la fecha indicada 
+                <i class="fas fa-folder-open"></i>
+            </div>
+        </div>
+    </div>
     <div class="columns">
         <div class="column">
             <div class="card">
@@ -359,6 +396,7 @@
                                     <th>Barniz S/Impresión</th>
                                     <th>Asignado</th>
                                     <th>Devuelto</th>
+                                    <th>Total</th>
                                 </tr>
                                 <tr *ngFor="let Barniz of data.Barniz.Barniz">
                                     <td>
@@ -368,13 +406,18 @@
                                         {{puntoYcoma(Barniz.Cantidad)}}kg.
                                     </td>
                                     <td>
-                                        <!-- {{devuelto__(Barniz.Nombre,Barniz.Marca)}} -->
+                                        {{puntoYcoma(descuento('Barniz',Barniz.Nombre,Barniz.Marca))}}
+                                    </td>
+                                    <td>
+                                        {{(Barniz.Cantidad - descuento('Barniz',Barniz.Nombre,Barniz.Marca)).toFixed(2)}}
+                                        <!-- {{restar__(Barniz.Nombre,Barniz.Marca,Barniz.Cantidad)}}kg. -->
                                     </td>
                                 </tr>
                                 <tr>
                                     <th>Barniz Acuoso</th>
                                     <th>Asignado</th>
                                     <th>Devuelto</th>
+                                    <th>Total</th>
                                 </tr>
                                 <tr *ngFor="let Barniz of data.Barniz.Barniz_acuoso">
                                     <td>
@@ -382,6 +425,13 @@
                                     </td>
                                     <td>
                                         {{puntoYcoma(Barniz.Cantidad)}}L.
+                                    </td>
+                                    <td>
+                                        0,00L
+                                    </td>
+                                    <td>
+                                        {{puntoYcoma(Barniz.Cantidad)}}L.
+                                        <!-- {{restar__(Barniz.Nombre,Barniz.Marca,Barniz.Cantidad)}}L. -->
                                     </td>
                                 </tr>
                             </table>
@@ -404,8 +454,8 @@
                                     <th>Barniz Acuoso</th>   
                                 </tr>
                                 <tr>
-                                    <th class="xlarge">{{puntoYcoma(data.Barniz.Total_Barniz)}}kg.</th>
-                                    <th class="xlarge">{{puntoYcoma(data.Barniz.Total_barniz_acuoso)}}L.</th>
+                                    <th class="xlarge">{{puntoYcoma(data.Barniz.Total_Barniz-data.Barniz.Devolucion_Total_barniz)}}kg.</th>
+                                    <th class="xlarge">{{puntoYcoma(data.Barniz.Total_barniz_acuoso)}}L. / {{puntoYcoma(data.Barniz.Total_barniz_acuoso * 0.868)}}kg</th>
                                 </tr>
                             </table>
                         </div>
@@ -435,13 +485,27 @@
                                     <th colspan="11" class="is-selected titulo_sustrato">Cajas</th>
                                 </tr>
                                 <tr>
+                                    <th></th>
                                     <ng-container *ngFor="let cajas of data.Caja.Caja">
                                         <td class="titulo_sustrato">{{cajas.Nombre}}</td>
                                     </ng-container>
                                 </tr>
                                 <tr>
+                                    <th>Asignado</th>
                                     <ng-container *ngFor="let cajas of data.Caja.Caja">
                                         <th class="titulo_sustrato">{{puntoYcoma(cajas.Cantidad)}}</th>
+                                    </ng-container>
+                                </tr>
+                                <tr>
+                                    <th>Devuelto</th>
+                                    <ng-container *ngFor="let cajas of data.Caja.Caja">
+                                        <th class="titulo_sustrato">{{puntoYcoma(descuento('Caja',cajas.Nombre,0))}}</th>
+                                    </ng-container>
+                                </tr>
+                                <tr>   
+                                    <th>Total</th>
+                                    <ng-container *ngFor="let cajas of data.Caja.Caja">
+                                        <th class="titulo_sustrato">{{puntoYcoma(cajas.Cantidad-descuento('Caja',cajas.Nombre,0))}}</th>
                                     </ng-container>
                                 </tr>
                             </table>
@@ -468,13 +532,25 @@
                                 <i class="fas fa-tint"></i> Pega
                             </div>
                             <table class="table is-fullwidth" *ngIf="detalles_pega">
+                                <tr>
+                                    <th>Pega</th>
+                                    <th>Asignado</th>
+                                    <th>Devuelto</th>
+                                    <th>Total</th>
+                                </tr>
                                 <tr *ngFor="let Pega of data.Pega.Pega">
                                     <td>
                                         {{Pega.Nombre}}({{Pega.Marca}})
                                     </td>
-                                    <td>
+                                    <th>
                                         {{puntoYcoma(Pega.Cantidad)}}L.
-                                    </td>
+                                    </th>
+                                    <th>
+                                        {{descuento('Pega',Pega.Nombre,Pega.Marca)}}
+                                    </th>
+                                    <th>
+                                        {{puntoYcoma(Pega.Cantidad - descuento('Pega',Pega.Nombre,Pega.Marca))}}
+                                    </th>
                                 </tr>
                             </table>
                             <table class="table is-fullwidth" *ngIf="!Pega_loading">
@@ -496,7 +572,7 @@
                                 <tbody>
                                     <tr>
                                         <th class="xlarge">
-                                            {{puntoYcoma(data.Pega.Total_Pega)}}L.
+                                            {{puntoYcoma(data.Pega.Total_Pega-data.Pega.Devolucion_Total_pega)}}L.
                                         </th>
                                     </tr>
                                 </tbody>
@@ -515,42 +591,19 @@
     </div>
     <div class="card">
         <div class="card-content">
-            <div class="carga" *ngIf="sinBusqueda">
-                No se ha realizado ninguna consulta aun
-                <i class="far fa-clock"></i>
-            </div>
-            <div class="carga_" *ngIf="cargando">
-                <div class="loader">
-                    <span style="--i:2"></span>
-                    <span style="--i:3"></span>
-                    <span style="--i:1"></span>
-                    <span style="--i:4"></span>
-                    <span style="--i:5"></span>
-                    <span style="--i:6"></span>
-                    <span style="--i:7"></span>
-                    <span style="--i:8"></span>
-                    <span style="--i:9"></span>
-                    <span style="--i:10"></span>
-                </div>
-                <span class="text">Cargando, esto puede tomar un tiempo.</span>
-            </div>
-            <div class="empty" *ngIf="vacio">
-                No hay ordenes en la fecha indicada 
-                <i class="fas fa-folder-open"></i>
-            </div>
             
             <div class="columns" id="orders">
                 <div class="column">
                     <div class="info" *ngIf="!vacio && !cargando && !sinBusqueda">
-                        <div class="subtitulos">
+                        <div class="subtitulos xlarge">
                             <b>Cantidad de Ordenes:</b> 
-                            <!-- {{Ordenes.length}} -->
+                            {{data.Ordenes.length}}
                         </div>
                         <div class="orden">
                             <table class="table is-fullwidth" *ngFor="let orden of data.Ordenes;let impar = odd;let par = even;" [ngClass]="{impar:impar}">
                                 <tr>
                                     <th colspan="3">
-                                        {{orden.sort}} - {{orden.producto.producto}} <i class="fas fa-question-circle link" (click)="gestiones_(orden._id, orden.sort)"></i> / <i class="fas fa-chart-bar link" (click)="consumos(orden._id, orden.sort)"></i><br>
+                                        {{orden.sort}} - {{orden.producto.producto}} <i class="fas fa-eye link" (click)='goto(orden._id)'></i> / <i class="fas fa-question-circle link" (click)="gestiones_(orden._id, orden.sort)"></i> / <i class="fas fa-chart-bar link" (click)="consumos(orden._id, orden.sort)"></i> / <i class="fas fa-chart-line link" (click)="despachos_porcentaje(orden.sort,orden.producto.ejemplares[orden.montaje])"></i><br>
                                     </th>
                                 </tr>
                                 <!-- <tr> -->
