@@ -137,6 +137,13 @@
             <b>Precio por millar (Bs): {{puntoYcoma((Despachos[INDEX].despacho.cantidad / 1000 * Escala.precio)*Tasa)}}</b><br>
 
             <br>
+            <div class="field">
+                <label for="" class="label">Observación</label>
+                <div class="control">
+                    <textarea class='textarea' id="" [(ngModel)]="Observacion"></textarea>
+                </div>
+            </div>
+            <br>
             <button class="button is-success" (click)="descargarPDF()">
                 <div class="icon">
                     <i class="fas fa-download"></i>

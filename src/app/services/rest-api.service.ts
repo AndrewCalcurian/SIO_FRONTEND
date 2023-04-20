@@ -24,6 +24,14 @@ export class RestApiService {
   get token():string{
     return localStorage.getItem('token') || '';
   }
+  get token_two():string{
+    return localStorage.getItem('token_two') || '';
+  }
+  get headers2(){
+    return {
+      'Authorization':this.token_two
+    }
+  }
   get headers(){
     return {
       'Authorization':this.token
@@ -215,9 +223,9 @@ export class RestApiService {
     }).pipe(
       tap( (resp:any) =>{
 
-        const {estado,_id ,Nombre ,Apellido, Correo ,Departamento, Role,Nueva_orden,Consulta,Almacen,Maquinaria, Planificacion,Gestiones,Despacho,Estadisticas } = resp.usuario;
+        const {estado,_id ,Nombre ,Apellido, Correo ,Departamento, Role,Nueva_orden,Consulta,Almacen,Maquinaria, Planificacion,Gestiones,Despacho,Estadisticas,Precios,pin } = resp.usuario;
 
-        this.usuario = new Usuario(estado, _id, Nombre, Apellido, Correo, Departamento,Role,Nueva_orden, Consulta, Almacen,Maquinaria,Planificacion,Gestiones,Despacho,Estadisticas);
+        this.usuario = new Usuario(estado, _id, Nombre, Apellido, Correo, Departamento,Role,Nueva_orden, Consulta, Almacen,Maquinaria,Planificacion,Gestiones,Despacho,Estadisticas,Precios,pin);
         localStorage.setItem('token', resp.token);
         localStorage.setItem('menu', JSON.stringify( resp.menu) );
       }),
@@ -227,8 +235,22 @@ export class RestApiService {
 
   }
 
+  ValidarVerificacion():Observable<boolean>{
+    return this.http.get(`${this.api_url}/renew2`,{
+      headers:this.headers2
+    }).pipe(
+      tap( (resp:any) =>{
+        localStorage.setItem('token_two', resp.token_two);
+        localStorage.setItem('menu', JSON.stringify( resp.menu) );
+      }),
+      map(resp => true),
+      catchError(error => of(false))
+    )
+  }
+
   logout(){
     localStorage.removeItem('token');
+    localStorage.removeItem('token_two');
     localStorage.removeItem('menu');
     this.router.navigateByUrl('login');
   }
@@ -504,6 +526,16 @@ export class RestApiService {
   getDespachosYOrdenes(){
     const url = `${this.api_url}/despachos/pre-facturacion`
     return this.http.get(url)
+  }
+
+  TwoStepsValidation(pin){
+    const url = `${this.api_url}/validation2steps`
+    return this.http.post(url, pin)
+  }
+
+  crearPin(data){
+    const url = `${this.api_url}/crear-pin`
+    return this.http.post(url, data)
   }
 
 

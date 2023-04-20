@@ -8,6 +8,7 @@ import { PlanificacionComponent } from './planificacion/planificacion.component'
 import { LoginComponent } from './login/login.component';
 import { BarChartComponent} from './bar-chart/bar-chart.component';
 import { AuthGuard } from './Auth/auth-guard.guard';
+import { TokenValidationComponent } from './token-validation/token-validation.component';
 
 const routes: Routes = [
   {
@@ -46,7 +47,7 @@ const routes: Routes = [
     loadChildren: ()=> import('./estadisticas/estadisticas.module').then(m=>m.EstadisticasModule)
   },
   {
-    path: 'precios',
+    path: 'ventas',
     canActivate: [AuthGuard],
     loadChildren: ()=> import('./cotizacion/cotizacion.module').then(m=>m.CotizacionModule)
   },
@@ -62,6 +63,10 @@ const routes: Routes = [
   {
     path: 'login',
     component:LoginComponent
+  },
+  {
+    path: 'verificacion',
+    component:TokenValidationComponent
   }
 
 ]

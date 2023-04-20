@@ -11,10 +11,14 @@ import Swal from 'sweetalert2';
 })
 export class PreFacturacionComponent implements OnInit {
 
-  constructor(private api:RestApiService) { }
+  constructor(private api:RestApiService) {
+    this.usuario = api.usuario
+   }
 
+  public usuario
   public Despachos
   public Tasa
+  public Observacion = ''
   public Validacion:boolean = false
   public Modificacion:boolean = false
   public ModificaciondeEscala:boolean = false
@@ -106,12 +110,20 @@ export class PreFacturacionComponent implements OnInit {
     let direccion = this.Despachos[this.INDEX].orden.cliente.direccion
     let producto = this.Despachos[this.INDEX].orden.producto.producto
     let codigo = this.Despachos[this.INDEX].orden.producto.cod_cliente
+    let observacion = this.Observacion
     let sustrato = ''
     let colores = '0'
+    let usuario = `${this.usuario.Nombre} ${this.usuario.Apellido}`
+    let cargo = this.usuario.Departamento
     let procesos = 'Barnizado'
     let cantidad = this.Despachos[this.INDEX].despacho.cantidad
     cantidad = this.puntoYcoma(cantidad)
-
+    let fecha = new Date();
+    let hoy = fecha.getDate();
+    let dia = fecha.getDate();
+    let mes = fecha.getMonth()+1;
+    let ano = fecha.getFullYear();
+    let firma = `../../assets/firmas/${this.usuario._id}.png`
     let escale
     escale = this.puntoYcoma(this.Escala.cantidad)
     let tasa
@@ -124,12 +136,18 @@ export class PreFacturacionComponent implements OnInit {
     
     let contactos
     let cargos
+    let margin = 0;
 
     for(let i=0;i<this.Despachos[this.INDEX].orden.cliente.contactos.length;i++){
       if(i === 0){
         console.log(this.Despachos[this.INDEX].orden.cliente.contactos[i].trato)
         contactos = `${this.Despachos[this.INDEX].orden.cliente.contactos[i].trato} ${this.Despachos[this.INDEX].orden.cliente.contactos[i].nombre}`
         cargos = `${this.Despachos[this.INDEX].orden.cliente.contactos[i].cargo}`
+      }
+      if(i === 1){
+        margin = -35
+        contactos = contactos + ` \n\n ${this.Despachos[this.INDEX].orden.cliente.contactos[i].trato} ${this.Despachos[this.INDEX].orden.cliente.contactos[i].nombre}`
+        cargos = cargos + ` \n\n\n ${this.Despachos[this.INDEX].orden.cliente.contactos[i].cargo}`
       }
     }
     console.log(this.Despachos[this.INDEX].orden.cliente)
@@ -201,7 +219,7 @@ export class PreFacturacionComponent implements OnInit {
               ],
               [
                 new Cell(new Txt('Fecha').alignment('center').end).end,
-                new Cell(new Txt('17/04/2023').alignment('center').end).end,
+                new Cell(new Txt(`${dia}/${mes}/${ano}`).alignment('center').end).end,
               ],
             ]).widths(['25%','75%']).end).end,
 
@@ -210,7 +228,7 @@ export class PreFacturacionComponent implements OnInit {
       )
 
       pdf.add(
-        pdf.ln(3)
+        pdf.ln(1)
       )
 
       pdf.add(
@@ -260,7 +278,7 @@ export class PreFacturacionComponent implements OnInit {
 
                 ],
                 [
-                  new Cell(new Txt(cargos).italics().fontSize(9).end).end,
+                  new Cell(new Txt(cargos).margin([0,margin]).italics().fontSize(9).end).end,
 
                 ]
               ]).layout('noBorders').end,
@@ -334,13 +352,13 @@ export class PreFacturacionComponent implements OnInit {
             new Cell(new Txt('Observaciones:').bold().end).end,
           ],
           [
-            new Cell(new Txt('"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. ').end).end,
+            new Cell(new Txt(observacion).end).end,
           ]
         ]).layout('noBorders').end
       )
 
       pdf.add(
-        pdf.ln(4)
+        pdf.ln(2)
       )
 
 
@@ -350,19 +368,19 @@ export class PreFacturacionComponent implements OnInit {
             new Cell(new Txt('Emitido por:').bold().end).end,
           ],
           [
-            new Cell(new Txt('Attilio Granone').end).end,
+            new Cell(new Txt(usuario).end).end,
           ],
           [
-            new Cell(new Txt('Director General').italics().fontSize(9).end).end,
+            new Cell(new Txt(cargo).italics().fontSize(9).end).end,
           ],
           [
-            new Cell(new Txt('Firma').end).end,
+            new Cell(await new Img(firma).width(60).build()).end,
           ],
         ]).layout('noBorders').end
       )
 
       pdf.add(
-        pdf.ln(3)
+        pdf.ln(2)
       )
       
       pdf.add(

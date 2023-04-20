@@ -5,6 +5,8 @@ import { CotizacionComponent } from './cotizacion.component';
 import { MainComponent } from './main/main.component';
 import { GestionComponent } from './gestion/gestion.component';
 import { PreFacturacionComponent } from './pre-facturacion/pre-facturacion.component';
+import { TokenValidationComponent } from '../token-validation/token-validation.component';
+import { TwoStep } from '../Auth/twoStep.guard';
 
 const routes: Routes =[
   {
@@ -13,16 +15,23 @@ const routes: Routes =[
     children:[
       {
         path:'',
+        canActivate: [TwoStep],
         component:MainComponent
       },
       {
         path:'gestion',
+        canActivate: [TwoStep],
         component:GestionComponent
       },
       {
         path:'pre-facturacion',
+        canActivate: [TwoStep],
         component:PreFacturacionComponent
-      },]
+      },
+      {
+        path:'verificacion',
+        component:TokenValidationComponent
+      }]
 }]
 
 @NgModule({

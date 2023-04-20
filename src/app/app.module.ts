@@ -28,6 +28,7 @@ import { FormsModule } from '@angular/forms';
 import { UnicosPipe } from './pipe/unicos.pipe';
 import { BarChartComponent } from './bar-chart/bar-chart.component';
 import { CotizacionModule } from './cotizacion/cotizacion.module';
+import { TokenValidationComponent } from './token-validation/token-validation.component';
 registerLocaleData(localeES, 'es')
 
 @NgModule({
