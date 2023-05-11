@@ -19,6 +19,10 @@ const routes: Routes =[
       {
         path:'gestion',
         component:GestionComponent
+      },
+      {
+        path:'etiquetas',
+        component:GestionComponent
       }
       
       ]

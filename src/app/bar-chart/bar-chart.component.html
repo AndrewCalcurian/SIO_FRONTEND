@@ -1,390 +1,130 @@
-<!-- <app-navbar></app-navbar> -->
-
-<div class="container mt-5">
-
-    <div class="modal" [ngClass]="{'is-active':escalas}">
-        <div class="modal-background" (click)="escalas_modal()"></div>
-        <div class="modal-card">
-            <div class="modal-card-body">
-                <div class="carga" *ngIf="cargo_productos">
-                    <span class="cargando">
-                        Cargando por favor espere <i class="fas fa-circle-notch fa-spin fa-xs"></i>
-                    </span>
-                </div>
-                <div class="productos" *ngIf="!cargo_productos">
-                    <table class="table is-fullwidth is-bordered">
-                        <ng-container *ngFor="let producto of productos;index as i">
-                            <tr>
-                                <th class="is-selected">
-                                    {{producto.producto}}
-                                </th>
-                            </tr>
-                            <tr>
-                                <td>
-                                    <p class="buttons">
-                                        <button class="button is-small is-success" (click)="add_escala(i)">
-                                          <span class="icon is-small">
-                                            <i class="fas fa-plus"></i>
-                                          </span>
-                                        </button>
-                                      </p>
-                                    <span id="{{i}}" class="nueva_escala">
-                                        <b>
-                                            Nueva escala 
-                                        </b><br>
-                                        <div class="field-body">
-                                            <div class="field">
-                                                <p class="control is-expanded has-icons-left">
-                                                    <input class="input" type="text" placeholder="Cantidad" #cantidad>
-                                                    <span class="icon is-small is-left">
-                                                        <i class="fas fa-list-ol"></i>
-                                                    </span>
-                                                  </p>
-                                            </div>
-                                            <div class="field">
-                                                <p class="control is-expanded has-icons-left">
-                                                    <input class="input" type="text" placeholder="Precio" #precio>
-                                                    <span class="icon is-small is-left">
-                                                        <i class="fas fa-dollar-sign"></i>
-                                                    </span>
-                                                  </p>
-                                            </div>
-                                            <div class="field">                                                
-                                                <button class="button is-success is-outlined" (click)="NuevoIntervalo(cantidad.value,precio.value,producto._id,i)">
-                                                    <span class="icon">
-                                                        <i class="fas fa-check"></i>
-                                                    </span>
-                                                    <span>Confirmar</span>
-                                                </button>
-                                            </div>
-                                            <div class="field">                                                
-                                                <button class="button is-danger is-outlined" (click)="cancelar_intervalo(i)">
-                                                    <span class="icon">
-                                                        <i class="fas fa-times"></i>
-                                                    </span>
-                                                    <span>Cancelar</span>
-                                                </button>
-                                            </div>
-                                        </div>
-
-                                    </span>
-                                    <table class="table is-fullwidth mt-3" *ngIf="!Nueva_Escala" id="table_{{i}}">
-                                        <tr>
-                                            <ng-container *ngFor="let escala of Escalas;index as i">
-                                                <ng-container *ngIf="escala.producto === producto._id">
-                                                    <th>{{puntoYcoma(escala.cantidad)}}Unds</th>
-                                                    <th>
-                                                        <i class="fas fa-times close" (click)="delete_escala(escala._id)"></i>
-                                                    </th>
-                                                </ng-container>
-                                            </ng-container>
-                                        </tr>
-                                        <tr>
-                                            <ng-container *ngFor="let escala of Escalas">
-                                                <ng-container *ngIf="escala.producto === producto._id">
-                                                    <td colspan="2">{{puntoYcoma(escala.precio)}}$</td>
-                                                </ng-container>
-                                            </ng-container>
-                                        </tr>
-                                    </table>
-                                </td>
-                            </tr>
-                        </ng-container>
-                    </table>
-                </div>
-            </div>
-        </div>
+<!-- <div class="container">
+    <div class="subtitulos">
+        Cotización
     </div>
-
-    <div class="titulo">TITULO</div>
-
-    <!-- <div class="card">
-        <div class="card-content">
-            <progress class="progress is-small is-success" value="0" max="100" id="bar-progress">20%</progress>
-        </div>
-    </div> -->
-    <div class="card mt-5">
-        <div class="card-content">
-            <span class="subtitulos">
-                Gestión de precios
-            </span><br>
-            <div class="carga" *ngIf='carga_clientes'>
-                <i class="fas fa-circle-notch fa-spin fa-xs"></i>
-            </div>
-            <div class="select is-small" *ngIf="!carga_clientes">
-                <select (change)="select_cliente($event.target.value)">
-                  <option value='#'>Clientes</option>
-                  <option value='{{cliente._id}}' *ngFor="let cliente of clientes">{{cliente.nombre}}</option>
-                </select>
-            </div>  
-            <div class="select is-small" *ngIf="!carga_ordenes">
-                <select (change)="select_producto($event.target.value)">
-                    <option value="#">Productos</option>
-                    <option value="all">TODOS</option>
-                    <option value="{{producto._id}}" *ngFor="let producto of productos">{{producto.producto}}</option>
-                </select>
-            </div>  
-            <button class="button is-small is-info" (click)="consultar_precioss()" *ngIf="producto_seleccionado">
-                <span class="icon">
-                    <i class="fas fa-coins"></i>
-                </span>
-                <span>Consulta de precios</span>
-            </button>  
-            <!-- <button class="button is-primary is-small">
-                <span class="icon">
-                    <i class="fas fa-eye"></i>
-                </span>
-                <span>Consultar precios</span>
-            </button> -->
-            <br>
-            <hr>
-            <span class="subtitulos-p" *ngIf="producto_seleccionado">
-                <i class="fas fa-coins"></i> Precios
-            </span><br>
-            <button class="button is-info is-small" (click)="New_table()" *ngIf="producto_seleccionado">
-                <span class="icon">
-                    <i class="fas fa-table"></i>
-                </span>
-                <span>Nueva Tabla</span>
-            </button><br><br>
-            <div class="columns" *ngIf="newTable">
-                <div class="column is-3">
-                    <div class="field">
-                        <label class="label">Descripción:</label>
-                        <div class="control">
-                            {{desc}}
-                        </div>
-                    </div>
-                </div>
-                <div class="column is-1">
-                    <div class="field">
-                        <label class="label">Montaje:</label>
-                        <div class="control">
-                            <div class="select">
-                                <select id="" class="select" (change)="FindDescripcion($event.target.value)" #montaje>
-                                    <option value="#">Montaje</option>
-                                    <option value="{{montaje}}" *ngFor="let montaje of montajes">{{NumToLet(montaje)}}</option>
-                                </select>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="column">
-                    <div class="field">
-                        <label class="label"> </label>
-                        <button class="button is-success" (click)="next('f', montaje.value)">
-                            <span class="icon">
-                                <i class="fas fa-chevron-right"></i>
-                            </span>
-                            <span>Siguiente</span>
-                        </button>
-                    </div>
-                </div>
-            </div>
-
-            <div class="nueva_tabla" *ngIf="Descripcion">
-                <div class="columns">
-                    <div class="column is-2">
-                        <div class="field">
-                            <label class="label">Cantidad:</label>
-                            <div class="control">
-                                <input type="number" id="count" class="input" (keydown)="cantidad($event.target.value)" (change)="cantidad($event.target.value)" #new_cantidad>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="column is-2">
-                        <div class="field">
-                            <label class="label">Precio $:</label>
-                            <div class="control">
-                                <input type="number" id="price" class="input" [disabled]="input_precio" (keydown)="precio($event.target.value)" (change)="precio($event.target.value)" #new_precio>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="column">
-                        <div class="field">
-                            <label class="label"> </label>
-                            <div class="control">
-                                <button class="button is-success" [disabled]="agregar" (click)="nueva_escala(new_cantidad.value, new_precio.value)">
-                                    <span class="icon">
-                                        <i class="fas fa-plus"></i>
-                                    </span>
-                                    <span>Agregar</span>
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <table class="table">
-                    <thead>
-                        <tr>
-                            <th class="is-selected" colspan="{{escala.lenght}}">
-                                {{desc}}
-                            </th>
-                        </tr>
-                        <tr>
-                            <td class="is-selected">Escala</td>
-                            <td *ngFor="let escala of escala;index as i">
-                                {{i+1}}
-                                <a (click)="delete_escalas(i)"><i class="fas fa-trash-alt" style="color: #ff0000;"></i></a>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td class="is-selected">Cantidad</td>
-                            <td *ngFor="let escala of escala;index as i">
-                                {{escala.cantidad}}
-                            </td>
-                        </tr>
-                        <tr>
-                            <td class="is-selected">Precio</td>
-                            <td *ngFor="let escala of escala;index as i">
-                                {{escala.precio}}
-                            </td>
-                        </tr>
-                    </thead>
-                </table>
-                <button class="button is-success is-outlined" (click)="new_escala_vesion()">
-                    <span class="icon">
-                        <i class="fas fa-check"></i>
-                    </span>
-                    <span>Confirmar</span>
-                </button> 
-                <button class="button is-danger is-outlined" (click)="cancelarTabla()">
-                    <span class="icon">
-                        <i class="fas fa-times"></i>
-                    </span>
-                    <span>Cancelar</span>
-                </button>
-            </div>
-
-            <ng-container *ngIf="consulta_precios">
-                <ng-container *ngFor="let intervalo of intervalos;index as n">
-                    <div class="columns" id="nuevaColumna{{n}}" style='display:none'>
-                        <div class="column is-2">
-                            <div class="field">
-                                <label class="label">Cantidad:</label>
-                                <div class="control">
-                                    <input type="number" id="count" class="input" (keydown)="cantidad($event.target.value)" (change)="cantidad($event.target.value)" #new_cantidad>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="column is-2">
-                            <div class="field">
-                                <label class="label">Precio $:</label>
-                                <div class="control">
-                                    <input type="number" id="price" class="input" [disabled]="input_precio" (keydown)="precio($event.target.value)" (change)="precio($event.target.value)" #new_precio>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="column">
-                            <div class="field">
-                                <label class="label"> </label>
-                                <div class="control">
-                                    <button class="button is-success" [disabled]="agregar" (click)="nueva_columna(new_cantidad.value, new_precio.value,n)">
-                                        <span class="icon">
-                                            <i class="fas fa-plus"></i>
-                                        </span>
-                                        <span>Agregar</span>
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <table class="table is-fullwidth is-bordered is-striped">
-                        <thead>
-                            <td class="is-selected" colspan="10"><b>{{intervalo.producto.producto}}</b><br>{{intervalo.descripcion}} </td>
-                        </thead>
-                        <tr>
-                            <th class="is-selected xwidth">Escala <i class="fas fa-caret-right"></i><br>
-                            <a (click)="add_columna(n)"><i class="fas fa-plus-circle" style="color: #b6eba2;"></i></a></th>
-                            <td *ngFor="let escala of intervalo.escalas;index as i">
-                            <div class="columns">
-                                <div class="column number is-3">
-                                    {{i +1}}
-                                </div>
-                                <div class="column is-1">
-                                    <a id="Edit{{i}}" (click)="Edit(i)"><i class="fas fa-edit" style="color: #b6eba2;"></i></a> 
-                                </div>
-                                <div class="column is-1">
-                                    <a id="Confirm{{i}}" (click)="Confirm(i, n)" style="display:none"><i class="fas fa-check" style="color: #b6eba2;"></i></a> 
-                                </div>
-                                <div class="column is-1">
-                                    <a id="Delete{{i}}" (click)="Delete(i, n)"><i class="fas fa-trash-alt" style="color: #ff0000;"></i></a>
-                                </div>
-                            </div>
-                            </td>
-            
-                        </tr>
-                        <tr>
-                            <th class="is-selected">Cantidad (Und) <i class="fas fa-caret-right"></i></th>
-                            <td *ngFor="let escala of intervalo.escalas;index as i">
-                                <span id="cant_{{i}}">
-                                    {{puntoYcoma(escala.cantidad)}} 
-                                </span>
-                                <div class="columns">
-                                    <div class="column is-6">
-                                        <input type="text" class="input" [(ngModel)]="intervalos[n].escalas[i].cantidad" id="Cantidad{{i}}" style="display: none;" width="100px">
-                                    </div>
-                                </div>
-                            </td>
-                        </tr>
-                        <tr>
-                            <th class="is-selected">Precio (USD) <i class="fas fa-caret-right"></i></th>
-                            <td *ngFor="let escala of intervalo.escalas;index as i">
-                                <span id="precio_{{i}}">
-                                    {{puntoYcoma(escala.precio)}}
-                                </span>
-                                <div class="columns">
-                                    <div class="column is-6">
-                                        <input type="text" class="input" [(ngModel)]="intervalos[n].escalas[i].precio" id="Precio{{i}}" style="display: none;" width="100px">
-                                    </div>
-                                </div>
-                            </td>
-                        </tr>
-                    </table>
-                </ng-container>
-            </ng-container>
-
-        </div>
-    </div>
-    <div class="card mt-5">
-        <div class="card-content">
-            <div class="columns">
-                <div class="column is-2 tasa">
-                    Tasa BCV
-                    <input type="Number" class="input" value='24.95'[(ngModel)]="tasa">
-                </div>
-                <div class="column">
-                    Escala para:<br>
-                    {{puntoYcoma(Escala)}}
-                </div>
-            </div>
-            <div class="columns">
-                <div class="column">
-                    <table class="table">
-                        <tr>
-                            <th>Descripción</th>
-                            <th>Bs por millar</th>
-                            <th>US$ por millar</th>
-                        </tr>
-                        <tr>
-                            <td>{{producto_selected}}</td>
-                            <td>{{puntoYcoma((PrecioXunidad*tasa).toFixed(2))}}</td>
-                            <td>{{puntoYcoma(PrecioXunidad)}}</td>
-                        </tr>
-                    </table>
-                </div>
-                <div class="column">
-
-                </div>
-            </div>
-            Verificar tasa del dia en BCV <a href="https://www.bcv.org.ve/" target="_blank">aqui</a><br><br>
-            <button class="button is-success is-small" (click)="generarPDF()">
-                <span class="icon"><i class="fas fa-download"></i></span>
-                <span>Descargar</span>
-            </button>
-        </div>
+    <br>
+    <div class="select is-small">
+        <select name="" id="">
+            <option value="#">Clientes</option>
+            <option value="" *ngFor="let cliente of clientes">{{cliente.nombre}}</option>
+        </select><br>
+        
+        <button class="button">
+            Nuevo Cliente
+        </button><br>
+        <button class="button">
+            Editar Cliente
+        </button>
     </div>
 
 
+</div> -->
+<div class="container_" id="componentID" *ngIf="orden">
+    <div class="header">
+        <table class="datos">
+            <tr>
+                <td class="dato__ Logo-etiquetas" >
+                    <img src="../../assets/Logo-etiquetas.png" alt="" class="dato__">
+                </td>
+                <td class="dato__ qrcode">
+                    <ngx-qrcode 
+                      [elementType]="elementType" 
+                      [value]="value"
+                      [scale]="scale"
+                      [margin]="margin"
+                      cssClass="qrcode"
+                      errorCorrectionLevel="L">
+                    </ngx-qrcode>
+                </td>
+                <td class="dato__ Orden__">
+                    <span class="orden_pro">
+                        ORDEN DE PRODUCCIÓN <br>
+                    </span>
+                    <span class="op">
+                        {{orden.sort}}
+                    </span>
+                </td>
+            </tr>
+        </table>
+        <table>
+            <tr>
+                <td class="item__">
+                    <span class="subtitulo__">  PRODUCTO:</span><br>
+                    <span class="titulo__">  {{orden.producto.producto}}</span>
+                </td>
+            </tr>
+        </table>
+        <table>
+            <tr>
+                <td class="item__ short">
+                    <span class="subtitulo__">  CLIENTE:</span><br>
+                    <span class="titulo__">  {{orden.cliente.nombre}}</span>
+                </td>
+                <td class="shorter">
+                    <span class="subtitulo__">  ORDEN DE COMPRA:</span><br>
+                    <span class="titulo__">  {{orden.orden}}</span>
+                </td>
+            </tr>
+        </table>
+        <table>
+            <tr>
+                <td class="item__ short">
+                    <span class="subtitulo__">  SUSTRATO:</span><br>
+                    <span class="titulo__">  {{sustrato}}</span>
+                </td>
+                <td class="shorter">
+                    <span class="subtitulo__">  CÓD. DEL PRODUCTO:</span><br>
+                    <span class="titulo__">  {{orden.producto.cod_cliente}}</span>
+                </td>
+            </tr>
+        </table>
+        <table>
+            <tr>
+                <td class="shortest">
+                    <span class="subtitulo__">CÓD. ESPECIFICACIÓN:</span><br>
+                    <span class="titulo__ _ml">E-{{orden.cliente.codigo}}-{{orden.producto.codigo}}-{{orden.producto.edicion}}-{{orden.producto.version}}</span>
+                </td>
+                <td class="shortest ml ml__">
+                    <span class="subtitulo__">  FECHA DE FAB:</span><br>
+                    <span class="titulo__ _ml">  {{fecha}}</span>
+                </td>
+                <td class="shortest ml">
+                    <span class="subtitulo__">  FECHA DE ETIQ.:</span><br>
+                    <span class="titulo__ _ml">  {{hoy}}</span>
+                </td>
+                <td class="unidades__">
+                    <span class="unidades">  {{cantidad}}</span><br>
+                    <span class="letter">  unidades</span>
+                </td>
+            </tr>
+            <tr>
+            </tr>
+        </table>
+        <span class="FPR">
+            FPR-018
+        </span>
+        <table>
+            <tr>
+                <td class="mensaje">
+                    <span class="linea1">
+                        Se recomienda el uso de este producto dentro de un lapso no mayor<br>
+                    </span>
+                    <span class="linea2">
+                        a 6 meses. Para más información lea detenidamente nuestra<br>
+                    </span>
+                    <span class="linea2">
+                        “Politica de devoluciones o Reclamos (DDE-005)”
+                    </span>
+                </td>
+            </tr>
+        </table>
+    </div>
 </div>
+
+<button class="button is-success" id='imprimir__' (click)="onPrint()">
+    <span class="icon">
+        <i class="fas fa-print"></i>
+    </span>
+    <span>Imprimir</span>
+  </button>
+

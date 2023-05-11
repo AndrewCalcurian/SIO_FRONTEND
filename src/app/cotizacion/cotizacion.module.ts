@@ -9,18 +9,21 @@ import { GestionComponent } from './gestion/gestion.component';
 import { PreFacturacionComponent } from './pre-facturacion/pre-facturacion.component';
 import { MainComponent } from './main/main.component';
 import { TokenValidationComponent } from '../token-validation/token-validation.component';
+import { EtiquetaComponent } from './etiqueta/etiqueta.component';
+import { NgxQRCodeModule } from '@techiediaries/ngx-qrcode';
 
 
 
 @NgModule({
-  declarations: [CotizacionComponent, GestionComponent, PreFacturacionComponent, MainComponent, TokenValidationComponent],
+  declarations: [CotizacionComponent, GestionComponent, EtiquetaComponent, PreFacturacionComponent, MainComponent, TokenValidationComponent],
   imports: [
     SharedModule,
     CommonModule,
     CotizacionRoutingModule,
     FormsModule,
     ReactiveFormsModule,
-    RouterModule
+    RouterModule,
+    NgxQRCodeModule
   ]
 })
 export class CotizacionModule { }

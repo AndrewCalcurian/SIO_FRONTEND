@@ -31,6 +31,8 @@ import { CotizacionModule } from './cotizacion/cotizacion.module';
 import { TokenValidationComponent } from './token-validation/token-validation.component';
 registerLocaleData(localeES, 'es')
 
+import { NgxQRCodeModule } from '@techiediaries/ngx-qrcode';
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -59,7 +61,8 @@ registerLocaleData(localeES, 'es')
     OrdenesModule,
     CotizacionModule,
     ReactiveFormsModule,
-    FormsModule
+    FormsModule,
+    NgxQRCodeModule
   ],
   providers: [{provide: LOCALE_ID, useValue: 'es'}],
   bootstrap: [AppComponent]

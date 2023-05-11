@@ -213,11 +213,13 @@ export class AsignacionComponent implements OnInit {
     let unidad_necesaria:any = _cantidad / (EnAlmacen.material.neto + this.Descuentos(material));
     if(grupo === 'Barniz' || grupo === 'Barniz Acuoso'){
       unidad_necesaria = _cantidad - this.Descuentos(material)
+    }else if(grupo === 'CINTA DE EMBALAJE' || grupo === 'Cinta de Embalaje'){
+      unidad_necesaria = (_cantidad / EnAlmacen.material.neto) - (this.Descuentos(material)/ EnAlmacen.material.neto)
     }
-    console.log(_cantidad)
-    console.log(EnAlmacen.material.neto)
-    console.log(this.Descuentos(material))
-    console.log(unidad_necesaria)
+    // console.log(_cantidad,'_cantidad')
+    // console.log(EnAlmacen.material.neto,'Neto')
+    // console.log(this.Descuentos(material),'Descuento')
+    // console.log(unidad_necesaria,'Unidad necesaria')
     // // console.log(_cantidad,'-',EnAlmacen.material.neto)
 
     // // console.log( unidad_necesaria )

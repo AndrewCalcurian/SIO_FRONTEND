@@ -132,22 +132,66 @@ export class SolcitudComponent implements OnInit {
 
     requisicion.producto.materiales[0] = this._materiales
 
-    // console.log(requisicion)
+    let aprobado = true
 
-    this.api.postReq(requisicion)
-     .subscribe((resp:any)=>{
-       Swal.fire(
-         {
-           showConfirmButton:false,
-           title:'Hecho!',
-          text:'Se realizó la solicitud correctamente',
-           icon:'success',
-           timer:5000
-         }
-       )
-       this._materiales = []
-       this.onClose()
-     })
+    for(let i=0;i<this._materiales.length;i++){
+      this.api.getAlmacenadoID2(this._materiales[i].producto)
+        .subscribe((resp:any)=>{
+          let cantidad = 0;
+          console.log(resp)
+          for(let i=0;i<resp.length;i++){
+            cantidad = cantidad + Number(resp[i].cantidad)
+          }
+
+          if(cantidad < Number(this._materiales[i].cantidad)){
+            Swal.fire({
+              title:'Cantidad excedida',
+              text:`la cantidad solicitada de ${resp[0].material.nombre} es mayor a la cantidad de producto en el almacen,
+              existe en almacen: ${cantidad.toFixed(2)}`,
+              icon:'warning',
+              showConfirmButton:false
+            })
+            i = 1000
+          }else if(i === this._materiales.length -1){
+            this.api.postReq(requisicion)
+               .subscribe((resp:any)=>{
+                Swal.fire(
+                {
+                  showConfirmButton:false,
+                   title:'Hecho!',
+                  text:'Se realizó la solicitud correctamente',
+                  icon:'success',
+                  timer:5000
+                }
+              )
+              this._materiales = []
+              this.onClose()
+            })
+          }
+        })
+
+        // if(i === this._materiales.length -1){
+        //   if(aprobado){
+        //     this.api.postReq(requisicion)
+        //        .subscribe((resp:any)=>{
+        //         Swal.fire(
+        //         {
+        //           showConfirmButton:false,
+        //            title:'Hecho!',
+        //           text:'Se realizó la solicitud correctamente',
+        //           icon:'success',
+        //           timer:5000
+        //         }
+        //       )
+        //       this._materiales = []
+        //       this.onClose()
+        //     })
+        //   }
+        // }
+    }
+
+
+
 
   }
 
@@ -204,19 +248,68 @@ export class SolcitudComponent implements OnInit {
     }
 
   if(iteration>0){
-    this.api.postReq(requisicion)
-    .subscribe((resp:any)=>{
-      Swal.fire(
-        {
-          showConfirmButton:false,
-          title:'Hecho!',
-          text:'Se realizó la solicitud correctamente',
-          icon:'success',
-          timer:5000
-        }
-      )
-      this.onClose()
-    })
+
+    let materiales_fr =  requisicion.producto.materiales[0];
+
+    //test
+    for(let i=0;i<materiales_fr.length;i++){
+      console.log(materiales_fr[i],'aqui')
+      this.api.getAlmacenadoID2(materiales_fr[i].producto)
+        .subscribe((resp:any)=>{
+          let cantidad = 0;
+          console.log(resp,'HABLAME DE TIII')
+          for(let i=0;i<resp.length;i++){
+            cantidad = cantidad + Number(resp[i].cantidad)
+          }
+
+          if(cantidad < Number(materiales_fr[i].cantidad)){
+            Swal.fire({
+              title:'Cantidad excedida',
+              text:`la cantidad solicitada de ${resp[0].material.nombre} es mayor a la cantidad de producto en el almacen,
+              existe en almacen: ${cantidad.toFixed(2)}`,
+              icon:'warning',
+              showConfirmButton:false
+            })
+            i = 1000
+          }else if(i === materiales_fr.length -1){
+            this.api.postReq(requisicion)
+               .subscribe((resp:any)=>{
+                Swal.fire(
+                {
+                  showConfirmButton:false,
+                   title:'Hecho!',
+                  text:'Se realizó la solicitud correctamente',
+                  icon:'success',
+                  timer:5000
+                }
+              )
+              materiales_fr = []
+              this.onClose()
+            })
+          }
+        })
+
+        // if(i === this._materiales.length -1){
+        //   if(aprobado){
+        //     this.api.postReq(requisicion)
+        //        .subscribe((resp:any)=>{
+        //         Swal.fire(
+        //         {
+        //           showConfirmButton:false,
+        //            title:'Hecho!',
+        //           text:'Se realizó la solicitud correctamente',
+        //           icon:'success',
+        //           timer:5000
+        //         }
+        //       )
+        //       this._materiales = []
+        //       this.onClose()
+        //     })
+        //   }
+        // }
+    }
+
+    //test
     
   }else{
     Swal.fire(

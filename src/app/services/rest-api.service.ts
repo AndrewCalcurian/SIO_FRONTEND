@@ -306,9 +306,20 @@ export class RestApiService {
     return this.http.get(url)
   }
 
+
+  getAlmacenadoID2(id){
+    const url = `${this.api_url}/almacenados/${id}`
+    return this.http.get(url)
+  }
+
   putAlmacenadoID(id,body){
     const url = `${this.api_url}/almacenado/${id}`
     return this.http.put(url,body)
+  }
+
+  getOrdenById2(id){
+    const url = `${this.api_url}/etiquetar/${id}`
+    return this.http.get(url)
   }
 
   getMaterialesID(id){
@@ -537,6 +548,17 @@ export class RestApiService {
     const url = `${this.api_url}/crear-pin`
     return this.http.post(url, data)
   }
+
+  aumentoPre(data){
+    const url = `${this.api_url}/incremento/pre`
+    return this.http.post(url,data)
+  }
+
+  facturado(data){
+    const url = `${this.api_url}/facturado`
+    return this.http.put(url,data)
+  }
+
 
 
 }

@@ -523,6 +523,7 @@ export class MainComponent implements OnInit {
     this.api.getAlmacenadoID(id)
       .subscribe((resp:any)=>{
         this.AlmacenadoId = resp;
+        console.log(this.AlmacenadoId)
         this.selecciona_producto(this.AlmacenadoId.material.grupo.nombre)
         this.codigoID = this.AlmacenadoId.codigo;
         this.loteID = this.AlmacenadoId.lote;

@@ -1,0 +1,13 @@
+<div class="container">
+    <div class="titulo">
+        Etiquetas
+    </div> <br>
+    <div class="select">
+        <select name="" id="" (change)="seleccionar_orden($event.target.value)">
+            <option value="#">Selecciona una orden</option>
+            <option value="{{orden._id}}" *ngFor="let orden of ordenes">{{orden.sort}}</option>
+        </select>
+    </div>
+    <br> <br>
+    <button class="button is-info" *ngIf="valido" (click)="verEtiqueta()">Pre visualizar</button>
+</div>

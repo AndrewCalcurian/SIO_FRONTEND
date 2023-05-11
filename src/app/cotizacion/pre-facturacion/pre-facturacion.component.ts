@@ -23,11 +23,14 @@ export class PreFacturacionComponent implements OnInit {
   public Modificacion:boolean = false
   public ModificaciondeEscala:boolean = false
   public ModificaciondePrecio:boolean = false
+  public resumido:boolean = false
+  public resumen:boolean = true
 
   ngOnInit(): void {
     this.api.getDespachosYOrdenes()
       .subscribe((resp:any)=>{
         this.Despachos = resp.preFacuracion
+        console.log(this.Despachos,'AQUIIIIIIIIIIIIIIIII')
         this.Tasa = resp.MonitorBCV
         let split_dolar = resp.MonitorBCV.split(' ')
         this.Tasa = Number(split_dolar[1])
@@ -49,6 +52,14 @@ export class PreFacturacionComponent implements OnInit {
     this.ModificaciondePrecio = false;
   }
 
+  resumir(){
+    this.resumido = true;
+  }
+
+  habilitarBoton(){
+    this.resumen = false;
+  }
+
   closeModal(){
     this.Validacion = false;
   }
@@ -63,13 +74,22 @@ export class PreFacturacionComponent implements OnInit {
     this.buscarEscala(i)
   }
 
+
   public Escala = {cantidad:0, precio:0};
-  buscarEscala(precio){
-    console.log(precio)
+  buscarEscala(precio,nueva?){
+    console.log(precio,'PRECIOOOO')
     let escalas = this.Despachos[this.INDEX].escala.escalas
+    for(let i=0;i<escalas.length;i++){
+      escalas[i].cantidad = Number(escalas[i].cantidad)
+    }
+    console.log(escalas,'ESCALAAAAAAAAAAAAAAAAAAAS')
     let search = escalas.findLast(x=> x.cantidad <= precio)
-    this.Escala = search
-    console.log(this.Escala)
+    console.log(search,'SEARCH')
+    if(!search && !nueva){
+      console.log('fail')
+      search = escalas[0]
+    }
+    this.Escala = search  
   }
 
   public INDEX = 0;
@@ -94,19 +114,101 @@ export class PreFacturacionComponent implements OnInit {
     }
   }
 
+  public confirmed:boolean = false;
+  confirmar(){
+    this.confirmed = true
+  }
+
+  public tipo_documento = 'F - '
+  editTipo(e){
+    this.tipo_documento = e
+  }
+
+  public n_documento = ''
+  public numero_facturacion:boolean = false;
+  editDocumento(e){
+    this.n_documento = e;
+    if(!e){
+      this.numero_facturacion = false
+    }
+    else{
+      this.numero_facturacion = true
+    }
+  }
+
+  public fecha_facturacion:boolean = false
+  fecha_modificacion(e){
+    if(!e){
+      this.fecha_facturacion = false
+    }else{
+      this.fecha_facturacion = true
+    }
+  }
+
+  confirmar_todo(){
+    Swal.fire({
+      icon:'warning',
+      title: 'Verifique bien los datos',
+      text:`Los datos previamente mostrados, así como, la información suministrada por usted son de vital     importancia.
+      Es necesario su correcta verificación.   Dichos cambios no podrán ser modificados`,
+      showDenyButton: true,
+      showCancelButton: false,
+      confirmButtonText: 'Continuar',
+      denyButtonText: `Ir atrás`,
+      confirmButtonColor:'#48c78e'
+    }).then((result) => {
+      /* Read more about isConfirmed, isDenied below */
+      if (result.isConfirmed) {
+        this.Despachos[this.INDEX].despacho.documento =`${this.tipo_documento}${this.n_documento}`
+        this.n_documento = ''
+        this.tipo_documento = 'F - '
+        this.Facturacion = false;
+        Swal.fire(
+        {title:'Listo.', 
+        text:'Se realizó el registro de facturación correctamente.', 
+        icon:'info',
+        showConfirmButton:false}
+        )
+        this.api.facturado(this.Despachos[this.INDEX].despacho)
+          .subscribe((resp:any)=>{
+            console.log('donde')
+          })
+      } else if (result.isDenied) {
+        Swal.fire({title:'Nada cambió', text:'Ningún cambio fue realizado.', icon:'info',showConfirmButton:false})
+      }
+    })
+  }
+
   puntoYcoma(n){
     if(!n){
       return 0
     }
-    n = Number(n).toFixed(2)
     return n = new Intl.NumberFormat('de-DE').format(n)
+  }
+
+  public Facturacion:boolean = false
+  openFacturacion(i){
+    this.Facturacion = true
+      this.INDEX = i
+      // let busqueda = this.Despachos[this.INDEX].find(x=>x.escala.escalas.cantidad === "100000")
+      this.buscarEscala(this.Despachos[this.INDEX].orden.cantidad)
+  }
+  closeFacturacion(){
+    this.Facturacion = false
   }
 
   descargarPDF(){
 
+    
+    this.Despachos[this.INDEX].despacho.tasa = this.Tasa
+    this.Despachos[this.INDEX].despacho.precio = this.Escala.precio
+    this.Despachos[this.INDEX].despacho.escala = this.Escala.cantidad
+    console.log(this.Despachos[this.INDEX])
+
 
     let cliente = this.Despachos[this.INDEX].orden.cliente.nombre
     let rif = this.Despachos[this.INDEX].orden.cliente.rif
+    let codigo_name = this.Despachos[this.INDEX].orden.cliente.codigo
     let direccion = this.Despachos[this.INDEX].orden.cliente.direccion
     let producto = this.Despachos[this.INDEX].orden.producto.producto
     let codigo = this.Despachos[this.INDEX].orden.producto.cod_cliente
@@ -116,12 +218,25 @@ export class PreFacturacionComponent implements OnInit {
     let usuario = `${this.usuario.Nombre} ${this.usuario.Apellido}`
     let cargo = this.usuario.Departamento
     let procesos = 'Barnizado'
+    for(let n=1;n<this.Despachos[this.INDEX].orden.producto.post.length;n++){
+        let incluye = procesos.includes(this.Despachos[this.INDEX].orden.producto.post[n]);
+        console.log(incluye);
+      if(procesos.includes(this.Despachos[this.INDEX].orden.producto.post[n])){
+        procesos = procesos + `, ${this.Despachos[this.INDEX].orden.producto.post[n]}`;
+      }
+    }
     let cantidad = this.Despachos[this.INDEX].despacho.cantidad
     cantidad = this.puntoYcoma(cantidad)
     let fecha = new Date();
     let hoy = fecha.getDate();
     let dia = fecha.getDate();
+    if(dia < 10){
+      dia = Number(`0${dia}`)
+    }
     let mes = fecha.getMonth()+1;
+    if(mes < 10){
+      mes = Number(`0${mes}`)
+    }
     let ano = fecha.getFullYear();
     let firma = `../../assets/firmas/${this.usuario._id}.png`
     let escale
@@ -129,9 +244,14 @@ export class PreFacturacionComponent implements OnInit {
     let tasa
     tasa = this.puntoYcoma(this.Tasa)
     let precioUSD
-    precioUSD = this.puntoYcoma(this.Despachos[this.INDEX].despacho.cantidad / 1000 * this.Escala.precio)
+    precioUSD = this.puntoYcoma(this.Escala.precio)
     let precioBS
-    precioBS = this.puntoYcoma((this.Despachos[this.INDEX].despacho.cantidad / 1000 * this.Escala.precio)*this.Tasa)
+    precioBS = this.puntoYcoma(this.Escala.precio*this.Tasa)
+    let SubtotalUSD
+    SubtotalUSD = this.puntoYcoma(this.Despachos[this.INDEX].despacho.cantidad / 1000 * this.Despachos[this.INDEX].despacho.precio)
+    let SubtotalBS
+    SubtotalBS = this.puntoYcoma(this.Despachos[this.INDEX].despacho.cantidad / 1000 * this.Despachos[this.INDEX].despacho.precio*this.Despachos[this.INDEX].despacho.tasa)
+    
 
     
     let contactos
@@ -165,6 +285,22 @@ export class PreFacturacionComponent implements OnInit {
         colores = Numer.toString()
       }
     }
+
+    let pre;
+    this.api.aumentoPre(this.Despachos[this.INDEX].despacho)
+      .subscribe((resp:any)=>{
+        pre = resp
+        this.Validacion = false
+        this.resumen = true
+        this.resumido = false
+        generarPDF();
+        // if(pre < 10){
+        //   pre = `000${pre}`
+        // }
+        // if(pre > 10 && pre < 100){
+
+        // }
+      })
 
     const pdf = new PdfMakeWrapper();
     PdfMakeWrapper.setFonts(pdfFonts);
@@ -215,7 +351,7 @@ export class PreFacturacionComponent implements OnInit {
               ],
               [
                 new Cell(new Txt('N°').alignment('center').end).end,
-                new Cell(new Txt('C-23-0001').bold().color('#FF0000').alignment('center').end).end,
+                new Cell(new Txt(`C-23-${pre}`).bold().color('#FF0000').alignment('center').end).end,
               ],
               [
                 new Cell(new Txt('Fecha').alignment('center').end).end,
@@ -238,34 +374,31 @@ export class PreFacturacionComponent implements OnInit {
               new Table([
                 [
                   new Cell(new Txt('Cliente:').bold().end).end,
-                ],
-                [
                   new Cell(new Txt(cliente).end).end,
-
                 ],
                 [
+                  new Cell(new Txt('').end).end,
                   new Cell(new Txt('').end).end,
 
                 ],
                 [
                   new Cell(new Txt('Rif:').bold().end).end,
-                ],
-                [
                   new Cell(new Txt(rif).end).end,
-
                 ],
                 [
+                  new Cell(new Txt('').end).end,
                   new Cell(new Txt('').end).end,
 
                 ],
                 [
-                  new Cell(new Txt('Dirección Fiscal:').bold().end).end,
+                  new Cell(new Txt('Dirección Fiscal:').bold().end).colSpan(2).end,
+                  new Cell(new Txt('').end).end,
                 ],
                 [
-                  new Cell(new Txt(direccion).end).end,
-
+                  new Cell(new Txt(direccion).end).colSpan(2).end,
+                  new Cell(new Txt('').end).end,
                 ]
-              ]).layout('noBorders').end,
+              ]).widths(["15%", "85%"]).layout('noBorders').end,
               
             ).end,
             new Cell(
@@ -326,20 +459,39 @@ export class PreFacturacionComponent implements OnInit {
       pdf.add(
         new Table([
           [
-            new Cell(new Txt('Cantidad:').bold().margin([5,5]).alignment('center').end).fillColor('#dedede').end,
-            new Cell(new Txt('Escala:').bold().margin([5,5]).alignment('center').end).fillColor('#dedede').end,
+            // new Cell(new Txt('Cantidad:').bold().margin([5,5]).alignment('center').end).fillColor('#dedede').end,
+            new Cell(new Txt('Escala:').bold().alignment('center').end).fillColor('#dedede').end,
             new Cell(new Txt('Precio/millar (USD):').bold().alignment('center').end).fillColor('#dedede').end,
             new Cell(new Txt('Tasa de cambio (BCV):').bold().alignment('center').end).fillColor('#dedede').end,
             new Cell(new Txt('Precio/millar (Bs):').bold().alignment('center').end).fillColor('#dedede').end,
           ],
           [
-            new Cell(new Txt(cantidad).alignment('center').end).end,
             new Cell(new Txt(escale).alignment('center').end).end,
             new Cell(new Txt(precioUSD).alignment('center').end).end,
             new Cell(new Txt(tasa).alignment('center').end).end,
             new Cell(new Txt(precioBS).alignment('center').end).end,
           ]
-        ]).widths(['20%','20%','20%','20%','20%']).end
+        ]).widths(['13%','29%','29%','29%',]).end
+      )
+
+      pdf.add(
+        pdf.ln(1)
+      )
+      
+      pdf.add(
+        new Table([
+          [
+            new Cell(new Txt('Cantidad a despachar:').bold().alignment('center').end).fillColor('#dedede').end,
+            new Cell(new Txt('Subtotal USD:').bold().alignment('center').end).fillColor('#dedede').end,
+            new Cell(new Txt('Subtotal Bs:').bold().alignment('center').end).fillColor('#dedede').end,
+          ],
+          [
+            new Cell(new Txt(cantidad).alignment('center').end).end,
+            new Cell(new Txt(SubtotalUSD).alignment('center').end).end,
+            new Cell(new Txt(SubtotalBS).alignment('center').end).end,
+            
+          ]
+        ]).widths(['33%','33%','34%',]).end
       )
 
       pdf.add(
@@ -390,10 +542,8 @@ export class PreFacturacionComponent implements OnInit {
         new Txt('email: info@poligraficaindustrial.com').italics().fontSize(9).alignment('center').end
       )
 
-      pdf.create().download(`test`)
+      pdf.create().download(`${codigo_name}-C-23-${pre}`)
     }
-
-    generarPDF();
   }
 
 

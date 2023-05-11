@@ -7,6 +7,7 @@ import { GestionComponent } from './gestion/gestion.component';
 import { PreFacturacionComponent } from './pre-facturacion/pre-facturacion.component';
 import { TokenValidationComponent } from '../token-validation/token-validation.component';
 import { TwoStep } from '../Auth/twoStep.guard';
+import { EtiquetaComponent } from './etiqueta/etiqueta.component';
 
 const routes: Routes =[
   {
@@ -29,9 +30,14 @@ const routes: Routes =[
         component:PreFacturacionComponent
       },
       {
+        path:'etiqueta',
+        component:EtiquetaComponent
+      },
+      {
         path:'verificacion',
         component:TokenValidationComponent
-      }]
+      }
+    ]
 }]
 
 @NgModule({
