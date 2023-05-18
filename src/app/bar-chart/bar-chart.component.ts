@@ -1,10 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { RestApiService } from '../services/rest-api.service';
 
-
-import { NgxQrcodeElementTypes} from '@techiediaries/ngx-qrcode';
 import { ActivatedRoute } from '@angular/router';
 import * as moment from 'moment';
+
 
 // const consultaDolar = require('consulta-dolar-venezuela');
 
@@ -17,62 +16,123 @@ export class BarChartComponent implements OnInit {
 
   constructor(private api:RestApiService,
     private route:ActivatedRoute) {
-
-    this.id = this.route.snapshot.paramMap.get('id');
    }
-
-
-  public id!:any ;
-  public orden;
-  public fecha;
-  public sustrato;
-  public hoy;
-  public cantidad;
-
-
-
-  elementType = NgxQrcodeElementTypes.CANVAS;
-  margin = 1
-  scale = 2
-  value;
   
   ngOnInit(): void {
-    // consultaDolar.$monitor().then($=>{console.log($)})
-    // console.log('default printer name: ' + (ZebraBrowserPrintWrapper.getAvailablePrinters() || 'is not defined on your computer'));
-    
-    this.api.getOrdenById2(this.id)
-    .subscribe((resp:any)=>{
-      this.orden = resp.ordenes;
-      this.fecha = resp.trabajos;
-      this.hoy = moment.utc().format('DD/MM/yyyy');
-      for(let i=0;i<this.orden.producto.materiales[this.orden.montaje].length;i++){
-        if(this.orden.producto.materiales[this.orden.montaje][i].producto.ancho){
-          this.sustrato = `${this.orden.producto.materiales[this.orden.montaje][i].producto.nombre}, Cal ${this.orden.producto.materiales[this.orden.montaje][i].producto.calibre}, Gramaje ${this.orden.producto.materiales[this.orden.montaje][i].producto.gramaje}`
-        }else if(this.orden.producto.materiales[this.orden.montaje][i].producto.grupo.nombre === 'Cajas Corrugadas'){
-          // console.log(this.orden.producto.materiales[this.orden.montaje][i])
-          this.cantidad = this.orden.producto.materiales[this.orden.montaje][i].cantidad
-        }
-      }
-      this.value = `${this.orden.producto.producto}\nOP: ${this.orden.sort}\nOC: ${this.orden.orden}\n${this.cantidad} Und.`
+    this.obtenerClientes()
+  }
+
+  public CLIENTES = []
+  obtenerClientes(){
+    this.api.GetClientes()
+      .subscribe((resp:any)=>{
+        this.CLIENTES = resp.clientes
       })
   }
 
-  crearqr(){
-    
+
+  public PRODUCTOS = []
+  cliente_selected(e){
+    if(e.target.value != '#')
+    {
+      this.api.getById(e.target.value)
+        .subscribe((resp:any)=>{
+          this.PRODUCTOS = resp.productos;
+          // // console.log(this.PRODUCTOS)
+      })
+    }else{
+      this.PRODUCTOS = []
+    }
+  }
+
+  public PRODUCTO = [];
+  public producto__ = ''
+  producto_selected(e){
+    if(e != '#'){
+      this.PRODUCTO = e
+      let produc = this.PRODUCTOS.find(x=> x._id == e)
+      this.producto__ = produc.producto
+      console.log(produc.producto)
+    }else{
+      this.PRODUCTO = []
+    }
+  }
+
+  public ORDEN_COMPRA = ''
+  OC(e){
+    this.ORDEN_COMPRA = e
+  }
+
+  public Fecha_entrega = ''
+  date_(e){
+    this.Fecha_entrega = e
+  }
+  public _Fecha_entrega = ''
+  date__(e){
+    this._Fecha_entrega = e
+  }
+
+  public Loaded = false
+  datos(){
+    this.Loaded = true
+  }
+
+  public _CANTIDAD = ''
+  NuevaCantidad(e){
+    this._CANTIDAD = e
+  }
+
+  public __Fecha = ''
+  Fecha__(e){
+    this.__Fecha = e
   }
 
 
-  onPrint(){
+  public DATOS = []
+  AgregarNuevo(){
+    this.DATOS.push(
+    {
+     producto:this.PRODUCTO,
+     nombre:this.producto__,
+     cantidad:this._CANTIDAD,
+     fecha:this.__Fecha
+    })
 
-    window.resizeTo(900, 600)
-    var printButton = document.getElementById("imprimir__");
-    //Set the print button visibility to 'hidden'
-    printButton.style.height = '0px';
-    printButton.style.visibility = 'hidden';
-    window.print()
-    printButton.style.visibility = 'visible';
-    printButton.style.height = '40px';
+    this.__Fecha = ''
+    this._CANTIDAD = ''
+    this.PRODUCTO = []
+  }
 
+  Eliminar(i){
+    this.DATOS.splice(i,1)
+  }
+
+  Editar(i){
+    let _i_ = i.toString()
+    document.getElementById(`field_c${_i_}`).style.display = 'block';
+    document.getElementById(`field_f${_i_}`).style.display = 'block';
+    document.getElementById(`dato_c${_i_}`).style.display = 'none';
+    document.getElementById(`dato_f${_i_}`).style.display = 'none';
+    document.getElementById(`buttons${_i_}`).style.display = 'none'
+    document.getElementById(`buttons_${_i_}`).style.display = 'block'
+  }
+
+  editarCantidad(e,i){
+    this.DATOS[i].cantidad = e
+  }
+
+  editarFecha(e,i){
+    this.DATOS[i].fecha = e
+  }
+
+  FinalizarEdicion(i){
+    let _i_ = i.toString()
+    document.getElementById(`field_c${_i_}`).style.display = 'none';
+    document.getElementById(`field_f${_i_}`).style.display = 'none';
+    document.getElementById(`dato_c${_i_}`).style.display = 'block';
+    document.getElementById(`dato_f${_i_}`).style.display = 'block';
+    document.getElementById(`buttons${_i_}`).style.display = 'block'
+    document.getElementById(`buttons_${_i_}`).style.display = 'none'
   }
 
 

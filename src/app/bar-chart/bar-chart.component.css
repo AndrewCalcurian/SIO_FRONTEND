@@ -201,3 +201,11 @@
 canvas{
     height: 2cm;
 }
+
+.input_{
+    width: 100%;
+}
+
+.shot{
+    width: 30%;
+}

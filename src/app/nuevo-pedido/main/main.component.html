@@ -53,7 +53,14 @@
                     </div>
                 </div>
 
-                <button class="button is-primary" (click)='modal_nueva_orden()' [disabled]="!ae_ || ae_ == 0">Realizar Programación</button>
+                <button class="button is-primary" (click)='modal_nueva_orden()' [disabled]="!ae_ || ae_ == 0">
+                    <span class="icon">
+                        <i class="fas fa-calendar-day"></i>
+                    </span>
+                    <span>
+                        Realizar Programación
+                    </span>
+                </button>
             </div>
         </div>
     </div>
@@ -103,7 +110,9 @@
                         </div>
                     </div>
                 </div>
-                <button class="button is-primary mt-5" (click)='finalizar(cantidad)'>Generar Orden de Produccion</button>
+                <button class="button is-primary mt-5" (click)='finalizar(cantidad)'>
+                    Generar Orden de Produccion
+                </button>
             </div>
             
         </div>
@@ -312,7 +321,14 @@
                     </ng-container>
                 </tbody>
             </table> 
-            <button class="button is-primary" (click)='TimesTime()' *ngIf="!SinMaterial">Gestionar tiempo</button>
+            <button class="button is-primary" (click)='TimesTime()' *ngIf="!SinMaterial">
+                <span class="icon">
+                    <i class="far fa-clock"></i>
+                </span>
+                <span>
+                    Gestionar tiempo
+                </span>
+            </button>
         </div>
     </div>
 </div>

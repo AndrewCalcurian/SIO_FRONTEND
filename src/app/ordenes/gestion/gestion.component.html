@@ -23,7 +23,14 @@
                 <br>
             <ng-container *ngIf="!usuario.Despacho">
                 <ng-container *ngIf="usuario.Gestiones != 5">
-                    <button class="button is-primary" (click)='modal_nueva_gestion()' *ngIf="usuario.Almacen != 2 || usuario.Role == 'ADMIN'">Nueva Gestión</button> 
+                    <button class="button is-primary" (click)='modal_nueva_gestion()' *ngIf="usuario.Almacen != 2 || usuario.Role == 'ADMIN'">
+                        <span class="icon">
+                            <i class="fas fa-tasks"></i>
+                        </span>
+                        <span>
+                            Nueva Gestión
+                        </span>
+                    </button> 
                 </ng-container>
             </ng-container>    
                 <!-- <button class="button is-primary" (click)='nuevo_despacho()'>Despacho</button> -->
@@ -39,10 +46,50 @@
                 </ng-container>
             </ng-container>
             <ng-container *ngIf="!usuario.Despacho && usuario.Gestiones != 5">
-             <button class="button is-success" (click)="TraerTareasFueraDeFecha()" *ngIf="usuario.Almacen != 2 ||usuario.Role == 'ADMIN'">Otras Gestiones</button>
+             <button class="button is-success edited" (click)="TraerTareasFueraDeFecha()" *ngIf="usuario.Almacen != 2 ||usuario.Role == 'ADMIN'">
+                <span class="icon">
+                    <i class="fas fa-search-plus"></i>
+                </span>
+                <span>
+                    Otras <br> 
+                    <span class="down">
+                        Gestiones
+                    </span>
+                </span>
+            </button>
             </ng-container>
-             <button class="button is-primary" (click)='modal_solicitud()' *ngIf="usuario.Despacho != 1">Solicitud de materiales</button>
-             <button class="button is-primary" (click)='modal_Devolucion()' *ngIf="usuario.Despacho != 1">Devolución de materiales</button>
+             <button class="button is-primary edited" (click)='modal_solicitud()' *ngIf="usuario.Despacho != 1">
+                <span class="icon">
+                    <i class="fas fa-warehouse"></i>
+                </span>
+                <span>
+                    Solicitud <br>
+                    <span class="down">
+                        de materiales
+                    </span>
+                </span>
+            </button>
+             <button class="button is-primary edited" (click)='modal_Devolucion()' *ngIf="usuario.Despacho != 1">
+                <span class="icon">
+                    <i class="fas fa-undo"></i>
+                </span>
+                <span>
+                    Devolución <br> 
+                    <span class="down">
+                        de materiales
+                    </span>
+                </span>
+            </button>
+            <ng-container *ngIf="!usuario.Despacho && usuario.Gestiones != 5">
+                 <button class="button is-primary" routerLink="/ordenes/etiqueta">
+                    <span class="icon">
+                        <i class="fas fa-tag"></i>
+                    </span>
+                    <span>
+                        Etiquetas
+                    </span>
+                </button>
+            </ng-container>
             
             <hr>
             <div class="despachos" *ngIf="usuario.Almacen == 2 || usuario.Despacho == 1">

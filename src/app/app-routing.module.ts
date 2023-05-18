@@ -57,7 +57,7 @@ const routes: Routes = [
     component:PlanificacionComponent
   },
   {
-    path: 'etiqueta/:id',
+    path: 'prueba',
     component:BarChartComponent
   },
   {

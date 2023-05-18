@@ -14,3 +14,12 @@
 .mt-5{
     margin-top: 5px;
 }
+
+
+.edited{
+    text-align: left;
+}
+.down{
+    display: block;
+    margin-top: -7px;
+}

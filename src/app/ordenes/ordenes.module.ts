@@ -8,6 +8,7 @@ import { SolcitudComponent } from './gestion/solcitud/solcitud.component';
 import { DetallesComponent } from './detalles/detalles.component';
 import { DespachosComponent } from './despachos/despachos.component';
 import { DespachoComponent } from './gestion/despacho/despacho.component';
+import { RouterModule } from '@angular/router';
 
 
 
@@ -15,7 +16,8 @@ import { DespachoComponent } from './gestion/despacho/despacho.component';
   declarations: [MainComponent, GestionComponent,DevolucionComponent,SolcitudComponent, DetallesComponent, DespachosComponent, DespachoComponent],
   imports: [
     CommonModule,
-    OrdenesRoutingModule
+    OrdenesRoutingModule,
+    RouterModule
   ]
 })
 export class OrdenesModule { }

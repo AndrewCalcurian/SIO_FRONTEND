@@ -5,6 +5,7 @@ import { RouterModule, Routes } from '@angular/router';
 import { MainComponent } from './main/main.component';
 import { OrdenComponent } from '../orden/orden.component';
 import { GestionComponent } from './gestion/gestion.component';
+import { EtiquetaComponent } from '../cotizacion/etiqueta/etiqueta.component';
 
 
 const routes: Routes =[
@@ -21,8 +22,8 @@ const routes: Routes =[
         component:GestionComponent
       },
       {
-        path:'etiquetas',
-        component:GestionComponent
+        path:'etiqueta',
+        component:EtiquetaComponent
       }
       
       ]
