@@ -24,41 +24,50 @@
                         </select>
                     </div>
                     <hr>
-                    <table class="table is-fullwidth is-striped" *ngFor="materiales of materiales;index as i">
-                        <thead>
-                            <tr>
-                                <th>Material</th>
-                                <th>Cantidad</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr *ngFor="let material of materiales[i].material">
-                                <td>{{material.material.nombre}}
-                                    <ng-container *ngIf="material.material.ancho">
-                                        {{material.material.ancho}} x {{material.material.largo}}
-                                    </ng-container>
-                                    ({{material.material.marca}})<br>
-                                <b>Lote: </b>{{material.lote}} - <b>Código: </b>{{material.codigo}}</td>
-                                <td>
-                                    <div class="field has-addons">
-                                        <p class="control">
-                                            <input class="input" type="number" placeholder="Devolución" (change)="agregarMaterial(materiales[i]._id,cantidad,material.material._id,material.lote,material.codigo)" #cantidad>
-                                        </p>
-                                        <p class="control">
-                                            <a class="button is-static">
-                                                {{material.material.unidad}}
-                                            </a>
-                                          </p>
-                                    </div>
-                                </td>
-                            </tr>
-                        </tbody> 
-                        <br>
-                        <textarea class="textarea has-fixed-size" row="2" placeholder="Motivo" id="{{materiales[i]._id}}" #Motivo></textarea>
-                        <p class="error" id="{{materiales[i]._id}}_error">Debe ingresar un motivo</p>
-                        <br>
-                        <button class="button is-primary" (click)="finalizarDevolucion(materiales[i]._id,Motivo)">Realizar Devolución</button>
-                    </table>
+                    <ng-container *ngFor="materiales of materiales;index as i">
+                        <b class="Asignacion"> Asignación: AL-ASG-{{materiales[i].asignacion}}</b> <br>
+                        <table class="table is-fullwidth is-striped">
+                            <thead>
+                                <tr>
+                                    <th>Material</th>
+                                    <th>Cantidad</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr *ngFor="let material of materiales[i].material">
+                                    <td>
+                                        {{material.material.nombre}}
+                                        <ng-container *ngIf="material.material.ancho">
+                                            {{material.material.ancho}} x {{material.material.largo}}
+                                        </ng-container>
+                                        ({{material.material.marca}})<br>
+                                    <b>Lote: </b>{{material.lote}} - <b>Código: </b>{{material.codigo}}</td>
+                                    <td>
+                                        <div class="field has-addons">
+                                            <p class="control">
+                                                <input class="input" type="number" placeholder="Devolución" (change)="agregarMaterial(materiales[i]._id,cantidad,material.material._id,material.lote,material.codigo)" #cantidad>
+                                            </p>
+                                            <p class="control">
+                                                <a class="button is-static">
+                                                    {{material.material.unidad}}
+                                                </a>
+                                              </p>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </tbody> 
+                            <br>
+                            <textarea class="textarea has-fixed-size" row="2" placeholder="Motivo" id="{{materiales[i]._id}}" #Motivo></textarea>
+                            <p class="error" id="{{materiales[i]._id}}_error">Debe ingresar un motivo</p>
+                            <br>
+                            <button class="button is-primary" (click)="finalizarDevolucion(materiales[i]._id,Motivo)">
+                                Realizar Devolución
+                            </button> 
+                            <button class="button is-danger" (click)="CerrarDevolucion(materiales[i]._id)">
+                                Cerrar
+                            </button>
+                        </table>
+                    </ng-container>
 
         </div>
     </div>

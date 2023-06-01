@@ -18,11 +18,11 @@
                             </td>
                         </tr>
                         <tr>
-                            <th>OP</th>
-                            <th>Cliente</th>
-                            <th>Producto</th>
-                            <th>OC</th>
-                            <th>Cantidad</th>
+                            <th width="70px">OP</th>
+                            <th width="300px">Cliente</th>
+                            <th width="300px">Producto</th>
+                            <th width="125px">OC</th>
+                            <th width="100px">Cantidad</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -41,7 +41,7 @@
                                     Validar Datos
                                 </span>
                                 </button>
-                                <button class="button is-info is-small" (click)="openFacturacion(i)" *ngIf="despacho.despacho.precio">
+                                <button class="button is-success is-small" (click)="openFacturacion(i)" *ngIf="despacho.despacho.precio">
                                     <div class="icon">
                                         <i class="far fa-calendar-check"></i>
                                     </div>
@@ -321,6 +321,15 @@
                     Precio (USD)
                 </span><br>
                 <input type='number' class="input is-small" [(ngModel)]="Escala.precio">
+                <br> <br>
+                <button class="button is-success is-small boton_continuar" (click)="Modificacion_close()">
+                    <span class="icon">
+                        <i class="fas fa-long-arrow-alt-right"></i>
+                    </span>
+                    <span>
+                        Continuar
+                    </span>
+                </button>
             </div>
 
         </div>

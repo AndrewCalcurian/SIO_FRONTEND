@@ -22,9 +22,11 @@ export class PlanificacionComponent implements OnInit {
     
     this.ObtenerMaquinas()
     this.obtenerTrabajos()
+    this.ObtenerDespachos()
     let mes = moment().format('M')
     let ano = moment().format('yyyy')
     this.getDaysFromDate(mes,ano)
+    this.obtenerOrdenes()
   }
 
   // ***********************************************************
@@ -103,6 +105,14 @@ export class PlanificacionComponent implements OnInit {
       });
   }
 
+  public Despachos = []
+  ObtenerDespachos(){
+    this.api.GetDespacho()
+      .subscribe((resp:any)=>{
+        this.Despachos = resp
+      })
+  }
+
   obtenerTipos(){
     let x = this.MAQUINAS.length;
     for(let i = 0; i< x; i++){
@@ -110,7 +120,17 @@ export class PlanificacionComponent implements OnInit {
       if(!inde){
         this.FUNCIONES.push(this.MAQUINAS[i].tipo)
       }
+      if(i === x -1){
+        this.FUNCIONES.push('DESPACHO')
+      }
     }
+  }
+
+  obtenerOrdenes(){
+    this.api.getOrden()
+      .subscribe((resp:any)=>{
+        console.log(resp)
+      })
   }
 
   Cant_hojas(x,y){
@@ -128,21 +148,36 @@ export class PlanificacionComponent implements OnInit {
       fecha = `0${fecha}`
     }
 
-    fecha = `${ano}-${mes}-${fecha}`
+    let fecha_ = `${ano}-${mes}-${fecha}`
 
     let betas = [];
 
     let nuevo = this.TRABAJOS.filter(x => x.maquina.tipo === funcion);
+
+    let despach = []
+    if(funcion === 'DESPACHO'){
+      let funcion_:any = this.Despachos.filter(x => x.fecha === `${fecha}-${mes}-${ano}`)
+      if(funcion_.length>0){
+        // console.log(funcion_)
+        for(let i=0;i<funcion_.length;i++){
+          for(let x=0;x<funcion_[i].despacho.length;x++){
+            despach.push(funcion_[i].despacho[x])
+            if(i === funcion_[i].despacho.length-1){
+              return despach
+            }
+          }
+        }
+      }
+    }
 
     if(nuevo){
       let final = [];
       let Long = nuevo.length;
       for(let i=0; i<Long; i++){
 
-        if(fecha >= nuevo[i].fechaI){
-          if(fecha <= nuevo[i].fecha){
+        if(fecha_ >= nuevo[i].fechaI){
+          if(fecha_ <= nuevo[i].fecha){
             final.push(nuevo[i])
-            // console.log(final)
           }
         }
 
@@ -150,7 +185,6 @@ export class PlanificacionComponent implements OnInit {
       return final;
       
     }
-
     // // console.log(nuevo)
   }
     // // console.log(this.TRABAJOS.length )

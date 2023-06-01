@@ -1,12 +1,26 @@
-<div class="columns mt-5">
+<div class="ml-5 mt-5">
+    <div class="subtitulos">
+        Nueva Orden de Producción
+    </div>
+</div>
+<br>
+<nav class="breadcrumb ml-5" aria-label="breadcrumbs">
+    <ul>
+      <li><a href="#">Home</a></li>
+      <li><a href="/orden">Ordenes</a></li>
+      <li class="is-active"><a>Orden de producción</a></li>
+    </ul>
+</nav>
+<div class="columns mt-5 ml-5">
     <div class="column is-3">
         <div class="card">
             <div class="card-content">
+
                 <div class="field">
                     <label class="label">Cliente</label>
                     <div class="control">
                         <div class="select">
-                            <select id='cliente' (change)='cliente_selected($event)'>
+                            <select id='cliente' (change)='cliente_selected($event.target.value)'>
                                 <option value='0'>Selecciona Cliente</option>
                                 <option *ngFor='let cliente of CLIENTES' value="{{cliente._id}}">{{cliente.nombre}}</option>
                             </select>
@@ -14,13 +28,26 @@
                     </div>
                 </div>
 
+                <div class="field">
+                    <label class="label">Orden de compra</label>
+                    <div class="control">
+                        <div class="select">
+                            <select (change)="OrdenDeCompraSeleccionada($event.target.value)">
+                                <option value="">Selecciona orden de compra</option>
+                                <option value="{{i}}" *ngFor="let orden of ordenesFiltered;index as i">{{orden.orden}}</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+
                 <div class="field" *ngIf='cs'>
                     <label class="label">Producto</label>
                     <div class="control">
                         <div class="select">
                             <select id='producto' (change)='producto_selected($event)'>
                                 <option value='0'>Selecciona Producto</option>
-                                <option *ngFor='let producto of PRODUCTOS' value='{{producto._id}}'>{{producto.producto}}</option>
+                                <option *ngFor='let producto of OrdenSelected.productos' value='{{producto.producto._id}}'>{{producto.producto.producto}}</option>
                             </select>
                         </div>
                     </div>
@@ -30,14 +57,14 @@
                     <label class="label">Orden de Compra</label>
                     <div class="control">
                         <!-- <input type="text" class="input" (change)='orden_selected($event)' [(ngModel)]="userName"> -->
-                        <input type="text" class="input" [(ngModel)]="oc_">
+                        <input type="text" class="input" [(ngModel)]="oc_" disabled>
                     </div>
                 </div>
 
                 <div class="field" *ngIf='oc_'>
                 <label class="label">Fecha orden de compra:</label>
                 <div class="control">
-                    <input type="date" name="f_oc" class="input" max="{{hoy}}" [(ngModel)]="fo_">
+                    <input type="date" name="f_oc" class="input" max="{{hoy}}" [(ngModel)]="fo_" disabled>
                 </div>
                 </div>
 
@@ -130,7 +157,7 @@
                     <div class="field">
                         <label class="label">Cantidad</label>
                         <div class="control">
-                            <input type="number" class="input" value='1000' (change)='Cantidad($event)' #cantidad>
+                            <input type="number" class="input" [value]='Cantidad_de_orden' (change)='Cantidad($event)' #cantidad>
                         </div>
                     </div>
                 </div>
@@ -146,7 +173,7 @@
                     <div class="field">
                         <label class="label">Fecha Solic.</label>
                         <div class="control">
-                            <input type="date" class="input" value='0' [min]="hoy" (change)='Fecha_s($event.target.value)'>
+                            <input type="date" class="input" [value]='Fecha_solicitada' [min]="hoy" (change)='Fecha_s($event.target.value)'>
                         </div>
                     </div>
                 </div>

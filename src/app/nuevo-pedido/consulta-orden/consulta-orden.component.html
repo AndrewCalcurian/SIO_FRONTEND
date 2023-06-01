@@ -1,0 +1,154 @@
+<div class="ml-5 mt-5">
+    <div class="subtitulos">
+        Ordenes de compra
+    </div>
+</div>
+<br>
+<nav class="breadcrumb ml-5" aria-label="breadcrumbs">
+    <ul>
+      <li><a href="#">Home</a></li>
+      <li><a href="/orden">Ordenes</a></li>
+      <li class="is-active"><a>Ordenes de compra</a></li>
+    </ul>
+</nav>
+<div class="mt-5 ml-5">
+    <div class="columns">
+        <div class="column  is-one-quarter">
+            <div class="tabs">
+                <ul>
+                  <li><a routerLink="/orden/orden-compra">Crear</a></li>
+                  <li class="is-active"><a>Consultar</a></li>
+                </ul>
+              </div>
+            <div class="card">
+                <div class="card-content">
+                    <div class="field">
+                        <label class="label">Ver ordenes de compra</label>
+                        <div class="control">
+                            <div class="select">
+                                <select (change)="MostarOrden($event.target.value)">
+                                    <option value="#">Seleccionar orden de compra</option>
+                                    <option value="{{i}}" *ngFor="let orden of Ordenes;index as i">OC: {{orden.orden}} - {{orden.cliente.nombre}}</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="column">
+            <div class="card" *ngIf="selected">
+                <div class="card-content">
+                    <table class="table is-fullwidth">
+                        <tr>
+                            <td>
+                                <span id="Info__">
+                                    <span class="subtitulos">
+                                        OC: {{Orden.orden}}
+                                    </span><br>
+                                    <b>Fecha de OC:</b> {{Orden.fecha_entrega | date: 'dd/MM/yyyy': 'UTC'}} <br>
+                                    <b>Fecha de recepción: </b>{{Orden.fecha_recepcion | date: 'dd/MM/yyyy': 'UTC'}} 
+                                </span>
+                                <span style="display:none" id="EditionForm">
+                                    <label class="label">OC:</label>
+                                    <input type="text" class="input edicion_" [(ngModel)]="Orden.orden"> <br>
+                                    <label class="label">Fecha de OC:</label>
+                                    <input type="date" class="input edicion_" [(ngModel)]="Orden.fecha_entrega"> <br>
+                                    <label class="label">Fecha de recepción:</label>
+                                    <input type="date" class="input edicion_" [(ngModel)]="Orden.fecha_recepcion">
+                                </span>
+                                <br> <br>
+                                <button class="button is-small is-success is-outlined" style="display:none" id="okbutton" (click)="listoOCEDIT()">
+                                    <span class="icon">
+                                        <i class="fas fa-check"></i>
+                                    </span>
+                                    <span>
+                                        Listo
+                                    </span>
+                                </button>
+                                <button class="button is-small is-success is-outlined" id="editionButton" (click)="edicionOC()">
+                                    <span class="icon">
+                                        <i class="fas fa-edit"></i>
+                                    </span>
+                                    <span>
+                                        Editar
+                                    </span>
+                                </button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="3">
+                                <table class="table is-fullwidth">
+                                    <tr>
+                                        <td class="is-selected">Producto</td>
+                                        <td class="is-selected">Cantidad</td>
+                                        <td class="is-selected">Fecha solicitada</td>
+                                        <td class="is-selected" width="250px" id="status_">Orden de producción</td>
+                                        <td class="is-selected">Editar</td>
+                                    </tr>
+                                    <tr *ngFor="let producto of Orden.productos;index as i">
+                                        <td id="producto___{{i}}">
+                                            <span id="producto_{{i}}">
+                                                {{producto.producto.producto}}
+                                            </span>
+                                            <div class="select producto____" id="producto__{{i}}" style="display:none">
+                                                <select [(ngModel)]="producto.producto._id">
+                                                    <option value="{{producto._id}}" *ngFor="let producto of PRODUCTOS">{{producto.producto}}</option>
+                                                    <!-- <option value="{{producto.producto._id}}">{{producto.producto.producto}}</option> -->
+                                                </select>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <span id="cantidad_{{i}}">
+                                                {{puntoYcoma(producto.cantidad)}}
+                                            </span>
+                                            <input type="number" class="input cantidad" [(ngModel)]="producto.cantidad" id="cantidad__{{i}}" width="550px" style="display:none">
+                                        </td>
+                                        <td>
+                                            <span id="fecha_{{i}}">
+                                                {{producto.fecha | date: 'dd/MM/yyyy': 'UTC'}}
+                                            </span>
+                                            <input type="date" class="input" [(ngModel)]="producto.fecha" id="fecha__{{i}}" width="550px" style="display:none">
+                                        </td>
+                                        <td id="status_{{i}}">
+                                            {{producto.status}}
+                                            <ng-container *ngIf="!producto.status">
+                                                Sin asignar
+                                            </ng-container>
+                                        </td>
+                                        <td>
+                                            <button class="button is-small is-success is-outlined" id="listo_{{i}}" style="display:none" (click)="Terminar(i,Orden._id)">
+                                                <span class="icon">
+                                                    <i class="fas fa-check"></i>
+                                                </span>
+                                                <span>
+                                                    Listo
+                                                </span>
+                                            </button>
+                                            <button class="button is-small is-success is-outlined" id='edit_{{i}}' (click)="Edicion(i)">
+                                                <span class="icon">
+                                                    <i class="fas fa-edit"></i>
+                                                </span>
+                                                <span>
+                                                    Editar
+                                                </span>
+                                            </button> <br>
+                                            <!-- <button class="button is-small is-danger is-outlined" id='dele_{{i}}'>
+                                                <span class="icon">
+
+                                                </span>
+                                                <span>
+                                                    Eliminar
+                                                </span>
+                                            </button> -->
+                                        </td>
+                                    </tr>
+                                </table>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

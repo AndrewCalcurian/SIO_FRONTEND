@@ -185,7 +185,7 @@ export class ProductosComponent implements OnInit {
       // alert(clase)
       this.product_selected = e;
       if(this.product_selected != 'Sustrato'){
-        this.MATERIALES = [...this.MATERIALES.reduce((map, obj) => map.set(obj.nombre, obj), new Map()).values()];
+        this.MATERIALES = [...this.MATERIALES.reduce((map, obj) => map.set({nombre:obj.nombre,marca:obj.marca}, obj), new Map()).values()];
 
       }
     }
@@ -199,7 +199,7 @@ export class ProductosComponent implements OnInit {
       (<HTMLInputElement>document.getElementById(`x-${clase}`)).disabled = false;
       this.product_selected = e;
       if(this.product_selected != 'Sustrato'){
-        this.MATERIALES = [...this.MATERIALES.reduce((map, obj) => map.set(obj.nombre, obj), new Map()).values()];
+        this.MATERIALES = [...this.MATERIALES.reduce((map, obj) => map.set({nombre:obj.nombre,marca:obj.marca}, obj), new Map()).values()];
 
       }
     }

@@ -95,6 +95,7 @@ export class MainComponent implements OnInit {
   lote = '';
   cantidad = '';
   pedido = '';
+  precio = 0;
 
   public New_color:boolean = false;
   public caja_:boolean = false;
@@ -518,6 +519,7 @@ export class MainComponent implements OnInit {
           })
   }
 
+  public precioID = 0
   Editar(id){
     this.edit_almacen()
     this.api.getAlmacenadoID(id)
@@ -528,7 +530,7 @@ export class MainComponent implements OnInit {
         this.codigoID = this.AlmacenadoId.codigo;
         this.loteID = this.AlmacenadoId.lote;
         this.cantidadID = this.AlmacenadoId.cantidad;
-
+        this.precioID = this.AlmacenadoId.precio
       })
   }
 
@@ -538,8 +540,8 @@ export class MainComponent implements OnInit {
       codigo:this.codigoID,
       lote:this.loteID,
       cantidad:this.cantidadID,
-      motivo:this.Edition__
-
+      motivo:this.Edition__,
+      precio:this.precioID
     }
 
     this.api.putAlmacenadoID(this.AlmacenadoId._id, body)
@@ -736,6 +738,7 @@ export class MainComponent implements OnInit {
     this.api.getAlmacen()
       .subscribe((resp:any) => {
         this.ALMACEN = resp.materiales;
+        console.log('666666666666666666666666',this.ALMACEN)
         this.filterList();
         this.totalizar_materiales()
         this.loading = false;
@@ -810,7 +813,8 @@ export class MainComponent implements OnInit {
       codigo:this.codigo,
       lote:this.lote,
       cantidad:this.cantidad,
-      pedido:this.pedido
+      pedido:this.pedido,
+      precio:this.precio
     }
 
     this.api.postAlmacenado(data)
@@ -828,6 +832,8 @@ export class MainComponent implements OnInit {
         this.codigo = '';
         this.lote = '';
         this.cantidad ='';
+        this.precio = 0;
+        this.pedido = '';
         (<HTMLInputElement>document.getElementById('Nuevoproducto')).value = "0";
       }, err =>{
         Swal.fire({
@@ -993,12 +999,13 @@ export class MainComponent implements OnInit {
     this.SUSTRATO_CONVERSION = [];
     this.Convertidora = e;
     let BobinasEnConvertidora = this.BOBINAS_.filter(x => x.convertidora === e)
-    console.log(BobinasEnConvertidora)
+    // console.log(BobinasEnConvertidora)
     for(let i = 0; i<BobinasEnConvertidora.length; i++){
       let bobina = BobinasEnConvertidora[i]
+      // console.log(bobina)
       let sustrato = this.ALMACEN.filter(x => x.nombre == bobina.material && x.marca == bobina.marca && x.ancho == bobina.ancho && x.gramaje == bobina.gramaje && x.calibre == bobina.calibre)
 
-          console.log(sustrato,'aja')
+          // console.log(sustrato,'aja')
           if(sustrato){
           for(let i =0; i<sustrato.length;i++){
   

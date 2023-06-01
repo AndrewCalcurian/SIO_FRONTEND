@@ -1,26 +1,67 @@
 <div class="card">
     <div class="card-content">
         <div class="titulo">Almacen</div>
-        <button class="button is-primary" (click)='Modal_Almacen()' *ngIf="!_bobina && usuario.Almacen == 2">Nuevo Material</button>
-        <button class="button is-primary" (click)='Nuevo_producto()' *ngIf="!_bobina && usuario.Almacen == 2">Agregar Inventario</button>
+        <button class="button is-primary edited" (click)='Modal_Almacen()' *ngIf="!_bobina && usuario.Almacen == 2">
+            <span class="icon">
+                <i class="fas fa-swatchbook"></i>
+            </span>
+            <span>
+                Nuevo <br>
+                <span class="down">
+                material
+                </span>
+            </span>
+        </button>
+        <button class="button is-primary edited" (click)='Nuevo_producto()' *ngIf="!_bobina && usuario.Almacen == 2">
+            <span class="icon">
+                <i class="fas fa-pallet"></i>
+            </span>
+            <span>
+                Agregar <br>
+                <span class="down">
+                inventario
+                </span>
+            </span>
+        </button>
         <button class="button is-primary" (click)='modal_Conversion()' *ngIf="_bobina && usuario.Almacen == 2 || _bobina && usuario.Role == 'ADMIN'" >Hacer Conversión</button>
         <button class="button is-primary" (click)='Modal_bobinas()' *ngIf="_bobina && usuario.Almacen == 2">Nueva Bobinas</button>
-        <button class="button is-primary" (click)='modal_asignacion()' *ngIf="usuario.Almacen == 2">Mat. Necesario (
-            <ng-container *ngIf="necesario">
-                {{necesario.length}}
-            </ng-container>
-            <ng-container *ngIf="!necesario">
-                0
-            </ng-container>
-            )</button>
-        <button class="button is-primary" (click)="Requisicion()">Solicitud Pendiente (
-            <ng-container *ngIf="Pendiente">
-                {{Pendiente.length}}
-            </ng-container>
-            <ng-container *ngIf="!Pendiente">
-                0
-            </ng-container>
-            )</button>
+        <button class="button is-primary edited" (click)='modal_asignacion()' *ngIf="usuario.Almacen == 2">
+            <span class="icon">
+                <i class="fas fa-hand-holding edited"></i>
+            </span>
+            <span>
+
+                Material <br>
+                <span class="down">
+                    necesario (
+                        <ng-container *ngIf="necesario">
+                            {{necesario.length}}
+                        </ng-container>
+                        <ng-container *ngIf="!necesario">
+                            0
+                        </ng-container>
+                        )
+                </span>
+            </span>
+        </button>
+        <button class="button is-primary edited" (click)="Requisicion()">
+            <span class="icon">
+                <i class="far fa-bell"></i>
+            </span>
+            <span>
+                Solicitud <br>
+                <span class="down">
+                    pendiente (
+                    <ng-container *ngIf="Pendiente">
+                        {{Pendiente.length}}
+                    </ng-container>
+                    <ng-container *ngIf="!Pendiente">
+                        0
+                    </ng-container>
+                    )
+                </span>
+            </span>
+        </button>
         <ng-containe *ngIf="Devoluciones">
             <ng-container *ngIf="Devoluciones.length > 0 && usuario.Almacen == 2">
                 <button class="button is-danger is-outlined" (click)="Modal_Devolucion()">
@@ -639,6 +680,16 @@
                     </div>
                 </div>
             </div>
+            <div class="columns">
+                <div class="column is-3">
+                    <div class="field">
+                        <label class="label">Precio (USD)</label>
+                        <div class="control">
+                            <input type="number" class="input" [(ngModel)]="precioID">
+                        </div>
+                    </div>
+                </div>
+            </div>
             <div class="field">
                 <label for="" class="label">Motivo de edición:</label>
                 <textarea rows="2" class="textarea" [(ngModel)]="Edition__"></textarea>
@@ -791,6 +842,7 @@
                 <div class="columns">
                     <div class="column ">
                         <div class="field has-addons">
+                            <label class="label">Cant.Neto</label>
                             <p class="control">
                               <span class="select">
                                 <select name="unidad" [(ngModel)]="MaterialID.unidad">
@@ -894,6 +946,14 @@
                         <label class="label">N° de pedido</label>
                         <div class="control">
                             <input type="text" class="input" [(ngModel)]="pedido">
+                        </div>
+                    </div>
+                </div>
+                <div class="column is-4">
+                    <div class="field">
+                        <label class="label">Precio (USD)</label>
+                        <div class="control">
+                            <input type="number" class="input" [(ngModel)]="precio">
                         </div>
                     </div>
                 </div>

@@ -88,7 +88,17 @@ export class MainComponent implements OnInit {
     this.obtenerClientes();
     this.BuscarAlmacen();
     this.Almacenado();
+    this.OrdenesdeCompra();
     this.hoy = moment().format('yyyy-MM-DD');
+  }
+
+  public OrdenesDeCompra = []
+  OrdenesdeCompra(){
+    this.api.getOrdenesDeCompra()
+      .subscribe((resp:any)=>{
+        this.OrdenesDeCompra = resp
+        console.log(this.OrdenesDeCompra)
+      })
   }
 
   NumToLet(n){
@@ -134,19 +144,31 @@ export class MainComponent implements OnInit {
       })
   }
 
+  public OrdenSelected
+  OrdenDeCompraSeleccionada(e){
+    this.cs = true;
+    this.OrdenSelected = this.ordenesFiltered[e];
+    (<HTMLInputElement>document.getElementById('cliente')).value = this.ordenesFiltered[e].cliente._id;
+    this.cliente_selected(this.ordenesFiltered[e].cliente._id)
+  }
+
+  public ordenesFiltered
   cliente_selected(e){
-    if(e.target.value === '0'){
+
+    this.ordenesFiltered = this.OrdenesDeCompra.filter(x=>x.cliente._id === e)
+    console.log(this.ordenesFiltered)
+    this.ps = false
+    this.oc_ = ''
+    this.fo_ = ''
+    if(e === '0'){
       this.cs = false 
     }else{
-      this.cs = true;
-      this.CLIENTE = e.target.value
-      let index = this.CLIENTES.find(x => x._id === e.target.value)
+      this.CLIENTE = e
+      let index = this.CLIENTES.find(x => x._id === e)
       this.ALMACEN = index.almacenes;
-
-      // // console.log(this.ALMACEN)
     }
 
-    this.api.getById(e.target.value)
+    this.api.getById(e)
       .subscribe((resp:any)=>{
         this.PRODUCTOS = resp.productos;
         // // console.log(this.PRODUCTOS)
@@ -170,12 +192,23 @@ export class MainComponent implements OnInit {
 
   }
 
+  public Cantidad_de_orden
+  public Fecha_solicitada
+  public ProductodeProductos
   producto_selected(e){
 
+    let indexOF = this.OrdenSelected.productos.findIndex(x=> x.producto._id == e.target.value)
+    this.ProductodeProductos = indexOF
+    this.Cantidad_de_orden = this.OrdenSelected.productos[indexOF].cantidad
+    this.Fecha_solicitada = this.OrdenSelected.productos[indexOF].fecha
+    this.Fecha_S = this.Fecha_solicitada;
+    this.Cantidad_ejemplares = this.Cantidad_de_orden
     if(e.target.value === '0'){
       this.ps = false 
     }else{
       this.ps = true;
+      this.oc_ = this.OrdenSelected.orden
+      this.fo_ = this.OrdenSelected.fecha_recepcion
     }
 
     this.api.getOneById(e.target.value)
@@ -245,7 +278,7 @@ export class MainComponent implements OnInit {
     // // console.log(this.Cantidad_ejemplares, '/', this.Ejemplares_montados, '/ ', this.demasia ,'-', this.paginas)
     // this.paginas = (this.paginas)
   }
-  public demasia_
+  public demasia_ = 0;
   Demasia(e){
 
     this.paginas = Math.ceil(this.Cantidad_ejemplares / this.Ejemplares_montados)
@@ -507,7 +540,9 @@ export class MainComponent implements OnInit {
       e_c:(<HTMLInputElement>document.getElementById(`e_c`)).checked,
       i_ancho:(<HTMLInputElement>document.getElementById(`ancho_imprimir`)).value,
       i_largo:(<HTMLInputElement>document.getElementById(`largo_imprimir`)).value,
-      observacion:this.observacion_
+      observacion:this.observacion_,
+      ordencompra:this.OrdenSelected,
+      ProductodeProductos:this.ProductodeProductos
     }
 
     this.api.postOrden(data)

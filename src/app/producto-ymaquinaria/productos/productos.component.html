@@ -13,8 +13,22 @@
                         </div>
                     </div>
                 </div>
-                <button class="button is-primary" (click)='Modal_Cliente()' *ngIf='usuario.Maquinaria == 2 && !edicion'>Nuevo Cliente</button>
-                <button class="button is-primary" (click)='Modal_Edit_cliente()' *ngIf='usuario.Maquinaria == 2 && edicion'>Editar Cliente</button>
+                <button class="button is-primary" (click)='Modal_Cliente()' *ngIf='usuario.Maquinaria == 2 && !edicion'>
+                    <span class="icon">
+                        <i class="fas fa-address-book"></i>
+                    </span>
+                    <span>
+                        Nuevo Cliente
+                    </span>
+                </button>
+                <button class="button is-primary" (click)='Modal_Edit_cliente()' *ngIf='usuario.Maquinaria == 2 && edicion'>
+                    <span class="icon">
+                        <i class="fas fa-user-edit"></i>
+                    </span>
+                    <span>
+                        Editar Cliente
+                    </span>
+                </button>
             </div>
         </div>
     </div>
@@ -22,7 +36,14 @@
         <div class="card">
             <div class="card-content">
                 <div class="titulo">Productos</div>
-                <button class="button is-primary" (click)='Modal_Producto()' disabled id='NP_button' *ngIf='usuario.Maquinaria == 2'>Nuevo Producto</button>
+                <button class="button is-primary" (click)='Modal_Producto()' disabled id='NP_button' *ngIf='usuario.Maquinaria == 2'>
+                    <span class="icon">
+                        <i class="fas fa-list-ol"></i>
+                    </span>
+                    <span>
+                        Nuevo Producto
+                    </span>
+                </button>
                 <hr>
                 <table class="table is-fullwidth">
                     <thead>
@@ -39,19 +60,19 @@
                             <td>{{producto.producto}}</td>
                             <td>
                                 <button class="button is-info is-outlined" (click)='verProducto(producto._id)'>
-                                    <span>Ver</span>
                                     <span class="icon is-small">
                                         <i class="far fa-eye"></i>
                                     </span>
+                                    <span>Ver</span>
                                 </button>
                             </td>
                             <td *ngIf='usuario.Maquinaria == 2'>
                             
                             <button class="button is-success is-outlined" (click)='editar(producto._id)'>
-                                <span>Editar</span>
                                 <span class="icon is-small">
                                     <i class="far fa-edit"></i>
                                 </span>
+                                <span>Editar</span>
                             </button>
                         </td>
                         </tr>

@@ -7,11 +7,25 @@
         <div class="column">
             <div class="card">
                 <div class="card-content">
-                    <div class="select">
+                    <!-- <div class="select">
                         <select name="" id="" (change)="seleccionar_orden($event.target.value)">
                             <option value="#">Selecciona una orden</option>
-                            <option value="{{orden._id}}" *ngFor="let orden of ordenes">{{orden.sort}}</option>
+                            <ng-container *ngFor="let orden of ordenes">
+                                <ng-container *ngIf="Despachado(orden.sort) < 0">
+                                    <option value="{{orden._id}}" >{{orden.sort}}</option>
+                                </ng-container>
+                            </ng-container>
                         </select>
+                    </div> -->
+                    <label class="label">Ingrese Orden de producción:</label>
+                    <div class="columns">
+                        <div class="column width__">
+                            <div class="field">
+                                <div class="control">
+                                    <input type="text" class="input width__" placeholder="Orden de producción N°" (change)="seleccionar_orden($event.target.value)" >
+                                </div>
+                            </div>
+                        </div>
                     </div>
                     <br> <br>
                     <div *ngIf="valido">

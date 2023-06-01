@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import * as moment from 'moment';
 import { Cell, Img, Line, PdfMakeWrapper, Table, Txt } from 'pdfmake-wrapper';
 import * as pdfFonts from "pdfmake/build/vfs_fonts";
 import { RestApiService } from 'src/app/services/rest-api.service';
@@ -220,7 +221,6 @@ export class PreFacturacionComponent implements OnInit {
     let procesos = 'Barnizado'
     for(let n=1;n<this.Despachos[this.INDEX].orden.producto.post.length;n++){
         let incluye = procesos.includes(this.Despachos[this.INDEX].orden.producto.post[n]);
-        console.log(incluye);
       if(procesos.includes(this.Despachos[this.INDEX].orden.producto.post[n])){
         procesos = procesos + `, ${this.Despachos[this.INDEX].orden.producto.post[n]}`;
       }
@@ -253,7 +253,7 @@ export class PreFacturacionComponent implements OnInit {
     SubtotalBS = this.puntoYcoma(this.Despachos[this.INDEX].despacho.cantidad / 1000 * this.Despachos[this.INDEX].despacho.precio*this.Despachos[this.INDEX].despacho.tasa)
     
 
-    
+    // this.Despachos[this.INDEX].fecha_prefacturacion =  moment().format('DD/MM/YYYY')
     let contactos
     let cargos
     let margin = 0;
@@ -286,6 +286,7 @@ export class PreFacturacionComponent implements OnInit {
       }
     }
 
+    
     let pre;
     this.api.aumentoPre(this.Despachos[this.INDEX].despacho)
       .subscribe((resp:any)=>{

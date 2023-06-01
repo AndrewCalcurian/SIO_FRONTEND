@@ -19,17 +19,30 @@
                 <b class="titulo">{{funcion}}</b>
                 <!-- * -->
                 <ng-container *ngFor="let id of getFechas(day?.value, funcion);index as i">
-                    <div style="--i:{{id.orden.sort.charAt(id.orden.sort.length - 1)}}" class="op-{{id.orden.sort.charAt(id.orden.sort.length - 1)}} color">
-                        <span class="tooltip">
-                            <b>Producto: </b>{{id.orden.producto.producto}} <br>
-                           <b>Numero de Orden: </b>{{id.orden.sort}} <br>
-                           <b>Cantidad de productos: </b>{{id.orden.cantidad}} <br>
-                           <b>Cantidad de hojas: </b>{{Cant_hojas(id.orden.cantidad, id.orden.producto.ejemplares[id.orden.montaje])}} <br>
-                           <b>Maquina: </b>{{id.maquina.nombre}}
-                       </span>
-                        {{id.orden.sort}}
-                        <br> 
-                    </div>
+                    <ng-container *ngIf="id.orden">
+
+                        <div style="--i:{{id.orden.sort.charAt(id.orden.sort.length - 1)}}" class="op-{{id.orden.sort.charAt(id.orden.sort.length - 1)}} color">
+                            <span class="tooltip">
+                                <b>Producto: </b>{{id.orden.producto.producto}} <br>
+                                <b>Numero de Orden: </b>{{id.orden.sort}} <br>
+                                <b>Cantidad de productos: </b>{{id.orden.cantidad}} <br>
+                                <b>Cantidad de hojas: </b>{{Cant_hojas(id.orden.cantidad, id.orden.producto.ejemplares[id.orden.montaje])}} <br>
+                                <b>Maquina: </b>{{id.maquina.nombre}}
+                            </span>
+                            {{id.orden.sort}}
+                            <br> 
+                        </div>
+                    </ng-container>
+                    <ng-container *ngIf="!id.orden">
+                        <div class="op-{{id.op.charAt(id.op.length - 1)}} color">
+                            <span class="tooltip">
+                                <b>Producto: </b>{{id.producto}} <br>
+                                <b>Numero de Orden: </b>{{id.op}} <br>
+                                <b>Cantidad a despachar: </b>{{id.cantidad}} <br>
+                            </span>
+                            {{id.op}}
+                        </div>
+                    </ng-container>
                 </ng-container>
                 <!-- * -->
             </div>

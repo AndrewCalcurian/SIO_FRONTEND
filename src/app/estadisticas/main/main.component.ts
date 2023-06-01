@@ -622,6 +622,7 @@ export class MainComponent implements OnInit {
     this.lote_mayor = []
     this.c_devoluciones = []
     this.c_devoluciones = this.data.devoluciones.filter(x=> x.orden === op)
+    console.log(this.c_devoluciones)
 
     this.c_lotes = this.data.Lotes.filter(x => x.orden === op)
 

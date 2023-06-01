@@ -28,6 +28,15 @@ export class EtiquetaComponent implements OnInit {
         this.ordenes = resp.reverse()
       })
 
+    this.api.getDespachados()
+      .subscribe((resp:any)=>{
+        this.Despachados = resp
+      })
+
+  }
+
+  Despachado(n){
+    return this.Despachados.indexOf(n)
   }
 
   public __orden;
@@ -38,7 +47,14 @@ export class EtiquetaComponent implements OnInit {
   public fecha
   public hoy
   public sustrato
+  public Despachados
   seleccionar_orden(e){
+    console.log(e)
+
+    let id = this.ordenes.find(x=> x.sort === e)
+    // console.log(id)
+    e = id._id
+
     if(e != '#'){
       this.visto = false
       this.loaded = false;
@@ -132,6 +148,10 @@ export class EtiquetaComponent implements OnInit {
       .subscribe((resp:any)=>{
         this.seleccionar_orden(this.orden)
         this.visto = false
+        this.api.copyTags(this.__orden.sort, this.unidades__)
+          .subscribe((resp:any)=>{
+            console.log('done')
+          })
       })
     
   }

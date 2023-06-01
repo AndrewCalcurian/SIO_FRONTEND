@@ -8,6 +8,7 @@ import { PreFacturacionComponent } from './pre-facturacion/pre-facturacion.compo
 import { TokenValidationComponent } from '../token-validation/token-validation.component';
 import { TwoStep } from '../Auth/twoStep.guard';
 import { EtiquetaComponent } from './etiqueta/etiqueta.component';
+import { ConsultaFacturacionComponent } from './consulta-facturacion/consulta-facturacion.component';
 
 const routes: Routes =[
   {
@@ -36,6 +37,11 @@ const routes: Routes =[
       {
         path:'verificacion',
         component:TokenValidationComponent
+      },
+      {
+        path:'consulta-facturacion',
+        canActivate: [TwoStep],
+        component:ConsultaFacturacionComponent
       }
     ]
 }]

@@ -86,11 +86,7 @@
     height: 1.5cm;
     margin-top: 13px;
 }
-.op{
-    display: block;
-    font-size: 38px;
-    margin-top:-15px;
-}
+
 .qrcode{
     width: 2.6cm;
     height: 1.5cm;
@@ -208,4 +204,15 @@ canvas{
 
 .shot{
     width: 30%;
+}
+
+.tablas{
+    font-size: xx-small;
+}
+
+.data__{
+    font-size: 13px;
+}
+._data__{
+    font-size: 15px;
 }

@@ -54,7 +54,7 @@ export class ConsumoComponent implements OnInit {
           data = data + this.c_devoluciones[i].filtrado[n].cantidad;
           // console.log(this.c_devoluciones[i].filtrado[n])
         }
-        if(x == this.c_devoluciones.length && y == len.length){
+        if(i == this.c_devoluciones.length -1  && n == len.length -1){
           if(data > 0){
             return data.toFixed(2);
           }else{

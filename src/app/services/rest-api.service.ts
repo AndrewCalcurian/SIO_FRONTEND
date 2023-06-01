@@ -565,6 +565,52 @@ export class RestApiService {
 
   }
 
+  postOrdenDeCompra(data){
+    const url = `${this.api_url}/orden-compra`
+    return this.http.post(url,data)
+  } 
+
+  getOrdenesDeCompra(){
+    const url = `${this.api_url}/orden-compra`
+    return this.http.get(url)
+  }
+
+  putOrdenesDeCompra(data, id){
+    const url = `${this.api_url}/orden-compra/${id}`
+    return this.http.put(url, data)
+  }
+
+  putCerrarLotes(id){
+    const url = `${this.api_url}/devoluciones`
+    return this.http.put(url,id)
+  }
+
+  getDespachados(){
+    const url = `${this.api_url}/despachados`
+    return this.http.get(url)
+  }
+
+  getDespachadoTodos(){
+    const url = `${this.api_url}/despachados-todos`
+    return this.http.get(url)
+  }
+
+  getDespachoFechas(desde,hasta){
+    const url = `${this.api_url}/despacho-fechas/${desde}/${hasta}`
+    return this.http.get(url)
+
+  }
+
+  getDespachoCliente(cliente, desde, hasta){
+    const url = `${this.api_url}/despachos-cliente/${cliente}/${desde}/${hasta}`
+    return this.http.get(url)
+  }
+
+  copyTags(orden, cantidad){
+    const url = `${this.api_url}/copy/${orden}/${cantidad}`
+    return this.http.get(url)
+  }
+
 
 
 }

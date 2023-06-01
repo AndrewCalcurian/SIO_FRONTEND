@@ -3,6 +3,7 @@ import { RestApiService } from '../services/rest-api.service';
 
 import { ActivatedRoute } from '@angular/router';
 import * as moment from 'moment';
+import Swal from 'sweetalert2';
 
 
 // const consultaDolar = require('consulta-dolar-venezuela');
@@ -19,122 +20,205 @@ export class BarChartComponent implements OnInit {
    }
   
   ngOnInit(): void {
-    this.obtenerClientes()
+    this.api.getDespachadoTodos()
+      .subscribe((resp:any)=>{
+        this.Despachos = resp;
+      })
   }
 
-  public CLIENTES = []
-  obtenerClientes(){
+  Select_opcion(e){
+    if(e === 'cliente'){
+      this.m_fecha = false
+      this.m_orden = false
+      this.m_cliente = true;
+      this.ObtenerClientes()
+    }else if(e === 'fecha'){
+      this.m_fecha = true
+      this.m_cliente = false;
+      this.m_orden = false
+    }else if(e === 'orden'){
+      this.m_orden = true
+      this.m_fecha = false
+      this.m_cliente = false;
+    }
+  }
+
+  public Despachos = []
+  public Clientes = []
+
+  public m_cliente:boolean = false;
+  public m_fecha:boolean = false;
+  public m_orden:boolean = false;
+
+  public Total_Bs = 0
+  public Total_USD = 0
+  public Total_Bs_N = 0
+  public Total_USD_N = 0
+
+  public Facturas:boolean = true;
+  public Notas:boolean = false
+
+  ObtenerClientes(){
+    console.log('work')
     this.api.GetClientes()
       .subscribe((resp:any)=>{
-        this.CLIENTES = resp.clientes
+        this.Clientes = resp.clientes
       })
   }
 
 
-  public PRODUCTOS = []
-  cliente_selected(e){
-    if(e.target.value != '#')
-    {
-      this.api.getById(e.target.value)
-        .subscribe((resp:any)=>{
-          this.PRODUCTOS = resp.productos;
-          // // console.log(this.PRODUCTOS)
+  puntoYcoma(n){
+    if(!n){
+      return 0
+    }
+    return n = new Intl.NumberFormat('de-DE').format(n)
+  }
+
+
+  NE(){
+    let element = document.getElementById('NE_');
+    element.classList.add("is-active");
+    document.getElementById('FA_').classList.remove("is-active");
+    this.Notas = true;
+    this.Facturas = false
+  }
+
+  FA(){
+    let element = document.getElementById('NE_');
+    element.classList.remove("is-active");
+    document.getElementById('FA_').classList.add("is-active");
+    this.Notas = false;
+    this.Facturas = true
+  }
+
+  public INDEX
+  public ORDENES = []
+  public NOTAS = []
+  Buscar_op(op){
+    this.ORDENES = []
+    this.NOTAS = []
+    this.Total_Bs = 0;
+    this.Total_USD = 0;
+    this.Total_Bs_N = 0;
+    this.Total_USD_N = 0;
+    this.api.getDespachosbyOrden(op)
+      .subscribe((resp:any)=>{
+        for(let i=0; i< resp[0].despacho.length;i++){
+          if(resp[0].despacho[i].op === op){
+            resp[0].despacho[i].fecha = resp[0].fecha
+            this.INDEX = i;
+            this.ORDENES.push(resp[0].despacho[i])
+            this.Total_USD = this.Total_USD + (( resp[0].despacho[i].cantidad / 1000)* resp[0].despacho[i].precio);
+              this.Total_Bs = this.Total_Bs + ((( resp[0].despacho[i].cantidad / 1000)* resp[0].despacho[i].precio)*resp[0].despacho[i].tasa);
+          }
+        }
+
       })
-    }else{
-      this.PRODUCTOS = []
+  }
+
+
+  buscar_fecha(desde, hasta){
+    
+    if(!desde.value || !hasta.value){
+      Swal.fire({
+        title:'Error',
+        text:'Debes ingresar 2 fechas validas',
+        icon:'error',
+        showConfirmButton:false,
+        timer: 2000,
+        timerProgressBar: true,
+      })
     }
-  }
 
-  public PRODUCTO = [];
-  public producto__ = ''
-  producto_selected(e){
-    if(e != '#'){
-      this.PRODUCTO = e
-      let produc = this.PRODUCTOS.find(x=> x._id == e)
-      this.producto__ = produc.producto
-      console.log(produc.producto)
-    }else{
-      this.PRODUCTO = []
+    if(desde.value > hasta.value){
+      Swal.fire({
+        title:'Error',
+        text:'Debes ingresar 2 fechas validas',
+        icon:'error',
+        showConfirmButton:false,
+        timer: 2000,
+        timerProgressBar: true,
+      })
     }
+    
+    this.api.getDespachoFechas(desde.value, hasta.value)
+      .subscribe((resp:any)=>{
+        this.ORDENES = []
+        this.NOTAS = []
+        this.Total_Bs = 0;
+        this.Total_USD = 0;
+        this.Total_Bs_N = 0;
+        this.Total_USD_N = 0;
+        for(let i=0; i< resp.length;i++){
+          for(let x=0; x< resp[i].despacho.length;x++){
+            if(resp[i].despacho[x].tasa){
+              if(resp[i].despacho[x].documento.charAt(0) === 'F'){
+                resp[i].despacho[x].fecha = resp[i].fecha
+                this.ORDENES.push(resp[i].despacho[x])
+                this.Total_USD = this.Total_USD + (( resp[i].despacho[x].cantidad / 1000)* resp[i].despacho[x].precio);
+                this.Total_Bs = this.Total_Bs + ((( resp[i].despacho[x].cantidad / 1000)* resp[i].despacho[x].precio)/resp[i].despacho[x].tasa);
+              }else{
+                resp[i].despacho[x].fecha = resp[i].fecha
+                this.NOTAS.push(resp[i].despacho[x])
+                this.Total_USD_N = this.Total_USD_N + (( resp[i].despacho[x].cantidad / 1000)* resp[i].despacho[x].precio);
+                this.Total_Bs_N = this.Total_Bs_N + ((( resp[i].despacho[x].cantidad / 1000)* resp[i].despacho[x].precio)*resp[i].despacho[x].tasa);
+              }
+            }
+          }
+        }
+      })
+  
   }
 
-  public ORDEN_COMPRA = ''
-  OC(e){
-    this.ORDEN_COMPRA = e
+  BuscarCliente(cliente, desde, hasta){
+
+    console.log(cliente, '*', desde, '*', hasta)
+
+    if(cliente === '#'){
+      Swal.fire({
+        title:'Error',
+        text:'Debes seleccionar un cliente',
+        icon:'error',
+        showConfirmButton:false,
+        timer: 2000,
+        timerProgressBar: true,
+      })
+    }
+
+    if(!desde || !hasta){
+      Swal.fire({
+        title:'Error',
+        text:'Debes ingresar 2 fechas validas',
+        icon:'error',
+        showConfirmButton:false,
+        timer: 2000,
+        timerProgressBar: true,
+      })
+    }
+
+    this.api.getDespachoCliente(cliente, desde, hasta)
+      .subscribe((resp:any)=>{
+        this.ORDENES = []
+        this.Total_Bs = 0;
+        this.Total_USD = 0;
+        for(let i=0; i< resp.length;i++){
+          for(let x=0; x< resp[i].despacho.length;x++){
+            if(resp[i].despacho[x].tasa){
+              if(resp[i].despacho[x].documento.charAt(0) === 'F'){
+                resp[i].despacho[x].fecha = resp[i].fecha
+                this.ORDENES.push(resp[i].despacho[x])
+                this.Total_USD = this.Total_USD + (( resp[i].despacho[x].cantidad / 1000)* resp[i].despacho[x].precio);
+                this.Total_Bs = this.Total_Bs + ((( resp[i].despacho[x].cantidad / 1000)* resp[i].despacho[x].precio)/resp[i].despacho[x].tasa);
+              }else{
+                resp[i].despacho[x].fecha = resp[i].fecha
+                this.NOTAS.push(resp[i].despacho[x])
+                this.Total_USD_N = this.Total_USD_N + (( resp[i].despacho[x].cantidad / 1000)* resp[i].despacho[x].precio);
+                this.Total_Bs_N = this.Total_Bs_N + ((( resp[i].despacho[x].cantidad / 1000)* resp[i].despacho[x].precio)*resp[i].despacho[x].tasa);
+              }
+            }
+          }
+        }
+      })
   }
-
-  public Fecha_entrega = ''
-  date_(e){
-    this.Fecha_entrega = e
-  }
-  public _Fecha_entrega = ''
-  date__(e){
-    this._Fecha_entrega = e
-  }
-
-  public Loaded = false
-  datos(){
-    this.Loaded = true
-  }
-
-  public _CANTIDAD = ''
-  NuevaCantidad(e){
-    this._CANTIDAD = e
-  }
-
-  public __Fecha = ''
-  Fecha__(e){
-    this.__Fecha = e
-  }
-
-
-  public DATOS = []
-  AgregarNuevo(){
-    this.DATOS.push(
-    {
-     producto:this.PRODUCTO,
-     nombre:this.producto__,
-     cantidad:this._CANTIDAD,
-     fecha:this.__Fecha
-    })
-
-    this.__Fecha = ''
-    this._CANTIDAD = ''
-    this.PRODUCTO = []
-  }
-
-  Eliminar(i){
-    this.DATOS.splice(i,1)
-  }
-
-  Editar(i){
-    let _i_ = i.toString()
-    document.getElementById(`field_c${_i_}`).style.display = 'block';
-    document.getElementById(`field_f${_i_}`).style.display = 'block';
-    document.getElementById(`dato_c${_i_}`).style.display = 'none';
-    document.getElementById(`dato_f${_i_}`).style.display = 'none';
-    document.getElementById(`buttons${_i_}`).style.display = 'none'
-    document.getElementById(`buttons_${_i_}`).style.display = 'block'
-  }
-
-  editarCantidad(e,i){
-    this.DATOS[i].cantidad = e
-  }
-
-  editarFecha(e,i){
-    this.DATOS[i].fecha = e
-  }
-
-  FinalizarEdicion(i){
-    let _i_ = i.toString()
-    document.getElementById(`field_c${_i_}`).style.display = 'none';
-    document.getElementById(`field_f${_i_}`).style.display = 'none';
-    document.getElementById(`dato_c${_i_}`).style.display = 'block';
-    document.getElementById(`dato_f${_i_}`).style.display = 'block';
-    document.getElementById(`buttons${_i_}`).style.display = 'block'
-    document.getElementById(`buttons_${_i_}`).style.display = 'none'
-  }
-
-
 }
 

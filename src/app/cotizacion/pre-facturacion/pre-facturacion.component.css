@@ -36,3 +36,8 @@
     width: 250px;
     margin-left: 30%;
 }
+.boton_continuar{
+    align-items: center;
+    align-self: center;
+    text-align: center;
+}

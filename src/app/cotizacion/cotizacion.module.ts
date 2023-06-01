@@ -11,11 +11,12 @@ import { MainComponent } from './main/main.component';
 import { TokenValidationComponent } from '../token-validation/token-validation.component';
 import { EtiquetaComponent } from './etiqueta/etiqueta.component';
 import { NgxQRCodeModule } from '@techiediaries/ngx-qrcode';
+import { ConsultaFacturacionComponent } from './consulta-facturacion/consulta-facturacion.component';
 
 
 
 @NgModule({
-  declarations: [CotizacionComponent, GestionComponent, EtiquetaComponent, PreFacturacionComponent, MainComponent, TokenValidationComponent],
+  declarations: [CotizacionComponent, GestionComponent, EtiquetaComponent, PreFacturacionComponent, MainComponent, TokenValidationComponent, ConsultaFacturacionComponent],
   imports: [
     SharedModule,
     CommonModule,
