@@ -216,8 +216,15 @@ export class OrdenComponent implements OnInit {
       pega_unidad =pega[0].producto.unidad
     }
     let caja = materiales.filter(x => x.producto.grupo.nombre === 'Cajas Corrugadas')
-    let cant_cajas = Math.ceil(PRODUCTO.cantidad / caja[0].cantidad)
-    let cinta_ = caja[0].producto.cinta * cant_cajas;
+    let cant_cajas = 0;
+    let cinta_ = 0;
+    if(caja[0]){
+      cant_cajas = Math.ceil(PRODUCTO.cantidad / caja[0].cantidad)
+      cinta_ = caja[0].producto.cinta * cant_cajas;
+    }else{
+      caja = [];
+      caja.push({producto:{nombre:'N/A'},cantidad:'N/A'})
+    }
     let cantidad_cajas = Math.ceil(cant_cajas)
     let cinta = materiales.filter(x => x.producto.grupo.nombre === 'Cinta de Embalaje')
     let Nombre_sustrato = `${sustrato[0].producto.nombre} ${sustrato[0].producto.marca} (Calibre:${sustrato[0].producto.calibre}, Gramaje:${sustrato[0].producto.gramaje})`

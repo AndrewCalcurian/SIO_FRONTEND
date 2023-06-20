@@ -13,7 +13,7 @@ export class SubirArchivosService {
 
   async actualizarFoto(
     archivo:File,
-    tipo:'usuarios'|'errors'|'producto',
+    tipo:'usuarios'|'errors'|'producto'|'despacho'|'distribucion'|'aereo',
     id:string
   ) {
     try{
@@ -32,7 +32,7 @@ export class SubirArchivosService {
 
       const data = await resp.json();
       if (data.ok){
-        Swal.fire('Excelente!', 'Se ha actualizado la imagen del producto', 'success');
+        Swal.fire({title:'Excelente!', text:'Se ha actualizado la imagen del producto', icon:'success', showConfirmButton:false, timer:2000, timerProgressBar:true});
         return data.img
       }else{
         Swal.fire('Error', data.err.message, 'error');

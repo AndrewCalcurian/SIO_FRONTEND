@@ -21,10 +21,16 @@ export class ConsultaOrdenComponent implements OnInit {
   public Ordenes = []
   public Orden;
   public selected = false;
+  public all_ = false;
   MostarOrden(e){
-    console.log(e)
-    this.Orden = this.Ordenes[e]
-    this.selected = true;
+    if(e != 'all'){
+      console.log(e)
+      this.all_ = false;
+      this.Orden = this.Ordenes[e]
+      this.selected = true;
+    }else if(e === 'all'){
+      this.all_ = true;
+    }
   }
   puntoYcoma(n){
     if(!n){

@@ -52,12 +52,17 @@ const routes: Routes = [
     loadChildren: ()=> import('./cotizacion/cotizacion.module').then(m=>m.CotizacionModule)
   },
   {
+    path: 'laboratorio',
+    canActivate: [AuthGuard],
+    loadChildren: ()=> import('./laboratorio/laboratorio.module').then(m=>m.LaboratorioModule)
+  },
+  {
     path: 'planificacion',
     canActivate: [AuthGuard],
     component:PlanificacionComponent
   },
   {
-    path: 'prueba',
+    path: 'prueba/:producto',
     component:BarChartComponent
   },
   {

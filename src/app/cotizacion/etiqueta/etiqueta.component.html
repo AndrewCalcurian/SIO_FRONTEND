@@ -23,6 +23,11 @@
                             <div class="field">
                                 <div class="control">
                                     <input type="text" class="input width__" placeholder="Orden de producción N°" (change)="seleccionar_orden($event.target.value)" >
+                                     <button class="button is-success">
+                                        <span class="icon">
+                                            <i class="fas fa-search"></i>
+                                        </span>
+                                    </button>
                                 </div>
                             </div>
                         </div>
@@ -143,11 +148,12 @@
                             </table>
                         </div>
                     </div>
-                    <button class="button is-success" id='imprimir__' (click)="generarpdf()" *ngIf="visto">
+                    <br><br>
+                    <button class="button is-success" id='imprimir__' (click)="generarpdf()" *ngIf="visto"
+                    [ngClass]="{'is-loading':cargando}">
                         <span class="icon">
                             <i class="fas fa-print"></i>
                         </span>
-                        <span>Imprimir</span>
                     </button>
                 </div>
             </div>
@@ -199,7 +205,7 @@
                                                   </button>
                                             </ng-container>
                                             <ng-container *ngIf="gestion.Impreso">
-                                                Impreso: {{gestion.Impreso}}
+                                                Impreso: {{gestion.Impreso | date:'dd/MM/yyyy'}}
                                             </ng-container>
                                     </td>
                                     </tr>
@@ -217,7 +223,7 @@
                                             </ng-container>
         
                                               <ng-container *ngIf="gestion.Resto">
-                                                Impreso: {{gestion.Resto}}
+                                                Impreso: {{gestion.Resto  | date:'dd/MM/yyyy'}}
                                             </ng-container>
         
                                         </td>

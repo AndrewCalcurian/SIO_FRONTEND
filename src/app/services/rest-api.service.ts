@@ -611,6 +611,15 @@ export class RestApiService {
     return this.http.get(url)
   }
 
+  updateManyMateriales(id, data){
+    const url = `${this.api_url}/materiales/${id}`
+    return this.http.put(url, data)
+  }
+
+  putAgregarformula(id, data){
+    const url = `${this.api_url}/agregar-formula/${id}`
+    return this.http.put(url, data)
+  }
 
 
 }

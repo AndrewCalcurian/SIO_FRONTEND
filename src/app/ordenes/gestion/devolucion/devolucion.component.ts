@@ -48,12 +48,17 @@ export class DevolucionComponent implements OnInit {
     this.materiales = this.devoluciones.filter(devoluciones => devoluciones.orden === orden_);
     console.log(this.materiales)
     for(let i=0;i<this.materiales.length;i++){
-      this.materiales[i].material.sort(function(a, b) {
-        if(a.material.nombre.toLowerCase() < b.material.nombre.toLowerCase()) return -1
-        if(a.material.nombre.toLowerCase() > b.material.nombre.toLowerCase()) return 1
-        return 0
-
-      })
+      if(!this.materiales.nombre){
+        console.log(this.materiales[i])
+        this.materiales.slice(i,1);
+      }else{
+        this.materiales[i].material.sort(function(a, b) {
+          if(a.material.nombre.toLowerCase() < b.material.nombre.toLowerCase()) return -1
+          if(a.material.nombre.toLowerCase() > b.material.nombre.toLowerCase()) return 1
+          return 0
+  
+        })
+      }
     }
     let malas = this.materiales.filter(materiales => materiales.material[0].material === null)
     if(orden_ == '#'){
@@ -61,6 +66,7 @@ export class DevolucionComponent implements OnInit {
     }
 
     console.log(this.materiales)
+    this.materiales = this.materiales.reverse();
   // this.materiales = this.materiales.material
   
   }

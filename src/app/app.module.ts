@@ -32,6 +32,8 @@ import { TokenValidationComponent } from './token-validation/token-validation.co
 registerLocaleData(localeES, 'es')
 
 import { NgxQRCodeModule } from '@techiediaries/ngx-qrcode';
+import { LaboratorioComponent } from './laboratorio/laboratorio.component';
+import { LaboratorioModule } from './laboratorio/laboratorio.module';
 
 @NgModule({
   declarations: [
@@ -46,7 +48,7 @@ import { NgxQRCodeModule } from '@techiediaries/ngx-qrcode';
     PlanificacionComponent,
     LoginComponent,
     UnicosPipe,
-    BarChartComponent
+    BarChartComponent,
   ],
   imports: [
     BrowserModule,
@@ -54,6 +56,7 @@ import { NgxQRCodeModule } from '@techiediaries/ngx-qrcode';
     SharedModule,
     AppRoutingModule,
     EstadisticasModule,
+    LaboratorioModule,
     IndexModule,
     NuevoPedidoModule,
     ProductoYMaquinariaModule,

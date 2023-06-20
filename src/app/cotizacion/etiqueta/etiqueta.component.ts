@@ -48,9 +48,11 @@ export class EtiquetaComponent implements OnInit {
   public hoy
   public sustrato
   public Despachados
+  public cargando:boolean = false;
+  public __orden__
   seleccionar_orden(e){
-    console.log(e)
-
+    console.log(e,'<- e')
+    this.__orden__ = e;
     let id = this.ordenes.find(x=> x.sort === e)
     // console.log(id)
     e = id._id
@@ -67,6 +69,7 @@ export class EtiquetaComponent implements OnInit {
           this.hoy = moment.utc().format('DD/MM/yyyy');
           console.log(this.__orden)
           this.orden = e;
+          console.log(this.orden, '<-- this.orden')
           // this.__orden = this.ordenes.find(x=> x._id === e)
           for(let i=0;i<this.__orden.producto.materiales[this.__orden.montaje].length;i++){
             
@@ -133,6 +136,7 @@ export class EtiquetaComponent implements OnInit {
 
   generarpdf()
   {
+    this.cargando = true;
     let data = {
       orden:this.__orden,
       fecha:this.fecha,
@@ -146,10 +150,13 @@ export class EtiquetaComponent implements OnInit {
     }
     this.api.ImprimirPDF(data)
       .subscribe((resp:any)=>{
-        this.seleccionar_orden(this.orden)
+        console.log(resp)
+        console.log('---> ',this.orden)
+        this.seleccionar_orden(this.__orden__)
         this.visto = false
         this.api.copyTags(this.__orden.sort, this.unidades__)
           .subscribe((resp:any)=>{
+           this.cargando = false;
             console.log('done')
           })
       })
