@@ -424,6 +424,15 @@ export class BarChartComponent implements OnInit {
 
   DescargarPDF(){
 
+    // Swal.fire({
+    //   position: 'top-end',
+    //   icon: 'success',
+    //   title: 'Descargando',
+    //   showConfirmButton: false,
+    //   timer: 1500,
+    //   timerProgressBar:true
+    // })
+
     let producto = this.productos.producto
     let producto_cerrado = ``
     let Sustrato = this.Sustrato
@@ -444,6 +453,8 @@ export class BarChartComponent implements OnInit {
     let secuencia_color = []
     let solucion_fuente = []
     let pega = this.pega
+    let caja = this.caja
+
     let test:boolean = false;
 
 
@@ -508,7 +519,8 @@ export class BarChartComponent implements OnInit {
     }
 
     for(let i =0; i< producto.impresora_aprobada.length; i++){
-      tamano_pinza.push(`${producto.impresora_aprobada[i]} (${producto.tamano_pinza[i]})`)
+      tamano_pinza.push(`${producto.impresora_aprobada[i].text} (${producto.tamano_pinza[i]})`)
+      console.log(producto.impresora_aprobada[i])
     }
 
     if(producto.tamano_cerrado[2]){
@@ -621,7 +633,7 @@ export class BarChartComponent implements OnInit {
                   new Cell(new Txt('2.3. diseño del producto').bold().end).margin([-5,0]).border([false]).end,
                 ],
                 [
-                  new Cell(await new Img(`http://localhost:8080/api/imagen/producto/${producto.img}`).width(400).build()).alignment('center').end,
+                  new Cell(await new Img(`http://192.168.0.23:8080/api/imagen/producto/${producto.img}`).width(400).build()).alignment('center').end,
                 ],
                 [
                   new Cell(new Txt('Imagen 1: Diseño del producto').end).alignment('center').border([false]).end,
@@ -1300,10 +1312,182 @@ export class BarChartComponent implements OnInit {
           [
             new Cell(new Txt('6.7. Pegamento aprobado:').bold().end).end,
             new Cell(new Stack(pega).end).end
-          ]
+          ],
+          [
+            new Cell(new Txt('6.8. Tipo de caja para embalaje:').bold().end).end,
+            new Cell(new Txt(`${caja.producto.descripcion}
+            Tipo: ${caja.producto.tipo}
+            ECT Mínimo: ${caja.producto.ECT} KN/m`).end).end
+          ],
+          [
+            new Cell(new Txt('6.9. Modelo de la caja:').bold().end).end,
+            new Cell(new Txt(`${caja.producto.nombre}`).end).end
+          ],
+          [
+            new Cell(new Txt('6.10. Proveedores de corrugados aprobados:').bold().end).end,
+            new Cell(new Txt(`Servicios de Corrugados Maracay, C.A
+            Corrugados Industriales de Venezuela, C.A. (CIVCA)`).end).end
+          ],
+          [
+            new Cell(new Txt('6.11. Cantidad de unidades por caja:').bold().end).end,
+            new Cell(new Txt(`${caja.cantidad} unidades`).end).end
+          ],
+          [
+            new Cell(new Txt('6.12. Cantidad por paquetes:').bold().end).end,
+            new Cell(new Txt(`${producto.Cantidad_paquete} unidades`).end).end
+          ],
 
+        ]).widths(['30%','70%']).pageBreak('after').end
+      )
+
+      pdf.add(
+        new Table([
+          [
+            new Cell(await new Img('../../assets/poli_cintillo.png').width(85).margin([0, 15]).build()).alignment('center').rowSpan(4).end,
+            new Cell(new Txt(`
+            FORMATO 
+            ESPECIFICACIÓN DE 
+            PRODUCTO
+            `).bold().end).alignment('center').fontSize(13).rowSpan(4).end,
+            new Cell(new Txt('Código: FRP-007').end).fillColor('#dedede').fontSize(9).alignment('center').end,
+          ],
+          [
+            new Cell(new Txt('').end).end,
+            new Cell(new Txt('').end).end,
+            new Cell(new Txt('N° de Revisión: 1').end).fillColor('#dedede').fontSize(9).alignment('center').end,
+          ],
+          [
+            new Cell(new Txt('').end).end,
+            new Cell(new Txt('').end).end,
+            new Cell(new Txt('Fecha de Revision: 20/06/2023').end).fillColor('#dedede').fontSize(9).alignment('center').end,
+          ],
+          [
+            new Cell(new Txt('').end).end,
+            new Cell(new Txt('').end).end,
+            new Cell(new Txt('Página: 1 de 1').end).fillColor('#dedede').fontSize(9).alignment('center').end,
+          ],
+        ]).widths(['25%','50%','25%']).end
+      )
+
+      pdf.add(
+        pdf.ln(1)
+      )
+      
+      pdf.add(
+        new Table([
+          [
+            new Cell(new Txt('6. POST-IMPRESIÓN').end).colSpan(2).fontSize(10).fillColor('#000000').color('#FFFFFF').end,
+            new Cell(new Txt('').end).border([false]).end,
+          ],
+          [
+            new Cell(
+              new Table([
+                [
+                  new Cell(new Txt('6.13. Distribución del producto en caja').bold().end).border([false]).colSpan(2).end,
+                  new Cell(new Txt('').end).end
+                ],
+                [
+                  new Cell(await new Img(`http://192.168.0.23:8080/api/imagen/aereo/${producto.aereo}`).width(200).build()).alignment('center').end,
+                  new Cell(await new Img(`http://192.168.0.23:8080/api/imagen/distribucion/${producto.distribucion}`).width(200).build()).alignment('center').end,
+                ],
+                [
+                  new Cell(new Txt(`Imagen 2: Distribución del producto 
+                  (vista aerea)`).alignment('center').end).border([false]).end,
+                  new Cell(new Txt(`Imagen 3: Distribución del producto 
+                  (vista 3D)`).alignment('center').end).border([false]).end
+                ]
+              ]).layout('noBorders').widths(['50%','50%']).end,
+            ).colSpan(2).end,
+            new Cell(new Txt(``).end).end
+          ],
+          [
+            new Cell(
+              new Table([
+                [
+                  new Cell(new Txt('6.14. Paletizado').bold().end).border([false]).end,
+                ],
+                [
+
+                  new Cell(new Txt(`Tipo de paleta: ${producto.tipo_paleta[0]}
+                  Tamaño de paleta (cm): ${producto.tipo_paleta[1]}
+                  Cantidad de estibas: ${producto.tipo_paleta[2]}
+                  Peso de caja (Kg): ${producto.tipo_paleta[3]}`).end).border([false]).end,
+                ],
+                [
+                  new Cell(await new Img(`http://192.168.0.23:8080/api/imagen/despacho/${producto.paletizado}`).width(200).build()).margin([300,0,0,0]).alignment('center').end,
+                ],
+                [
+                  new Cell(new Txt(`Imagen 3: Paletizado aprobado 
+                  (vista aerea)`).alignment('center').end).border([false]).end,
+                ]
+              ]).layout('noBorders').end,
+            ).colSpan(2).end,
+            new Cell(new Txt(``).end).end
+          ]
+          
+        ]).widths(['30%','70%']).pageBreak('after').end
+      )
+
+      pdf.add(
+        new Table([
+          [
+            new Cell(await new Img('../../assets/poli_cintillo.png').width(85).margin([0, 15]).build()).alignment('center').rowSpan(4).end,
+            new Cell(new Txt(`
+            FORMATO 
+            ESPECIFICACIÓN DE 
+            PRODUCTO
+            `).bold().end).alignment('center').fontSize(13).rowSpan(4).end,
+            new Cell(new Txt('Código: FRP-007').end).fillColor('#dedede').fontSize(9).alignment('center').end,
+          ],
+          [
+            new Cell(new Txt('').end).end,
+            new Cell(new Txt('').end).end,
+            new Cell(new Txt('N° de Revisión: 1').end).fillColor('#dedede').fontSize(9).alignment('center').end,
+          ],
+          [
+            new Cell(new Txt('').end).end,
+            new Cell(new Txt('').end).end,
+            new Cell(new Txt('Fecha de Revision: 20/06/2023').end).fillColor('#dedede').fontSize(9).alignment('center').end,
+          ],
+          [
+            new Cell(new Txt('').end).end,
+            new Cell(new Txt('').end).end,
+            new Cell(new Txt('Página: 1 de 1').end).fillColor('#dedede').fontSize(9).alignment('center').end,
+          ],
+        ]).widths(['25%','50%','25%']).end
+      )
+
+      pdf.add(
+        pdf.ln(1)
+      )
+
+      pdf.add(
+        new Table([
+          [
+            new Cell(new Txt('7. CLASIFICACIÓN DE DEFECTOS').end).colSpan(2).fontSize(10).fillColor('#000000').color('#FFFFFF').end,
+            new Cell(new Txt('').end).border([false]).end,
+          ],
+          [
+            new Cell(new Txt('7.1. Defectos críticos:').bold().end).end,
+            new Cell(new Txt(producto.defectos[0]).end).end
+          ],
+          [
+            new Cell(new Txt('7.2. Defectos mayores:').bold().end).end,
+            new Cell(new Txt(producto.defectos[1]).end).end
+          ],
+          [
+            new Cell(new Txt('7.3. Defectos menores:').bold().end).end,
+            new Cell(new Txt('').end).end
+          ],
         ]).widths(['30%','70%']).end
       )
+
+
+
+
+
+
+      
 
 
 

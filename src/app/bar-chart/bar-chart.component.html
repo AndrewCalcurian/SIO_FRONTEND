@@ -1115,7 +1115,7 @@
                         <td>
                         <ng-container *ngIf="productos.producto.defectos[1] && !Edicion">
                             <pre>
-                                {{Formatear(productos.producto.defectos[1])}}
+                                {{productos.producto.defectos[1]}}
                             </pre>
                         </ng-container>
                         <ng-container *ngIf="Edicion">
