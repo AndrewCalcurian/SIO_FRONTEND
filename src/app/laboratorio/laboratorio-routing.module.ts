@@ -6,6 +6,7 @@ import { MainComponent } from './main/main.component';
 import { MateriaPrimaComponent } from './materia-prima/materia-prima.component';
 import { ProductoTerminadoComponent } from './producto-terminado/producto-terminado.component';
 import { IndexComponent } from './index/index.component';
+import { EspecificacionComponent } from './especificacion/especificacion.component';
 
 
 
@@ -29,6 +30,10 @@ const routes: Routes =[
       {
         path:'producto-terminado',
         component:ProductoTerminadoComponent
+      },
+      {
+        path:'especificacion/:producto',
+        component:EspecificacionComponent
       }
     ]
 }]

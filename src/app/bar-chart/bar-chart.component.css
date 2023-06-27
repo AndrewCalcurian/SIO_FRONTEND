@@ -1,16 +1,7 @@
 @font-face {
-    font-family: 'BarlowCondensed-Bold';
-    src: url(../../assets/fuente/BarlowCondensed-Bold.ttf);
-  }
-
-  @font-face {
-    font-family: 'BarlowCondensed-Light';
-    src: url(../../assets/fuente/BarlowCondensed-Light.ttf);
-  }
-  @font-face {
-    font-family: 'BarlowCondensed-Regular';
-    src: url(../../assets/fuente/BarlowCondensed-Regular.ttf);
-  }
+    font-family: Roboto;
+    src: url(../../assets/Roboto/Roboto-Black.ttf);
+}
 
   .titulo{
     font-size: 45px;
@@ -21,54 +12,28 @@
     font-family: Roboto;
 }
 
-.indice{
-    width: 250px;
-    font-weight: bold;
-}
-
-.img{
-    display: block;
-    width: 100%;
-    border: solid 1px black;
-    align-items: center;
-    align-self: center;
-    align-content: center;
-    text-align: center;
-}
-.descripcionImg {
-    display: block;
-    width: 100%;
-    text-align: center;
-}
-
-.img_{
-    display: block;
-    border:solid 1px black;
-    width: 100%;
-    float: left;
-    margin:5px;
-    align-items: center;
-    align-self: center;
-    align-content: center;
-    text-align: center;
-    height: 400px;
-}
-.DescripcionImg_{
-    display: block;
-    width: 48.8%;
-    float: left;
-    margin:5px;
-    text-align: center;
-}
-.red__{
-    color: red;
-}
-
-.short{
+.n_lote{
     width: 150px;
 }
-
-pre{
-    background-color: white;
-    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+.n_lote_{
+    width: 100px;
+}
+.datos{
+    margin-top: -24px;
+}
+.gramaje{
+    width: 70px;
+    height: 23px;
+}
+.gramaje_{
+    height: 20px;
+}
+.size{
+    width: 100px;
+}
+.red{
+    color: red;
+}
+.green{
+    color: #48c78e;
 }

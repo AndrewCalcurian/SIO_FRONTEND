@@ -129,7 +129,7 @@
                         Subtotal (Bs):
                     </th>
                     <td>
-                        {{puntoYcoma(Despachos[INDEX].despacho.cantidad / 1000 * Despachos[INDEX].despacho.precio*Despachos[INDEX].despacho.tasa)}}
+                        {{calcularSub(Despachos[INDEX].despacho.cantidad, Despachos[INDEX].despacho.precio, Despachos[INDEX].despacho.tasa)}}
                     </td>
                 </tr>
             </table>

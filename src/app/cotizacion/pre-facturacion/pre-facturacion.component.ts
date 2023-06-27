@@ -26,6 +26,7 @@ export class PreFacturacionComponent implements OnInit {
   public ModificaciondePrecio:boolean = false
   public resumido:boolean = false
   public resumen:boolean = true
+  public precio_millar_Bs
 
   ngOnInit(): void {
     this.api.getDespachosYOrdenes()
@@ -45,6 +46,13 @@ export class PreFacturacionComponent implements OnInit {
 
   Editar_Cantidad_despachada(){
     (<HTMLInputElement>document.getElementById('Cantidad_Despachada')).disabled = false
+  }
+
+
+  calcularSub(x,y,z){
+    let sub_bs:any = (y*z).toFixed(3)
+    x = x / 1000;
+    return this.puntoYcoma(x*sub_bs)
   }
 
   Modificacion_close(){
@@ -250,7 +258,8 @@ export class PreFacturacionComponent implements OnInit {
     let SubtotalUSD
     SubtotalUSD = this.puntoYcoma(this.Despachos[this.INDEX].despacho.cantidad / 1000 * this.Despachos[this.INDEX].despacho.precio)
     let SubtotalBS
-    SubtotalBS = this.puntoYcoma(this.Despachos[this.INDEX].despacho.cantidad / 1000 * this.Despachos[this.INDEX].despacho.precio*this.Despachos[this.INDEX].despacho.tasa)
+    let precio_millar_Bs:any = ( this.Despachos[this.INDEX].despacho.precio*this.Despachos[this.INDEX].despacho.tasa).toFixed(3)
+    SubtotalBS = this.puntoYcoma(this.Despachos[this.INDEX].despacho.cantidad / 1000 * precio_millar_Bs)
     
 
     // this.Despachos[this.INDEX].fecha_prefacturacion =  moment().format('DD/MM/YYYY')

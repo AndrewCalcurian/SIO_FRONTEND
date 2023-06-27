@@ -622,4 +622,19 @@ export class RestApiService {
   }
 
 
+
+  // **********************************************************************
+  // *            API PARA CONSULTAS DE LABORATORIO                       *
+  // **********************************************************************
+
+  getAlmacenadoPorLote(lote){
+    const url = `${this.api_url}/analisis/${lote}`
+    return this.http.get(url)
+  }
+
+  // **********************************************************************
+  // *            FINAL API PARA CONSULTAS DE LABORATORIO                 *
+  // **********************************************************************
+
+
 }

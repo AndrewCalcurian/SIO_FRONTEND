@@ -62,7 +62,7 @@ const routes: Routes = [
     component:PlanificacionComponent
   },
   {
-    path: 'prueba/:producto',
+    path: 'prueba',
     component:BarChartComponent
   },
   {
