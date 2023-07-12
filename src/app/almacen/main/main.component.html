@@ -62,6 +62,17 @@
                 </span>
             </span>
         </button>
+        <a class="button is-primary edited" href="almacen/reportes">
+            <span class="icon">
+                <i class="fas fa-clipboard-list"></i>
+            </span>
+            <span>
+                Reporte <br>
+                <span class="down">
+                    Inventario
+                </span>
+            </span>
+        </a>
         <ng-containe *ngIf="Devoluciones">
             <ng-container *ngIf="Devoluciones.length > 0 && usuario.Almacen == 2">
                 <button class="button is-danger is-outlined" (click)="Modal_Devolucion()">

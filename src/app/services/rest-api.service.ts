@@ -637,4 +637,34 @@ export class RestApiService {
   // **********************************************************************
 
 
+  putBuscarAlmacen(data){
+    const url = `${this.api_url}/reporte-inventario`
+    return this.http.post(url, data)
+  }
+
+  postSalidas(data){
+    const url = `${this.api_url}/reporte-salidas`
+    return this.http.post(url, data)
+  }
+
+  postDevoluciones(data){
+    const url = `${this.api_url}/reporte-devoluciones`
+    return this.http.post(url, data)
+  }
+
+  postentradashastahoy(data){
+    const url = `${this.api_url}/corte-de-fecha`
+    return this.http.post(url, data)
+  }
+
+  postsalidashastahoy(data){
+    const url = `${this.api_url}/corte-salida`
+    return this.http.post(url, data)
+  }
+
+  postdevolucioneshastahoy(data){
+    const url = `${this.api_url}/corte-devolucion`
+    return this.http.post(url, data)
+  }
+
 }

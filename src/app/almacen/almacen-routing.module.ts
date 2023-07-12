@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { Routes, RouterModule } from '@angular/router';
 import { AlmacenComponent } from './almacen.component';
 import { MainComponent } from './main/main.component';
+import { ReportesComponent } from './reportes/reportes.component';
 
 const routes: Routes =[
   {
@@ -12,7 +13,12 @@ const routes: Routes =[
       {
         path:'',
         component:MainComponent
-      }]
+      },
+      {
+        path:'reportes',
+        component:ReportesComponent
+      }
+    ]
 }]
 
 @NgModule({

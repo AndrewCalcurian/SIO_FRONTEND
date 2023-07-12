@@ -440,11 +440,13 @@
                     <table class="table is-fullwidth is-bordered">
                         <thead>
                             <tr>
+                                <th></th>
                                 <th>Mínimo</th>
                                 <th>Nominal</th>
                                 <th>Máximo</th>
                             </tr>
                             <tr>
+                                <td>TOP</td>
                                 <td>
                                     <span *ngIf="!Edited_sustrato">
                                         {{sustrato_selected.cobb[0]}}
@@ -467,6 +469,33 @@
                                     </span>
                                     <span *ngIf="Edited_sustrato">
                                         <input type="number" class="input" [(ngModel)]="sustrato_selected.cobb[2]">
+                                    </span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>BACK</td>
+                                <td>
+                                    <span *ngIf="!Edited_sustrato">
+                                        {{sustrato_selected.cobb[3]}}
+                                    </span>
+                                    <span *ngIf="Edited_sustrato">
+                                        <input type="number" class="input" [(ngModel)]="sustrato_selected.cobb[3]">
+                                    </span>
+                                </td>
+                                <td>
+                                    <span *ngIf="!Edited_sustrato">
+                                        {{sustrato_selected.cobb[4]}}
+                                    </span>
+                                    <span *ngIf="Edited_sustrato">
+                                        <input type="number" class="input" [(ngModel)]="sustrato_selected.cobb[4]">
+                                    </span>
+                                </td>
+                                <td>
+                                    <span *ngIf="!Edited_sustrato">
+                                        {{sustrato_selected.cobb[5]}}
+                                    </span>
+                                    <span *ngIf="Edited_sustrato">
+                                        <input type="number" class="input" [(ngModel)]="sustrato_selected.cobb[5]">
                                     </span>
                                 </td>
                             </tr>

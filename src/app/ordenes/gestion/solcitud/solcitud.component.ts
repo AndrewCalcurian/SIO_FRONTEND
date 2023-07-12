@@ -138,7 +138,7 @@ export class SolcitudComponent implements OnInit {
       this.api.getAlmacenadoID2(this._materiales[i].producto)
         .subscribe((resp:any)=>{
           let cantidad = 0;
-          console.log(resp)
+          console.log(resp,'---------------------------------------------',this._materiales[i].producto)
           for(let i=0;i<resp.length;i++){
             cantidad = cantidad + Number(resp[i].cantidad)
           }

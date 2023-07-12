@@ -384,7 +384,7 @@ export class MateriaPrimaComponent implements OnInit {
     let info = {
       data:{gramaje_e:[this.sustrato_selected.gramaje_e[0],this.sustrato_selected.gramaje_e[1],this.sustrato_selected.gramaje_e[2]],
         calibre_e:[this.sustrato_selected.calibre_e[0],this.sustrato_selected.calibre_e[1],this.sustrato_selected.calibre_e[2],this.sustrato_selected.calibre_e[3],this.sustrato_selected.calibre_e[4],this.sustrato_selected.calibre_e[5],this.sustrato_selected.calibre_e[6],this.sustrato_selected.calibre_e[7],this.sustrato_selected.calibre_e[8]],
-        cobb:[this.sustrato_selected.cobb[0],this.sustrato_selected.cobb[1],this.sustrato_selected.cobb[2]],
+        cobb:[this.sustrato_selected.cobb[0],this.sustrato_selected.cobb[1],this.sustrato_selected.cobb[2],this.sustrato_selected.cobb[3],this.sustrato_selected.cobb[4],this.sustrato_selected.cobb[5]],
         curling:[this.sustrato_selected.curling[0],this.sustrato_selected.curling[1],this.sustrato_selected.curling[2]],
         blancura:[this.sustrato_selected.blancura[0],this.sustrato_selected.blancura[1],this.sustrato_selected.blancura[2]]},
       info:{nombre:this.sustrato_selected.nombre, marca:this.sustrato_selected.marca, calibre:this.sustrato_selected.calibre, gramaje:this.sustrato_selected.gramaje}

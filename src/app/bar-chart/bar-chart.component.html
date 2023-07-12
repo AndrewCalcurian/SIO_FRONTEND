@@ -17,13 +17,13 @@
                 </div>
             </div>
 
-            <table class="table is-fullwidth">
+            <table class="table is-fullwidth" *ngIf="material.length > 0" >
                 <tr>
                     <th class="is-selected">Información del sustrato</th>
                 </tr>
             </table>
 
-            <table class="table is-fullwidth">
+            <table class="table is-fullwidth" *ngIf="material.length > 0">
                 <tr>
                     <th class="is-selected">Descripcion del sustrato</th>
                     <td colspan="3">{{material[0].material.nombre}} ({{material[0].material.ancho}}x{{material[0].material.largo}}) </td>
@@ -60,16 +60,19 @@
 
         <hr>
 
-        <div class="field">
+        <div class="field" *ngIf="material.length > 0">
             <label for="" class="label">Cantidad de muestras:</label>
             <div class="control">
                 <input type="number" class="input n_lote_ is-small" min="0" [(ngModel)]="muestras">
+                <button class="button is-success is-small">
+                    <i class="fas fa-arrow-right"></i>
+                </button>
             </div>
         </div>
 
         <hr>
 
-        <div class="field">
+        <div class="field" *ngIf="muestras > 0">
             <label for="" class="label">Tamaño de muestra</label>
             <div class="columns">
                 <div class="column ">
@@ -98,149 +101,28 @@
                 </div>
             </div>
         </div>
-        <b>Area (cm²):</b>{{ancho * largo}}
+        <b *ngIf="muestras > 0">Area (cm²):</b>
+        <ng-container *ngIf="muestras > 0">
+            {{ancho * largo}} <br>
+        </ng-container>
+        <button class="button is-success is-small" *ngIf="(ancho * largo)>0" (click)="showTables()">
+            <span class="icon">
+                <i class="fas fa-arrow-right"></i>
+            </span>
+            <span>
+                continuar
+            </span>
+        </button>
         <hr>
-        <!-- <table class="table">
-            <tr>
-                <th class="is-selected" colspan="5">ESPECIFICACIONES</th>
-            </tr>
-            <tr>
-                <th>Mínimo</th>
-                <th></th>
-                <th></th>
-                <th class="is-selected">Gramaje (g/m²)</th>
-                <th class="is-selected">Cobb (g/m²)</th>
 
-            </tr>
+        <table class="table is-fullwidth is-bordered" *ngIf="_gramaje && tablas">
             <tr>
-                <th>Nominal</th>
-                <th></th>
-                <th></th>
-                <td style="text-align: center;">{{material[0].material.gramaje_e[0]}}</td>
-                <th></th>
-            </tr>
-            <tr>
-                <th>Máximo</th>
-                <th></th>
-                <th></th>
-                <td style="text-align: center;">{{material[0].material.gramaje_e[1]}}</td>
-                <th></th>
-            </tr>
-            <tr>
-                <th></th>
-                <th></th>
-                <th></th>
-                <td style="text-align: center;">{{material[0].material.gramaje_e[2]}}</td>
-                <th></th>
-            </tr>
-            <tr>
-                <th class="is-selected" colspan="5">RESULTADOS</th>
-            </tr>
-            <tr>
-                <th></th>
-                <th class="is-selected">Masa inicial (g)</th>
-                <th class="is-selected">Masa final (g)</th>
-                <th class="is-selected">Gramaje (g/m²)</th>
-                <th class="is-selected">Cobb (g/m²)</th>
-            </tr>
-            <tr style="text-align: center;">
-                <th>Promedio (X̅)</th>
-                <td>1,40</td>
-                <td>1,62</td>
-                <td>90</td>
-                <td>
-                    <div class="columns">
-                        <div class="column is-1">
-                            22
-                        </div>
-                        <div class="column is-1">
-                            (T)
-                        </div>
-                        <div class="column is-1">
-                            22
-                        </div>
-                        <div class="column is-1">
-                            (B)
-                        </div>
-                    </div>
-                </td>
-            </tr>
-            <tr style="text-align: center;">
-                <th>Desviación (S)</th>
-                <td>0,02</td>
-                <td>0,03</td>
-                <td>1</td>
-                <td>
-                    <div class="columns">
-                        <div class="column is-1">
-                            2
-                        </div>
-                        <div class="column is-1">
-                            (T)
-                        </div>
-                        <div class="column is-1">
-                            1
-                        </div>
-                        <div class="column is-1">
-                            (B)
-                        </div>
-                    </div>
-                </td>
-            </tr>
-            <tr style="text-align: center;">
-                <th>mín</th>
-                <td>1,37</td>
-                <td>1,57</td>
-                <td>88</td>
-                <td>
-                    <div class="columns">
-                        <div class="column is-1">
-                            20
-                        </div>
-                        <div class="column is-1">
-                            (T)
-                        </div>
-                        <div class="column is-1">
-                            20
-                        </div>
-                        <div class="column is-1">
-                            (B)
-                        </div>
-                    </div>
-                </td>
-            </tr>
-            <tr style="text-align: center;">
-                <th>máx</th>
-                <td>1,45</td>
-                <td>1,169</td>
-                <td>93</td>
-                <td>
-                    <div class="columns">
-                        <div class="column is-1">
-                            25
-                        </div>
-                        <div class="column is-1">
-                            (T)
-                        </div>
-                        <div class="column is-1">
-                            24
-                        </div>
-                        <div class="column is-1">
-                            (B)
-                        </div>
-                    </div>
-                </td>
-            </tr>
-        </table> -->
-
-        <table class="table is-fullwidth is-bordered">
-            <tr>
-                <th></th>
+                <th style="border: none;"></th>
                 <th class="is-selected" colspan="3">Especificación</th>
                 <th class="is-selected" colspan="4">Resultado</th>
             </tr>
             <tr>
-                <th></th>
+                <th style="border: none;"></th>
                 <th style="text-align: center;">mín</th>
                 <th style="text-align: center;">Estandar</th>
                 <th style="text-align: center;">máx</th>
@@ -254,34 +136,120 @@
                <td style="text-align: center;">{{material[0].material.gramaje_e[0]}}</td>
                <td style="text-align: center;">{{material[0].material.gramaje_e[1]}}</td>
                <td style="text-align: center;">{{material[0].material.gramaje_e[2]}}</td>
-               <td style="text-align: center;">{{promedio}}</td>
-               <td style="text-align: center;">{{desviacion}}</td>
-               <td style="text-align: center;"></td>
-               <td style="text-align: center;"></td> 
+               <td style="text-align: center;">{{promedio.toFixed(Gramaje_nf)}}</td>
+               <td style="text-align: center;">{{desviacion.toFixed(Gramaje_nf)}}</td>
+               <td style="text-align: center;">{{min_gramaje}}</td>
+               <td style="text-align: center;">{{max_gramaje}}</td> 
             </tr>
             <tr>
                 <th style="text-align: center;">Cobb top</th>
-                <td style="text-align: center;"></td>
-                <td style="text-align: center;"></td>
-                <td style="text-align: center;"></td>
-                <td style="text-align: center;"></td>
-                <td style="text-align: center;"></td>
-                <td style="text-align: center;"></td>
-                <td style="text-align: center;"></td> 
+                <td style="text-align: center;">{{material[0].material.cobb[0]}}</td>
+                <td style="text-align: center;">{{material[0].material.cobb[1]}}</td>
+                <td style="text-align: center;">{{material[0].material.cobb[2]}}</td>
+                <td style="text-align: center;">{{promedio_cobb_top}}</td>
+                <td style="text-align: center;">{{desviacion_cobb_top}}</td>
+                <td style="text-align: center;">{{min_cobb_top}}</td>
+                <td style="text-align: center;">{{max_cobb_top}}</td> 
              </tr>
              <tr>
                 <th style="text-align: center;">Cobb back</th>
-                <td style="text-align: center;"></td>
-                <td style="text-align: center;"></td>
-                <td style="text-align: center;"></td>
-                <td style="text-align: center;"></td>
-                <td style="text-align: center;"></td>
-                <td style="text-align: center;"></td>
-                <td style="text-align: center;"></td> 
+                <td style="text-align: center;">{{material[0].material.cobb[3]}}</td>
+                <td style="text-align: center;">{{material[0].material.cobb[4]}}</td>
+                <td style="text-align: center;">{{material[0].material.cobb[5]}}</td>
+                <td style="text-align: center;">{{promedio_cobb_back}}</td>
+                <td style="text-align: center;">{{desviacion_cobb_back}}</td>
+                <td style="text-align: center;">{{min_cobb_bac}}</td>
+                <td style="text-align: center;">{{max_cobb_bac}}</td> 
              </tr>
         </table>
 
-        <div class="columns">
+        <table class="table is-fullwidth is-bordered" *ngIf="_calibre && tablas">
+            <tr>
+                <th style="border: none;"></th>
+                <th class="is-selected" colspan="3">Especificación</th>
+                <th class="is-selected" colspan="4">Resultado</th>
+            </tr>
+            <tr>
+                <th style="border: none;"></th>
+                <th style="text-align: center;">mín</th>
+                <th style="text-align: center;">Estandar</th>
+                <th style="text-align: center;">máx</th>
+                <th style="text-align: center;">X̅</th>
+                <th style="text-align: center;">S</th>
+                <th style="text-align: center;">mín</th>
+                <th style="text-align: center;">máx</th>
+            </tr>
+            <tr>
+                <th style="text-align: center;">Calibre (mm)</th>
+                <td style="text-align: center;">{{material[0].material.calibre_e[0]}}</td>
+                <td style="text-align: center;">{{material[0].material.calibre_e[1]}}</td>
+                <td style="text-align: center;">{{material[0].material.calibre_e[2]}}</td>
+                <td style="text-align: center;">{{promedio_calibre.toFixed(Calibre_nf)}}</td>
+                <td style="text-align: center;">{{desviacion_calibre.toFixed(Calibre_nf)}}</td>
+                <td style="text-align: center;">{{min_calibre}}</td>
+                <td style="text-align: center;">{{max_calibre}}</td> 
+             </tr>
+             <tr>
+                <th style="text-align: center;">Calibre (µm)</th>
+                <td style="text-align: center;">{{material[0].material.calibre_e[6]}}</td>
+                <td style="text-align: center;">{{material[0].material.calibre_e[7]}}</td>
+                <td style="text-align: center;">{{material[0].material.calibre_e[8]}}</td>
+                <td style="text-align: center;">{{promedio_calibre_um.toFixed(Calibre_nf_um)}}</td>
+                <td style="text-align: center;">{{desviacion_calibre_um.toFixed(Calibre_nf_um)}}</td>
+                <td style="text-align: center;">{{min_calibre_um}}</td>
+                <td style="text-align: center;">{{max_calibre_um}}</td> 
+            </tr>
+            <tr>
+                <th style="text-align: center;">Calibre (pt)</th>
+                <td style="text-align: center;">{{material[0].material.calibre_e[3]}}</td>
+                <td style="text-align: center;">{{material[0].material.calibre_e[4]}}</td>
+                <td style="text-align: center;">{{material[0].material.calibre_e[5]}}</td>
+                <td style="text-align: center;">{{promedio_calibre_pt.toFixed(Calibre_nf_pt)}}</td>
+                <td style="text-align: center;">{{desviacion_calibre_pt.toFixed(Calibre_nf_pt)}}</td>
+                <td style="text-align: center;">{{min_calibre_pt}}</td>
+                <td style="text-align: center;">{{max_calibre_pt}}</td> 
+             </tr>
+        </table>
+
+        <table class="table is-fullwidth is-bordered" *ngIf="_blancura && tablas">
+            <tr>
+                <th style="border: none;"></th>
+                <th class="is-selected" colspan="3">Especificación</th>
+                <th class="is-selected" colspan="4">Resultado</th>
+            </tr>
+            <tr>
+                <th style="border: none;"></th>
+                <th style="text-align: center;">mín</th>
+                <th style="text-align: center;">Estandar</th>
+                <th style="text-align: center;">máx</th>
+                <th style="text-align: center;">X̅</th>
+                <th style="text-align: center;">S</th>
+                <th style="text-align: center;">mín</th>
+                <th style="text-align: center;">máx</th>
+            </tr>
+            <tr>
+                <th style="text-align: center;">Curling (s)</th>
+                <td style="text-align: center;">{{material[0].material.curling[0]}}</td>
+                <td style="text-align: center;">{{material[0].material.curling[1]}}</td>
+                <td style="text-align: center;">{{material[0].material.curling[2]}}</td>
+                <td style="text-align: center;">{{promedio_curling.toFixed(curling_nf)}}</td>
+                <td style="text-align: center;">{{desviacion_curling.toFixed(curling_nf)}}</td>
+                <td style="text-align: center;">{{min_curling}}</td>
+                <td style="text-align: center;">{{max_curling}}</td> 
+            </tr>
+            <tr>
+                <th style="text-align: center;">Blancura (%)</th>
+                <td style="text-align: center;">{{material[0].material.blancura[0]}}</td>
+                <td style="text-align: center;">{{material[0].material.blancura[1]}}</td>
+                <td style="text-align: center;">{{material[0].material.blancura[2]}}</td>
+                <td style="text-align: center;">{{promedio_blancura.toFixed(blancura_nf)}}</td>
+                <td style="text-align: center;">{{desviacion_blancura.toFixed(blancura_nf)}}</td>
+                <td style="text-align: center;">{{min_blancura}}</td>
+                <td style="text-align: center;">{{max_blancura}}</td> 
+            </tr>
+        </table>
+
+        <div class="columns" *ngIf="tablas">
             <div class="column is-1">
                 <table class="table is-fullwidth is-striped">
                     <tr>
@@ -296,19 +264,19 @@
                 </table>
             </div>
         
-            <div class="column">
+            <div class="column" *ngIf="tablas">
                 <div class="tabs">
                     <ul>
-                      <li class="is-active"><a>Gramaje y Cobb</a></li>
-                      <li><a>Calibre</a></li>
-                      <li><a>Curling</a></li>
-                      <li><a>Blancura</a></li>
+                      <li [ngClass]="{'is-active':_gramaje}" (click)="gramaje_()"><a>Gramaje y Cobb</a></li>
+                      <li [ngClass]="{'is-active':_calibre}" (click)="calibre_()"><a>Calibre</a></li>
+                      <li [ngClass]="{'is-active':_blancura}" (click)="blancura_()"><a>Curling y blancura</a></li>
+                      <li [ngClass]="{'is-active':_dimensiones}" (click)="dimensiones_()"><a>Dimensiones</a></li>
                     </ul>
                 </div>
 
 
                 <!-- Gramaje -->
-                <table class="table is-fullwidth datos">
+                <table class="table is-fullwidth datos" *ngIf="_gramaje && tablas">
                     <tr>
                         <th class="is-selected">
                             Masa inicial (g)
@@ -330,7 +298,7 @@
                         <td>
                             <div class="columns">
                                 <div class="column is-3" *ngIf="gramaje[i]">
-                                    {{(gramaje[i]).toFixed(2)}} 
+                                    {{gramaje[i]}} 
                                 </div>
                                 <div class="column is-1">
                                     <ng-container *ngIf="gramaje[i] > material[0].material.gramaje_e[2]">
@@ -354,25 +322,253 @@
                             </div>
                         </td>
                         <td>
-                            <input type="number" class="input is-small gramaje" tabindex="{{muestras+i+1}}" [(ngModel)]="final[i]">
+                            <input type="number" class="input is-small gramaje" tabindex="{{muestras+i+1}}" [(ngModel)]="final[i]" (change)="calcular_cobb(i)">
                         </td>
                         <td>
                             <ng-container *ngIf="i+1 <= muestras/2">
+                                <div class="columns">
+                                    <div class="column">{{cobb[i]}}</div>
+                                    <div class="column">(T)</div>
+                                    <div class="column">
+                                        <ng-container *ngIf="cobb[i] > material[0].material.cobb[2]">
+                                            <span class="red">
+                                                <i class="fas fa-caret-up"></i>
+                                            </span>
+                                        </ng-container>
+            
+                                        <ng-container *ngIf="cobb[i] < material[0].material.cobb[0]">
+                                            <span class="red">
+                                                <i class="fas fa-caret-down"></i>
+                                            </span>
+                                        </ng-container>
+            
+                                        <ng-container *ngIf="cobb[i] <= material[0].material.cobb[2] && cobb[i] >= material[0].material.cobb[0]">
+                                            <span class="green">
+                                                <i class="fas fa-check"></i>
+                                            </span>
+                                        </ng-container>
+                                    </div>
+                                </div>
                                 <!--    <input type="number" class="input is-small gramaje"> (T) -->
-                                   {{i}} (T)
+                                <!--    {{cobb[i]}} (T) -->
                             </ng-container>
                             <ng-container *ngIf="i+1 > muestras/2">
+                                <div class="columns">
+                                    <div class="column">{{cobb[i]}}</div>
+                                    <div class="column">(B)</div>
+                                    <div class="column">
+                                        <ng-container *ngIf="cobb[i] > material[0].material.cobb[5]">
+                                            <span class="red">
+                                                <i class="fas fa-caret-up"></i>
+                                            </span>
+                                        </ng-container>
+            
+                                        <ng-container *ngIf="cobb[i] < material[0].material.cobb[3]">
+                                            <span class="red">
+                                                <i class="fas fa-caret-down"></i>
+                                            </span>
+                                        </ng-container>
+            
+                                        <ng-container *ngIf="cobb[i] < material[0].material.cobb[5] && cobb[i] > material[0].material.cobb[3]">
+                                            <span class="green">
+                                                <i class="fas fa-check"></i>
+                                            </span>
+                                        </ng-container>
+                                    </div>
+                                </div>
                                 <!-- (B) <input type="number" class="input is-small gramaje"> -->
-                                (B) {{i}}
+                                <!-- (B) {{cobb[i]}} -->
                             </ng-container>
                         </td>
                     </tr>
                 </table>
                 <!-- FIN Gramaje -->
 
+                <!-- CALIBRE -->
+                <table class="table is-fullwidth datos" *ngIf="_calibre && tablas">
+                    <tr>
+                        <th class="is-selected">
+                            Calibre (mm)
+                        </th>
+                        <th class="is-selected">
+                            Calibre (µm)
+                        </th>
+                        <th class="is-selected">
+                            Calibre (pt)
+                        </th>
+                    </tr>
+                    <tr *ngFor="let e of [].constructor(muestras);index as i">
+                        <td>
+                            <div class="columns">
+                                <div class="column">
+                                    <input type="number" class="input is-small gramaje" tabindex="{{i+1}}" [(ngModel)]="calibre[i]" (change)="calcular_calibre(i)">
+                                </div>
+                                <div class="column">
+                                    <ng-container *ngIf="calibre[i] > material[0].material.calibre_e[2]">
+                                        <span class="red">
+                                            <i class="fas fa-caret-up"></i>
+                                        </span>
+                                    </ng-container>
+        
+                                    <ng-container *ngIf="calibre[i] < material[0].material.calibre_e[0]">
+                                        <span class="red">
+                                            <i class="fas fa-caret-down"></i>
+                                        </span>
+                                    </ng-container>
+        
+                                    <ng-container *ngIf="calibre[i] <= material[0].material.calibre_e[2] && calibre[i] >= material[0].material.calibre_e[0]">
+                                        <span class="green">
+                                            <i class="fas fa-check"></i>
+                                        </span>
+                                    </ng-container>
+                                </div>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="columns">
+                                <div class="column">
+                                    {{Um_calibre[i]}}
+                                </div>
+                                <div class="column">
+                                    <ng-container *ngIf="Um_calibre[i] > material[0].material.calibre_e[8]">
+                                        <span class="red">
+                                            <i class="fas fa-caret-up"></i>
+                                        </span>
+                                    </ng-container>
+        
+                                    <ng-container *ngIf="Um_calibre[i] < material[0].material.calibre_e[6]">
+                                        <span class="red">
+                                            <i class="fas fa-caret-down"></i>
+                                        </span>
+                                    </ng-container>
+        
+                                    <ng-container *ngIf="Um_calibre[i] <= material[0].material.calibre_e[8] && Um_calibre[i] >= material[0].material.calibre_e[6]">
+                                        <span class="green">
+                                            <i class="fas fa-check"></i>
+                                        </span>
+                                    </ng-container>
+                                </div>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="columns">
+                                <div class="column">
+                                    {{pt_calibre[i]}}
+                                </div>
+                                <div class="column">
+                                    <ng-container *ngIf="pt_calibre[i] > material[0].material.calibre_e[2]">
+                                        <span class="red">
+                                            <i class="fas fa-caret-up"></i>
+                                        </span>
+                                    </ng-container>
+        
+                                    <ng-container *ngIf="pt_calibre[i] < material[0].material.calibre_e[3]">
+                                        <span class="red">
+                                            <i class="fas fa-caret-down"></i>
+                                        </span>
+                                    </ng-container>
+        
+                                    <ng-container *ngIf="pt_calibre[i] <= material[0].material.calibre_e[5] && pt_calibre[i] >= material[0].material.calibre_e[3]">
+                                        <span class="green">
+                                            <i class="fas fa-check"></i>
+                                        </span>
+                                    </ng-container>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                </table>
+                <!-- FIN DE CALIBRE  -->
+
+                <!-- BLANCURA -->
+                <table class="table is-fullwidth datos" *ngIf="_blancura && tablas">
+                    <tr>
+                        <th class="is-selected">
+                            Curling (s)
+                        </th>
+                        <th class="is-selected">
+                            Grado de blancura (%)
+                        </th>
+                    </tr>
+                    <tr *ngFor="let e of [].constructor(muestras);index as n">
+                        <td>
+                            <div class="columns">
+                                <div class="column">
+                                    <input type="number" class="input is-small gramaje" [(ngModel)]="curling[n]" tabindex="{{n+1}}" (change)="calcular_curling(i)">
+                                </div>
+                                <div class="column">
+                                    <ng-container *ngIf="curling[n] > material[0].material.curling[2]">
+                                        <span class="red">
+                                            <i class="fas fa-caret-up"></i>
+                                        </span>
+                                    </ng-container>
+        
+                                    <ng-container *ngIf="curling[n] < material[0].material.curling[0]">
+                                        <span class="red">
+                                            <i class="fas fa-caret-down"></i>
+                                        </span>
+                                    </ng-container>
+        
+                                    <ng-container *ngIf="curling[n] <= material[0].material.curling[2] && curling[n] >= material[0].material.curling[0]">
+                                        <span class="green">
+                                            <i class="fas fa-check"></i>
+                                        </span>
+                                    </ng-container>
+                                </div>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="columns">
+                                <div class="column">
+                                    <input type="number" class="input is-small gramaje" [(ngModel)]="blancura[n]" tabindex="{{muestras+i+1}}" (change)="calcular_blancura(i)">
+                                </div>
+                                <div class="column">
+                                    <ng-container *ngIf="blancura[n] > material[0].material.blancura[2]">
+                                        <span class="red">
+                                            <i class="fas fa-caret-up"></i>
+                                        </span>
+                                    </ng-container>
+        
+                                    <ng-container *ngIf="blancura[n] < material[0].material.blancura[0]">
+                                        <span class="red">
+                                            <i class="fas fa-caret-down"></i>
+                                        </span>
+                                    </ng-container>
+        
+                                    <ng-container *ngIf="blancura[n] <= material[0].material.blancura[2] && blancura[n] >= material[0].material.blancura[0]">
+                                        <span class="green">
+                                            <i class="fas fa-check"></i>
+                                        </span>
+                                    </ng-container>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                </table>
+                <!-- FIN BLANCURA -->
+                <table class="table is-fullwidth datos" *ngIf="_dimensiones && tablas">
+                    <tr>
+                        <th class="is-selected">Escuadra</th>
+                        <th class="is-selected">Contra Escuadra</th>
+                        <th class="is-selected">Pinza</th>
+                        <th class="is-selected">Contra pinza</th>
+                    </tr>
+                    <tr *ngFor="let e of [].constructor(muestras);index as n">
+                        <td><input type="number" class="input is-small gramaje" [(ngModel)]="escuadra[n]" tabindex="{{n+1}}" (change)="calcular_escuadra(i)"></td>
+                        <td><input type="number" class="input is-small gramaje" [(ngModel)]="contra_escuadra[n]" tabindex="{{n+1}}" (change)="calcular_contra_escuadra(i)"></td>
+                        <td><input type="number" class="input is-small gramaje" [(ngModel)]="pinza[n]" tabindex="{{n+1}}" (change)="calcular_pinza(i)"></td>
+                        <td><input type="number" class="input is-small gramaje" [(ngModel)]="contra_pinza[n]" tabindex="{{n+1}}" (change)="calcular_contra_pinza(i)"></td>
+                    </tr>
+                </table>
+
             </div>
         </div>
-
+        <button class="button is-success" (click)="Finalizar_Sustrato()">
+            <span></span>
+            <span>
+                Finalizar
+            </span>
+        </button>
         </div>
     </div>
 </div>
