@@ -14,6 +14,7 @@ export class DespachosComponent implements OnInit {
   @Input() despachos_orden:any
   @Input() lote_mayor:any
   @Input() Ej_montados:any
+  @Input() c_devoluciones:any
 
   Total_Despachado = 0;
   public chart_rendimiento;
@@ -23,7 +24,6 @@ export class DespachosComponent implements OnInit {
   constructor(private router:Router,) { }
 
   ngOnInit(): void {
-
   }
 
   public ids = []
@@ -105,12 +105,27 @@ export class DespachosComponent implements OnInit {
   public asignadas
   showPercent(){
     let hojas = 0
+    let descuentos = 0;
+    console.log(this.c_devoluciones)
     for(let i=0;i<this.lote_mayor.length;i++){
       if(this.lote_mayor[i].ancho){
         hojas = Number(hojas)+ this.lote_mayor[i].cantidad
       }
+
+      if(i === this.lote_mayor.length -1){
+        for(let x=0;x<this.c_devoluciones.length;x++){
+          for(let y=0;y<this.c_devoluciones[x].filtrado.length;y++){
+            let _material_ = this.c_devoluciones[x].filtrado[y].material;
+            if(_material_.ancho){
+              descuentos = Number(descuentos) + Number(this.c_devoluciones[x].filtrado[y].cantidad)
+              console.log(this.c_devoluciones[x].filtrado[y])
+            }
+          }
+        }
+      }
+
     }
-    this.asignadas = hojas
+    this.asignadas = hojas - descuentos;
     
     this.sumaCantidades();
     this.showChart()

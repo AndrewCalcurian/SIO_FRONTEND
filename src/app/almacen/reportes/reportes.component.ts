@@ -28,6 +28,11 @@ export class ReportesComponent implements OnInit {
   public saldos_iniciales = []
   public saldos_finales = []
   public unidades = []
+  public facturados = []
+  public asignaciones = []
+  public devoluciones = []
+  public general = []
+  public fechas = []
 
   GetGrupos(){
     this.api.GetGrupoMp()
@@ -63,6 +68,76 @@ export class ReportesComponent implements OnInit {
     n = Number(n).toFixed(2)
     return n = new Intl.NumberFormat('de-DE').format(n)
   }
+
+
+  getDespachosFacturados(desde, hasta){
+    this.asignaciones = []
+    this.cargando = true;
+    this.facturados = [];
+    let ordenes = []
+    this.general = []
+    this.fechas = []
+    this.api.getDespachoFechas_(desde, hasta)
+        .subscribe((resp:any)=>{
+          for(let i=0;i<resp.length;i++){
+            for(let n=0;n<resp[i].despacho.length;n++){
+              this.facturados.push(resp[i].despacho[n])
+              this.fechas.push(resp[i].fecha) 
+              ordenes.push(resp[i].despacho[n].op)
+              
+              if(i === resp.length -1){
+                if(n === resp[i].despacho.length -1){
+                this.api.postBuscarLoteporFecha(ordenes, desde, hasta)
+                  .subscribe((resp:any)=>{
+                    if(this.asignaciones.length < 1){
+                      this.asignaciones = resp;
+                    }
+                    console.log(this.asignaciones)
+                    this.api.postBuscarDevolucionesPorFecha(ordenes, desde, hasta)
+                      .subscribe((resp:any)=>{
+                        this.devoluciones = resp;
+
+                        for(let n=0;n<this.devoluciones.length;n++){
+                          let index = this.asignaciones.findIndex(x=>x.orden === this.devoluciones[n].orden && x.material._id === this.devoluciones[n].material._id)
+                          if(index >= 0){
+                            console.log(this.devoluciones[n].cantidad)
+                            console.log(this.asignaciones[index].devolucion)
+                            this.asignaciones[index].devolucion = Number(this.asignaciones[index].devolucion) + Number(this.devoluciones[n].cantidad)
+                            console.log(this.asignaciones[index])
+                          }
+                        
+                          if(n === this.devoluciones.length -1){
+                            for(let iterator=0;iterator<this.asignaciones.length;iterator++){
+                              let index__ = this.general.findIndex(x=> x.material._id === this.asignaciones[iterator].material._id)
+
+                              if(index__ < 0){
+                                this.general.push({material:this.asignaciones[iterator].material, total:(this.asignaciones[iterator].cantidad - this.asignaciones[iterator].devolucion).toFixed(2)})
+                                console.log(this.general)
+                              }
+                              else{
+                                this.general[index__].total = Number(this.general[index__].total) + Number((this.asignaciones[iterator].cantidad - this.asignaciones[iterator].devolucion).toFixed(2))
+                                this.general[index__].total = (this.general[index__].total).toFixed(2)
+                              }
+                              this.general = this.general.sort(function(a, b) {
+                                if(a.material.nombre.toLowerCase() < b.material.nombre.toLowerCase()) return -1
+                                if(a.material.nombre.toLowerCase() > b.material.nombre.toLowerCase()) return 1
+                                return 0
+                      
+                              })
+
+                              this.cargando = false;
+                            }
+                          }
+                        }
+
+                      })
+                  })
+                }
+              }
+            }
+          }
+        })
+  } 
 
   realizarBusqueda(desde, hasta){
 
@@ -201,6 +276,12 @@ export class ReportesComponent implements OnInit {
                               }
                             }
                             // console.log(this.entradas_hasta_hoy)
+                            this.materiales = this.materiales.sort(function(a, b) {
+                              if(a.nombre.toLowerCase() < b.nombre.toLowerCase()) return -1
+                              if(a.nombre.toLowerCase() > b.nombre.toLowerCase()) return 1
+                              return 0
+                    
+                            })
                             for(let i=0;i<this.materiales.length;i++){
                               let almacenado
                               let iHasta_hoy

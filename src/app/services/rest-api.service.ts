@@ -667,4 +667,26 @@ export class RestApiService {
     return this.http.post(url, data)
   }
 
+  getDespachoFechas_(desde,hasta){
+    const url = `${this.api_url}/gastos/${desde}/${hasta}`
+    return this.http.get(url)
+
+  }
+
+  postBuscarLoteporFecha(ordenes,desde, hasta){
+    let data = {
+      ordenes,desde,hasta
+    }
+    const url = `${this.api_url}/lote-fecha`
+    return this.http.post(url,data)
+  }
+
+  postBuscarDevolucionesPorFecha(ordenes,desde, hasta){
+    let data = {
+      ordenes,desde,hasta
+    }
+    const url = `${this.api_url}/devoluciones-fecha`
+    return this.http.post(url,data)
+  }
+
 }
