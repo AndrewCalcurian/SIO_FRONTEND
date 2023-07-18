@@ -80,6 +80,14 @@
     position: absolute;
     color: black;
 }
+
+.containe{
+    margin-left: 1%;
+    width: 98%;
+}
+.mt-5{
+    margin-top: 15px;
+}
 .carga_{
     margin: 0;
     padding: 0;

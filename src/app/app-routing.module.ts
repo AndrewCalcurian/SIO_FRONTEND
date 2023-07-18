@@ -9,6 +9,7 @@ import { LoginComponent } from './login/login.component';
 import { BarChartComponent} from './bar-chart/bar-chart.component';
 import { AuthGuard } from './Auth/auth-guard.guard';
 import { TokenValidationComponent } from './token-validation/token-validation.component';
+import { DesarrolloComponent } from './desarrollo/desarrollo.component';
 
 const routes: Routes = [
   {
@@ -72,6 +73,10 @@ const routes: Routes = [
   {
     path: 'verificacion',
     component:TokenValidationComponent
+  },
+  {
+    path:'listas',
+    component:DesarrolloComponent
   }
 
 ]

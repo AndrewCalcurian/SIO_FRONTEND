@@ -368,6 +368,7 @@ export class AsignacionComponent implements OnInit {
   Restar(orden, solicitud,index,n,requi?){
 
     let largo = solicitud.length;
+    let ceros = []
 
     if(solicitud == 1){
       solicitud = `000${solicitud}`;
@@ -380,67 +381,79 @@ export class AsignacionComponent implements OnInit {
     }
 
     let En_Almacen = this.necesario[index].producto.materiales[this.necesario[index].montaje];
-    // // console.log(En_Almacen,'almacen')
-    let Cargados = this.LOTES.length
-
-
-    for(let i = 0; i<En_Almacen.length; i++){
-      let existe = this.LOTES.find(x => x.i === i);
-      // // console.log(En_Almacen.length,'/-',i)
-      if(!existe){
-        // alert('1')
-        // // console.log(this.LOTES)
-        Swal.fire({
-          icon: 'error',
-          title: 'Oops...',
-          text: 'Debes cubrir toda la materia prima para esta orden',
-          showConfirmButton: false,
-          timer:1500
-        })
-        return
-      }else{
-        // alert('2')
-        // // console.log(En_Almacen[0][i],'i')
-        if(En_Almacen[i].producto.grupo.nombre === 'Cajas Corrugadas' && !requi){
-          let _existe = this.LOTES.find(x => x.i === 100);
-          if(!_existe){
-            // // console.log(this.LOTES)
-            Swal.fire({
-              icon: 'error',
-              title: 'Oops...',
-              text: 'Debes cubrir toda la materia prima para esta orden',
-              showConfirmButton: false,
-              timer:1500
-            })
-            return
-          }
+    console.log(En_Almacen)
+    for(let n=0;n<En_Almacen.length;n++){
+      if(!En_Almacen[n].producto.ancho){
+        if(En_Almacen[n].cantidad == 0){
+          ceros.push(n)
+          En_Almacen.splice(n,1)
         }
       }
 
+      if(n == En_Almacen.length-1){
+        for(let i = 0; i<En_Almacen.length; i++){
+          let existe = this.LOTES.find(x => x.i === i);
+          console.log(existe)
+          if(!existe){
+            let existencia = ceros.find(x=> x === i)
+            console.log(existencia)
+            if(!existencia){
+              Swal.fire({
+                icon: 'error',
+                title: 'Oops...',
+                text: 'Debes cubrir toda la materia prima para esta orden',
+                showConfirmButton: false,
+                timer:1500
+              })
+              return
+            }
+          }else{
+            // alert('2')
+            // // console.log(En_Almacen[0][i],'i')
+            if(En_Almacen[i].producto.grupo.nombre === 'Cajas Corrugadas' && !requi){
+              let _existe = this.LOTES.find(x => x.i === 100);
+              if(!_existe){
+                // // console.log(this.LOTES)
+                Swal.fire({
+                  icon: 'error',
+                  title: 'Oops...',
+                  text: 'Debes cubrir toda la materia prima para esta orden',
+                  showConfirmButton: false,
+                  timer:1500
+                })
+                return
+              }
+            }
+          }
+    
+        }
+    
+        let data = {
+          lotes:this.LOTES,
+          orden,
+          solicitud,
+          n,
+          requi
+        }
+    
+        // // console.log('data lotes',data.lotes)
+        // alert('asignado')
+        this.api.realizarDescuentoAlmacen(data)
+         .subscribe(resp=> {
+           Swal.fire({
+             icon: 'success',
+              title: 'Excelente!',
+              text: 'La nueva orden ya esta generada',
+              showConfirmButton: false,
+              timer:1500
+           })
+          this.onCloseModal.emit();
+          this.onFinalizarAsignacion.emit();
+        })
+      }
     }
-
-    let data = {
-      lotes:this.LOTES,
-      orden,
-      solicitud,
-      n,
-      requi
-    }
-
-    // // console.log('data lotes',data.lotes)
-    // alert('asignado')
-    this.api.realizarDescuentoAlmacen(data)
-     .subscribe(resp=> {
-       Swal.fire({
-         icon: 'success',
-          title: 'Excelente!',
-          text: 'La nueva orden ya esta generada',
-          showConfirmButton: false,
-          timer:1500
-       })
-      this.onCloseModal.emit();
-      this.onFinalizarAsignacion.emit();
-    })
+    console.log(En_Almacen,'almacen')
+    let Cargados = this.LOTES.length
 
   }
 

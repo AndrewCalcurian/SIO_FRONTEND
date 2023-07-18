@@ -689,4 +689,20 @@ export class RestApiService {
     return this.http.post(url,data)
   }
 
+  getTodoslosProductos(){
+    const url = `${this.api_url}/productos-todos`
+    return this.http.get(url)
+
+  }
+
+  postAnalisisSustrato(data){
+    const url = `${this.api_url}/analisis-sustrato`
+    return this.http.post(url, data)
+  }
+
+  getLotesUsados(lote){
+    const url = `${this.api_url}/analisis-sustrato/${lote}`
+    return this.http.get(url)
+  }
+
 }

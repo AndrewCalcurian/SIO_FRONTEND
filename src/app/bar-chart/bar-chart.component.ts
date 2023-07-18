@@ -264,19 +264,24 @@ export class BarChartComponent implements OnInit {
             this.desviacion_calibre = Math.sqrt(varianza)
             this.desviacion_calibre_um = Math.sqrt(varianza_um)
             this.desviacion_calibre_pt = Math.sqrt(varianza_pt)
-            this.desviacion_calibre = Number(this.desviacion_calibre)
-            this.desviacion_calibre_um = Number(this.desviacion_calibre_um)
-            this.desviacion_calibre_pt = Number(this.desviacion_calibre_pt)
+            this.desviacion_calibre = Number(this.desviacion_calibre.toFixed(2))
+            this.desviacion_calibre_um = Number(this.desviacion_calibre_um.toFixed(2))
+            this.desviacion_calibre_pt = Number(this.desviacion_calibre_pt.toFixed(2))
             if(this.desviacion_calibre < 1){
-              let str = this.desviacion_calibre.toString()
-              let split = str.split('.')
-              let decimales = split[1]
+              if(this.desviacion_calibre === 0){
+                this.Calibre_nf = 2
+              }else{
 
-              for(let i=0;i<decimales.length;i++){
-                if(decimales[i] != '0'){
-                  this.Calibre_nf = Number(i)
-                  this.Calibre_nf = this.Calibre_nf + 1;
-                  i = 100;
+                let str = this.desviacion_calibre.toString()
+                let split = str.split('.')
+                let decimales = split[1]
+                
+                for(let i=0;i<decimales.length;i++){
+                  if(decimales[i] != '0'){
+                    this.Calibre_nf = Number(i)
+                    this.Calibre_nf = this.Calibre_nf + 1;
+                    i = 100;
+                  }
                 }
               }
             }
@@ -379,6 +384,7 @@ export class BarChartComponent implements OnInit {
       this.promedio_contra_escuadra = Number(this.promedio_contra_escuadra) + Number(this.contra_escuadra[i])
       if(i === this.muestras-1){
         this.promedio_contra_escuadra = this.promedio_contra_escuadra / this.muestras;
+        this.promedio_contra_escuadra = Number(this.promedio_contra_escuadra.toFixed(2))
         for(let x =0;x<this.muestras;x++){
           let rango = Math.pow(this.contra_escuadra[x] - this.promedio_contra_escuadra, 2);
           rango = Number(rango.toFixed(4))
@@ -387,9 +393,9 @@ export class BarChartComponent implements OnInit {
             varianza = varianza / (this.muestras-1)
             this.desviacion_contra_escuadra = Math.sqrt(varianza)
             console.log(this.desviacion_contra_escuadra, '/', this.promedio_contra_escuadra )
-            if(this.desviacion_contra_escuadra > 0){
-              this.contra_escuadra_nf = 0
-            }
+            // if(this.desviacion_contra_escuadra > 0){
+            //   this.contra_escuadra_nf = 0
+            // }
             if(this.desviacion_contra_escuadra < 1){
               let str = this.desviacion_contra_escuadra.toString()
               let split = str.split('.')
@@ -460,21 +466,22 @@ export class BarChartComponent implements OnInit {
       this.promedio_contra_pinza = Number(this.promedio_contra_pinza) + Number(this.contra_pinza[i])
       if(i === this.muestras-1){
         this.promedio_contra_pinza = this.promedio_contra_pinza / this.muestras;
+        this.promedio_contra_pinza = Number(this.promedio_contra_pinza.toFixed(2))
         for(let x =0;x<this.muestras;x++){
           let rango = Math.pow(this.contra_pinza[x] - this.promedio_contra_pinza, 2);
           rango = Number(rango.toFixed(4))
           varianza = varianza + rango
           if(x === this.muestras -1){
             varianza = varianza / (this.muestras-1)
-            this.promedio_contra_pinza = Math.sqrt(varianza)
-            if(this.promedio_contra_pinza > 0){
+            this.desviacion_contra_escuadra = Math.sqrt(varianza)
+            if(this.desviacion_contra_escuadra > 0){
               this.contra_pinza_nf = 0
             }
-            if(this.promedio_contra_pinza < 1){
-              let str = this.promedio_contra_pinza.toString()
+            if(this.desviacion_contra_escuadra < 1){
+              let str = this.desviacion_contra_escuadra.toString()
               let split = str.split('.')
               let decimales = split[1]
-
+              
               for(let i=0;i<decimales.length;i++){
                 if(decimales[i] != '0'){
                   this.contra_pinza_nf = Number(i)
@@ -575,7 +582,6 @@ export class BarChartComponent implements OnInit {
 
     
     let mitad = this.muestras / 2;
-    
     if(i+1<=mitad){
       this.promedio_cobb_top = 0
       let varianza = 0;
@@ -597,7 +603,6 @@ export class BarChartComponent implements OnInit {
           this.max_cobb_top = Number(this.max_cobb_top.toFixed(2))
           this.min_cobb_top = Math.min(...cobb_top)
           this.min_cobb_top = Number(this.min_cobb_top.toFixed(2))
-
           this.promedio_cobb_top = this.promedio_cobb_top / mitad;
           this.promedio_cobb_top = Number(this.promedio_cobb_top.toFixed(2))
 
@@ -610,7 +615,7 @@ export class BarChartComponent implements OnInit {
               varianza = varianza / (mitad-1)
               this.desviacion_cobb_top = Math.sqrt(varianza)
               if(this.desviacion > 0){
-                this.promedio_cobb_top = Math.ceil(this.promedio_cobb_top)
+                this.promedio_cobb_top = Number(this.promedio_cobb_top.toFixed(0))
                 this.desviacion_cobb_top = Number(this.desviacion_cobb_top.toFixed(0))
               }
             }
@@ -629,8 +634,6 @@ export class BarChartComponent implements OnInit {
         if(this.cobb[i]){
           let number = Number(this.cobb[i])
           this.promedio_cobb_back = this.promedio_cobb_back + number
-          console.log(this.promedio_cobb_top,'/',number,'/',mitad)
-
         }
 
         if(i == this.muestras-1){
@@ -638,7 +641,7 @@ export class BarChartComponent implements OnInit {
           this.max_cobb_bac = Number(this.max_cobb_bac.toFixed(2))
           this.min_cobb_bac = Math.min(...cobb_back)
           this.min_cobb_bac = Number(this.min_cobb_bac.toFixed(2))
-
+          
           this.promedio_cobb_back = this.promedio_cobb_back / mitad;
           this.promedio_cobb_back = Number(this.promedio_cobb_back.toFixed(2))
 
@@ -651,7 +654,7 @@ export class BarChartComponent implements OnInit {
               varianza = varianza / (mitad-1)
               this.desviacion_cobb_back = Math.sqrt(varianza)
               if(this.desviacion > 0){
-                this.promedio_cobb_back = Math.ceil(this.promedio_cobb_top)
+                this.promedio_cobb_back = Number(this.promedio_cobb_back.toFixed(0))
                 this.desviacion_cobb_back = Number(this.desviacion_cobb_back.toFixed(0))
               }
             }
@@ -677,10 +680,20 @@ export class BarChartComponent implements OnInit {
     //   blancura:{blancura:this.blancura,promedio:this.promedio_blancura.toFixed(this.blancura_nf),desviacion:this.desviacion_curling.toFixed(this.curling_nf)}
     // }
 
+    let material = this.material[0]
+    let ancho = this.ancho
+    let largo = this.largo
+    console.log(material)
+    let hoy = moment().format('DD/MM/YYYY')
+
     let certificado = {
-      gramaje:{promedio:this.promedio.toFixed(this.Gramaje_nf),desviacion:this.desviacion.toFixed(this.Gramaje_nf),masa_inicial:this.inicial,masa_final:this.final, gramaje:this.gramaje},
+      lote:material.lote,
+      ancho:ancho,
+      largo:largo,
+      muestras:this.muestras,
+      gramaje:{promedio:this.promedio.toFixed(this.Gramaje_nf),desviacion:this.desviacion.toFixed(this.Gramaje_nf),masa_inicial:this.inicial,masa_final:this.final, gramaje:this.gramaje, nf:this.Gramaje_nf},
       cobb:{cobb:this.cobb,promedio_top:this.promedio_cobb_top,desviacion_top:this.desviacion_cobb_top,promedio_back:this.promedio_cobb_back,desviacion_back:this.desviacion_cobb_back},
-      calibre:{mm:this.calibre,um:this.Um_calibre,pt:this.pt_calibre,promedio:this.promedio_calibre.toFixed(this.Calibre_nf),desviacion:this.desviacion_calibre.toFixed(this.Calibre_nf),promedio_um:this.promedio_calibre_um.toFixed(this.Calibre_nf_um),desviacion_um:this.desviacion_calibre_um.toFixed(this.Calibre_nf_um),promedio_pt:this.promedio_calibre_pt.toFixed(this.Calibre_nf_pt),desviacion_pt:this.desviacion_calibre_pt.toFixed(this.Calibre_nf_pt)},
+      calibre:{mm:this.calibre,um:this.Um_calibre,pt:this.pt_calibre,promedio:this.promedio_calibre.toFixed(this.Calibre_nf),desviacion:this.desviacion_calibre.toFixed(this.Calibre_nf),promedio_um:this.promedio_calibre_um.toFixed(this.Calibre_nf_um),desviacion_um:this.desviacion_calibre_um.toFixed(this.Calibre_nf_um),promedio_pt:this.promedio_calibre_pt.toFixed(this.Calibre_nf_pt),desviacion_pt:this.desviacion_calibre_pt.toFixed(this.Calibre_nf_pt),nf:this.Calibre_nf, nf_um:this.Calibre_nf_um, nf_pt:this.Calibre_nf_pt},
       curling:{curling:this.curling,promedio:this.promedio_curling.toFixed(this.curling_nf),desviacion:this.desviacion_curling.toFixed(this.curling_nf)},
       blancura:{blancura:this.blancura,promedio:this.promedio_blancura.toFixed(this.blancura_nf),desviacion:this.desviacion_blancura.toFixed(this.blancura_nf)},
       escuadra:{escuadra:this.escuadra,promedio:this.promedio_escuadra.toFixed(this.escuadra_nf),desviacion:this.desviacion_escuadra.toFixed(this.escuadra_nf), max_escuadra:this.max_escuadra, min_escuadra:this.min_escuadra},
@@ -698,8 +711,16 @@ export class BarChartComponent implements OnInit {
       }
     }
 
+
+    // alert(certificado.contra_pinza.promedio)
+
     let muestras_ = [];
     let muestras__ = [];
+
+    this.api.postAnalisisSustrato(certificado)
+      .subscribe((resp:any)=>{
+        console.log('ready')
+      })
     
     for(let i=0;i<this.muestras;i++){
       muestras_.push(i+1)
@@ -750,6 +771,7 @@ export class BarChartComponent implements OnInit {
 
     let min_blancura = Math.min(...certificado.blancura.blancura)
     let max_blancura = Math.max(...certificado.blancura.blancura)
+
 
 
 
@@ -813,24 +835,24 @@ export class BarChartComponent implements OnInit {
         new Table([
           [
             new Cell(new Txt('Descripción:').end).fillColor('#dedede').fontSize(6).end,
-            new Cell(new Txt('Papel Litho 90g').end).fontSize(6).colSpan(3).end,
+            new Cell(new Txt(`${material.material.nombre} ${material.material.gramaje}g (${material.material.ancho}x${material.material.largo})`).end).fontSize(6).colSpan(3).end,
             new Cell(new Txt('').end).fontSize(6).end,
             new Cell(new Txt('').end).fontSize(6).end,
             new Cell(new Txt('Marca:').end).fontSize(6).fillColor('#dedede').end,
-            new Cell(new Txt('B&B').bold().fontSize(6).fontSize(6).end).colSpan(3).end,
+            new Cell(new Txt(`${material.material.marca}`).bold().fontSize(6).fontSize(6).end).colSpan(3).end,
             new Cell(new Txt('').end).fontSize(6).end,
             new Cell(new Txt('').end).fontSize(6).end,
 
           ],
           [
             new Cell(new Txt('Lote:').end).fontSize(6).fillColor('#dedede').end,
-            new Cell(new Txt('2023576').end).fontSize(6).end,
+            new Cell(new Txt(`${material.lote}`).end).fontSize(6).end,
             new Cell(new Txt('Fecha:').end).fontSize(6).fillColor('#dedede').end,
-            new Cell(new Txt('28/06/2023').end).fontSize(6).end,
+            new Cell(new Txt(hoy).end).fontSize(6).end,
             new Cell(new Txt('Tamaño de muestra (cm):').end).fontSize(6).fillColor('#dedede').end,
-            new Cell(new Txt('12,5 x 12,5').end).fontSize(6).end,
+            new Cell(new Txt(`${ancho} x ${largo}`).end).fontSize(6).end,
             new Cell(new Txt('Area (cm²):').end).fontSize(6).fillColor('#dedede').end,
-            new Cell(new Txt('156.25').end).fontSize(6).end,
+            new Cell(new Txt(`${ancho * largo}`).end).fontSize(6).end,
           ],
         ]).widths(['12%','12%','12%','12%','16%','12%','12%','12%']).end
       )
@@ -878,9 +900,9 @@ export class BarChartComponent implements OnInit {
           ],
           [
             new Cell(new Txt(' ').alignment('center').end).fontSize(6).fillColor('#bdbdbd').end,
-            new Cell(new Txt('Masa inicial (g)').alignment('center').margin([0,15]).end).rowSpan(3).fontSize(6).fillColor('#bdbdbd').end,
+            new Cell(new Txt('Masa inicial (g)').alignment('center').margin([0,10]).end).rowSpan(3).fontSize(6).fillColor('#bdbdbd').end,
             new Cell(new Txt('Gramaje\n (g/m²)').alignment('center').end).fontSize(6).fillColor('#bdbdbd').end,
-            new Cell(new Txt('Masa final (g)').alignment('center').margin([0,15]).end).rowSpan(3).fontSize(6).fillColor('#bdbdbd').end,
+            new Cell(new Txt('Masa final (g)').alignment('center').margin([0,10]).end).rowSpan(3).fontSize(6).fillColor('#bdbdbd').end,
             new Cell(new Txt('Cobb (g/m²) \n TOP').alignment('center').end).fontSize(6).fillColor('#bdbdbd').end,
             new Cell(new Txt('Cobb (g/m²) \nBACK').alignment('center').end).fontSize(6).fillColor('#bdbdbd').end,
             new Cell(new Txt('(mm)').alignment('center').margin([0,5]).end).fontSize(6).fillColor('#bdbdbd').end,
@@ -890,23 +912,23 @@ export class BarChartComponent implements OnInit {
             new Cell(new Txt('(%)').alignment('center').margin([0,5]).end).fontSize(6).fillColor('#bdbdbd').end,
             new Cell(new Txt('').alignment('center').end).border([false,false]).fontSize(6).color('#FFFFFF').end,
             new Cell(new Txt('').alignment('center').end).border([false,false]).fontSize(6).color('#FFFFFF').end,
-            new Cell(new Txt('Escuadra').alignment('center').margin([0,15]).end).rowSpan(3).fillColor('#bdbdbd').fontSize(6).end,
-            new Cell(new Txt('contra escuadra').alignment('center').margin([0,15]).end).rowSpan(3).fillColor('#bdbdbd').fontSize(6).end,
-            new Cell(new Txt('Pinza').alignment('center').margin([0,15]).end).rowSpan(3).fillColor('#bdbdbd').fontSize(6).end,
-            new Cell(new Txt('Contra pinza').alignment('center').margin([0,15]).end).rowSpan(3).fillColor('#bdbdbd').fontSize(6).end,
+            new Cell(new Txt('Escuadra').alignment('center').margin([0,5]).end).rowSpan(3).fillColor('#bdbdbd').fontSize(6).end,
+            new Cell(new Txt('contra escuadra').alignment('center').margin([0,5]).end).rowSpan(3).fillColor('#bdbdbd').fontSize(6).end,
+            new Cell(new Txt('Pinza').alignment('center').margin([0,5]).end).rowSpan(3).fillColor('#bdbdbd').fontSize(6).end,
+            new Cell(new Txt('Contra pinza').alignment('center').margin([0,5]).end).rowSpan(3).fillColor('#bdbdbd').fontSize(6).end,
           ],
           [
             new Cell(new Txt(' ').alignment('center').end).fontSize(6).fillColor('#cecece').end,
             new Cell(new Txt('Masa inicial (g)').alignment('center').end).fontSize(6).fillColor('#cecece').end,
             new Cell(new Txt('COVENIN 945-84').alignment('center').end).fontSize(5).fillColor('#cecece').end,
             new Cell(new Txt('Masa final (g)').alignment('center').end).fontSize(6).fillColor('#cecece').end,
-            new Cell(new Txt('COVENIN 1243-78').alignment('center').margin([0,5]).end).colSpan(2).fontSize(5).fillColor('#cecece').end,
+            new Cell(new Txt('COVENIN 1243-78').alignment('center').end).colSpan(2).fontSize(5).fillColor('#cecece').end,
             new Cell(new Txt('-').alignment('center').end).fontSize(6).fillColor('#bdbdbd').end,
-            new Cell(new Txt('COVENIN 946-79').alignment('center').margin([0,5]).end).colSpan(3).fontSize(6).fillColor('#cecece').end,
+            new Cell(new Txt('COVENIN 946-79').alignment('center').end).colSpan(3).fontSize(6).fillColor('#cecece').end,
             new Cell(new Txt('(um)').alignment('center').end).fontSize(6).fillColor('#cecece').end,
             new Cell(new Txt('(pt)').alignment('center').end).fontSize(6).fillColor('#cecece').end,
-            new Cell(new Txt('ISO 5635').alignment('center').margin([0,5]).end).fontSize(5).fillColor('#cecece').end,
-            new Cell(new Txt('ISO 2470').alignment('center').margin([0,10]).end).rowSpan(2).fontSize(5).fillColor('#cecece').end,
+            new Cell(new Txt('ISO 5635').alignment('center').end).fontSize(5).fillColor('#cecece').end,
+            new Cell(new Txt('ISO 2470').alignment('center').end).rowSpan(2).fontSize(5).fillColor('#cecece').end,
             new Cell(new Txt('').alignment('center').end).border([false,false]).fontSize(6).end,
             new Cell(new Txt('').alignment('center').end).border([false,false]).fontSize(6).end,
             new Cell(new Txt('Escuadra').alignment('center').end).fillColor('#cecece').fontSize(6).end,
@@ -1065,10 +1087,10 @@ export class BarChartComponent implements OnInit {
             new Cell(new Txt(certificado.especificacion.blancura_min).alignment('center').end).fontSize(6).fillColor('#eeeded').end,
             new Cell(new Txt('').alignment('center').end).border([false,false]).fontSize(6).end,
             new Cell(new Txt('std').alignment('center').end).fillColor('#bdbdbd').fontSize(6).end,
-            new Cell(new Txt('88.96').alignment('center').end).fontSize(6).fillColor('#bdbdbd').end,
-            new Cell(new Txt('88.96').alignment('center').end).fontSize(6).fillColor('#bdbdbd').end,
-            new Cell(new Txt('88.96').alignment('center').end).fontSize(6).fillColor('#bdbdbd').end,
-            new Cell(new Txt('0.09').alignment('center').end).fontSize(6).fillColor('#bdbdbd').end,
+            new Cell(new Txt(material.material.ancho).alignment('center').end).fontSize(6).fillColor('#bdbdbd').end,
+            new Cell(new Txt(material.material.ancho).alignment('center').end).fontSize(6).fillColor('#bdbdbd').end,
+            new Cell(new Txt(material.material.largo).alignment('center').end).fontSize(6).fillColor('#bdbdbd').end,
+            new Cell(new Txt(material.material.largo).alignment('center').end).fontSize(6).fillColor('#bdbdbd').end,
           ],
           [
             new Cell(new Txt('').alignment('center').end).fontSize(6).fillColor('#eeeded').end,
@@ -1141,17 +1163,41 @@ export class BarChartComponent implements OnInit {
       pdf.add(
         new Table([
           [
-            new Cell(new Txt('OBSERVACIÓN').fontSize(8).end).fillColor('#000000').color('#FFFFFF').end,
-            new Cell(new Txt('RESULTADO DE ANÁLISIS').fontSize(8).end).fillColor('#0000000').color('#FFFFFF').colSpan(2).end,
-            new Cell(new Txt('').end).fontSize(8).end
+            new Cell(new Txt('OBSERVACIÓN').fontSize(8).alignment('center').end).fillColor('#000000').color('#FFFFFF').end,
+            new Cell(new Txt('RESULTADO DE ANÁLISIS').fontSize(8).alignment('center').end).fillColor('#0000000').color('#FFFFFF').end
+          ],
+          [
+            new Cell(new Txt('').fontSize(8).end).rowSpan(2).end,
+            new Cell(new Txt('APROBADO').fontSize(10).bold().end).border([false]).alignment('center').end
           ],
           [
             new Cell(new Txt('').fontSize(8).end).end,
-            new Cell(new Txt('APROBADO').bold().end).alignment('center').end,
-            new Cell(new Txt(`FIRMA: Andrés Calcurian
-                              FECHA:28/06/2023`).fontSize(8).end).end
+            new Cell(new Table([
+              [
+                new Cell(new Txt('Realizado por:').fontSize(8).alignment('center').end).colSpan(2).fillColor('#000000').color('#FFFFFF').end,
+                new Cell(new Txt('Realizado por:').fontSize(8).alignment('center').end).fillColor('#000000').color('#FFFFFF').end,
+                new Cell(new Txt('').fontSize(8).alignment('center').end).border([false]).fillColor('#FFFFFF').end,
+                new Cell(new Txt('Validado por:').fontSize(8).alignment('center').end).colSpan(2).fillColor('#0000000').color('#FFFFFF').end,
+                new Cell(new Txt('Validado por:').fontSize(8).alignment('center').end).fillColor('#000000').color('#FFFFFF').end
+              ],
+              [
+                new Cell(new Txt('Firma:').fontSize(6).alignment('center').end).end,
+                new Cell(new Txt('').fontSize(6).alignment('center').end).end,
+                new Cell(new Txt('').fontSize(6).alignment('center').end).border([false]).fillColor('#FFFFFF').end,
+                new Cell(new Txt('Firma:').fontSize(6).alignment('center').end).end,
+                new Cell(new Txt('').fontSize(6).alignment('center').end).end,
+              ],
+              [
+                new Cell(new Txt('Fecha:').fontSize(6).alignment('center').end).end,
+                new Cell(new Txt(hoy).fontSize(6).alignment('center').end).end,
+                new Cell(new Txt('').fontSize(6).alignment('center').end).border([false]).fillColor('#FFFFFF').end,
+                new Cell(new Txt('Fecha:').fontSize(6).alignment('center').end).end,
+                new Cell(new Txt(hoy).fontSize(6).alignment('center').end).end,
+              ]
+            ]).widths(['10%','38%','2%','10%','38%']).end
+          ).alignment('center').border([false]).end
           ]
-        ]).widths(['60%','20%','20%']).end
+        ]).widths(['60%','40%']).end
       )
 
 
@@ -1174,6 +1220,66 @@ export class BarChartComponent implements OnInit {
           })
         }
         this.material = resp
+        this.api.getLotesUsados(e)
+          .subscribe((resp:any)=>{
+            if(!resp.empty){
+              this.ancho = resp.ancho
+              this.largo = resp.largo
+              this.inicial = resp.gramaje.masa_inicial
+              this.final = resp.gramaje.masa_final
+              this.gramaje = resp.gramaje.gramaje
+              this.promedio = Number(resp.gramaje.promedio)
+              this.desviacion = Number(resp.gramaje.desviacion)
+              this.Gramaje_nf = Number(resp.gramaje.nf)
+              this.max_gramaje = Math.max(...this.gramaje)
+              this.max_gramaje = Number(this.max_gramaje.toFixed(2))
+              this.min_gramaje = Math.min(...this.gramaje)
+              this.min_gramaje = Number(this.min_gramaje.toFixed(2))
+
+              this.cobb = resp.cobb.cobb
+              let cobb_top = []
+              let cobb_back = []
+              let mitad = this.muestras / 2;
+              this.promedio_cobb_top = Number(resp.cobb.promedio_top)
+              this.desviacion_cobb_top = Number(resp.cobb.desviacion_top)
+              this.promedio_cobb_back = Number(resp.cobb.promedio_back)
+              this.desviacion_cobb_back = Number(resp.cobb.desviacion_back)
+
+              this.calibre = resp.calibre.mm
+              this.Um_calibre = resp.calibre.um
+              this.pt_calibre = resp.calibre.pt
+              console.log(resp)
+
+              this.promedio_calibre = Number(resp.calibre.promedio)
+              this.desviacion_calibre = Number(resp.calibre.desviacion)
+              this.Calibre_nf = Number(resp.calibre.nf)
+
+              this.promedio_calibre_um = Number(resp.calibre.promedio_um)
+              this.desviacion_calibre_um = Number(resp.calibre.desviacion_um)
+              this.Calibre_nf_um = Number(resp.calibre.nf_um)
+
+
+              this.promedio_calibre_pt = Number(resp.calibre.promedio_pt)
+              this.desviacion_calibre_pt = Number(resp.calibre.desviacion_pt)
+              this.Calibre_nf_pt = Number(resp.calibre.nf_pt)
+
+              this.max_calibre = Math.max(...this.calibre)
+            this.max_calibre = Number(this.max_calibre.toFixed(2))
+            this.min_calibre = Math.min(...this.calibre)
+            this.min_calibre = Number(this.min_calibre.toFixed(2))
+
+            this.max_calibre_um = Math.max(...this.Um_calibre)
+            this.max_calibre_um = Number(this.max_calibre_um.toFixed(2))
+            this.min_calibre_um = Math.min(...this.Um_calibre)
+            this.min_calibre_um = Number(this.min_calibre_um.toFixed(2))
+
+            this.max_calibre_pt = Math.max(...this.pt_calibre)
+            this.max_calibre_pt = Number(this.max_calibre_pt.toFixed(2))
+            this.min_calibre_pt = Math.min(...this.pt_calibre)
+            this.min_calibre_pt = Number(this.min_calibre_pt.toFixed(2))
+              
+            }
+          })
         for(let i=0;i<this.material.length;i++){
           let index = this.cantidades.indexOf(this.material[i].cantidad)
           if(index < 0){

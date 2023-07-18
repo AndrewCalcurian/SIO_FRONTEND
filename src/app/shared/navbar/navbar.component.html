@@ -7,15 +7,15 @@
     <div class="navbar-end">
         <div class="navbar-item has-dropdown is-hoverable">
             <a class="navbar-link">
-                {{usuario.Nombre}} {{usuario.Apellido}}
+              <i class="fas fa-user"></i>  {{usuario.Nombre}} {{usuario.Apellido}}
             </a>
     
             <div class="navbar-dropdown">
               <a class="navbar-item" (click)="cambiar()">
-                Cambiar Contraseña
+                <i class="fas fa-key"></i> Cambiar Contraseña
               </a>
               <a class="navbar-item" (click)='logout()'>
-                Cerrar Sesion
+                <i class="fas fa-sign-out-alt"></i> Cerrar Sesion
               </a>
             </div>
           </div>

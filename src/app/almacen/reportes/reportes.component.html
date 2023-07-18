@@ -1,7 +1,7 @@
-<div class="container">
+<div class="containe mt-5">
     <div class="titulo">
-        Reporte de inventario
-    </div><br>
+        <i class="fas fa-clipboard-list"></i> Reporte de inventario
+    </div>
     <div class="card">
         <div class="card-content">
     
@@ -99,7 +99,7 @@
     </div> -->
 </div>
 
-<div class="card" *ngIf="!cargando && tipo_ === 'general'">
+<div class="card" *ngIf="!cargando && tipo_ === 'general' && materiales.length > 0">
     <div class="card-content">
         <!-- <span class="subtitulo">Grupo</span><br> -->
         <span class="subtitulo">Desde: {{desde.value | date: 'dd/MM/yyyy': 'UTC'}} Hasta: {{hasta.value | date: 'dd/MM/yyyy': 'UTC'}}</span>

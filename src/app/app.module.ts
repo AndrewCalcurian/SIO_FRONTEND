@@ -34,6 +34,7 @@ registerLocaleData(localeES, 'es')
 import { NgxQRCodeModule } from '@techiediaries/ngx-qrcode';
 import { LaboratorioComponent } from './laboratorio/laboratorio.component';
 import { LaboratorioModule } from './laboratorio/laboratorio.module';
+import { DesarrolloComponent } from './desarrollo/desarrollo.component';
 
 @NgModule({
   declarations: [
@@ -49,6 +50,7 @@ import { LaboratorioModule } from './laboratorio/laboratorio.module';
     LoginComponent,
     UnicosPipe,
     BarChartComponent,
+    DesarrolloComponent,
   ],
   imports: [
     BrowserModule,
