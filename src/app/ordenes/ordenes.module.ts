@@ -9,6 +9,7 @@ import { DetallesComponent } from './detalles/detalles.component';
 import { DespachosComponent } from './despachos/despachos.component';
 import { DespachoComponent } from './gestion/despacho/despacho.component';
 import { RouterModule } from '@angular/router';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 
 
@@ -17,6 +18,8 @@ import { RouterModule } from '@angular/router';
   imports: [
     CommonModule,
     OrdenesRoutingModule,
+    FormsModule,
+    ReactiveFormsModule,
     RouterModule
   ]
 })

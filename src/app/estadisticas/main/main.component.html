@@ -23,7 +23,7 @@
 
 <button class="ordenes_button" *ngIf="!vacio && !cargando && !sinBusqueda">
     <button class="is-primary button" (click)="rolltoorders()">
-        Ordenes
+        Órdenes
     </button>
 </button>
 
@@ -133,7 +133,7 @@
                 <span class="text">Cargando, esto puede tomar un tiempo.</span>
             </div>
             <div class="empty" *ngIf="vacio">
-                No hay ordenes en la fecha indicada 
+                No hay órdenes en la fecha indicada 
                 <i class="fas fa-folder-open"></i>
             </div>
         </div>
@@ -597,7 +597,7 @@
                 <div class="column">
                     <div class="info" *ngIf="!vacio && !cargando && !sinBusqueda">
                         <div class="subtitulos xlarge">
-                            <b>Cantidad de Ordenes:</b> 
+                            <b>Cantidad de Órdenes:</b> 
                             {{data.Ordenes.length}}
                         </div>
                         <div class="orden">

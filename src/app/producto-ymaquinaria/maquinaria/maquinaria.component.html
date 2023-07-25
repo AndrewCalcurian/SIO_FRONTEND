@@ -46,10 +46,35 @@
             </div>
             <button class="button is-primary" (click)='Modal_Grupo()' *ngIf='usuario.Maquinaria == 2'>Nuevo Grupo</button>
             <hr>
-            <table class="table is-fullwidth">
+                <table class="table tables__" *ngFor="let grupo of GRUPOS">
+                    <tr>
+                        <th>
+                            {{grupo.nombre}}
+                            <span class="borrar">
+                                <i class="fas fa-trash-alt" (click)='EliminarGrupo_(grupo._id)' *ngIf='usuario.Maquinaria == 2'></i>
+                            </span>
+                            <!-- <button class="button is-danger is-small is-outlined" (click)='EliminarGrupo_(grupo._id)' *ngIf='usuario.Maquinaria == 2'>
+                                <span class="icon is-small">
+                                    <i class="fas fa-times"></i>
+                                </span>
+                            </button> -->
+                        </th>
+                    </tr>
+                    <tr>
+                        <ul>
+                            <li *ngFor='let tipo of grupo.tipos;index as i'>
+                                <p>
+                                    {{tipo}}
+                                </p>
+                            </li>
+                        </ul>
+                    </tr>
+                </table>
+            <hr>
+            <!-- <table class="table is-fullwidth">
                 <thead>
                     <tr>
-                        <th *ngFor="let grupo of GRUPOS">{{grupo.nombre}} 
+                        <th *ngFor="let grupo of GRUPOS">{{grupo.nombre}}
                             <button class="button is-danger is-small is-outlined" (click)='EliminarGrupo_(grupo._id)' *ngIf='usuario.Maquinaria == 2'>
                                 <span class="icon is-small">
                                     <i class="fas fa-times"></i>
@@ -69,7 +94,7 @@
                         </ul>
                     </td>
                 </tbody>
-            </table>
+            </table> -->
         </div>
     </div>
 </div>

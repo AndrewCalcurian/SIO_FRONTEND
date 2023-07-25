@@ -41,7 +41,7 @@ export class ConsultaOrdenComponent implements OnInit {
   }
 
   public PRODUCTOS = [];
-  Edicion(i){
+  Edicion(i,orden?){
     document.getElementById(`status_${i}`).style.width = '1px';
     document.getElementById(`cantidad_${i}`).style.display = 'none';
     document.getElementById(`fecha_${i}`).style.display = 'none';
@@ -52,45 +52,83 @@ export class ConsultaOrdenComponent implements OnInit {
     document.getElementById(`fecha__${i}`).style.display = 'block';
     document.getElementById(`producto__${i}`).style.display = 'block';
     document.getElementById(`listo_${i}`).style.display = 'block';
-    this.api.getById(this.Orden.cliente._id)
-      .subscribe((resp:any)=>{
-        this.PRODUCTOS = resp.productos
-        console.log(this.PRODUCTOS)
-      })
+
+    if(orden){
+      this.api.getById(orden.cliente._id)
+        .subscribe((resp:any)=>{
+          this.PRODUCTOS = resp.productos
+          console.log(this.PRODUCTOS)
+        })
+    }else{
+      this.api.getById(this.Orden.cliente._id)
+        .subscribe((resp:any)=>{
+          this.PRODUCTOS = resp.productos
+          console.log(this.PRODUCTOS)
+        })
+    }
   }
 
-  Terminar( i){
-    this.api.putOrdenesDeCompra(this.Orden, this.Orden._id)
-      .subscribe((resp:any)=>{
-        document.getElementById(`status_${i}`).style.width = '150px';
-    document.getElementById(`cantidad_${i}`).style.display = 'block';
-    document.getElementById(`fecha_${i}`).style.display = 'block';
-    document.getElementById(`edit_${i}`).style.display = 'block';
-    // document.getElementById(`dele_${i}`).style.display = 'block';
-    document.getElementById(`producto_${i}`).style.display = 'block'
-    document.getElementById(`cantidad__${i}`).style.display = 'none';
-    document.getElementById(`fecha__${i}`).style.display = 'none';
-    document.getElementById(`producto__${i}`).style.display = 'none';
-    document.getElementById(`listo_${i}`).style.display = 'none';
-      })
+  Terminar(i,orden?){
+    if(orden){
+      this.api.putOrdenesDeCompra(orden, orden._id)
+        .subscribe((resp:any)=>{
+          document.getElementById(`status_${i}`).style.width = '150px';
+      document.getElementById(`cantidad_${i}`).style.display = 'block';
+      document.getElementById(`fecha_${i}`).style.display = 'block';
+      document.getElementById(`edit_${i}`).style.display = 'block';
+      // document.getElementById(`dele_${i}`).style.display = 'block';
+      document.getElementById(`producto_${i}`).style.display = 'block'
+      document.getElementById(`cantidad__${i}`).style.display = 'none';
+      document.getElementById(`fecha__${i}`).style.display = 'none';
+      document.getElementById(`producto__${i}`).style.display = 'none';
+      document.getElementById(`listo_${i}`).style.display = 'none';
+        })
+    }else{
+      this.api.putOrdenesDeCompra(this.Orden, this.Orden._id)
+        .subscribe((resp:any)=>{
+          document.getElementById(`status_${i}`).style.width = '150px';
+      document.getElementById(`cantidad_${i}`).style.display = 'block';
+      document.getElementById(`fecha_${i}`).style.display = 'block';
+      document.getElementById(`edit_${i}`).style.display = 'block';
+      // document.getElementById(`dele_${i}`).style.display = 'block';
+      document.getElementById(`producto_${i}`).style.display = 'block'
+      document.getElementById(`cantidad__${i}`).style.display = 'none';
+      document.getElementById(`fecha__${i}`).style.display = 'none';
+      document.getElementById(`producto__${i}`).style.display = 'none';
+      document.getElementById(`listo_${i}`).style.display = 'none';
+        })
+    }
   }
 
-  edicionOC(){
-    document.getElementById(`EditionForm`).style.display = 'block';
-    document.getElementById(`okbutton`).style.display = 'block';
-    document.getElementById(`editionButton`).style.display = 'none';
-    document.getElementById(`Info__`).style.display = 'none';
+  edicionOC(i){
+    document.getElementById(`EditionForm_${i}`).style.display = 'block';
+    document.getElementById(`okbutton_${i}`).style.display = 'block';
+    document.getElementById(`editionButton_${i}`).style.display = 'none';
+    document.getElementById(`Info___${i}`).style.display = 'none';
     
   }
 
-  listoOCEDIT(){
-    this.api.putOrdenesDeCompra(this.Orden, this.Orden._id)
-      .subscribe((resp:any)=>{
-        document.getElementById(`EditionForm`).style.display = 'none';
-        document.getElementById(`okbutton`).style.display = 'none';
-        document.getElementById(`editionButton`).style.display = 'block';
-        document.getElementById(`Info__`).style.display = 'block';
-      })
+  listoOCEDIT(i,orden?){
+
+    if(orden){
+      this.api.putOrdenesDeCompra(orden, orden._id)
+        .subscribe((resp:any)=>{
+          document.getElementById(`EditionForm_${i}`).style.display = 'none';
+          document.getElementById(`okbutton_${i}`).style.display = 'none';
+          document.getElementById(`editionButton_${i}`).style.display = 'block';
+          document.getElementById(`Info___${i}`).style.display = 'block';
+        })
+    }else{
+
+      this.api.putOrdenesDeCompra(this.Orden, this.Orden._id)
+        .subscribe((resp:any)=>{
+          document.getElementById(`EditionForm_${i}`).style.display = 'none';
+          document.getElementById(`okbutton_${i}`).style.display = 'none';
+          document.getElementById(`editionButton_${i}`).style.display = 'block';
+          document.getElementById(`Info___${i}`).style.display = 'block';
+        })
+    }
+
 
   }
 

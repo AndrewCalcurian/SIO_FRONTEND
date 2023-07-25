@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { zIndex } from 'html2canvas/dist/types/css/property-descriptors/z-index';
 import * as moment from 'moment';
 import { RestApiService } from 'src/app/services/rest-api.service';
+import Swal from 'sweetalert2';
 
 
 
@@ -162,6 +163,25 @@ export class EtiquetaComponent implements OnInit {
       })
     
   }
+
+  test_print(){
+    this.api.imprimirTest()
+      .subscribe((resp:any)=>{
+        Swal.fire({
+          position: 'top-end',
+          icon:'success',
+          title: 'Se imprimió etiqueta de prueba',
+          showConfirmButton: false,
+          timer: 1500,
+          timerProgressBar:true,
+          toast:true,
+          didOpen: (toast) => {
+            toast.addEventListener('mouseenter', Swal.stopTimer)
+            toast.addEventListener('mouseleave', Swal.resumeTimer)
+          }
+        })
+      })
+}
 
   puntoYcoma(n){
     return n = new Intl.NumberFormat('de-DE').format(n)

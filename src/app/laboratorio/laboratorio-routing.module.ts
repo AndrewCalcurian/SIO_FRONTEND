@@ -7,6 +7,7 @@ import { MateriaPrimaComponent } from './materia-prima/materia-prima.component';
 import { ProductoTerminadoComponent } from './producto-terminado/producto-terminado.component';
 import { IndexComponent } from './index/index.component';
 import { EspecificacionComponent } from './especificacion/especificacion.component';
+import { AnalisisSustratoComponent } from './analisis-sustrato/analisis-sustrato.component';
 
 
 
@@ -34,6 +35,10 @@ const routes: Routes =[
       {
         path:'especificacion/:producto',
         component:EspecificacionComponent
+      },
+      {
+        path:'analisis-sustrato',
+        component:AnalisisSustratoComponent
       }
     ]
 }]

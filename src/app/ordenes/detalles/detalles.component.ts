@@ -15,6 +15,7 @@ export class DetallesComponent implements OnInit {
   @Input() orden_id:any
   @Input() cantidad_d:any
   @Input() cantidad_do:any
+  @Input() ejemplares_montados:any
   @Output() onCloseModal = new EventEmitter();
   @Output() CargarOrdenes = new EventEmitter();
 
@@ -42,7 +43,70 @@ export class DetallesComponent implements OnInit {
   }
 
   format(n){
-    return Math.ceil(n);
+    n = Math.ceil(n);
+    return n = new Intl.NumberFormat('de-DE').format(n)
+  }
+
+  Finalizar(i){
+    document.getElementById(`dato_hoja_${i}`).style.display = 'block'
+    document.getElementById(`dato_producto_${i}`).style.display = 'block'
+    document.getElementById(`edicion_${i}`).style.display = 'block'
+    document.getElementById(`dato_fecha_${i}`).style.display = 'block'
+    document.getElementById(`productos_${i}`).style.display = 'none'
+    document.getElementById(`hojas_${i}`).style.display = 'none' 
+    document.getElementById(`finalizar_${i}`).style.display = 'none'
+    document.getElementById(`fecha_${i}`).style.display = 'none'
+
+    let gestiones = this.gestiones_.filter(x => x.maquina.tipo == this.gestiones_[i].maquina.tipo)
+
+
+    this.api.PostEditarGestiones(gestiones)
+      .subscribe((resp:any)=>{
+        Swal.fire({
+          // title:'Editado',
+          title:'gestión editada con exito',
+          toast:true,
+          icon:'success',
+          showConfirmButton:false,
+          timerProgressBar:true,
+          timer:1500,
+          position:'top-end',
+          didOpen: (toast) => {
+            toast.addEventListener('mouseenter', Swal.stopTimer)
+            toast.addEventListener('mouseleave', Swal.resumeTimer)
+          }
+        })
+      })
+  }
+
+  chage_date(e, i){
+    this.gestiones_[i].fecha = e;
+  }
+
+  editar_gestion(i){
+
+    document.getElementById(`dato_hoja_${i}`).style.display = 'none'
+    document.getElementById(`dato_producto_${i}`).style.display = 'none'
+    document.getElementById(`edicion_${i}`).style.display = 'none'
+    document.getElementById(`dato_fecha_${i}`).style.display = 'none'
+    document.getElementById(`productos_${i}`).style.display = 'block'
+    document.getElementById(`hojas_${i}`).style.display = 'block' 
+    document.getElementById(`finalizar_${i}`).style.display = 'block'
+    document.getElementById(`fecha_${i}`).style.display = 'block'
+    
+    // Swal.fire({
+    //   title:'En desarrollo',
+    //   text:'La siguiente función se encuentra en desarrollo, pronto estará disponible',
+    //   toast:true,
+    //   icon:'info',
+    //   timer:1500,
+    //   showConfirmButton:false,
+    //   timerProgressBar:true,
+    //   didOpen: (toast) => {
+    //     toast.addEventListener('mouseenter', Swal.stopTimer)
+    //     toast.addEventListener('mouseleave', Swal.resumeTimer)
+    //   }
+    // })
   }
 
   gestiones(){
@@ -105,14 +169,71 @@ export class DetallesComponent implements OnInit {
   }
 
   buscarGestiones(){
-    this.api.getGestiones()
+    this.api.getGestionesByOp(this.orden_id)
       .subscribe((resp:any)=>{
         this.gestiones_ = resp;
+        console.log(resp)
       })
+    // this.api.getGestiones()
+    //   .subscribe((resp:any)=>{
+    //     this.gestiones_ = resp;
+    //   })
   }
 
   CambioDeMaquina(e){
     alert(e)
+  }
+
+  change_hojas(e, i){
+    //calcular producto por hoja
+    let pph = this.ejemplares_montados
+    this.gestiones_[i].hojas = e;
+    this.gestiones_[i].productos = pph * e;
+
+    let gestionesXtipo = this.gestiones_.filter(x => x.maquina.tipo == this.gestiones_[i].maquina.tipo) 
+    
+    for(let n=0;n<gestionesXtipo.length;n++){
+      let productos = this.cantidad_d
+      let hojas = Math.ceil(productos / this.ejemplares_montados)
+
+      if(n == 0){
+        let index = this.gestiones_.findIndex(x=> x._id === gestionesXtipo[n]._id)
+        this.gestiones_[index].Rhojas = hojas - this.gestiones_[index].hojas
+        this.gestiones_[index].Rproductos = productos - this.gestiones_[index].productos
+      }else{
+        let index = this.gestiones_.findIndex(x=> x._id === gestionesXtipo[n]._id)
+        let anterior = this.gestiones_.findIndex(x=> x._id === gestionesXtipo[n-1]._id)
+
+        this.gestiones_[index].Rhojas = this.gestiones_[anterior].Rhojas - this.gestiones_[index].hojas
+        this.gestiones_[index].Rproductos = this.gestiones_[anterior].Rproductos - this.gestiones_[index].productos
+      }
+    }
+
+  }
+
+  change_productos(e,i){
+    this.gestiones_[i].productos = e;
+    this.gestiones_[i].hojas = e / this.ejemplares_montados;
+    this.gestiones_[i].hojas = Math.ceil(this.gestiones_[i].hojas)
+
+    let gestionesXtipo = this.gestiones_.filter(x => x.maquina.tipo == this.gestiones_[i].maquina.tipo)
+    for(let n=0;n<gestionesXtipo.length;n++){
+      let productos = this.cantidad_d
+      let hojas = Math.ceil(productos / this.ejemplares_montados)
+
+      if(n == 0){
+        let index = this.gestiones_.findIndex(x=> x._id === gestionesXtipo[n]._id)
+        this.gestiones_[index].Rhojas = hojas - this.gestiones_[index].hojas
+        this.gestiones_[index].Rproductos = productos - this.gestiones_[index].productos
+      }else{
+        let index = this.gestiones_.findIndex(x=> x._id === gestionesXtipo[n]._id)
+        let anterior = this.gestiones_.findIndex(x=> x._id === gestionesXtipo[n-1]._id)
+
+        this.gestiones_[index].Rhojas = this.gestiones_[anterior].Rhojas - this.gestiones_[index].hojas
+        this.gestiones_[index].Rproductos = this.gestiones_[anterior].Rproductos - this.gestiones_[index].productos
+      }
+    }
+
   }
 
   buscarTrabajos(){

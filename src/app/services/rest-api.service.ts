@@ -172,6 +172,11 @@ export class RestApiService {
     const url = `${this.api_url}/gestiones`
     return this.http.get(url);
   }
+
+  getGestionesByOp(op_id){
+    const url = `${this.api_url}/gestiones/${op_id}`
+    return this.http.get(url);
+  }
   postRestrasar(data){
     const url = `${this.api_url}/trabajos/retrasar`
     return this.http.post(url,data)
@@ -704,5 +709,26 @@ export class RestApiService {
     const url = `${this.api_url}/analisis-sustrato/${lote}`
     return this.http.get(url)
   }
+
+  PostEditarGestiones(data){
+    const url = `${this.api_url}/many-gestiones`
+    return this.http.post(url, data)
+  }
+
+  imprimirTest(){
+    const url = `${this.api_url}/createMark`
+    return this.http.get(url)
+  }
+
+  postDepartamento(data){
+    const url = `${this.api_url}/departamento`
+    return this.http.post(url, data)
+  }
+
+  GetDepartamento(){
+    const url = `${this.api_url}/departamento`
+    return this.http.get(url)
+  }
+
 
 }

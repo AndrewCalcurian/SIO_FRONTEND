@@ -14,7 +14,14 @@
                     Cantidad a entregar: <b>{{cantidad_do}} ({{((cantidad_do * 100) /cantidad_d).toFixed(2)}}%)</b>
                 </div>
                 <div class="column is-2">
-                    <button class="button is-primary" (click)="gestiones()" >Gestiones</button>
+                    <button class="button is-primary" (click)="gestiones()" >
+                        <span class="icon">
+                            <i class="fas fa-wrench"></i>
+                        </span>
+                        <span>
+                            Gestiones
+                        </span>
+                    </button>
                 </div>
             </div>
 
@@ -42,6 +49,7 @@
                             <table class="table is-fullwidth">
                                 <thead>
                                     <tr>
+                                        <th *ngIf="usuario.Role === 'ADMIN'">Edición</th>
                                         <th>Fecha</th>
                                         <th>Hojas gestionadas</th>
                                         <th>Productos gestionados</th>
@@ -49,11 +57,34 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <ng-container *ngFor="let gestion of gestiones_">
+                                    <ng-container *ngFor="let gestion of gestiones_;index as i">
                                     <tr *ngIf="gestion.maquina.tipo === trabajo.maquina.tipo && gestion.op === orden_id">
-                                        <td>{{gestion.fecha | date:'dd/MM/yyyy':'UTC'}}</td>
-                                        <td>{{format(gestion.hojas)}}</td>
-                                        <td>{{format(gestion.productos)}}</td>
+                                        <td *ngIf="usuario.Role === 'ADMIN'">
+                                            <span class="icono" id="edicion_{{i}}" (click)="editar_gestion(i)">
+                                                <i class="fas fa-edit"></i>
+                                            </span>
+                                            <span class="icono" id="finalizar_{{i}}" (click)="Finalizar(i)" style="display: none;">
+                                                <i class="fas fa-check"></i>
+                                            </span>
+                                        </td>
+                                        <td>
+                                            <span id="dato_fecha_{{i}}">
+                                                {{gestion.fecha | date:'dd/MM/yyyy':'UTC'}}
+                                            </span>
+                                            <input type="date" name="" id="fecha_{{i}}" class="input is-small" [value]="gestiones_[i].fecha"  style="display: none;" (change)="chage_date($event.target.value, i)">
+                                        </td>
+                                        <td>
+                                            <span id="dato_hoja_{{i}}">
+                                                {{format(gestion.hojas)}} <br>
+                                            </span>
+                                            <input type="number" class="input is-small" id="hojas_{{i}}" [value]="gestiones_[i].hojas" (change)="change_hojas($event.target.value, i)" style="display: none;">
+                                        </td>
+                                        <td>
+                                            <span id="dato_producto_{{i}}">
+                                                {{format(gestion.productos)}}
+                                            </span>
+                                            <input type="number" class="input is-small" id="productos_{{i}}" [value]="gestiones_[i].productos" (change)="change_productos($event.target.value,i)" style="display: none;">
+                                        </td>
                                         <td>{{gestion.Rhojas}}(Hojas) /
                                             <ng-container *ngIf="gestion.Rproductos > 0">
                                                 {{gestion.Rproductos}}(Productos)

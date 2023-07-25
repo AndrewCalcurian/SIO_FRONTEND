@@ -24,3 +24,11 @@
     position: relative;
     width: 100px;
 }
+
+.icono{
+    color: #48c78e;
+}
+.icono:hover{
+    color: #49a079;
+    cursor: pointer;
+}

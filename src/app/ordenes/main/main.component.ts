@@ -17,7 +17,8 @@ export class MainComponent implements OnInit {
   public orden_detalle;
   public orden_id;
   public cantidad_d;
-  public cantidad_do
+  public cantidad_do;
+  public ejemplares_montados;
 
   public despacho:boolean = false;
 
@@ -44,7 +45,8 @@ export class MainComponent implements OnInit {
       })
   }
 
-  detallar(id,sort, x, y){
+  detallar(id,sort, x, y, montajes){
+    this.ejemplares_montados = montajes;
     this.detalle = true;
     this.orden_detalle = sort;
     this.orden_id = id;

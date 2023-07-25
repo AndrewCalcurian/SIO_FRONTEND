@@ -10,11 +10,12 @@ import { RouterModule } from '@angular/router';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { IndexComponent } from './index/index.component';
 import { EspecificacionComponent } from './especificacion/especificacion.component';
+import { AnalisisSustratoComponent } from './analisis-sustrato/analisis-sustrato.component';
 
 
 
 @NgModule({
-  declarations: [LaboratorioComponent, MainComponent, MateriaPrimaComponent, ProductoTerminadoComponent, IndexComponent, EspecificacionComponent],
+  declarations: [LaboratorioComponent, MainComponent, MateriaPrimaComponent, ProductoTerminadoComponent, IndexComponent, EspecificacionComponent, AnalisisSustratoComponent],
   imports: [
     CommonModule,
     LaboratorioRoutingModule,

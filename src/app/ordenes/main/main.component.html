@@ -4,6 +4,7 @@
 [orden_id]="orden_id"
 [cantidad_d]="cantidad_d"
 [cantidad_do]="cantidad_do"
+[ejemplares_montados]="ejemplares_montados"
 (onCloseModal)="detalle = false"
 (CargarOrdenes)="getOrdenes()"
 >
@@ -18,7 +19,7 @@
     <div class="card mt-5">
         <div class="card-content">
             <div class="titulo">
-                <i class="fas fa-list-ol"></i> Ordenes de Producción
+                <i class="fas fa-list-ol"></i> Órdenes de Producción
             </div>
             <hr>
             <table class="table is-fullwidth is-hoverable">
@@ -43,7 +44,7 @@
                         <td *ngIf="!loading">{{getEstados(orden._id)}}</td>
                         <td>
                                  
-                            <i class="fas fa-th-list" (click)='detallar(orden._id, orden.sort, orden.cantidad, orden.cantidad_o)'></i>
+                            <i class="fas fa-th-list" (click)='detallar(orden._id, orden.sort, orden.cantidad, orden.cantidad_o, orden.producto.ejemplares[orden.montaje])'></i>
                             <!-- <button class="button is-primary" (click)='detallar(orden._id, orden.sort, orden.cantidad, orden.cantidad_o)'>Detalles</button> -->
                         </td>
                         <!-- <td><button class="button is-primary" (click)='alert(orden._id)'>Consultar</button></td> -->
