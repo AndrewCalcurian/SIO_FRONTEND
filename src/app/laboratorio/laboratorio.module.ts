@@ -11,11 +11,13 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { IndexComponent } from './index/index.component';
 import { EspecificacionComponent } from './especificacion/especificacion.component';
 import { AnalisisSustratoComponent } from './analisis-sustrato/analisis-sustrato.component';
+import { AnalisisMenuComponent } from './analisis-menu/analisis-menu.component';
+import { AnalisisTintaComponent } from './analisis-tinta/analisis-tinta.component';
 
 
 
 @NgModule({
-  declarations: [LaboratorioComponent, MainComponent, MateriaPrimaComponent, ProductoTerminadoComponent, IndexComponent, EspecificacionComponent, AnalisisSustratoComponent],
+  declarations: [LaboratorioComponent, MainComponent, MateriaPrimaComponent, ProductoTerminadoComponent, IndexComponent, EspecificacionComponent, AnalisisSustratoComponent, AnalisisMenuComponent, AnalisisTintaComponent],
   imports: [
     CommonModule,
     LaboratorioRoutingModule,

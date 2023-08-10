@@ -13,7 +13,7 @@ export class SubirArchivosService {
 
   async actualizarFoto(
     archivo:File,
-    tipo:'usuarios'|'errors'|'producto'|'despacho'|'distribucion'|'aereo',
+    tipo:'usuarios'|'errors'|'producto'|'despacho'|'distribucion'|'aereo'|'analisis',
     id:string
   ) {
     try{

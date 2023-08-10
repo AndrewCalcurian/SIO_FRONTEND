@@ -228,9 +228,9 @@ export class RestApiService {
     }).pipe(
       tap( (resp:any) =>{
 
-        const {estado,_id ,Nombre ,Apellido, Correo ,Departamento, Role,Nueva_orden,Consulta,Almacen,Maquinaria, Planificacion,Gestiones,Despacho,Estadisticas,Precios,pin } = resp.usuario;
+        const {estado,_id ,Nombre ,Apellido, Correo ,Departamento, Role,Nueva_orden,Consulta,Almacen,Maquinaria, Planificacion,Gestiones,Despacho,Estadisticas,Precios,pin,laboratorio } = resp.usuario;
 
-        this.usuario = new Usuario(estado, _id, Nombre, Apellido, Correo, Departamento,Role,Nueva_orden, Consulta, Almacen,Maquinaria,Planificacion,Gestiones,Despacho,Estadisticas,Precios,pin);
+        this.usuario = new Usuario(estado, _id, Nombre, Apellido, Correo, Departamento,Role,Nueva_orden, Consulta, Almacen,Maquinaria,Planificacion,Gestiones,Despacho,Estadisticas,Precios,pin,laboratorio);
         localStorage.setItem('token', resp.token);
         localStorage.setItem('menu', JSON.stringify( resp.menu) );
       }),
@@ -727,6 +727,16 @@ export class RestApiService {
 
   GetDepartamento(){
     const url = `${this.api_url}/departamento`
+    return this.http.get(url)
+  }
+
+  postAnalisisTinta(data){
+    const url = `${this.api_url}/analisis-tinta`
+    return this.http.post(url, data)
+  }
+
+  getAnalisisTinta(lote){
+    const url = `${this.api_url}/analisis-tinta/${lote}`
     return this.http.get(url)
   }
 

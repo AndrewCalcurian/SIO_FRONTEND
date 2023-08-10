@@ -3,6 +3,7 @@ import { RestApiService } from '../services/rest-api.service';
 
 import { ActivatedRoute } from '@angular/router';
 import Swal from 'sweetalert2';
+import { rgb2lab, lab2rgb, deltaE } from 'rgb-lab'
 
 // const consultaDolar = require('consulta-dolar-venezuela');
 
@@ -25,7 +26,42 @@ export class BarChartComponent implements OnInit {
 
   ngOnInit(): void {
     this.BuscarDepartamentos()
+
   }
+  
+  
+  public l
+  public a
+  public b
+  // TEST DE COLORES
+  
+  calcularRGB(r,g,b){
+    r = Number(r)
+    g = Number(g)
+    b = Number(b)
+
+    this.l = r;
+    this.a = g;
+    this.b = b;
+    let rgb_converted = lab2rgb([r,g,b])
+    
+    document.getElementById('cart').style.backgroundColor = `rgb(${rgb_converted[0]},${rgb_converted[1]},${rgb_converted[2]})`
+}
+
+calcularRGB_a(r,g,b){
+  r = Number(r)
+  g = Number(g)
+  b = Number(b)
+  let rgb_converted = lab2rgb([r,g,b])
+  
+  document.getElementById('cart_2').style.backgroundColor = `rgb(${rgb_converted[0]},${rgb_converted[1]},${rgb_converted[2]})`
+
+  console.log(deltaE([this.l,this.a,this.b], [r,g,b]))
+}
+
+  
+
+  // FIN TEST DE COLORES 
 
   BuscarDepartamentos(){
     this.api.GetDepartamento()

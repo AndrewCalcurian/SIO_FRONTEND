@@ -37,6 +37,7 @@
     "pdfmake": "^0.2.2",
     "pdfmake-wrapper": "^2.1.2",
     "qrcode": "^1.5.1",
+    "rgb-lab": "^1.0.0",
     "rxjs": "~6.6.0",
     "sweetalert2": "^11.1.7",
     "tslib": "^2.0.0",

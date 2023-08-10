@@ -178,11 +178,11 @@ export class MainComponent implements OnInit {
 
 
   ngOnInit(): void {
+    this.porConfirmar();
     this.BuscarAlmacen();
     this.getAalmacenado();
     this.BuscarGruposEnAlmacen();
     // this.getSustratos();
-    this.porConfirmar();
     this.totalizar_materiales()
     this.Gs = (<HTMLInputElement>document.getElementById('selected')).value
     this.Buscar_conversiones()
@@ -329,13 +329,15 @@ export class MainComponent implements OnInit {
     this.necesario.push(e)
   }
 
-  public necesario;
+  public necesario = [];
 
   porConfirmar(){
+    console.log('WHAAT')
     this.api.getMaterialesPorConfirmar()
       .subscribe((resp:any)=>{
         this.necesario = resp;
-        // // console.log( this.necesario ,'AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA')
+        console.log(resp)
+        console.log( this.necesario ,'AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA')
       })
   }
 
@@ -738,7 +740,7 @@ export class MainComponent implements OnInit {
     this.api.getAlmacen()
       .subscribe((resp:any) => {
         this.ALMACEN = resp.materiales;
-        console.log('666666666666666666666666',this.ALMACEN)
+        // console.log('666666666666666666666666',this.ALMACEN)
         this.filterList();
         this.totalizar_materiales()
         this.loading = false;
@@ -1003,7 +1005,8 @@ export class MainComponent implements OnInit {
     for(let i = 0; i<BobinasEnConvertidora.length; i++){
       let bobina = BobinasEnConvertidora[i]
       // console.log(bobina)
-      let sustrato = this.ALMACEN.filter(x => x.nombre == bobina.material && x.marca == bobina.marca && x.ancho == bobina.ancho && x.gramaje == bobina.gramaje && x.calibre == bobina.calibre)
+      // let sustrato = this.ALMACEN.filter(x => x.nombre == bobina.material && x.marca == bobina.marca && x.ancho == bobina.ancho && x.gramaje == bobina.gramaje && x.calibre == bobina.calibre)
+      let sustrato = this.ALMACEN.filter(x => x.nombre == bobina.material &&  x.ancho == bobina.ancho)
 
           // console.log(sustrato,'aja')
           if(sustrato){
@@ -1054,11 +1057,11 @@ export class MainComponent implements OnInit {
               this.BobinasSencillas[sumada].peso = peso
           }
 
-          console.log(this.BobinasSencillas)
+          // console.log(this.BobinasSencillas)
 
           let sustrato = this.ALMACEN.find(x => x.nombre == bobina.material && x.marca == bobina.marca && x.ancho == bobina.ancho && x.gramaje == bobina.gramaje)
 
-          console.log(sustrato)
+          // console.log(sustrato)
           if(sustrato){
 
             let existe = this.SUSTRATO_CONVERSION.find(x => x._id == sustrato._id)

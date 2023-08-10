@@ -205,7 +205,9 @@ export class DetallesComponent implements OnInit {
         let anterior = this.gestiones_.findIndex(x=> x._id === gestionesXtipo[n-1]._id)
 
         this.gestiones_[index].Rhojas = this.gestiones_[anterior].Rhojas - this.gestiones_[index].hojas
+        this.gestiones_[index].Rhojas = Math.ceil(this.gestiones_[index].Rhojas)
         this.gestiones_[index].Rproductos = this.gestiones_[anterior].Rproductos - this.gestiones_[index].productos
+        this.gestiones_[index].Rproductos = Math.ceil(this.gestiones_[index].Rproductos)
       }
     }
 
@@ -230,7 +232,9 @@ export class DetallesComponent implements OnInit {
         let anterior = this.gestiones_.findIndex(x=> x._id === gestionesXtipo[n-1]._id)
 
         this.gestiones_[index].Rhojas = this.gestiones_[anterior].Rhojas - this.gestiones_[index].hojas
+        this.gestiones_[index].Rhojas = Math.ceil(this.gestiones_[index].Rhojas)
         this.gestiones_[index].Rproductos = this.gestiones_[anterior].Rproductos - this.gestiones_[index].productos
+        this.gestiones_[index].Rproductos = Math.ceil(this.gestiones_[index].Rproductos)
       }
     }
 

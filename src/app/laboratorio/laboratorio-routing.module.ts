@@ -8,6 +8,8 @@ import { ProductoTerminadoComponent } from './producto-terminado/producto-termin
 import { IndexComponent } from './index/index.component';
 import { EspecificacionComponent } from './especificacion/especificacion.component';
 import { AnalisisSustratoComponent } from './analisis-sustrato/analisis-sustrato.component';
+import { AnalisisMenuComponent } from './analisis-menu/analisis-menu.component';
+import { AnalisisTintaComponent } from './analisis-tinta/analisis-tinta.component';
 
 
 
@@ -39,6 +41,14 @@ const routes: Routes =[
       {
         path:'analisis-sustrato',
         component:AnalisisSustratoComponent
+      },
+      {
+        path:'analisis-tinta',
+        component:AnalisisTintaComponent
+      },
+      {
+        path:'analisis',
+        component:AnalisisMenuComponent
       }
     ]
 }]

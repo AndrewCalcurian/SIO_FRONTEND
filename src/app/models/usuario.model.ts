@@ -18,6 +18,7 @@ export class Usuario {
         public Despacho:Number,
         public Estadisticas:Number,
         public Precios:Number,
-        public pin: string
+        public pin: string,
+        public laboratorio: String
     ) {}
 }

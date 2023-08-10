@@ -39,6 +39,7 @@ export class AsignacionComponent implements OnInit {
   buscarRequisicion(){
     this.api.getRequi()
     .subscribe((resp:any)=>{
+      console.log(resp)
       for(let i =0; i<resp.length;i++){
         this.necesario.push(resp[i])
         // console.log(this.Almacenado, 'almacenado')
@@ -188,8 +189,8 @@ export class AsignacionComponent implements OnInit {
     }else if(grupo === 'Soportes de Embalaje'){
         _cantidad = (m_cantidad * hojas) / 1000;
     }else if(grupo === 'Cajas Corrugadas' || grupo === 'Insumos'){
-      _cantidad = cantidad / m_cantidad;
-                  // alert(m_cantidad)
+      _cantidad =  cantidad / m_cantidad;
+      console.log(_cantidad,'-',cantidad,'/', m_cantidad)
       if(cantidad === 1){
         _cantidad = m_cantidad
       }
@@ -217,6 +218,9 @@ export class AsignacionComponent implements OnInit {
       unidad_necesaria = _cantidad - this.Descuentos(material)
     }else if(grupo === 'CINTA DE EMBALAJE' || grupo === 'Cinta de Embalaje'){
       unidad_necesaria = (_cantidad / EnAlmacen.material.neto) - (this.Descuentos(material)/ EnAlmacen.material.neto)
+    }else if(grupo === 'Cajas Corrugadas'){
+      unidad_necesaria = _cantidad - this.Descuentos(material)
+      console.log(unidad_necesaria,'/',_cantidad)
     }
     // console.log(_cantidad,'_cantidad')
     // console.log(EnAlmacen.material.neto,'Neto')
@@ -244,6 +248,7 @@ export class AsignacionComponent implements OnInit {
 
     if(EnAlmacen.material.grupo.nombre === 'Cajas Corrugadas' && orden.cliente){
       unidad_necesaria =_cantidad - this.Descuentos(material);
+      console.log(unidad_necesaria)
     }else if(EnAlmacen.material.grupo.nombre === 'Sustrato' && orden.cliente){
       unidad_necesaria = hojas - this.Descuentos(material)
       // alert(this.Descuentos(material))
@@ -369,6 +374,8 @@ export class AsignacionComponent implements OnInit {
 
   Restar(orden, solicitud,index,n,requi?){
 
+    console.log(this.LOTES)
+
     let largo = solicitud.length;
     let ceros = []
 
@@ -383,7 +390,7 @@ export class AsignacionComponent implements OnInit {
     }
 
     let En_Almacen = this.necesario[index].producto.materiales[this.necesario[index].montaje];
-    console.log(En_Almacen)
+    
     for(let n=0;n<En_Almacen.length;n++){
       if(!En_Almacen[n].producto.ancho){
         if(En_Almacen[n].cantidad == 0){
@@ -391,7 +398,7 @@ export class AsignacionComponent implements OnInit {
           En_Almacen.splice(n,1)
         }
       }
-
+      
       if(n == En_Almacen.length-1){
         for(let i = 0; i<En_Almacen.length; i++){
           let existe = this.LOTES.find(x => x.i === i);
@@ -447,7 +454,8 @@ export class AsignacionComponent implements OnInit {
               title: 'Excelente!',
               text: 'La nueva orden ya esta generada',
               showConfirmButton: false,
-              timer:1500
+              timer:1500,
+              timerProgressBar:true
            })
           this.onCloseModal.emit();
           this.onFinalizarAsignacion.emit();

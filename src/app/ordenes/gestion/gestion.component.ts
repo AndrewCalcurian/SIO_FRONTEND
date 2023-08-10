@@ -416,7 +416,7 @@ export class GestionComponent implements OnInit {
 
     if(index > 0){
       let gest = this.GESTIONES.filter(x => x.maquina.tipo == group.tipos[index -1] && x.op == op)
-      // console.log('gestiones',gest)
+      console.log('gestiones',gest,'Grupos',group)
       let hojas = 0;
       let productos = 0;
       for(let i =0; i<gest.length; i++){

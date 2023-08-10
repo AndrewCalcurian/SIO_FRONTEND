@@ -44,3 +44,10 @@
 .color{
     color: #bdbdbd;
 }
+
+.cart{
+    display: block;
+    width: 100px;
+    height: 100px;
+    float: left;
+}
