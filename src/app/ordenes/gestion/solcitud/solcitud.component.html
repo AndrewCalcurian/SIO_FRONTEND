@@ -6,16 +6,33 @@
                 Solicitud de Material
             </div>
             <hr>
-                <div class="field">
-                    <label class="label">Producto / Orden de producción:</label>
-                    <div class="select">
-                        <select (change)="TraerMateriales($event.target.value)">
-                            <option value="">Selecciona OP</option>
-                            <option class="option" value="Otro">Otros Materiales</option>
-                            <ng-container *ngIf="usuario.Gestiones != 5">
-                                <option class="option" value='{{Orden.sort}}' *ngFor="let Orden of orden.reverse()">{{Orden.sort}}</option>
-                            </ng-container>
-                        </select>
+                <div class="columns">
+                    <div class="column">
+                        <div class="field">
+                            <label class="label">Producto / Orden de producción:</label>
+                            <div class="select">
+                                <select (change)="TraerMateriales($event.target.value)">
+                                    <option value="">Selecciona OP</option>
+                                    <option class="option" value="Otro">Otros Materiales</option>
+                                    <ng-container *ngIf="usuario.Gestiones != 5">
+                                        <option class="option" value='{{Orden.sort}}' *ngFor="let Orden of orden.reverse()">{{Orden.sort}}</option>
+                                    </ng-container>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="column" *ngIf="Otro">
+                        <div class="field">
+                            <label class="label">Asociar a otra OP:</label>
+                            <div class="select">
+                                <select [(ngModel)]="asociacion">
+                                    <option class="option" value="#">Sin asignar</option>
+                                    <ng-container *ngIf="usuario.Gestiones != 5">
+                                        <option class="option" value='{{Orden.sort}}' *ngFor="let Orden of orden">{{Orden.sort}}</option>
+                                    </ng-container>
+                                </select>
+                            </div>
+                        </div>
                     </div>
                 </div>
                 <hr>

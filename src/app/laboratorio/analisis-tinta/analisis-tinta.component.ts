@@ -78,10 +78,21 @@ export class AnalisisTintaComponent implements OnInit {
 
   public ImgSubir:File;
   public img = 'no-file';
+  public usuario;
+  public usuario_;
+  public dia;
+  public Resultado = 'APROBADO';
+  public tipo;
+  public sobre = '#';
+  public prueba = 'Cartón'
+  public presentacion_;
+  public cantidad__;
 
 
   constructor(private api:RestApiService,
-    private subirArchivo:SubirArchivosService,) { }
+    private subirArchivo:SubirArchivosService) {
+      this.usuario = api.usuario
+     }
 
   ngOnInit(): void {
   }
@@ -244,6 +255,7 @@ export class AnalisisTintaComponent implements OnInit {
       
       this.muestra2 = `background-color:rgb(${rgb_converted[0]},${rgb_converted[1]},${rgb_converted[2]});`
     }
+    if(this.l3[2], this.a3[2], this.b3[2])
     {
       this.l3[2] = Number(this.l3[2])
       this.a3[2] = Number(this.a3[2])
@@ -274,6 +286,7 @@ export class AnalisisTintaComponent implements OnInit {
   }
 
   cantidad_(e){
+    this.tipo = e;
     switch(e){
       case 'Carton':
         this._carton_ = true;
@@ -312,13 +325,154 @@ export class AnalisisTintaComponent implements OnInit {
     }
   }
 
+  verImagen(){
+    Swal.fire({
+      imageUrl: `http://192.168.0.23:8080/api/imagen/analisis/${this.img}`,
+      imageAlt: 'Draw down',
+      showConfirmButton:false
+    })
+  }
+
+
+  puntoYcoma(n){
+    n = new Intl.NumberFormat('de-DE').format(n)
+    if(n === 'NaN'){
+      return 'N/A'
+    }else{
+      return n 
+    }
+   }
+
   GenerarPDF(){
+
+
+    for(let i= 0;i<this.d1.length;i++){
+      if(!this.d1[i]){
+        if(this.d1[i] === 0){
+          this.d1[i] = '0.00'
+        }else{
+          this.d1[i] = 'N/A'
+        }
+      }else{
+        this.d1[i] = this.puntoYcoma(this.d1[i])
+      }
+    }
+
+    for(let i= 0;i<this.l1.length;i++){
+      if(!this.l1[i]){
+        if(this.l1[i] === 0){
+          this.l1[i] = '0.00'
+        }else{
+          this.l1[i] = 'N/A'
+        }
+      }else{
+        this.l1[i] = this.puntoYcoma(this.l1[i])
+      }
+    }
+    for(let i= 0;i<this.a1.length;i++){
+      if(!this.a1[i]){
+        if(this.a1[i] === 0){
+          this.a1[i] = '0.00'
+        }else{
+          this.a1[i] = 'N/A'
+        }
+      }else{
+        this.a1[i] = this.puntoYcoma(this.a1[i])
+      }
+    }
+    for(let i= 0;i<this.b1.length;i++){
+      if(!this.b1[i]){
+        if(this.b1[i] === 0){
+          this.b1[i] = '0.00'
+        }else{
+          this.b1[i] = 'N/A'
+        }
+      }else{
+        this.b1[i] = this.puntoYcoma(this.b1[i])
+      }
+    }
+
+    for(let i= 0;i<this.l2.length;i++){
+      if(!this.l2[i]){
+        if(this.l2[i] === 0){
+          this.l2[i] = '0.00'
+        }else{
+          this.l2[i] = 'N/A'
+        }
+      }else{
+        this.l2[i] = this.puntoYcoma(this.l2[i])
+      }
+    }
+    for(let i= 0;i<this.a2.length;i++){
+      if(!this.a2[i]){
+        if(this.a2[i] === 0){
+          this.a2[i] = '0.00'
+        }else{
+          this.a2[i] = 'N/A'
+        }
+      }else{
+        this.a2[i] = this.puntoYcoma(this.a2[i])
+      }
+    }
+    for(let i= 0;i<this.b2.length;i++){
+      if(!this.b2[i]){
+        if(this.b2[i] === 0){
+          this.b2[i] = '0.00'
+        }else{
+          this.b2[i] = 'N/A'
+        }
+      }else{
+        this.b2[i] = this.puntoYcoma(this.b2[i])
+      }
+    }
+
+    for(let i= 0;i<this.l3.length;i++){
+      if(!this.l3[i]){
+        if(this.l3[i] === 0){
+          this.l3[i] = '0.00'
+        }else{
+          this.l3[i] = 'N/A'
+        }
+      }else{
+        this.l3[i] = this.puntoYcoma(this.l3[i])
+      }
+    }
+    for(let i= 0;i<this.a3.length;i++){
+      if(!this.a3[i]){
+        if(this.a3[i] === 0){
+          this.a3[i] = '0.00'
+        }else{
+          this.a3[i] = 'N/A'
+        }
+      }else{
+        this.a3[i] = this.puntoYcoma(this.a3[i])
+      }
+    }
+    for(let i= 0;i<this.b3.length;i++){
+      if(!this.b3[i]){
+        if(this.b3[i] === 0){
+          this.b3[i] = '0.00'
+        }else{
+          this.b3[i] = 'N/A'
+        }
+      }else{
+        this.b3[i] = this.puntoYcoma(this.b3[i])
+      }
+    }
+
     let img = this.img
     let hoy = moment().format('DD/MM/YYYY')
+    let dia = this.dia;
+    let guardado = this.usuario_
+    let validado = `${this.usuario.Nombre} ${this.usuario.Apellido}`
+    let Resultado = this.Resultado;
+    this.f_fabricacion = moment(this.f_fabricacion).format('DD/MM/YYYY')
+    this.f_vencimiento = moment(this.f_vencimiento).format('DD/MM/YYYY')
     let analisis = {
       producto:this.muestra__.material.nombre,
       marcar:this.muestra__.material.marca,
-      presentacion:this.cantidad,
+      presentacion:this.presentacion_,
+      total:this.cantidad__,
       f_fabricacion:this.f_fabricacion,
       f_vencimiento:this.f_vencimiento,
       estandar:this.estandar_utilizado,
@@ -370,7 +524,12 @@ export class AnalisisTintaComponent implements OnInit {
       ],
       observaciones:this.Observacion_
     }
-
+    let marca 
+    if(analisis.marcar === 'Olin' || analisis.marcar === 'olin'){
+      marca = 'Fábrica de Tinta Olin, C.A'
+    }else{
+      marca = analisis.marcar
+    }
     let sustrato_muestra_ = this.papel_muestra_
     async function GenerarCertificado(){
       const pdf = new PdfMakeWrapper();
@@ -433,13 +592,13 @@ export class AnalisisTintaComponent implements OnInit {
             new Cell(new Txt('Producto').bold().end).fontSize(7).fillColor('#dedede').end,
             new Cell(new Txt(analisis.producto).bold().end).alignment('center').fontSize(7).end,
             new Cell(new Txt('Proveedor').bold().end).fontSize(7).fillColor('#dedede').end,
-            new Cell(new Txt(analisis.marcar).alignment('center').bold().end).fontSize(7).end,
+            new Cell(new Txt(marca).alignment('center').bold().end).fontSize(7).end,
           ],
           [
             new Cell(new Txt('N° de Lote').bold().end).fillColor('#dedede').fontSize(7).end,
             new Cell(new Txt(analisis.lote).bold().end).alignment('center').fontSize(7).end,
             new Cell(new Txt('Presentación').bold().end).fillColor('#dedede').fontSize(7).end,
-            new Cell(new Txt('31 envases plásticos de 2Kg y uno de 1,60Kg').bold().end).alignment('center').fontSize(7).end,
+            new Cell(new Txt(analisis.presentacion).bold().end).alignment('center').fontSize(7).end,
           ],
           [
             new Cell(new Txt('Fecha de fabricación').bold().end).fillColor('#dedede').fontSize(7).end,
@@ -449,7 +608,7 @@ export class AnalisisTintaComponent implements OnInit {
           ],
           [
             new Cell(new Txt('Cantidad (Kg)').bold().end).fillColor('#dedede').fontSize(7).end,
-            new Cell(new Txt('63.6').bold().end).alignment('center').fontSize(7).end,
+            new Cell(new Txt(analisis.total).bold().end).alignment('center').fontSize(7).end,
             new Cell(new Txt('Estándar Utilizado').bold().end).fillColor('#dedede').fontSize(7).end,
             new Cell(new Txt(analisis.estandar).bold().end).alignment('center').fontSize(7).end,
           ]
@@ -1052,11 +1211,11 @@ export class AnalisisTintaComponent implements OnInit {
             new Cell(
               new Table([
                 [
-                  new Cell(new Txt('Resultado de analisis:').bold().end).colSpan(2).fillColor('#000000').color('#FFFFFF').alignment('center').end,
+                  new Cell(new Txt('Resultado de análisis:').bold().end).colSpan(2).fillColor('#000000').color('#FFFFFF').alignment('center').end,
                   new Cell(new Txt('').bold().end).alignment('center').fontSize(0).end,
                 ],
                 [
-                  new Cell(new Txt('APROBADO').bold().end).margin([0,9.5]).colSpan(2).alignment('center').end,
+                  new Cell(new Txt(Resultado).bold().end).margin([0,9.5]).colSpan(2).alignment('center').end,
                   new Cell(new Txt('').bold().end).alignment('center').fontSize(0).end,
                 ],
 
@@ -1070,11 +1229,11 @@ export class AnalisisTintaComponent implements OnInit {
                 ],
                 [
                   new Cell(new Txt('Firma:').bold().end).border([true,false,false,false]).fillColor('#eaeaea').alignment('center').end,
-                  new Cell(new Txt('').bold().end).border([false,false,true,false]).alignment('center').fontSize(0).end,
+                  new Cell(new Txt(guardado).bold().end).border([false,false,true,false]).alignment('center').fontSize(7).end,
                 ],
                 [
                   new Cell(new Txt('Fecha:').bold().end).border([true,false,false,true]).fillColor('#eaeaea').alignment('center').end,
-                  new Cell(new Txt(hoy).bold().end).border([false,false,true,true]).alignment('center').fontSize(0).end,
+                  new Cell(new Txt(dia).bold().end).border([false,false,true,true]).alignment('center').fontSize(7).end,
                 ]
               ]).widths(['35%','65%']).end
             ).border([false,false]).alignment('center').end,
@@ -1086,11 +1245,11 @@ export class AnalisisTintaComponent implements OnInit {
                 ],
                 [
                   new Cell(new Txt('Firma:').bold().end).border([true,false,false,false]).fillColor('#eaeaea').alignment('center').end,
-                  new Cell(new Txt('').bold().end).border([false,false,true,false]).alignment('center').fontSize(0).end,
+                  new Cell(new Txt(validado).bold().end).border([false,false,true,false]).alignment('center').fontSize(7).end,
                 ],
                 [
                   new Cell(new Txt('Fecha:').bold().end).border([true,false,false,true]).fillColor('#eaeaea').alignment('center').end,
-                  new Cell(new Txt(hoy).bold().end).border([false,false,true,true]).alignment('center').fontSize(0).end,
+                  new Cell(new Txt(hoy).bold().end).border([false,false,true,true]).alignment('center').fontSize(7).end,
                 ]
               ]).widths(['35%','65%']).end
             ).border([false,false]).alignment('center').end,
@@ -1098,14 +1257,16 @@ export class AnalisisTintaComponent implements OnInit {
         ]).widths(['33%','33%','33%']).end
       )
 
-      pdf.create().download(`certificado`)
+      pdf.create().download(`${analisis.producto} ${analisis.marcar} Lote:${analisis.lote}`)
     }
 
     GenerarCertificado()
+    this.getLote(analisis.lote)
   }
 
   papel_muestra(e){
     this.papel_muestra_ = e;
+    this.prueba = e
   }
 
   cualitativo(n,e){
@@ -1115,16 +1276,25 @@ export class AnalisisTintaComponent implements OnInit {
   }
 
   Guardar_(){
+
+
+    console.log(this.usuario)
+    let hoy = moment().format('DD/MM/YYYY')
     let analisis = {
       producto:this.muestra__.material.nombre,
       marcar:this.muestra__.material.marca,
-      presentacion:this.cantidad,
+      presentacion:this.presentacion_,
       f_fabricacion:this.f_fabricacion,
       f_vencimiento:this.f_vencimiento,
       estandar:this.estandar_utilizado,
       DrawDown:this.DrawDown_,
       tipo:this._tipo_,
       lote:this.muestra__.lote,
+      guardado:`${this.usuario.Nombre} ${this.usuario.Apellido}`,
+      dia:hoy,
+      sobre:this.tipo,
+      prueba_:this.prueba,
+      total:this.cantidad__,
       carton:[
         // 1
         [
@@ -1183,7 +1353,15 @@ export class AnalisisTintaComponent implements OnInit {
           }
       });
         }else{
-          alert('no existe')
+          Swal.fire({
+            title:'Análisis guardado',
+            icon:'success',
+            timer:1500,
+            showConfirmButton:false,
+            timerProgressBar:true,
+            toast:true,
+            position:'top-end'
+          })
         }
       })
   }
@@ -1223,7 +1401,12 @@ export class AnalisisTintaComponent implements OnInit {
                 this.muestra__ = resp[0]
                 console.log(this.muestra__, '-', this.cantidad)
               }else{
-                this.muestra__ = {material:{nombre:resp_.producto, marca:resp_.marca}, lote:resp_.lote}
+                this.sobre =  resp_.sobre
+                this.cantidad_(this.sobre);
+                this.papel_muestra(resp_.prueba_)
+                this.presentacion_ = resp_.presentacion
+                this.cantidad__ = resp_.total
+                this.muestra__ = {material:{nombre:resp_.producto, marca:resp_.marcar}, lote:resp_.lote}
                 this.cantidad = resp_.presentacion
                 this.f_fabricacion = resp_.f_fabricacion
                 this.f_vencimiento = resp_.f_vencimiento
@@ -1311,6 +1494,8 @@ export class AnalisisTintaComponent implements OnInit {
                 this.a3[2] = resp_.prueba[2][0].lab[1]
                 this.b3[2] = resp_.prueba[2][0].lab[2]
 
+                this.usuario_ = resp_.guardado
+                this.dia = resp_.dia
                 this.move3()
                 
                 if(resp_.img){
@@ -1320,7 +1505,6 @@ export class AnalisisTintaComponent implements OnInit {
                 this.Observacion_ = resp_.observaciones
 
                 this._tipo_ = resp_.tipo
-                console.log(resp_.carton[0][0].lab_estandar[0])
               }
             })
           }

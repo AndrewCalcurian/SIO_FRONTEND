@@ -135,6 +135,15 @@
     cursor: pointer;
 
 }
+
+.ver{
+    display: block;
+    text-align: center;
+    width: 50px;
+    font-size: larger;
+    margin-top: 5px;
+    cursor: pointer;
+}
 /* .text{
     margin-top: 40px;
 } */

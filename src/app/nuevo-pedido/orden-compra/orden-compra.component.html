@@ -93,7 +93,7 @@
                             <div class="select" >
                                 <select id='producto' (change)='producto_selected($event.target.value)'>
                                     <option value='#'>Selecciona Producto</option>
-                                    <option *ngFor='let producto of PRODUCTOS' value='{{producto._id}}'>{{producto.producto}}</option>
+                                    <option *ngFor='let producto of PRODUCTOS' value='{{producto._id}}'>E-{{producto.cliente.codigo}}-{{producto.codigo}}-{{producto.version}}-{{producto.edicion}} {{producto.producto}}</option>
                                 </select>
                             </div>
                         </div>

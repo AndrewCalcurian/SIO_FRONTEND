@@ -439,6 +439,7 @@ export class GestionComponent implements OnInit {
 
   finalizar(){
 
+    
     let hoy = moment().format('yyyy-MM-DD');
     let orden =  ''
     let productos = ''

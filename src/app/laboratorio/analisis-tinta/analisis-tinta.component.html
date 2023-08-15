@@ -30,9 +30,10 @@
                 <tr>
                     <th class="is-selected standar">Presentación:</th>
                     <td>
-                        <ng-container *ngFor="let cantidad of cantidad;index as i">
+                        <input type="text" class="input is-small wd100" [(ngModel)]="presentacion_">
+                        <!-- <ng-container *ngFor="let cantidad of cantidad;index as i">
                            <ng-containr *ngIf="i > 0">,</ng-containr>{{cantidad.unidades}} {{cantidad.presentacion}} {{cantidad.neto}}Kg
-                        </ng-container>
+                        </ng-container> -->
                     </td>
                     <th class="is-selected standar">Fecha fabricación:</th>
                     <td><input type="date" class="input is-small wd100" [(ngModel)]="f_fabricacion"></td>
@@ -41,7 +42,7 @@
                 </tr>
                 <tr>
                     <th class="is-selected standar">Cantidad (Kg):</th>
-                    <td>{{neto_total}}Kg</td>
+                    <td><input type="text" class="input is-small wd100" [(ngModel)]="cantidad__"></td>
                     <th class="is-selected standar">Estándar utilizado:</th>
                     <td><input type="text" class="input is-small wd100" [(ngModel)]="estandar_utilizado"></td>
                 </tr>
@@ -312,6 +313,9 @@
                     Sin archivo...
                   </span>
                 </label>
+                <span class="ver" (click)="verImagen()" *ngIf="img != 'no-file'">
+                    <i class="fas fa-eye"></i>
+                </span>
               </div>
             <hr>
             <table class="table is-fullwidth">
@@ -328,7 +332,7 @@
                                 <label for="" class="label">Realizar Roll down sobre:</label>
                                 <div class="control">
                                     <div class="select">
-                                        <Select (change)="cantidad_($event.target.value)">
+                                        <Select name="fieldName" ngDefaultControl (change)="cantidad_($event.target.value)" [(ngModel)]="sobre">
                                             <option value="#">Tipo de sustrato</option>
                                             <option value="Carton">Cartón</option>
                                             <option value="Papel">Papel</option>
@@ -368,8 +372,8 @@
                                 <tr>
                                     <td>
                                         <div class="select">
-                                            <select name="" id="" (change)="papel_muestra($event.target.value)">
-                                                <option value="Carton">Cartón</option>
+                                            <select name="" id="" (change)="papel_muestra($event.target.value)" [(ngModel)]="prueba">
+                                                <option value="Cartón">Cartón</option>
                                                 <option value="Papel">Papel</option>
                                                 <option value="Metalizado">Metalizado</option>
                                             </select>
@@ -860,7 +864,7 @@
                                     </td>
                                     <td>
                                         <div class="select">
-                                            <select>
+                                            <select [(ngModel)]="Resultado">
                                                 <option value="APROBADO">APROBADO</option>
                                                 <option value="RECHAZADO">RECHAZADO</option>
                                             </select>

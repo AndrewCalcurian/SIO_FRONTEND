@@ -10,11 +10,14 @@
             </div>
             <hr>
             <ng-container *ngFor="let despacho of Despachos;index as i">
-                <table class="table is-fullwidth is-bordered" *ngIf="despacho.despacho.documento === ''">
+                <table class="table is-fullwidth is-bordered" *ngIf="despacho.despacho.documento === '' || despacho.despacho.documento[0] === 'N'">
                     <thead>
                         <tr>
                             <td class="is-selected" colspan="2">
                                 <b>Fecha: </b>{{despacho.fecha}}
+                            </td>
+                            <td *ngIf="despacho.despacho.documento[0] === 'N'" class="red">
+                                <b>Nota de entrega: </b>{{despacho.despacho.documento}}
                             </td>
                         </tr>
                         <tr>
@@ -33,14 +36,14 @@
                             <td>{{despacho.orden.orden}}</td>
                             <td>{{despacho.despacho.cantidad}}</td>
                             <td>
-                                <button class="button is-info is-small" (click)="ValidarDatos(i)" *ngIf="!despacho.despacho.precio">
+                                <button class="button is-info is-small" (click)="ValidarDatos(i)">
                                 <div class="icon">
                                     <i class="far fa-calendar-check"></i>
                                 </div>
                                 <span>
                                     Validar Datos
                                 </span>
-                                </button>
+                                </button> 
                                 <button class="button is-success is-small" (click)="openFacturacion(i)" *ngIf="despacho.despacho.precio">
                                     <div class="icon">
                                         <i class="far fa-calendar-check"></i>

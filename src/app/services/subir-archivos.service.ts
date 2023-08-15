@@ -31,7 +31,7 @@ export class SubirArchivosService {
       });
 
       const data = await resp.json();
-      if (data.ok){
+      if (data.ok && tipo != 'analisis'){
         Swal.fire({title:'Excelente!', text:'Se ha actualizado la imagen del producto', icon:'success', showConfirmButton:false, timer:2000, timerProgressBar:true});
         return data.img
       }else{

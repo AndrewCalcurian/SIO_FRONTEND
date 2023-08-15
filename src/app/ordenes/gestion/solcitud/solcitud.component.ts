@@ -17,6 +17,7 @@ export class SolcitudComponent implements OnInit {
   public por_confirmar = []
   public _materiales = []
   public usuario
+  public asociacion = '#'
 
 
 
@@ -121,7 +122,7 @@ export class SolcitudComponent implements OnInit {
 
   FinalizarSolicitu(){
     let requisicion = {
-      sort:'#',
+      sort:this.asociacion,
       motivo:(<HTMLInputElement>document.getElementById('_motivo')).value,
       usuario:`${this.api.usuario.Nombre} ${this.api.usuario.Apellido}`,
       producto:{
@@ -138,7 +139,6 @@ export class SolcitudComponent implements OnInit {
       this.api.getAlmacenadoID2(this._materiales[i].producto)
         .subscribe((resp:any)=>{
           let cantidad = 0;
-          console.log(resp,'---------------------------------------------',this._materiales[i].producto)
           for(let i=0;i<resp.length;i++){
             cantidad = cantidad + Number(resp[i].cantidad)
           }

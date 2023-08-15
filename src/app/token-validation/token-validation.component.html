@@ -16,7 +16,7 @@
             </span>
             <br>
             <!-- <hr> -->
-            <input type="password" class="input" #pin><br><br>
+            <input type="password" class="input" #pin (change)="Verificar(pin.value)"><br><br>
             <span class="confirmacion">
                 <button class="button is-success" (click)="Verificar(pin.value)">
                     Continuar
