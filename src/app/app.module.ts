@@ -35,6 +35,7 @@ import { NgxQRCodeModule } from '@techiediaries/ngx-qrcode';
 import { LaboratorioComponent } from './laboratorio/laboratorio.component';
 import { LaboratorioModule } from './laboratorio/laboratorio.module';
 import { DesarrolloComponent } from './desarrollo/desarrollo.component';
+import { ComprasComponent } from './compras/compras.component';
 
 @NgModule({
   declarations: [
@@ -51,6 +52,7 @@ import { DesarrolloComponent } from './desarrollo/desarrollo.component';
     UnicosPipe,
     BarChartComponent,
     DesarrolloComponent,
+    ComprasComponent,
   ],
   imports: [
     BrowserModule,

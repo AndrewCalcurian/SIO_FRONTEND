@@ -58,6 +58,11 @@ const routes: Routes = [
     loadChildren: ()=> import('./laboratorio/laboratorio.module').then(m=>m.LaboratorioModule)
   },
   {
+    path:'compras',
+    canActivate: [AuthGuard],
+    loadChildren: ()=> import('./compras/compras.module').then(m=>m.ComprasModule)
+  },
+  {
     path: 'planificacion',
     canActivate: [AuthGuard],
     component:PlanificacionComponent

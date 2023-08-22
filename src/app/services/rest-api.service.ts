@@ -740,5 +740,34 @@ export class RestApiService {
     return this.http.get(url)
   }
 
+  postFabricantes(data){
+    const url = `${this.api_url}/compras/fabricante`
+    return this.http.post(url, data)
+  }
+
+  getFabricantes(){
+    const url = `${this.api_url}/compras/fabricante`
+    return this.http.get(url)
+  }
+
+  putFabricantes(id, data){
+    const url = `${this.api_url}/compras/fabricante/${id}`
+    return this.http.put(url,data)
+  }
+
+  postProveedor(data){
+    const url = `${this.api_url}/compras/proveedor`
+    return this.http.post(url, data)
+  }
+
+  GetProveedores(){
+    const url = `${this.api_url}/compras/proveedor`
+    return this.http.get(url)
+  }
+
+  putProveedores(id, data){
+    const url = `${this.api_url}/compras/proveedor/${id}`
+    return this.http.put(url,data)
+  }
 
 }

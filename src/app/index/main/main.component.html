@@ -8,8 +8,6 @@
         <div class="column" *ngIf="usuario.Nueva_orden != 0">
             <img src="../../../assets/BANNER-ORDENES.png" alt="" routerLink="/orden">
         </div>
-        <div class="column" *ngIf="usuario.Nueva_orden === 0">
-        </div>
         <div class="column" *ngIf="usuario.Almacen != 0">
             <img src="../../../assets/BANNER-ALMACEN.png" routerLink="/almacen">
         </div>
@@ -35,6 +33,9 @@
         </div>
         <div class="column" *ngIf="usuario.laboratorio == 1 || usuario.laboratorio == 2">
             <img src="../../../assets/BANNER-LABORATORIO.png" alt="" routerLink="/laboratorio">
+        </div>
+        <div class="column" *ngIf="usuario.Nueva_orden != 0">
+            <img src="../../../assets/BANNER-COMPRAS.png" alt="" routerLink="/compras">
         </div>
     </div>
 </div>

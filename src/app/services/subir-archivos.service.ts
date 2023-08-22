@@ -13,7 +13,7 @@ export class SubirArchivosService {
 
   async actualizarFoto(
     archivo:File,
-    tipo:'usuarios'|'errors'|'producto'|'despacho'|'distribucion'|'aereo'|'analisis',
+    tipo:'usuarios'|'errors'|'producto'|'despacho'|'distribucion'|'aereo'|'analisis'|'fabricante'|'proveedor',
     id:string
   ) {
     try{
@@ -31,11 +31,15 @@ export class SubirArchivosService {
       });
 
       const data = await resp.json();
-      if (data.ok && tipo != 'analisis'){
-        Swal.fire({title:'Excelente!', text:'Se ha actualizado la imagen del producto', icon:'success', showConfirmButton:false, timer:2000, timerProgressBar:true});
-        return data.img
+      if (data.ok && tipo != 'analisis' && tipo != 'fabricante'){
+        if(tipo != 'proveedor'){
+          Swal.fire({title:'Excelente!', text:'Se ha actualizado la imagen', icon:'success', showConfirmButton:false, timer:2000, timerProgressBar:true});
+          return data.img
+        }
       }else{
-        Swal.fire('Error', data.err.message, 'error');
+        if(tipo != 'fabricante'){
+          Swal.fire('Error', data.err.message, 'error');
+        }
         
         return false;
       }
