@@ -16,6 +16,7 @@
                 </ng-container>
                 <ng-container *ngIf="orden.sort != '#'">
                     <p class="subtitulo">{{orden.sort}}</p>
+                    <p class="subtitulo">{{orden.motivo}}</p>
                 </ng-container>
                 <ng-container *ngIf="orden.sort == '#'">
                     <p class=""><b>Motivo: </b>{{orden.motivo}}</p>
@@ -28,7 +29,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <ng-container *ngFor='let materiales of orden.producto.materiales[orden.montaje];let i = index'>
+                        <ng-container *ngFor='let materiales of orden.producto.materiales[orden.montaje];index as i'>
                             <ng-container>
                                 <tr>
                                     <td>
@@ -187,11 +188,26 @@
                 </table>
                 <br>
                 <ng-container *ngIf="orden.motivo">
-                    <button class="button is-primary" (click)='Restar(orden.sort, orden.solicitud,index, 0, orden._id)'>Confirmar</button>
+                    <button class="button is-primary" (click)='Restar(orden.sort, orden.solicitud,index, 0, orden._id)'>
+                        <span class="icon">
+                            <i class="fas fa-check"></i>
+                        </span>
+                        <span>
+                            Confirmar
+                        </span>
+                    </button>
                 </ng-container>
                 <ng-container *ngIf="!orden.motivo">
-                    <button class="button is-primary" (click)='Restar(orden.sort, orden.solicitud,index, 1)'>Confirmar</button>
+                    <button class="button is-primary" (click)='Restar(orden.sort, orden.solicitud,index, 1)'>
+                        <span class="icon">
+                            <i class="fas fa-check"></i>
+                        </span>
+                        <span>
+                            Confirmar
+                        </span>
+                    </button>
                 </ng-container>
+                <hr>
             </div>
         </div>
     </div>

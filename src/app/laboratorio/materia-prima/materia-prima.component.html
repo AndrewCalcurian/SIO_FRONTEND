@@ -198,7 +198,7 @@
                             <p class="control">
                               <input class="input" type="text" placeholder="Neto por unidad" formControlName="neto">
                             </p>
-                          </div>
+                        </div>
                         <!-- <div class="field">
                             <label class="label">Neto por Unidad</label>
                             <div class="control">
@@ -231,6 +231,32 @@
                         </div>
                     </div> -->
 
+                </div>
+                <div class="columns">
+                    <div class="column">
+                        <div class="field">
+                            <label class="label">Fabricante</label>
+                            <p class="control">
+                              <span class="select">
+                                <select formControlName="proveedor" (change)="addProveedor($event.target.value)">
+                                    <option value="{{proveedor._id}}" *ngFor="let proveedor of proveedores">{{proveedor.nombre}}</option>
+                                </select>
+                              </span>
+                            </p>
+                        </div>
+                    </div>
+                    <div class="column">
+                        <table class="table is-fullwidth">
+                            <tr *ngFor="let proveedor of proveedores__;index as i">
+                                <td>{{proveedor}}</td>
+                                <td>
+                                    <button class="button is-small is-danger is-outlined" (click)="borrar_provedor(i)">
+                                        <span class="icon"><i class="fas fa-trash-alt"></i></span>
+                                    </button>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
                 </div>
                 <button class="button is-primary">Finalizar</button>
             </form>

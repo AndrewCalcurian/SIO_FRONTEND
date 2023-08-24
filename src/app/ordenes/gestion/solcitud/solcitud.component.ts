@@ -165,6 +165,7 @@ export class SolcitudComponent implements OnInit {
                 }
               )
               this._materiales = []
+              this.por_confirmar = []
               this.onClose()
             })
           }
@@ -284,6 +285,7 @@ export class SolcitudComponent implements OnInit {
                 }
               )
               materiales_fr = []
+              this.por_confirmar = []
               this.onClose()
             })
           }

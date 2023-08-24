@@ -439,8 +439,18 @@ export class GestionComponent implements OnInit {
 
   finalizar(){
 
-    
-    let hoy = moment().format('yyyy-MM-DD');
+    Swal.fire({
+      title: 'Cuidado',
+      text: " Recuerda verificar que la cantidad suministrada sea la realizada en el momento y no la suma total de las mismas",
+      icon: 'info',
+      showCancelButton: true,
+      confirmButtonColor: '#48c78e',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Verificado',
+      cancelButtonText:'Cancelar'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        let hoy = moment().format('yyyy-MM-DD');
     let orden =  ''
     let productos = ''
     let hojas = ''
@@ -509,6 +519,8 @@ export class GestionComponent implements OnInit {
          this.getGestiones();
       })
 
+      }
+    })
 
   }
 

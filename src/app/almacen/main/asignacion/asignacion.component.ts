@@ -157,7 +157,7 @@ export class AsignacionComponent implements OnInit {
 
     //   })
 
-
+    console.log(i)
 
     let splited = e.split('*')
     e = splited[1]
@@ -320,10 +320,10 @@ export class AsignacionComponent implements OnInit {
       let existe = this.LOTES.find(x => x.lote === e)
 
       if(!existe){
-        this.LOTES.push({Mname,EA_Cantidad,lote:e,codigo:codigo,resta:restante,i,almacenado:EnAlmacen.cantidad,solicitado:cantidad_solicitada,unidad})
+        this.LOTES.push({index,Mname,EA_Cantidad,lote:e,codigo:codigo,resta:restante,i,almacenado:EnAlmacen.cantidad,solicitado:cantidad_solicitada,unidad})
       }
       else{
-        this.LOTES.push({Mname,EA_Cantidad,lote:e,codigo,resta:restante,i,almacenado:EnAlmacen.cantidad,solicitado:cantidad_solicitada,unidad})
+        this.LOTES.push({index,Mname,EA_Cantidad,lote:e,codigo,resta:restante,i,almacenado:EnAlmacen.cantidad,solicitado:cantidad_solicitada,unidad})
       }
 
       console.log(this.LOTES)
@@ -437,8 +437,11 @@ export class AsignacionComponent implements OnInit {
     
         }
     
+
+        let filtrado = this.LOTES.filter(x=> x.index === index)
+
         let data = {
-          lotes:this.LOTES,
+          lotes:filtrado,
           orden,
           solicitud,
           n,
@@ -459,6 +462,7 @@ export class AsignacionComponent implements OnInit {
            })
           this.onCloseModal.emit();
           this.onFinalizarAsignacion.emit();
+          this.LOTES = []
         })
       }
     }

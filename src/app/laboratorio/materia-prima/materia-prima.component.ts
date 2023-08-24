@@ -16,6 +16,7 @@ export class MateriaPrimaComponent implements OnInit {
   ngOnInit(): void {
     this.buscarAlmacen()
     this.BuscarGruposEnAlmacen()
+    this.buscar_proveedores()
   }
 
   public Materiales = []
@@ -56,6 +57,10 @@ export class MateriaPrimaComponent implements OnInit {
   public _Cajas = false;
   public _Plancha = false;
 
+  public proveedores = []
+  public proveedores__ = []
+  public proveedores_ = []
+
   InventarioForm:FormGroup = this.fb.group({
     ancho:[''],
     largo:[''],
@@ -68,11 +73,19 @@ export class MateriaPrimaComponent implements OnInit {
     neto:['', Validators.required],
     color:['Negro',Validators.required],
     cinta:[''],
+    proveedor:['',Validators.required],
     // codigo:['',Validators.required],
     // cantidad:['', Validators.required],
     // lote:['', Validators.required],
     NewControl:['']
   });
+
+  buscar_proveedores(){
+    this.api.getFabricantes()
+      .subscribe((resp:any) => {
+        this.proveedores = resp;
+      })
+  }
 
   Sustrato__(){
     this._Sustrato = true;
@@ -203,6 +216,24 @@ export class MateriaPrimaComponent implements OnInit {
 
   }
 
+  borrar_provedor(i){
+    this.proveedores__.splice(i,1)
+    this.proveedores_.splice(i,1)
+  }
+  
+  addProveedor(e){
+    
+    let one = this.proveedores.filter(x=>x._id === e)
+    let existe = this.proveedores__.find(x=>x === one[0].nombre)
+
+
+    if(!existe){
+      this.proveedores__.push(one[0].nombre)
+      this.proveedores_.push(one[0]._id)
+      console.log(this.proveedores__)
+    }
+    
+  }
 
   Almacenar(){
 
@@ -234,6 +265,7 @@ export class MateriaPrimaComponent implements OnInit {
       // codigo: this.InventarioForm.get('codigo').value,
       // lote: this.InventarioForm.get('lote').value,
       cinta:this.InventarioForm.get('cinta').value,
+      proveedor:this.proveedores_,
       grupo,
       nuevo:this.OTRO
 
@@ -247,7 +279,7 @@ export class MateriaPrimaComponent implements OnInit {
 
 
 
-    this.api.PostAlmacen(data)
+    this.api.PostMateriaPrima(data)
      .subscribe(resp=>{
         this.InventarioForm.reset();
         this.buscarAlmacen();
@@ -260,6 +292,9 @@ export class MateriaPrimaComponent implements OnInit {
           showConfirmButton:false,
           timerProgressBar:true
         })
+
+        this.proveedores__ = []
+        this.proveedores_ = []
         // this.getSustratos();
       })
 
