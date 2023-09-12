@@ -196,6 +196,14 @@ export class AsignacionComponent implements OnInit {
       }
       // // console.log(cantidad,'/////',m_cantidad,'/',grupo,'0',_cantidad)
       // cinta  = cinta * _cantidad;
+    }else if(grupo === 'Aceites'){
+      _cantidad =  cantidad / m_cantidad;
+      console.log(_cantidad,'-',cantidad,'/', m_cantidad)
+      if(cantidad === 1){
+        _cantidad = m_cantidad
+      }
+      // // console.log(cantidad,'/////',m_cantidad,'/',grupo,'0',_cantidad)
+      // cinta  = cinta * _cantidad;
     }else if(grupo === 'CINTA DE EMBALAJE' || grupo === 'Cinta de Embalaje'){
       if(!this._cinta_(index)){
         _cantidad = m_cantidad * 100 ;
@@ -310,7 +318,7 @@ export class AsignacionComponent implements OnInit {
       let check = document.getElementById(`fijar_lote-${index}-${i}`);
 
       cantidad_solicitada = EnAlmacen.cantidad;
-      check.onclick = () => this.fijalote(Mname,EA_Cantidad,e,codigo, 0, i, (EnAlmacen.cantidad*EnAlmacen.material.neto), restante,cantidad_solicitada, unidad, _cantidad, material)
+      check.onclick = () => this.fijalote(index,Mname,EA_Cantidad,e,codigo, 0, i, (EnAlmacen.cantidad*EnAlmacen.material.neto), restante,cantidad_solicitada, unidad, _cantidad, material)
 
     }else{
       document.getElementById(`fijar_lote-${index}-${i}`).style.display = "none";
@@ -333,16 +341,16 @@ export class AsignacionComponent implements OnInit {
 
   }
 
-  fijalote(Mname,EA_Cantidad,lote,codigo, resto, i, almacenado, restante,solicitado,unidad,cantidad?,material?){
+  fijalote(index,Mname,EA_Cantidad,lote,codigo, resto, i, almacenado, restante,solicitado,unidad,cantidad?,material?){
 
     let existe = this.LOTES.find(x => x.lote == lote)
 
       if(!existe){
-        this.LOTES.push({Mname,EA_Cantidad,lote,codigo,resta:resto,i,almacenado,restante:restante,solicitado,unidad,cantidad,material})
+        this.LOTES.push({index,Mname,EA_Cantidad,lote,codigo,resta:resto,i,almacenado,restante:restante,solicitado,unidad,cantidad,material})
         // // console.log(this.LOTES)
       }
      else{
-      this.LOTES.push({Mname,EA_Cantidad,lote,codigo,resta:resto,i,almacenado,restante:restante,solicitado,unidad,cantidad,material})
+      this.LOTES.push({index,Mname,EA_Cantidad,lote,codigo,resta:resto,i,almacenado,restante:restante,solicitado,unidad,cantidad,material})
       //   let index = this.LOTES.findIndex(x => x.lote == lote)
       //   this.LOTES.push({lote,codigo,resta:resto,i,almacenado,restante:restante,solicitado,unidad,cantidad,material})
       }
@@ -448,6 +456,7 @@ export class AsignacionComponent implements OnInit {
           requi
         }
     
+        console.log(this.LOTES)
         // // console.log('data lotes',data.lotes)
         // alert('asignado')
         this.api.realizarDescuentoAlmacen(data)

@@ -121,6 +121,22 @@ export class SolcitudComponent implements OnInit {
   }
 
   FinalizarSolicitu(){
+
+    let motivo = (<HTMLInputElement>document.getElementById('_motivo')).value;
+
+    if(!motivo){
+      Swal.fire({
+        title:'Debes agregar un motivo',
+        text:'Es necesario agregar un motivo a la solicitud de material',
+        icon:'error',
+        timerProgressBar:true,
+        timer:5000,
+        showConfirmButton:false
+      })
+
+      return
+    }
+
     let requisicion = {
       sort:this.asociacion,
       motivo:(<HTMLInputElement>document.getElementById('_motivo')).value,

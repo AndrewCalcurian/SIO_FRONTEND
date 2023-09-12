@@ -34,8 +34,8 @@ export class PreFacturacionComponent implements OnInit {
         this.Despachos = resp.preFacuracion
         console.log(this.Despachos,'AQUIIIIIIIIIIIIIIIII')
         this.Tasa = resp.MonitorBCV
-        let split_dolar = resp.MonitorBCV.split(' ')
-        this.Tasa = Number(split_dolar[1])
+        // let split_dolar = resp.MonitorBCV.split(' ')
+        // this.Tasa = Number(split_dolar[1])
         console.log(this.Tasa)
       })
   }

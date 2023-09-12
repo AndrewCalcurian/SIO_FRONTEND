@@ -781,5 +781,25 @@ export class RestApiService {
     const url = `${this.api_url}/materia-prima`
     return this.http.post(url, data)
   }
+  getMateriaPrima(){
+    const url = `${this.api_url}/materia-prima`
+    return this.http.get(url)
+  }
+
+  postFacturacion(data){
+    const url = `${this.api_url}/facturacion`
+    return this.http.post(url,data)
+  }
+
+  getFacturacion(){
+    const url = `${this.api_url}/facturacion`
+    return this.http.get(url)
+  }
+
+  putFacturacion(id, data){
+    const url = `${this.api_url}/facturacion/${id}`
+    return this.http.put(url, data)
+  }
+
 
 }
