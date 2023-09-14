@@ -161,7 +161,7 @@ export class MainComponent implements OnInit {
   BobinaForm:FormGroup = this.fb.group({
     Nbobina:['', Validators.required],
     material:['', Validators.required],
-    marca:['', Validators.required],
+    // marca:['', Validators.required],
     gramaje:['', Validators.required],
     calibre:['', Validators.required],
     ancho:['', Validators.required],
@@ -335,6 +335,7 @@ export class MainComponent implements OnInit {
     console.log('WHAAT')
     this.api.getMaterialesPorConfirmar()
       .subscribe((resp:any)=>{
+        console.log('ok')
         this.necesario = resp;
         console.log(resp)
         console.log( this.necesario ,'AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA')

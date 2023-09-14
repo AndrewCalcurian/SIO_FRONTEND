@@ -801,5 +801,15 @@ export class RestApiService {
     return this.http.put(url, data)
   }
 
+  sendNotificacion(id){
+    const url = `${this.api_url}/notificacion-recepcion/${id}`
+    return this.http.get(url)
+  }
+
+  Cambiaraobservacion(id){
+    const url = `${this.api_url}/recepcion-observacion/${id}`
+    return this.http.get(url)
+  }
+
 
 }

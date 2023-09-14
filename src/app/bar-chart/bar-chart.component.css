@@ -83,3 +83,11 @@
 .menor{
     font-size: small;
 }
+.color{
+    color: #d6d6d6;
+}
+
+.etiqueta{
+    position: relative;
+    float: left;
+}

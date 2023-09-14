@@ -11,31 +11,94 @@
                 <tr>
                     <th>Factura</th>
                     <th>Orden</th>
-                    <th>Transportista</th>
+                    <th>Proveedor</th>
                     <th>Cantidad</th>
+                    <th>Estatus</th>
                     <th>Editar</th>
                 </tr>
                 <tr *ngFor="let Pedido of Pedido;index as i">
                     <td>{{Pedido.factura}}</td>
                     <td>{{Pedido.orden}}</td>
-                    <td>{{Pedido.transportista}}</td>
+                    <td>{{Pedido.proveedor.nombre}}</td>
                     <td>
                         <span *ngFor="let cantidad of Pedido.totales;index as n">
-                            {{cantidad.producto}} ({{cantidad.marca}}) {{cantidad.total}} <i class="fas fa-eye" (click)="abrirDetalles_(i,n,cantidad.producto, cantidad.marca)"></i><br>
+                            {{cantidad.producto}} ({{cantidad.marca}}) {{cantidad.total}} 
+                            <i class="fas fa-eye" (click)="abrirDetalles_(i,n,cantidad.producto, cantidad.marca)" *ngIf="Pedido.status === 'Por notificar'"></i>
+                            <i class="fas fa-eye" (click)="_abrirDetalles__(i,n,cantidad.producto, cantidad.marca)" *ngIf="Pedido.status === 'Notificado'"></i>
+                            <br>
                         </span>
                     </td>
                     <td>
-                        <button class="button is-success is-outlined is-small" (click)='EditarPedido(i)'>
+                        <span class="tag is-danger is-medium etiqueta" *ngIf="Pedido.status === 'Por notificar'">Por notificar</span> 
+                        <span class="tag is-info is-medium etiqueta" *ngIf="Pedido.status === 'Notificado'">Notificado</span> 
+                        <span class="tag is-warning is-medium etiqueta" *ngIf="Pedido.status === 'En Observacion'">En Observación</span> 
+                        <button class="button is-small is-outlined" (click)="Notificar(Pedido._id)"  *ngIf="Pedido.status === 'Por notificar'">
+                            <span class="icon"><i class="fas fa-bell"></i></span>
+                        </button>
+                        <button class="button is-small is-outlined" (click)="Alert_(Pedido._id)"  *ngIf="Pedido.status === 'Notificado' ">
+                            <i class="far fa-check-circle"></i>
+                        </button>
+                        <button class="button is-small is-outlined" (click)="observacion(Pedido._id)"  *ngIf="Pedido.status === 'En Observacion'">
+                            <i class="fas fa-window-close"></i>
+                        </button>
+                    </td>
+                    <td>
+                        <button class="button is-success is-outlined is-small" (click)='EditarPedido(i)' *ngIf="Pedido.status === 'Por notificar'">
+                            <span class="icon"><i class="fas fa-edit"></i></span>
+                            <span>Editar</span>
+                        </button>
+                        <button class="button is-success is-outlined is-small" disabled (click)='EditarPedido(i)' *ngIf="Pedido.status === 'Notificado'">
                             <span class="icon"><i class="fas fa-edit"></i></span>
                             <span>Editar</span>
                         </button>
                     </td>
                 </tr>
             </table>
+            <button class="button is-primary" (click)="GenerarPDF()">
+                <span>Generar pdf</span>
+            </button>
         </div>
     </div>
 </div>
 
+<div class="modal" [ngClass]="{'is-active':Detallar_}">
+    <div class="modal-background" (click)="_abrirDetalles_()"></div>
+        <div class="modal-card ampliar">
+            <div class="modal-card-body">
+                <div class="subtitulo">
+                    Detalle
+                </div>
+                <hr>
+                <table class="table is-fullwidth">
+                    <tr>
+                        <th>Producto</th>
+                        <th>Marca</th>
+                        <th>Fabricación</th>
+                        <th>Lote</th>
+                        <th>Capacidad</th>
+                        <th>Codigo</th>
+                    </tr>
+                    <tr *ngFor="let detalle of Detallados;index as i">
+                        <td>{{detalle.nombre}}</td>
+                        <td>{{detalle.marca}}</td>
+                        <td>
+                            <input type="date" class="input is-small small_" [(ngModel)]="detalle.fabricacion" (change)="cambiar_fabricacion_Detalles($event.target.value)" disabled>
+                        </td>
+                        <td>
+                            <input type="text" class="input is-small small_" [(ngModel)]="detalle.lote" (change)="cambiar_lote_Detalles($event.target.value)" disabled>
+                        </td>
+                        <td>
+                            <input type="text" class="input is-small small_" [(ngModel)]="detalle.capacidad" disabled>
+                        </td>
+                        <td>
+                            <input type="text" class="input is-small small_" [(ngModel)]="detalle.numero" disabled>
+                        </td>
+                    </tr>
+                </table>
+                <hr>
+            </div>
+        </div>
+</div>
 
 <div class="modal" [ngClass]="{'is-active':Detallar}">
     <div class="modal-background" (click)="abrirDetalles()"></div>

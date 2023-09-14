@@ -720,7 +720,6 @@
     <div class="modal-card">
         <div class="modal-card-body">
             <div class="subtitulo">Editar Material</div>
-            <form>
             <div class="columns">
                 <div class="column">
                     <div class="field">
@@ -906,7 +905,6 @@
 
                 </div>
                 <button class="button is-primary" (click)="Editar_Material_F()" *ngIf="Edition__2">Editar</button>
-            </form>
         </div>
     </div>
 </div>
@@ -1083,7 +1081,7 @@
                         <div class="field">
                             <label class="label">Ancho</label>
                             <div class="control">
-                                <input type="number" class="input" formControlName='ancho'>
+                                <input type="number" class="input" id="ancho_____" formControlName='ancho'>
                             </div>
                         </div>
                     </div>
@@ -1099,7 +1097,7 @@
                         <div class="field">
                             <label class="label">Gramaje</label>
                             <div class="control">
-                                <input type="number" class="input" formControlName='gramaje'>
+                                <input type="number" class="input" id="x" formControlName='gramaje'>
                             </div>
                         </div>
                     </div>
@@ -1107,7 +1105,7 @@
                         <div class="field">
                             <label class="label">Calibre</label>
                             <div class="control">
-                                <input type="number" class="input" formControlName='calibre'>
+                                <input type="number" class="input" id="y" formControlName='calibre'>
                             </div>
                         </div>
                     </div>
@@ -1119,7 +1117,7 @@
                         <div class="field">
                             <label class="label">Material</label>
                             <div class="control">
-                                <input type="text" class="input" formControlName="producto">
+                                <input type="text" class="input" id="z" formControlName="producto">
                             </div>
                         </div>
                     </div>

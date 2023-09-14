@@ -3,7 +3,9 @@ import { RestApiService } from '../services/rest-api.service';
 
 import { ActivatedRoute } from '@angular/router';
 import Swal from 'sweetalert2';
-import { rgb2lab, lab2rgb, deltaE } from 'rgb-lab'
+import { Canvas, Cell, Img, Line, PdfMakeWrapper, Rect, Table, Txt } from 'pdfmake-wrapper';
+import * as pdfFonts from "pdfmake/build/vfs_fonts";
+import { position } from 'html2canvas/dist/types/css/property-descriptors/position';
 
 // const consultaDolar = require('consulta-dolar-venezuela');
 
@@ -43,6 +45,7 @@ export class BarChartComponent implements OnInit {
   public NuevaRecepcion:boolean = false;
 
   public Detallar = false
+  public Detallar_ = false
   public Detallados = [] 
   public index_ 
   public index__ 
@@ -87,6 +90,27 @@ export class BarChartComponent implements OnInit {
 
   }
 
+  Notificar(id){
+
+    console.log(id)
+
+    this.api.sendNotificacion(id)
+      .subscribe((resp:any)=>{
+        console.log(resp)
+        this.BuscarFacturas();
+        Swal.fire({
+          title:'Se ha enviado la notificación',
+          text:'La notificación del material fue enviada para su revisión',
+          icon:'success',
+          timer:5000,
+          timerProgressBar:true,
+          position:'top-end',
+          toast:true,
+          showConfirmButton:false
+        })
+      })
+  }
+
   abrirDetalles_(i,n, producto, marca){
 
     this.index_ = i;
@@ -95,7 +119,6 @@ export class BarChartComponent implements OnInit {
     let productos = this.Pedido[i].productos
     let filtro = productos.filter(x=>x.nombre === producto && x.marca === marca)
     this.Detallados.push(filtro)
-    console.log(this.Detallados)
     this.Detallados = this.Detallados[0]
     this.abrirDetalles();
    }
@@ -106,6 +129,149 @@ export class BarChartComponent implements OnInit {
     }else{
       this.Detallar = false
     }
+   }
+
+  
+  observacion(id){
+    Swal.fire({
+      title:'Observación',
+      input:'textarea',
+      inputAttributes: {
+        autocapitalize: 'off'
+      },
+      confirmButtonColor: '#48c78e',
+      cancelButtonColor: '#d33',
+      showCancelButton: true,
+      confirmButtonText: 'Enviar',
+      showLoaderOnConfirm: true,
+      cancelButtonText:'Cancelar',
+      preConfirm: (info) => {
+        return fetch(`//192.168.0.23:8080/api/recepcion-porconfirmar/${info}/${id}`)
+          .then(response => {
+            if (!response.ok) {
+              throw new Error(response.statusText)
+            }
+            return response.json()
+          })
+          .catch(error => {
+            Swal.showValidationMessage(
+              `Error interno: ${error}`
+            )
+          })
+      },
+      allowOutsideClick: () => !Swal.isLoading()          
+    }).then((result) => {
+      if (result.isConfirmed) {
+        console.log(result)
+        Swal.fire({
+          title:'Enviado',
+          text: `${result.value}`,
+          icon:'success',
+          showConfirmButton:false,
+          toast:true,
+          timer:5000,
+          timerProgressBar:true,
+          position:'top-end'
+        })
+        this.BuscarFacturas();
+      }
+    })
+  }
+
+
+   _abrirDetalles__(i,n, producto, marca){
+
+    this.index_ = i;
+    this.index__ = n;
+    this.Detallados = [] 
+    let productos = this.Pedido[i].productos
+    let filtro = productos.filter(x=>x.nombre === producto && x.marca === marca)
+    this.Detallados.push(filtro)
+    this.Detallados = this.Detallados[0]
+    this._abrirDetalles_();
+   }
+
+   public _abrirDetalles_(){
+    if(!this.Detallar_){
+      this.Detallar_ = true
+    }else{
+      this.Detallar_ = false
+    }
+   }
+
+   Alert_(id){
+    Swal.fire({
+      title: '¿Cambiar estatus del material?',
+      text: "¿Verifica que los documentos digitalizados coincidan con los cargados en el sistema?",
+      icon:'question',
+      showCancelButton: true,
+      confirmButtonColor: '#48c78e',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Correcta',
+      cancelButtonText:'Enviar revisión'
+    }).then((result) => {
+      if (result.isConfirmed) {
+
+        this.api.Cambiaraobservacion(id)
+          .subscribe((resp:any)=>{
+            Swal.fire({
+              title:'Listo para análisis',
+              text:'Se cambio estatus a «En observación»',
+              toast:true,
+              icon:'success',
+              showConfirmButton:false,
+              timerProgressBar:true,
+              timer:5000,
+              position:'top-end'
+            })
+            this.BuscarFacturas();
+          })
+      }else{
+        Swal.fire({
+          title:'Observación',
+          input:'textarea',
+          inputAttributes: {
+            autocapitalize: 'off'
+          },
+          confirmButtonColor: '#48c78e',
+          cancelButtonColor: '#d33',
+          showCancelButton: true,
+          confirmButtonText: 'Enviar',
+          showLoaderOnConfirm: true,
+          cancelButtonText:'Cancelar',
+          preConfirm: (info) => {
+            return fetch(`//192.168.0.23:8080/api/recepcion-porconfirmar/${info}/${id}`)
+              .then(response => {
+                if (!response.ok) {
+                  throw new Error(response.statusText)
+                }
+                return response.json()
+              })
+              .catch(error => {
+                Swal.showValidationMessage(
+                  `Error interno: ${error}`
+                )
+              })
+          },
+          allowOutsideClick: () => !Swal.isLoading()          
+        }).then((result) => {
+          if (result.isConfirmed) {
+            console.log(result)
+            Swal.fire({
+              title:'Enviado',
+              text: `${result.value}`,
+              icon:'success',
+              showConfirmButton:false,
+              toast:true,
+              timer:5000,
+              timerProgressBar:true,
+              position:'top-end'
+            })
+            this.BuscarFacturas();
+          }
+        })
+      }
+    })
    }
 
   ngOnInit(): void {
@@ -152,6 +318,7 @@ export class BarChartComponent implements OnInit {
     }
 
     let fabricante = this.proveedores.filter(x=> x._id === e)
+    console.log(fabricante)
     this.proveedor_selected = e
     this.Fabricantes_ = fabricante[0].fabricantes
   }
@@ -428,6 +595,208 @@ export class BarChartComponent implements OnInit {
     }
   }
 
+
+  GenerarPDF(){
+    const pdf = new PdfMakeWrapper();
+    PdfMakeWrapper.setFonts(pdfFonts);
+    pdf.pageOrientation('landscape');
+    pdf.pageSize('A4');
+
+    async function generarPDF_(){
+      console.log('test')
+
+      pdf.add(
+        new Table([
+          [
+            new Cell(await new Img('../../assets/poli_cintillo.png').width(60).margin([0, 5,0,0]).build()).alignment('center').rowSpan(4).end,
+            new Cell(new Txt(`
+            VERIFICACIÓN DE LAS CONDICIONES \n DEL MATERIAL RECIBIDO
+            `).bold().end).alignment('center').fontSize(9).rowSpan(4).end,
+            new Cell(new Txt('Código: FAL-002').end).fillColor('#dedede').fontSize(5).alignment('center').end,
+          ],
+          [
+            new Cell(new Txt('').end).end,
+            new Cell(new Txt('').end).end,
+            new Cell(new Txt('N° de Revisión: 1').end).fillColor('#dedede').fontSize(5).alignment('center').end,
+          ],
+          [
+            new Cell(new Txt('').end).end,
+            new Cell(new Txt('').end).end,
+            new Cell(new Txt('Fecha de Revisión: 03/08/2023').end).fillColor('#dedede').fontSize(5).alignment('center').end,
+          ],
+          [
+            new Cell(new Txt('').end).end,
+            new Cell(new Txt('').end).end,
+            new Cell(new Txt('Página: 1 de 1').end).fillColor('#dedede').fontSize(5).alignment('center').end,
+          ],
+        ]).widths(['25%','50%','25%']).end
+      )
+
+
+      pdf.add(
+        pdf.ln(1)
+      )
+      pdf.add(
+        new Table([
+          [
+            new Cell(new Txt('DATOS DE RECEPCIÓN DE MATERIAL').end).alignment('center').color('#FFFFFF').fillColor('#000000').fontSize(8).end,
+            new Cell(new Txt('').end).alignment('center').border([false]).color('#FFFFFF').fontSize(8).end,
+            new Cell(new Txt('N° DE VERIFICACIÓN').end).alignment('center').color('#FFFFFF').fillColor('#000000').fontSize(8).end
+          ]
+        ]).widths(['80%','0.2%','19.8%']).end
+      )
+
+      pdf.add(
+        new Table([
+          [
+            new Cell(new Txt('').end).end
+          ]
+        ]).layout('noBorders').widths(['100%']).end
+      )
+
+      pdf.add(
+        new Table([
+          [
+            new Cell(new Txt('Nombre del proveedor').end).alignment('center').fillColor('#dddddd').fontSize(8).end,
+            new Cell(new Txt('Nombre del transportista').end).alignment('center').fillColor('#dddddd').fontSize(8).end,
+            new Cell(new Txt('Fecha de recepción').end).fontSize(8).alignment('center').fillColor('#dddddd').end,
+            new Cell(new Txt('N° Factura/ Nota de entrega').end).alignment('center').fillColor('#dddddd').fontSize(8).end,
+            new Cell(new Txt('N° Orden de compra').end).alignment('center').fillColor('#dddddd').fontSize(8).end,
+            new Cell(new Txt('').end).border([false]).fontSize(8).end,
+            new Cell(new Txt('AL-MR-230000').bold().end).margin([0,5,0,0]).alignment('center').rowSpan(2).end,
+          ],
+          [
+            new Cell(new Txt('Fabrica de Tinta Olin, C.A.').end).alignment('center').fontSize(8).end,
+            new Cell(new Txt('Jhonny Rios').end).alignment('center').fontSize(8).end,
+            new Cell(new Txt('12/09/2023').end).alignment('center').fontSize(8).end,
+            new Cell(new Txt('115397').end).alignment('center').fontSize(8).end,
+            new Cell(new Txt('7450').end).alignment('center').fontSize(8).end,
+            new Cell(new Txt('').end).border([false]).fontSize(8).end,
+            new Cell(new Txt('').end).border([false]).fontSize(8).end,
+          ]
+        ]).widths(['15%','20%','15%','15%','14%','0.2%','21%']).end
+      )
+
+      pdf.add(
+        pdf.ln(1)
+      )
+
+      pdf.add(
+        new Table([
+          [
+            new Cell(new Txt('DATOS DEL MATERIAL').end).alignment('center').color('#FFFFFF').fillColor('#9c9c9c').fontSize(8).end
+          ]
+        ]).widths(['100%']).layout('noBorders').end
+      )
+
+      pdf.add(
+        new Table([
+          [
+            new Cell(new Txt('').end).end
+          ]
+        ]).layout('noBorders').widths(['100%']).end
+      )
+
+      pdf.add(
+        new Table([
+          [
+            new Cell(new Txt('Descripción').end).alignment('center').fillColor('#dddddd').fontSize(8).end,
+            new Cell(new Txt('Grupo').end).alignment('center').fillColor('#dddddd').fontSize(8).end,
+            new Cell(new Txt('N° de lote').end).alignment('center').fillColor('#dddddd').fontSize(8).end,
+            new Cell(new Txt('Fecha de fabricación').end).alignment('center').fillColor('#dddddd').fontSize(8).end,
+            new Cell(new Txt('Código').end).alignment('center').fillColor('#dddddd').fontSize(8).end,
+            new Cell(new Txt('Presentación').end).alignment('center').fillColor('#dddddd').fontSize(8).end,
+            new Cell(new Txt('Capacidad').end).alignment('center').fillColor('#dddddd').fontSize(8).end,
+            new Cell(new Txt('Total de unidades').end).alignment('center').fillColor('#dddddd').fontSize(8).end,
+            new Cell(new Txt('Total').end).alignment('center').fillColor('#dddddd').fontSize(8).end
+          ]
+        ]).widths(['17.5%','8%','10%','12.5%','10%','12.5%','10%','12.5%','7%']).end
+      )
+      
+      for(let i=0;i<3;i++){
+        
+        pdf.add(
+          new Table([
+            [
+              new Cell(new Txt('Tinta Amarillo Fondo Mavesa').end).alignment('center').fontSize(8).border([true,false,true,true]).end,
+              new Cell(new Txt('Tinta').end).alignment('center').fontSize(8).border([true,false,true,true]).end,
+              new Cell(new Txt('56706').end).alignment('center').fontSize(8).border([true,false,true,true]).end,
+              new Cell(new Txt('22/08/2023').end).alignment('center').fontSize(8).border([true,false,true,true]).end,
+              new Cell(new Txt('N/A').end).alignment('center').fontSize(8).border([true,false,true,true]).end,
+              new Cell(new Txt('Envase Plástico').end).alignment('center').fontSize(8).border([true,false,true,true]).end,
+              new Cell(new Txt('1,9 Kg').end).alignment('center').fontSize(8).border([true,false,true,true]).end,
+              new Cell(new Txt('16').end).alignment('center').fontSize(8).border([true,false,true,true]).end,
+              new Cell(new Txt('999.999Und').end).alignment('center').fontSize(8).border([true,false,true,true]).end,
+            ],
+            [
+              new Cell(new Txt(`(x) Certificado de calidad, (x) Identificación de lote, (x) Paletas en buen estado, (x) Paletas sin presentación de humedad, (x) Paleta libres de insectos, \n (x) Embalaje limpio (Libre de excremento de animales, otros), (x) Embalaje sin rotura, ( )Embalaje seco externamente, (x) Embalaje seco internamente, (x) Evidencia de fumigacion o tratamiento térmico (sello)`).end).fillColor('#eeeeee').colSpan(9).fontSize(7).end,
+              new Cell(new Txt('').end).fontSize(8).end,
+              new Cell(new Txt('').end).fontSize(8).end,
+              new Cell(new Txt('').end).fontSize(8).end,
+              new Cell(new Txt('').end).fontSize(8).end,
+              new Cell(new Txt('').end).fontSize(8).end,
+              new Cell(new Txt('').end).fontSize(8).end,
+              new Cell(new Txt('').end).fontSize(8).end,
+              new Cell(new Txt('').end).fontSize(8).end
+            ]
+          ]).widths(['17.5%','8%','10%','12.5%','10%','12.5%','10%','12.5%','7%']).end
+        )
+          
+          
+      }
+
+      pdf.add(
+        new Table([
+          [
+            new Cell(new Txt('').end).end
+          ]
+        ]).layout('noBorders').widths(['100%']).end
+      )
+
+      pdf.add(
+        new Table([
+          [
+            new Cell(
+              new Table([
+                [
+                  new Cell(new Txt('Observación').end).alignment('center').color('#FFFFFF').fillColor('#000000').fontSize(9).end,
+                ],
+                [
+                  new Cell(new Txt(`\n\n\n`).end).fontSize(8).end,
+
+                ]
+              ]).widths(['100%']).end
+            ).fontSize(8).end,
+            new Cell(
+              new Table([
+                [
+                  new Cell(new Txt('Realizado por:').end).alignment('center').color('#FFFFFF').fillColor('#000000').fontSize(9).end,
+                ],
+                [
+                  new Cell(new Txt(`Firma:\n\nFecha:`).end).fontSize(8).end,
+
+                ]
+              ]).widths(['100%']).end
+            ).fontSize(8).end,
+            new Cell(new Table([
+              [
+                new Cell(new Txt('Validado por:').end).alignment('center').color('#FFFFFF').fillColor('#000000').fontSize(9).end,
+              ],
+              [
+                new Cell(new Txt(`Firma:\n\nFecha:`).end).fontSize(8).end,
+
+              ]
+            ]).widths(['100%']).end).fontSize(8).end
+          ]
+        ]).widths(['50%','25%','25%']).layout('noBorders').end
+      )
+
+      pdf.create().download(`test`)
+    }
+
+    generarPDF_()
+  }
+
   finalizar_(){
     (<HTMLInputElement>document.getElementById('disabled_1')).disabled = false;
     (<HTMLInputElement>document.getElementById('disabled_2')).disabled = false;
@@ -489,7 +858,7 @@ export class BarChartComponent implements OnInit {
     this.N_OC = this.Pedido[i].orden;
     this.Transportista = this.Pedido[i].transportista;
     this.proveedor_selected = this.Pedido[i].proveedor;
-    this.SeleccionarProveedor(this.Pedido[i].proveedor)
+    this.SeleccionarProveedor(this.Pedido[i].proveedor._id)
     this.Factura = {totales:[],productos:[],condicion:[]}
     this.Factura.productos = this.Pedido[i].productos
     this.Factura.condicion = this.Pedido[i].condicion
