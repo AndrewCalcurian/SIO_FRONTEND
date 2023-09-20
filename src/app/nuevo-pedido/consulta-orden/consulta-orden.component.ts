@@ -12,17 +12,22 @@ export class ConsultaOrdenComponent implements OnInit {
   constructor(private api:RestApiService) { }
 
   ngOnInit(): void {
-    this.api.getOrdenesDeCompra()
-      .subscribe((resp:any)=>{
-        this.Ordenes = resp
-        console.log(this.Ordenes)
-      })
+    this.GetOrdens()
   }
 
   public Ordenes = []
   public Orden;
   public selected = false;
   public all_ = false;
+  public PRODUCTO = []
+
+  GetOrdens(){
+    this.api.getOrdenesDeCompra()
+      .subscribe((resp:any)=>{
+        this.Ordenes = resp
+        console.log(this.Ordenes)
+      })
+  }
   MostarOrden(e){
     if(e != 'all'){
       console.log(e)
@@ -39,6 +44,36 @@ export class ConsultaOrdenComponent implements OnInit {
     }
     n = Number(n)
     return n = new Intl.NumberFormat('de-DE').format(n)
+  }
+
+  BuscarProductos(id){
+    this.api.getById(id)
+        .subscribe((resp:any)=>{
+          this.PRODUCTOS = resp.productos;
+          // // console.log(this.PRODUCTOS)
+      })
+  }
+
+  public producto__;
+  producto_selected(e){
+    if(e != '#'){
+      this.PRODUCTO = e
+      let produc = this.PRODUCTOS.find(x=> x._id == e)
+      this.producto__ = produc.producto
+      console.log(produc.producto)
+    }else{
+      this.PRODUCTO = []
+    }
+  }
+
+  public _CANTIDAD = ''
+  NuevaCantidad(e){
+    this._CANTIDAD = e
+  }
+
+  public __Fecha = ''
+  Fecha__(e){
+    this.__Fecha = e
   }
 
   public PRODUCTOS = [];
@@ -85,19 +120,48 @@ export class ConsultaOrdenComponent implements OnInit {
     })
       })
   }
+  
+  AgregarNuevo(){
+    let id = this.Orden._id
+    console.log(this.Orden)
+    this.Orden.productos.push(
+      {
+        producto:this.PRODUCTO,
+        nombre:this.producto__,
+        cantidad:this._CANTIDAD,
+        fecha:this.__Fecha
+      })
+      
+      this.__Fecha = ''
+      this._CANTIDAD = ''
+      this.PRODUCTO = []
+      this.listoOCEDIT()
+      this.GetOrdens()
+      setTimeout(()=> {
+        let index = this.Ordenes.findIndex(x=> x._id === id)
+        this.MostarOrden(index)
+      },1000)
+
+  }
 
   edicionOC(){
     document.getElementById(`EditionForm`).style.display = 'block';
+    document.getElementById('addprod').style.display = 'block';
     document.getElementById(`okbutton`).style.display = 'block';
     document.getElementById(`editionButton`).style.display = 'none';
     document.getElementById(`Info__`).style.display = 'none';
-    
+    this.api.getById(this.Orden.cliente._id)
+      .subscribe((resp:any)=>{
+        this.PRODUCTOS = resp.productos
+        console.log(this.PRODUCTOS)
+      })
   }
 
   listoOCEDIT(){
     this.api.putOrdenesDeCompra(this.Orden, this.Orden._id)
       .subscribe((resp:any)=>{
         document.getElementById(`EditionForm`).style.display = 'none';
+        document.getElementById('addprod').style.display = 'none';
         document.getElementById(`okbutton`).style.display = 'none';
         document.getElementById(`editionButton`).style.display = 'block';
         document.getElementById(`Info__`).style.display = 'block';

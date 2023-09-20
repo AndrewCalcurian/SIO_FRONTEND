@@ -1,6 +1,6 @@
 @font-face {
     font-family: Roboto;
-    src: url(../../assets/Roboto/Roboto-Black.ttf);
+    src: url('../../../assets/Roboto/Roboto-Bold.ttf')
 }
 
   .titulo{
@@ -93,4 +93,8 @@
 .etiqueta{
     position: relative;
     float: left;
+}
+
+.click{
+    cursor:pointer
 }

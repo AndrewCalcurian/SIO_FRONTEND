@@ -6,12 +6,13 @@ import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { ConfirmacionComponent } from './main/confirmacion/confirmacion.component';
 import { AsignacionComponent } from './main/asignacion/asignacion.component';
 import { ReportesComponent } from './reportes/reportes.component';
+import { RecepcionComponent } from './recepcion/recepcion.component';
 
 
 
 
 @NgModule({
-  declarations: [MainComponent, ConfirmacionComponent, AsignacionComponent, ReportesComponent],
+  declarations: [MainComponent, ConfirmacionComponent, AsignacionComponent, ReportesComponent, RecepcionComponent],
   imports: [
     CommonModule,
     AlmacenRoutingModule,

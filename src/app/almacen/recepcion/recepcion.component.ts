@@ -1,20 +1,17 @@
 import { Component, OnInit } from '@angular/core';
-import { RestApiService } from '../services/rest-api.service';
-
 import { ActivatedRoute } from '@angular/router';
-import Swal from 'sweetalert2';
-import { Canvas, Cell, Img, Line, PdfMakeWrapper, Rect, Table, Txt } from 'pdfmake-wrapper';
-import * as pdfFonts from "pdfmake/build/vfs_fonts";
 import * as moment from 'moment';
-
-// const consultaDolar = require('consulta-dolar-venezuela');
+import { Cell, Img, PdfMakeWrapper, Table, Txt } from 'pdfmake-wrapper';
+import * as pdfFonts from "pdfmake/build/vfs_fonts";
+import { RestApiService } from 'src/app/services/rest-api.service';
+import Swal from 'sweetalert2';
 
 @Component({
-  selector: 'app-bar-chart',
-  templateUrl: './bar-chart.component.html',
-  styleUrls: ['./bar-chart.component.css']
+  selector: 'app-recepcion',
+  templateUrl: './recepcion.component.html',
+  styleUrls: ['./recepcion.component.css']
 })
-export class BarChartComponent implements OnInit {
+export class RecepcionComponent implements OnInit {
 
   constructor(private api:RestApiService,
     private route:ActivatedRoute) {
@@ -56,6 +53,41 @@ export class BarChartComponent implements OnInit {
   public condicionado = false;
 
   public recepcion;
+
+  public Observacion_
+  public Observacion___ = false;
+
+  public porObservar = 0
+  verObservaciones(id){
+    if(!this.Observacion___){
+      this.Observacion___ = true;
+      this.porObservar = id
+      console.log(this.porObservar)
+    }else{
+      this.Observacion___ = false;
+    }
+  }
+
+  GuardarObservacion(){
+    console.log(this.Pedido[this.porObservar].observacion)
+
+    this.api.putFacturacion(this.Pedido[this.porObservar]._id, this.Pedido[this.porObservar])
+      .subscribe((resp:any)=>{
+        Swal.fire({
+          title:'Se agrego observación',
+          icon:'success',
+          toast:true,
+          position:'top-end',
+          timer:5000,
+          timerProgressBar:true,
+          showConfirmButton:false
+        })
+
+        this.verObservaciones(0)
+      })
+
+    
+  }
 
   GuardarCambios(){
     let productos = this.Pedido[this.index_].productos
@@ -138,13 +170,13 @@ export class BarChartComponent implements OnInit {
   
   observacion(id, pedido){
     Swal.fire({
-      title: '¿Imprimir formato de recepción de material?',
+      title: '¿Descargar formato de recepción de material?',
       text: "Todo el material esta previamente revisado y verificado",
       icon:'question',
       showCancelButton: true,
       confirmButtonColor: '#48c78e',
       cancelButtonColor: '#d33',
-      confirmButtonText: 'Imprimir',
+      confirmButtonText: 'Descargar',
       cancelButtonText:'Enviar revisión'
     }).then((result) => {
       if (result.isConfirmed) {
@@ -855,9 +887,9 @@ export class BarChartComponent implements OnInit {
 
           if(x==4){
             if(data.condicion[i][x]){
-              certificado[i] = certificado[i] + `(x) Bultos sin evidencia visible de excremento de animales, `
+              certificado[i] = certificado[i] + `(x) Bultos sin evidencia visible de excremento de animales `
             }else{
-              certificado[i] = certificado[i] + `( ) Bultos sin evidencia visible de excremento de animales, `
+              certificado[i] = certificado[i] + `( ) Bultos sin evidencia visible de excremento de animales `
             }
           }
 
@@ -898,9 +930,9 @@ export class BarChartComponent implements OnInit {
 
           if(x==4){
             if(data.condicion[i][x]){
-              certificado[i] = certificado[i] + `(x) Envases cerrados herméticamente, `
+              certificado[i] = certificado[i] + `(x) Envases cerrados herméticamente `
             }else{
-              certificado[i] = certificado[i] + `( ) Envases cerrados herméticamente, `
+              certificado[i] = certificado[i] + `( ) Envases cerrados herméticamente `
             }
           }
 
@@ -1075,7 +1107,7 @@ export class BarChartComponent implements OnInit {
                   new Cell(new Txt('Observación').end).alignment('center').color('#FFFFFF').fillColor('#000000').fontSize(9).end,
                 ],
                 [
-                  new Cell(new Txt(`\n\n\n`).end).fontSize(8).end,
+                  new Cell(new Txt(`${data.observacion}\n\n\n`).end).fontSize(8).end,
 
                 ]
               ]).widths(['100%']).end
@@ -1096,7 +1128,7 @@ export class BarChartComponent implements OnInit {
                 new Cell(new Txt('Validado por:').end).alignment('center').color('#FFFFFF').fillColor('#000000').fontSize(9).end,
               ],
               [
-                new Cell(new Txt(`Firma:${usuario}\n\nFecha:${hoy}`).end).fontSize(8).end,
+                new Cell(new Txt(`Firma: ${usuario}\n\nFecha: ${hoy}`).end).fontSize(8).end,
 
               ]
             ]).widths(['100%']).end).fontSize(8).end
@@ -1184,7 +1216,4 @@ export class BarChartComponent implements OnInit {
   }
 
 
-
-  
 }
-

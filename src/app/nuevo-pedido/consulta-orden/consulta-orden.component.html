@@ -58,6 +58,54 @@
                                     <label class="label">Fecha de recepción:</label>
                                     <input type="date" class="input edicion_" [(ngModel)]="Orden.fecha_recepcion">
                                 </span>
+
+                                <!-- AGREGAR NUEVO PRODUCTO -->
+                                <div class="field" id="addprod" style="display:none">
+                                    <label class="label">Producto</label>
+                                    <div class="control">
+                                        <div class="select" >
+                                            <select id='producto' (change)='producto_selected($event.target.value)'>
+                                                <option value='#'>Selecciona Producto</option>
+                                                <option *ngFor='let producto of PRODUCTOS' value='{{producto._id}}'>E-{{producto.cliente.codigo}}-{{producto.codigo}}-{{producto.version}}-{{producto.edicion}} {{producto.producto}}</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="columns">
+                                    <div class="column">
+                                        <div class="field" *ngIf="PRODUCTO.length > 0">
+                                            <label class="label">Cantidad</label>
+                                            <div class="control">
+                                                <!-- <input type="number" class="input" [(ngModel)]="_CANTIDAD"> -->
+                                                <input type="number" class="input" (keydown)="NuevaCantidad($event.target.value)" (change)="NuevaCantidad($event.target.value)">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="column">
+                                        <div class="field" *ngIf="_CANTIDAD.length > 0">
+                                            <label class="label">Fecha solicitada</label>
+                                            <div class="control">
+                                                <input type="date" class="input" (change)="Fecha__($event.target.value)">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="column">
+                                        <div class="field" *ngIf="__Fecha.length > 0">
+                                            <label class="label"> </label>
+                                            <div class="control">
+                                                <button class="button is-success" (click)="AgregarNuevo()">
+                                                    <span class="icon">
+                                                        <i class="fas fa-plus"></i>
+                                                    </span>
+                                                    <span>
+                                                        Agregar
+                                                    </span>
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- FIN AGREGAR NUEVO PRODUCTO -->
                                 <br> <br>
                                 <button class="button is-small is-success is-outlined" style="display:none" id="okbutton" (click)="listoOCEDIT()">
                                     <span class="icon">
@@ -89,6 +137,7 @@
                                     </tr>
                                     <tr *ngFor="let producto of Orden.productos;index as i">
                                         <td id="producto___{{i}}">
+                                            <span *ngIf="test">{{producto.test}}</span>
                                             <span id="producto_{{i}}">
                                                 {{producto.producto.producto}}
                                             </span>
