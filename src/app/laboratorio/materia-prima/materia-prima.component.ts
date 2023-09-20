@@ -143,9 +143,9 @@ export class MateriaPrimaComponent implements OnInit {
   }
 
   buscarAlmacen(){
-    this.api.getAlmacen()
+    this.api.getMateriaPrima()
     .subscribe((resp:any)=>{
-      this.Materiales = resp.materiales;
+      this.Materiales = resp
       for(let i=0;i<this.Materiales.length;i++){
         if(this.Materiales[i].grupo.nombre === 'Sustrato'){
           let existe = this.Sustrato.find(x=>x.nombre === this.Materiales[i].nombre && x.marca === this.Materiales[i].marca && x.calibre === this.Materiales[i].calibre && x.gramaje === this.Materiales[i].gramaje)
@@ -426,7 +426,7 @@ export class MateriaPrimaComponent implements OnInit {
     }
 
     this.Edited_sustrato = false;
-    this.api.updateManyMateriales(this.sustrato_selected._id, info)
+    this.api.putMateriaPrima(this.sustrato_selected._id, info)
       .subscribe((resp:any)=>{
         console.log('done')
       })

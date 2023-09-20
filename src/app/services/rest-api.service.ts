@@ -786,6 +786,11 @@ export class RestApiService {
     return this.http.get(url)
   }
 
+  putMateriaPrima(id, data){
+    const url = `${this.api_url}/materia-prima/${id}`
+    return this.http.put(url, data)
+  }
+
   postFacturacion(data){
     const url = `${this.api_url}/facturacion`
     return this.http.post(url,data)
@@ -814,6 +819,22 @@ export class RestApiService {
   SubirIteratorFacturacion(){
     const url = `${this.api_url}/addifacturacion`
     return this.http.get(url)
+  }
+
+  getPorAnalizar(){
+    const url = `${this.api_url}/por-analizar`
+    return this.http.get(url) 
+  }
+
+  FinalizarFacturacion(id){
+    const url = `${this.api_url}/cerrar-facturacion/${id}`
+    return this.http.get(url)
+  }
+
+  enviarNotificacion(data){
+    const url = `${this.api_url}/enviar-notificacion`
+    return this.http.post(url,data)
+
   }
 
 

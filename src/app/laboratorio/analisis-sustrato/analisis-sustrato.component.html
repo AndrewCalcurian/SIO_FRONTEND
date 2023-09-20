@@ -6,6 +6,17 @@
     <div class="card">
         <div class="card-content">
             <div class="field">
+                <label for="" class="label">Lotes por analizar</label>
+                <div class="control">
+                    <div class="select">
+                        <select (change)="_BuscarLote($event.target.value)">
+                            <option value="#">Lotes por analizar</option>
+                            <option value="{{lote.grupo}}*{{lote.lote}}" *ngFor="let lote of Lotes_por_analizar">{{lote.lote}} - {{lote.nombre}} {{lote.ancho}}x{{lote.largo}} ({{lote.marca}}) {{lote.gramaje}}g cal:{{lote.calibre}}</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <!-- <div class="field">
                 <label for="" class="label">Lote a analizar</label>
                 <div class="control">
                     <input type="text" class="input  n_lote" placeholder="N° de lote" (change)="buscarLote($event.target.value)">
@@ -15,7 +26,7 @@
                         </button>
                     </span>
                 </div>
-            </div>
+            </div> -->
 
             <table class="table is-fullwidth" *ngIf="material.length > 0" >
                 <tr>
@@ -34,10 +45,10 @@
                 </tr>
                 <tr>
                     <th class="is-selected">Proveedor</th>
-                    <td>Roxcel</td>
+                    <td>{{FacturaSelected.proveedor.nombre}}</td>
 
                     <th class="is-selected" width="120px">Cantidad</th>
-                    <td colspan="3">371.500 hojas</td>
+                    <td colspan="3">{{totales.total}}</td>
                 </tr>
 
                 <tr>
@@ -604,12 +615,12 @@
             </span>
             <span>Guardar progreso</span>
         </button> 
-        <button class="button is-success" (click)="Finalizar_Sustrato()" *ngIf="validado">
+        <button class="button is-success" (click)="PreFinalizacion()" *ngIf="validado">
             <span class="icon">
                 <i class="fas fa-download"></i>
             </span>
             <span>
-                Descargar análisis
+                Enviar resultados
             </span>
         </button>
         </div>

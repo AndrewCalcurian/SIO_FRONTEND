@@ -6,8 +6,8 @@
                 Observación
             </span>
             <hr>
-                <div class="control">
-                    <textarea class="textarea" placeholder="Observación" [(ngModel)]="Pedido[porObservar].observacion"></textarea>
+                <div class="control" *ngIf="Pedido">
+                    <textarea class="textarea" placeholder="Observación" [(ngModel)]="Pedido[porObservar].observacion" *ngIf="Pedido[porObservar]"></textarea>
                 </div>
             <hr>
             <button class="button is-success" (click)="GuardarObservacion()">
@@ -24,6 +24,8 @@
 
 <div class="container">
     <span class="titulo">Recepción de material</span>
+</div>    
+<div class='long'>
     <div class="card">
         <div class="card-content">
             <button class="button is-primary" (click)="NuevaRecepcion_()">
@@ -47,7 +49,21 @@
                     <td>{{Pedido.proveedor.nombre}}</td>
                     <td>
                         <span *ngFor="let cantidad of Pedido.totales;index as n">
-                            {{cantidad.producto}} ({{cantidad.marca}}) {{cantidad.total}} 
+                            <ng-container *ngIf="cantidad.resultado">
+                                <ng-container *ngIf="cantidad.resultado === 'APROBADO'">
+                                    <span class="tag is-success">A</span>
+                                </ng-container>
+                                <ng-container *ngIf="cantidad.resultado != 'APROBADO'">
+                                    <span class="tag is-danger">R</span>
+                                </ng-container>
+                            </ng-container>
+                            {{cantidad.producto}} 
+                            <ng-container *ngIf="cantidad.ancho">
+                                {{cantidad.ancho}}x{{cantidad.largo}}
+                                {{cantidad.gramaje}}g
+                                cal: {{cantidad.calibre}}
+                            </ng-container>
+                            ({{cantidad.marca}}) {{cantidad.total}} 
                             <i class="fas fa-eye click" (click)="abrirDetalles_(i,n,cantidad.producto, cantidad.marca)" *ngIf="Pedido.status === 'Por notificar'"></i>
                             <i class="fas fa-eye click" (click)="_abrirDetalles__(i,n,cantidad.producto, cantidad.marca, cantidad.marca)" *ngIf="Pedido.status === 'Notificado' || Pedido.status === 'En Observacion'"></i>
                             <br>
@@ -369,7 +385,13 @@
                     <th>Condición</th>
                 </tr>
                 <tr *ngFor="let factura of Factura.totales;index as i">
-                    <td>{{factura.producto}}</td>
+                    <td>{{factura.producto}}
+                        <ng-container *ngIf="factura.ancho">
+                            {{factura.ancho}} x {{factura.largo}} 
+                            {{factura.gramaje}}g cal:{{factura.calibre}}
+                        </ng-container>
+                        ({{factura.marca}})
+                    </td>
                     <td>{{factura.lote}}</td>
                     <td>{{factura.total}}</td>
                     <th><i class="fas fa-list-ol" (click)="ver_condiciones(i, factura.grupo)"></i></th>
@@ -415,7 +437,11 @@
                     <th>Borrar</th>
                 </tr>
                 <tr *ngFor="let envase of envases;index as i">
-                    <td>{{envase.nombre}}({{envase.marca}})</td>
+                    <td>{{envase.nombre}}
+                        <ng-container *ngIf="envase.ancho">
+                            {{envase.ancho}}
+                        </ng-container> 
+                        ({{envase.marca}})</td>
                     <td>
                         <input type="date" class="input is-small small_" [(ngModel)]="envases[i].fabricacion" (change)="cambiar_fabricacion($event.target.value)">
                     </td>

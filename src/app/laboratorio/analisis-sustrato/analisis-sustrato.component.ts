@@ -20,12 +20,7 @@ export class AnalisisSustratoComponent implements OnInit {
    }
   
   ngOnInit(): void {
-
-
-    let number = 0.002
-    console.log(parseFloat(number.toPrecision()))
-
-
+    this.BuscarEnObservacion();
   }
 
   public _gramaje:boolean = true;
@@ -129,6 +124,193 @@ export class AnalisisSustratoComponent implements OnInit {
 
   public tablas:boolean = false;
   public usuario;
+
+  public Lotes_por_analizar = []
+
+  public FacturaSelected
+  public totales
+  public Actual
+  public Lote_
+  _BuscarLote(e){
+
+    this.Actual = e;
+    let split = e.split('*')
+    
+    this.FacturaSelected = this.observadores[split[0]]
+    this.Lote_ = split[1]
+
+    
+    let material = this.observadores[split[0]].productos.filter(x=>x.lote === split[1])
+    this.totales = this.observadores[split[0]].totales.filter(x=>x.lote === split[1])
+    this.totales = this.totales[0]
+    this.material = material
+    console.log(this.totales)
+    
+    this.api.getLotesUsados(split[1])
+          .subscribe((resp:any)=>{
+            if(!resp.empty){
+              this.muestras = resp.muestras
+              this.ancho = resp.ancho
+              this.largo = resp.largo
+              this.inicial = resp.gramaje.masa_inicial
+              this.final = resp.gramaje.masa_final
+              this.gramaje = resp.gramaje.gramaje
+              this.promedio = Number(resp.gramaje.promedio)
+              this.desviacion = Number(resp.gramaje.desviacion)
+              this.Gramaje_nf = Number(resp.gramaje.nf)
+              this.max_gramaje = Math.max(...this.gramaje)
+              this.max_gramaje = Number(this.max_gramaje.toFixed(2))
+              this.min_gramaje = Math.min(...this.gramaje)
+              this.min_gramaje = Number(this.min_gramaje.toFixed(2))
+
+              this.cobb = resp.cobb.cobb
+              let cobb_top = []
+              let cobb_back = []
+              let mitad = this.muestras / 2;
+              this.promedio_cobb_top = Number(resp.cobb.promedio_top)
+              this.desviacion_cobb_top = Number(resp.cobb.desviacion_top)
+              this.promedio_cobb_back = Number(resp.cobb.promedio_back)
+              this.desviacion_cobb_back = Number(resp.cobb.desviacion_back)
+              this.max_cobb_top = resp.cobb.max_top;
+              this.min_cobb_top = resp.cobb.min_top;
+              this.max_cobb_bac = resp.cobb.max_back;
+              this.min_cobb_bac = resp.cobb.min_back;
+
+              this.calibre = resp.calibre.mm
+              this.Um_calibre = resp.calibre.um
+              this.pt_calibre = resp.calibre.pt
+              console.log(resp)
+
+              this.promedio_calibre = Number(resp.calibre.promedio)
+              this.desviacion_calibre = Number(resp.calibre.desviacion)
+              this.Calibre_nf = Number(resp.calibre.nf)
+
+              this.promedio_calibre_um = Number(resp.calibre.promedio_um)
+              this.desviacion_calibre_um = Number(resp.calibre.desviacion_um)
+              this.Calibre_nf_um = Number(resp.calibre.nf_um)
+
+
+              this.promedio_calibre_pt = Number(resp.calibre.promedio_pt)
+              this.desviacion_calibre_pt = Number(resp.calibre.desviacion_pt)
+              this.Calibre_nf_pt = Number(resp.calibre.nf_pt)
+
+              this.max_calibre = Math.max(...this.calibre)
+            this.max_calibre = Number(this.max_calibre.toFixed(2))
+            this.min_calibre = Math.min(...this.calibre)
+            this.min_calibre = Number(this.min_calibre.toFixed(2))
+
+            this.max_calibre_um = Math.max(...this.Um_calibre)
+            this.max_calibre_um = Number(this.max_calibre_um.toFixed(2))
+            this.min_calibre_um = Math.min(...this.Um_calibre)
+            this.min_calibre_um = Number(this.min_calibre_um.toFixed(2))
+
+            this.max_calibre_pt = Math.max(...this.pt_calibre)
+            this.max_calibre_pt = Number(this.max_calibre_pt.toFixed(2))
+            this.min_calibre_pt = Math.min(...this.pt_calibre)
+            this.min_calibre_pt = Number(this.min_calibre_pt.toFixed(2))
+              
+            this.curling = resp.curling.curling;
+            this.promedio_curling = Number(resp.curling.promedio)
+            this.desviacion_curling = Number(resp.curling.desviacion)
+            this.curling_nf = Number(resp.curling.nf)
+
+            this.max_curling = Math.max(...this.curling)
+            this.max_curling = Number(this.max_curling.toFixed(2))
+            this.min_curling = Math.min(...this.curling)
+            this.min_curling = Number(this.min_curling.toFixed(2))
+
+            this.blancura = resp.blancura.blancura
+            this.promedio_blancura = Number(resp.blancura.promedio)
+            this.desviacion_blancura = Number(resp.blancura.desviacion)
+            this.blancura_nf = Number(resp.blancura.nf)
+
+            this.max_blancura = Math.max(...this.blancura)
+            this.max_blancura = Number(this.max_blancura.toFixed(2))
+            this.min_blancura = Math.min(...this.blancura)
+            this.min_blancura = Number(this.min_blancura.toFixed(2))
+
+            this.escuadra = resp.escuadra.escuadra
+            this.promedio_escuadra = Number(resp.escuadra.promedio)
+            this.desviacion_escuadra = Number(resp.escuadra.desviacion)
+            this.escuadra_nf = Number(resp.escuadra.nf)
+            this.max_escuadra = resp.escuadra.max_escuadra
+            this.min_escuadra = resp.escuadra.min_escuadra
+
+            this.contra_escuadra = resp.contra_escuadra.contra_escuadra
+            this.promedio_contra_escuadra = Number(resp.contra_escuadra.promedio)
+            this.desviacion_contra_escuadra = Number(resp.contra_escuadra.desviacion)
+            this.contra_escuadra_nf = Number(resp.contra_escuadra.nf)
+            this.max_contra_escuadra = resp.contra_escuadra.max_contra_escuadra
+            this.min_contra_escuadra = resp.contra_escuadra.min_contra_escuadra
+
+            this.pinza = resp.pinza.pinza
+            this.promedio_pinza = Number(resp.pinza.promedio)
+            this.desviacion_pinza = Number(resp.pinza.desviacion)
+            this.pinza_nf = Number(resp.pinza.nf)
+            this.max_pinza = resp.pinza.max_pinza
+            this.min_pinza = resp.pinza.min_pinza
+
+            this.contra_pinza = resp.contra_pinza.contra_pinza
+            this.promedio_contra_pinza = Number(resp.contra_pinza.promedio)
+            this.desviacion_contra_pinza = Number(resp.contra_pinza.desviacion)
+            this.contra_pinza_nf = Number(resp.contra_pinza.nf)
+            this.max_contra_pinza = resp.contra_pinza.max_contra_pinza
+            this.min_contra_pinza = resp.contra_pinza.min_contra_pinza
+
+            this.observacion = resp.observacion
+            this.resultado = resp.resultado
+
+            this.realizado = resp.realizado;
+            this.realizacion = resp.realizacion
+            }
+          })
+        for(let i=0;i<this.material.length;i++){
+          let index = this.cantidades.indexOf(this.material[i].cantidad)
+          if(index < 0){
+            this.cantidades.push(this.material[i].cantidad)
+          }else{
+            if(!this.paletas[index]){
+              this.paletas[index] = 1
+            }else{
+              this.paletas[index] = this.paletas[index] + 1;
+            }
+          }
+        }
+
+  }
+
+  public observadores
+  BuscarEnObservacion(){
+    this.api.getPorAnalizar()
+      .subscribe((resp:any)=>{
+        this.observadores = resp;
+        for(let i=0;i<resp.length;i++){
+          for(let x=0;x<resp[i].totales.length;x++){
+
+            let material = resp[i].totales[x]
+
+            if(material.grupo === 'Sustrato'){
+              
+              console.log(material)
+              this.Lotes_por_analizar.push(
+                {
+                  lote:material.lote,
+                  nombre:material.producto,
+                  marca:material.marca,
+                  ancho:material.ancho,
+                  largo:material.largo,
+                  calibre:material.calibre,
+                  gramaje:material.gramaje,
+                  grupo:i
+                }
+              )
+
+            }
+
+          }
+        }
+      })
+  }
 
   showTables(){
     if(!this.tablas){
@@ -740,6 +922,7 @@ export class AnalisisSustratoComponent implements OnInit {
     let ancho = this.ancho
     let largo = this.largo
     let hoy = moment().format('DD/MM/YYYY')
+    let fecha_hoy = moment().format('DDMMYYYY')
 
     let certificado = {
       lote:material.lote,
@@ -780,7 +963,97 @@ export class AnalisisSustratoComponent implements OnInit {
     return n = new Intl.NumberFormat('de-DE').format(n)
    }
 
+  
+  QuitarDeObservacion(Resultado){
+
+    for(let i=0;i<this.FacturaSelected.totales.length;i++){
+      if(this.FacturaSelected.totales[i].lote === this.Lote_){
+        this.FacturaSelected.totales[i].resultado = Resultado
+        
+      }
+      
+      if(i === this.FacturaSelected.totales.length -1){
+        
+        this.api.putFacturacion(this.FacturaSelected._id, this.FacturaSelected)
+          .subscribe((resp:any)=>{
+           this.api.FinalizarFacturacion(this.FacturaSelected._id)
+            .subscribe((resp:any)=>{
+              console.log(resp)
+            })
+          })
+      }
+    }
+  }
+
+
+  PreFinalizacion(){
+    Swal.fire({
+      icon:'info',
+      title:'Notificación de resultados',
+      text:'Se realizará la notificación de los resultados obtenidos de este análisis',
+      showDenyButton: true,
+      showCancelButton:true,
+      confirmButtonText:'Confirmar',
+      denyButtonText:'Añadir a producción',
+      cancelButtonText:'Cancelar',
+      denyButtonColor:'#3e8ed0',
+      confirmButtonColor:'#48c78e',
+      cancelButtonColor:'#f14668',
+      allowOutsideClick: false
+    }).then((result)=>{
+      if (result.isConfirmed) {
+        this.Finalizar_Sustrato()
+        let data = {
+          resultado:this.resultado,
+          correos:'calcurianandres@gmail.com',
+          observacion:this.observacion,
+          lote:this.Lote_,
+          tabla:`
+          <tr>
+            <td>${this.material[0].material.nombre} (${this.material[0].material.ancho}x${this.material[0].material.largo}) ${this.material[0].material.marca}</td>
+            <td>${this.Lote_}</td>
+            <td>${this.totales.total}</td>
+            <td>${this.resultado}</td>
+          </tr>
+          `
+        }
+
+        this.api.enviarNotificacion(data)
+          .subscribe((resp:any)=>{
+            console.log('correo enviado')
+          })
+
+      } else if (result.isDenied) {
+        this.Finalizar_Sustrato()
+        let data = {
+          resultado:this.resultado,
+          correos:'calcurianandres@gmail.com,zuleima.vela@poligraficaindustrial.com',
+          observacion:this.observacion,
+          lote:this.Lote_,
+          tabla:`
+          <tr>
+            <td>${this.material[0].material.nombre} (${this.material[0].material.ancho}x${this.material[0].material.largo}) ${this.material[0].material.marca}</td>
+            <td>${this.Lote_}</td>
+            <td>${this.totales.total}</td>
+            <td>${this.resultado}</td>
+          </tr>
+          `
+        }
+
+        this.api.enviarNotificacion(data)
+          .subscribe((resp:any)=>{
+            console.log('correo enviado')
+          })
+      }
+    })
+  }
+
+
+
   Finalizar_Sustrato(){
+
+
+
     // let certificado = {
     //   lote:this.material[0].lote,
     //   material:`${this.material[0].material.nombre} (${this.material[0].material.ancho}x${this.material[0].material.largo})`,
@@ -797,6 +1070,8 @@ export class AnalisisSustratoComponent implements OnInit {
     let ancho = this.ancho
     let largo = this.largo
     let hoy = moment().format('DD/MM/YYYY')
+    let fecha_hoy = moment().format('DDMMYYYY')
+    let name = `${this.material[0].material.nombre}(${this.material[0].material.marca})${this.material[0].material.ancho}x${this.material[0].material.largo}`
 
     let realizado = this.realizado;
     let realizacion = this.realizacion
@@ -832,7 +1107,8 @@ export class AnalisisSustratoComponent implements OnInit {
 
     this.api.postAnalisisSustrato(certificado)
       .subscribe((resp:any)=>{
-        this.buscarLote(certificado.lote)
+        this._BuscarLote(this.Actual)
+        this.QuitarDeObservacion(resp.resultado)
     })
 
     let masa_inicial = []
@@ -1372,7 +1648,7 @@ export class AnalisisSustratoComponent implements OnInit {
       )
 
 
-      pdf.create().download(`certificado`)
+      pdf.create().download(`${material.lote}_${name}_${fecha_hoy}`)
     }
     GenerarCertificado()
   }

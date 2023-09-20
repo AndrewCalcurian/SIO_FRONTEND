@@ -380,6 +380,7 @@ export class RecepcionComponent implements OnInit {
     this.api.getFacturacion()
       .subscribe((resp:any)=>{
         this.Pedido = resp
+        console.log(this.Pedido)
       })
   }
 
@@ -525,6 +526,10 @@ export class RecepcionComponent implements OnInit {
     if(this.resto > 0){
       this.envases.push({
         material:this.Materia_prima_selected._id,
+        ancho:this.Materia_prima_selected.ancho,
+        largo:this.Materia_prima_selected.largo,
+        calibre:this.Materia_prima_selected.calibre,
+        gramaje:this.Materia_prima_selected.gramaje,
         nombre:this.Materia_prima_selected.nombre,
         marca:this.Materia_prima_selected.marca,
         fabricacion:this.F_fabricacion,
@@ -535,6 +540,10 @@ export class RecepcionComponent implements OnInit {
       for(let i=0;i<contador;i++){
         this.envases.push({
           material:this.Materia_prima_selected._id,
+          ancho:this.Materia_prima_selected.ancho,
+          largo:this.Materia_prima_selected.largo,
+          calibre:this.Materia_prima_selected.calibre,
+          gramaje:this.Materia_prima_selected.gramaje,
           nombre:this.Materia_prima_selected.nombre,
           marca:this.Materia_prima_selected.marca,
           capacidad:this.Materia_prima_selected.neto,
@@ -664,7 +673,7 @@ export class RecepcionComponent implements OnInit {
         transportista:this.Transportista,
         productos:this.envases,
         recepcion:this.recepcion,
-        totales:[{lote:`${this.Lote}`,producto:`${this.Materia_prima_selected.nombre}`, marca:`${this.Materia_prima_selected.marca}`,total:this.total_kilos,grupo:this.Materia_prima_selected.grupo.nombre}],
+        totales:[{lote:`${this.Lote}`,producto:`${this.Materia_prima_selected.nombre}`, marca:`${this.Materia_prima_selected.marca}`,total:this.total_kilos,grupo:this.Materia_prima_selected.grupo.nombre, ancho:this.Materia_prima_selected.ancho, largo:this.Materia_prima_selected.largo, gramaje:this.Materia_prima_selected.gramaje, calibre:this.Materia_prima_selected.calibre}],
         condicion:[this.condicion___],
         proveedor:this.proveedor_selected
       }
@@ -672,7 +681,7 @@ export class RecepcionComponent implements OnInit {
       for(let i=0;i<this.envases.length;i++){
         this.Factura.productos.push(this.envases[i])
       }
-      this.Factura.totales.push({lote:`${this.Lote}`,producto:`${this.Materia_prima_selected.nombre}`, marca:`${this.Materia_prima_selected.marca}`,total:this.total_kilos,grupo:this.Materia_prima_selected.grupo.nombre})
+      this.Factura.totales.push({lote:`${this.Lote}`,producto:`${this.Materia_prima_selected.nombre}`, marca:`${this.Materia_prima_selected.marca}`,total:this.total_kilos,grupo:this.Materia_prima_selected.grupo.nombre,ancho:this.Materia_prima_selected.ancho, largo:this.Materia_prima_selected.largo, gramaje:this.Materia_prima_selected.gramaje, calibre:this.Materia_prima_selected.calibre})
       this.Factura.condicion.push(this.condicion___)
     }
     
