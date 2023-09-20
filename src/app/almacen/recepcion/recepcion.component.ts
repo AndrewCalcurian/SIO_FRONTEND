@@ -771,6 +771,10 @@ export class RecepcionComponent implements OnInit {
       }
     }
 
+    if(!data.observacion){
+      data.observacion = ' '
+    }
+
 
     let certificado = [];
 
@@ -1127,7 +1131,7 @@ export class RecepcionComponent implements OnInit {
                   new Cell(new Txt('Realizado por:').end).alignment('center').color('#FFFFFF').fillColor('#000000').fontSize(9).end,
                 ],
                 [
-                  new Cell(new Txt(`Firma:\n\nFecha:`).end).fontSize(8).end,
+                  new Cell(new Txt(`Firma: ${data.usuario}\n\nFecha: ${data.creacion}`).end).fontSize(8).end,
 
                 ]
               ]).widths(['100%']).end
@@ -1174,6 +1178,9 @@ export class RecepcionComponent implements OnInit {
   }
 
   finalizar(){
+
+    let hoy = moment().format('DD/MM/YYYY');
+
     (<HTMLInputElement>document.getElementById('disabled_1')).disabled = false;
     (<HTMLInputElement>document.getElementById('disabled_2')).disabled = false;
     (<HTMLInputElement>document.getElementById('disabled_3')).disabled = false;
@@ -1182,6 +1189,8 @@ export class RecepcionComponent implements OnInit {
     this.N_OC = ''
     this.Transportista = '';
     (<HTMLInputElement>document.getElementById('disabled_4')).value = '#'
+    this.Factura.usuario = `${this.api.usuario.Nombre} ${this.api.usuario.Apellido}`
+    this.Factura.creacion = hoy;
     this.api.postFacturacion(this.Factura)
     .subscribe((resp:any)=>{
         this.NuevaRecepcion = false
