@@ -22,8 +22,8 @@
     </div>
 </div>
 
-<div class="container">
-    <span class="titulo">Recepción de material</span>
+<div class="container mt-5">
+    <span class="titulo"><i class="fas fa-pallet"></i> Recepción de material</span>
 </div>    
 <div class='long'>
     <div class="card">
@@ -38,6 +38,7 @@
                     <th>Factura</th>
                     <th>OC</th>
                     <th>Proveedor</th>
+                    <th>Descripción</th>
                     <th>Cantidad</th>
                     <th>Estatus</th>
                     <th>Editar</th>
@@ -63,10 +64,15 @@
                                 {{cantidad.gramaje}}g
                                 cal: {{cantidad.calibre}}
                             </ng-container>
-                            ({{cantidad.marca}}) {{cantidad.total}} 
+                            ({{cantidad.marca}}) 
+                            <br>
+                        </span>
+                    </td>
+                    <td>
+                        <span *ngFor="let cantidad of Pedido.totales;index as n">
+                            {{cantidad.total}} 
                             <i class="fas fa-eye click" (click)="abrirDetalles_(i,n,cantidad.producto, cantidad.marca)" *ngIf="Pedido.status === 'Por notificar'"></i>
                             <i class="fas fa-eye click" (click)="_abrirDetalles__(i,n,cantidad.producto, cantidad.marca, cantidad.marca)" *ngIf="Pedido.status === 'Notificado' || Pedido.status === 'En Observacion'"></i>
-                            <br>
                         </span>
                     </td>
                     <td>
@@ -84,22 +90,15 @@
                         </button>
                     </td>
                     <td>
-                        <button class="button is-success is-outlined is-small" (click)='EditarPedido(i)' *ngIf="Pedido.status === 'Por notificar'">
+                        <i class="fas fa-edit ed" (click)='EditarPedido(i)' *ngIf="Pedido.status === 'Por notificar'"></i>
+                        <!-- <button class="button is-success is-outlined is-small" (click)='EditarPedido(i)' *ngIf="Pedido.status === 'Por notificar'">
                             <span class="icon"><i class="fas fa-edit"></i></span>
                             <span>Editar</span>
-                        </button>
-                        <button class="button is-success is-outlined is-small" disabled (click)='EditarPedido(i)' *ngIf="Pedido.status === 'Notificado' || Pedido.status === 'En Observacion'">
-                            <span class="icon"><i class="fas fa-edit"></i></span>
-                            <span>Editar</span>
-                        </button>
+                        </button> -->
+                        <i class="fas fa-edit ed2" *ngIf="Pedido.status === 'Notificado' || Pedido.status === 'En Observacion'"></i>
                     </td>
                     <td>
-                        <button class="button is-info is-outlined is-small" (click)="verObservaciones(i)">
-                            <span class="icon">
-                                <i class="far fa-sticky-note"></i>
-                            </span>
-                            <span>Observaciones</span>
-                        </button>
+                        <i class="fas fa-comment obs" (click)="verObservaciones(i)"></i>
                     </td>
                 </tr>
             </table>

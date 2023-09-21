@@ -38,7 +38,7 @@ export class SubirArchivosService {
         }
       }else{
         if(tipo != 'fabricante'){
-          Swal.fire('Error', data.err.message, 'error');
+          // Swal.fire('Error', data.err.message, 'error');
         }
         
         return false;

@@ -166,14 +166,14 @@
                             </div>
                         </div>
                     </div>
-                    <div class="column">
+                    <!-- <div class="column">
                         <div class="field">
                             <label class="label">Marca</label>
                             <div class="control">
                                 <input type="text" class="input" formControlName="marca">
                             </div>
                         </div>
-                    </div>
+                    </div> -->
                     <div class="column is-3">
                         <div class="field">
                             <label class="label">Presentación</label>
@@ -246,16 +246,16 @@
                         </div>
                     </div>
                     <div class="column">
-                        <table class="table is-fullwidth">
-                            <tr *ngFor="let proveedor of proveedores__;index as i">
-                                <td>{{proveedor}}</td>
-                                <td>
-                                    <button class="button is-small is-danger is-outlined" (click)="borrar_provedor(i)">
-                                        <span class="icon"><i class="fas fa-trash-alt"></i></span>
-                                    </button>
-                                </td>
-                            </tr>
-                        </table>
+                        <div class="field" *ngIf="exist_origenes">
+                            <label class="label">Origen</label>
+                            <p class="control">
+                              <span class="select">
+                                <select formControlName="proveedor" (change)="origenes__($event.target.value)">
+                                    <option value="{{origenes}}" *ngFor="let origenes of origenes">{{origenes}}</option>
+                                </select>
+                              </span>
+                            </p>
+                        </div>
                     </div>
                 </div>
                 <button class="button is-primary">Finalizar</button>
@@ -291,12 +291,7 @@
                         <td>{{sustrato.gramaje}}</td>
                         <td>{{sustrato.calibre}}</td>
                         <td>
-                            <button class="button is-small is-success" (click)="modal_sustrato(sustrato._id)">
-                                <span class="icon">
-                                    <i class="fas fa-info"></i>
-                                </span>
-                                <span>Ver especificación</span>
-                            </button>
+                            <i class="fas fa-eye" (click)="modal_sustrato(sustrato._id)"></i>
                         </td>
                     </tr>
                 </ng-container>
@@ -659,22 +654,12 @@
                         <td>{{tinta.color}}</td>
                         <td>
                             <ng-container *ngIf="tinta.color == 'Negro' || tinta.color == 'Amarillo'">
+                                <i class="fas fa-eye" (click)="modal_tintas(tinta._id)"></i>
                                 <!-- <ng-container *ngIf="tinta.color == 'Cyan' || tinta.color == 'Magenta' "> -->
-                                    <button class="button is-small is-success" (click)="modal_tintas(tinta._id)">
-                                        <span class="icon">
-                                            <i class="fas fa-info"></i>
-                                        </span>
-                                        <span>Ver especificación</span>
-                                    </button>
                                 <!-- </ng-container> -->
                             </ng-container>
                             <ng-container *ngIf="tinta.color == 'Cyan' || tinta.color == 'Magenta' ">
-                                <button class="button is-small is-success" (click)="modal_tintas(tinta._id)">
-                                    <span class="icon">
-                                        <i class="fas fa-info"></i>
-                                    </span>
-                                    <span>Ver especificación</span>
-                                </button>
+                                <i class="fas fa-eye" (click)="modal_tintas(tinta._id)"></i>
                                 <!-- </ng-container> -->
                             </ng-container>
                              <button class="button is-small is-info" *ngIf="tinta.color != 'Negro' && tinta.color != 'Amarillo' && tinta.color != 'Cyan' && tinta.color != 'Magenta' " (click)="modal_tintas_(tinta._id)">
@@ -867,12 +852,7 @@
                         <td>{{quimico.nombre}}</td>
                         <td>{{quimico.marca}}</td>
                         <td>
-                            <button class="button is-small is-success" (click)="modal_fuentes(quimico._id)">
-                            <span class="icon">
-                                <i class="fas fa-info"></i>
-                            </span>
-                            <span>Ver especificación</span>
-                            </button>
+                            <i class="fas fa-eye" (click)="modal_fuentes(quimico._id)"></i>
                         </td>
                     </tr>
                 </ng-container>
@@ -964,12 +944,7 @@
                 <tr *ngIf="caja.nombre != ''">
                     <td>{{caja.nombre}}</td>
                     <td>
-                        <button class="button is-small is-success" (click)="modal_caja(caja._id)">
-                            <span class="icon">
-                                <i class="fas fa-info"></i>
-                            </span>
-                            <span>Ver especificación</span>
-                        </button>
+                        <i class="fas fa-eye" (click)="modal_caja(caja._id)"></i>
                     </td>
                 </tr>
             </ng-container>
@@ -1063,12 +1038,7 @@
                         <td>{{plancha.nombre}}</td>
                         <td>{{plancha.marca}}</td>
                         <td>
-                            <button class="button is-small is-success" (click)="modal_plancha(plancha._id)">
-                                <span class="icon">
-                                    <i class="fas fa-info"></i>
-                                </span>
-                                <span>Ver especificación</span>
-                            </button>
+                            <i class="fas fa-eye" (click)="modal_plancha(plancha._id)"></i>
                         </td>
                     </tr>
                 </ng-container>

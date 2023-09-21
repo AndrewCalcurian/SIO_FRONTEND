@@ -246,6 +246,18 @@
                       </div>
                     </div>
                 </div>
+                <div class="field is-horizontal">
+                  <div class="field-label wdl">
+                    <label class="label wdl">Alias:</label>
+                  </div>
+                  <div class="field-body">
+                    <div class="field">
+                      <p class="control">
+                        <input class="input is-small" type="text" placeholder="Alias" formControlName="alias">
+                      </p>
+                    </div>
+                  </div>
+              </div>
                   <div class="field is-horizontal" *ngIf="internacional">
                     <div class="field-label wdl">
                         <label for="" class="label wdl">Orígenes:</label>
@@ -592,8 +604,9 @@
                       </div>
                     </div>
                   </div>
+                </form>
                   <label class="checkbox">
-                    <input type="checkbox" (click)="proveedor_()">
+                    <input type="checkbox" id='dp' (click)="proveedor_()">
                     <b>
                         Proveedor directo
                     </b>
@@ -608,7 +621,7 @@
                         <div class="field-body">
                           <div class="field">
                             <p class="control">
-                              <input class="input is-small" type="text" placeholder="Dirección fiscal">
+                              <input class="input is-small" type="text" placeholder="Dirección fiscal" [(ngModel)]="Direccion_proveedor">
                             </p>
                           </div>
                         </div>
@@ -621,13 +634,77 @@
                         <div class="field-body">
                           <div class="field">
                             <p class="control">
-                              <input class="input is-small" type="text" placeholder="Rif">
+                              <input class="input is-small" type="text" placeholder="Rif"[(ngModel)]="Rif_proveedor">
                             </p>
                           </div>
                         </div>
                     </div>
 
                     <div class="field is-horizontal">
+                      <div class="field-label wdl">
+                          <label for="" class="label wdl">Persona de contacto:</label>
+                      </div>
+                      <div class="field-body">
+                          <div class="control">
+                              <table class="table is-fullwidth">
+                                  <thead>
+                                      <tr *ngFor="let contacto of contacto;index as i">
+                                          <th>
+                                              <i class="fas fa-user"></i> {{contacto.nombre}} <br>
+                                              <i class="fas fa-phone"></i> {{contacto.telefono}} <br>
+                                              <i class="fas fa-envelope"></i> {{contacto.email}}
+                                          </th>
+                                          <th>
+                                              <button class="button is-danger is-small is-outlined" type="button" (click)="deleteContacto(i)">
+                                                  <span class="icon"><i class="fas fa-trash-alt"></i></span>
+                                              </button>
+                                          </th>
+                                      </tr>
+                                </thead>
+                              </table>
+                          </div>
+                      </div>
+                  </div>
+
+                    <div class="field is-horizontal">
+                      <div class="field-label wdl">
+                        <label class="label wdl">Persona contacto:</label>
+                      </div>
+                      <div class="field-body">
+                        <div class="field">
+                          <p class="control has-icons-left">
+                              <input type="text" class="input is-small" placeholder="Nombre" [(ngModel)]="contacto_n">
+                              <span class="icon is-small is-left">
+                                  <i class="fas fa-user"></i>
+                              </span>
+                          </p>
+                          <p class="control has-icons-left">
+                              <input type="text" class="input is-small" placeholder="Email" [(ngModel)]="contacto_e">
+                              <span class="icon is-small is-left">
+                                  <i class="fas fa-envelope"></i>
+                              </span>
+                          </p>
+                        </div>
+                        <div class="field">
+                          <p class="control has-icons-left">
+                              <input type="text" class="input is-small" placeholder="teléfono" [(ngModel)]="contacto_t">
+                              <span class="icon is-small is-left">
+                                  <i class="fas fa-phone"></i>
+                              </span>
+                          </p>
+                          <p class="control">
+                              <button type="button" class="button is-small is-success" *ngIf="contacto_n && contacto_e && contacto_t" (click)="AgregarContacto()">
+                                  <span class="icon"></span>
+                                  <span>
+                                      Agregar
+                                  </span>
+                              </button>
+                          </p>
+                        </div>
+                      </div>
+                  </div>
+
+                    <!-- <div class="field is-horizontal">
                         <div class="field-label wdl">
                           <label class="label wdl">Persona contacto:</label>
                         </div>
@@ -638,36 +715,10 @@
                             </p>
                           </div>
                         </div>
-                    </div>
-
-                    <div class="field is-horizontal">
-                        <div class="field-label wdl">
-                          <label class="label wdl">Teléfono:</label>
-                        </div>
-                        <div class="field-body">
-                          <div class="field">
-                            <p class="control">
-                              <input class="input is-small" type="text" placeholder="Teléfono">
-                            </p>
-                          </div>
-                        </div>
-                    </div>
-
-                    <div class="field is-horizontal">
-                        <div class="field-label wdl">
-                          <label class="label wdl">Correo electronico:</label>
-                        </div>
-                        <div class="field-body">
-                          <div class="field">
-                            <p class="control">
-                              <input class="input is-small" type="email" placeholder="email@ejemplo.com">
-                            </p>
-                          </div>
-                        </div>
-                    </div>
+                    </div> -->
                   </span>
                   <hr>
-                  <button class="button is-success" type="submit">
+                  <button class="button is-success" type="submit" (click)="NewFabricacion()">
                     <span class="icon">
                         <i class="fas fa-check"></i>
                     </span>
@@ -675,7 +726,7 @@
                         Finalizar
                     </span>
                   </button>
-                </form>
+                
                 <!-- <div class="field">
                     <label for="" class="label">Origen:</label>
                     <div class="control">
@@ -974,6 +1025,21 @@
                       <div class="field">
                         <p class="control" *ngIf="EdicionAvailable">
                           <input class="input is-small" type="text" placeholder="Razón social" formControlName="nombre">
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="field is-horizontal">
+                    <div class="field-label wdl">
+                      <label class="label wdl">Alias:</label>
+                    </div>
+                    <span *ngIf="proveedor__ && !EdicionAvailable">
+                      {{proveedor__.alias}}
+                    </span>
+                    <div class="field-body">
+                      <div class="field">
+                        <p class="control" *ngIf="EdicionAvailable">
+                          <input class="input is-small" type="text" placeholder="Alias" formControlName="alias">
                         </p>
                       </div>
                     </div>
@@ -1350,6 +1416,7 @@
 
                   <span *ngIf="proveedor">
                     <hr>
+
                     <div class="field is-horizontal">
                         <div class="field-label wdl">
                           <label class="label wdl">Dirección fiscal:</label>
@@ -1375,7 +1442,6 @@
                           </div>
                         </div>
                     </div>
-
                     <div class="field is-horizontal">
                         <div class="field-label wdl">
                           <label class="label wdl">Persona contacto:</label>

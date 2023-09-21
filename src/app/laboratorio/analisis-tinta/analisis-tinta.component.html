@@ -8,6 +8,17 @@
             <div class="columns">
                 <div class="column is-3">
                     <div class="field">
+                        <label for="" class="label">Lotes por analizar</label>
+                        <div class="control">
+                            <div class="select">
+                                <select (change)="_BuscarLote($event.target.value)">
+                                    <option value="#">Lotes por analizar</option>
+                                    <option value="{{lote.grupo}}*{{lote.lote}}" *ngFor="let lote of Lotes_por_analizar">{{lote.lote}} - {{lote.nombre}} ({{lote.marca}})</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- <div class="field">
                         <label for="" class="label">Buscar lote:</label>
                         <input type="text" class="input short___" (change)="getLote($event.target.value)">
                         <button class="button is-success">
@@ -15,7 +26,7 @@
                                 <i class="fas fa-search"></i>
                             </span>
                         </button>
-                    </div>
+                    </div> -->
                 </div>
             </div>
             <table class="table is-fullwidth" *ngIf="muestra__">
@@ -23,7 +34,7 @@
                     <th class="is-selected standar">Producto:</th>
                     <td>{{muestra__.material.nombre}}</td>
                     <th class="is-selected standar">Proveedor:</th>
-                    <td>{{muestra__.material.marca}}</td>
+                    <td>{{FacturaSelected.proveedor.nombre}}</td>
                     <th class="is-selected standar">N° Lote:</th>
                     <td>{{muestra__.lote}}</td>
                 </tr>
@@ -50,7 +61,7 @@
         </div>
     </div>
     <br>
-    <div class="card">
+    <div class="card" *ngIf="muestra__">
         <div class="card-content">
             <hr>
             <!-- <table class="table is-fullwidth" *ngIf="cualitativo">
@@ -880,7 +891,7 @@
                         <span>Guardar progreso</span>
                     </button> 
                     <span *ngIf="validado">
-                        <button class="button is-success" (click)="GenerarPDF()">
+                        <button class="button is-success" (click)="PreFinalizacion()">
                             <span class="icon"><i class="fas fa-download"></i></span>
                             <span>Descargar análisis</span>
                         </button>

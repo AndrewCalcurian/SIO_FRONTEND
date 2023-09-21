@@ -7,15 +7,19 @@ import { ConfirmacionComponent } from './main/confirmacion/confirmacion.componen
 import { AsignacionComponent } from './main/asignacion/asignacion.component';
 import { ReportesComponent } from './reportes/reportes.component';
 import { RecepcionComponent } from './recepcion/recepcion.component';
+import { IndexComponent } from './index/index.component';
+import { RouterModule } from '@angular/router';
+import { InventarioComponent } from './inventario/inventario.component';
 
 
 
 
 @NgModule({
-  declarations: [MainComponent, ConfirmacionComponent, AsignacionComponent, ReportesComponent, RecepcionComponent],
+  declarations: [MainComponent, ConfirmacionComponent, AsignacionComponent, ReportesComponent, RecepcionComponent, IndexComponent, InventarioComponent],
   imports: [
     CommonModule,
     AlmacenRoutingModule,
+    RouterModule,
     FormsModule,
     ReactiveFormsModule
   ]

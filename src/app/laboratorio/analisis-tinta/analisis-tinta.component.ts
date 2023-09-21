@@ -95,6 +95,191 @@ export class AnalisisTintaComponent implements OnInit {
      }
 
   ngOnInit(): void {
+    this.BuscarEnObservacion();
+  }
+
+
+  public observadores
+  public Lotes_por_analizar = []
+  BuscarEnObservacion(){
+    this.api.getPorAnalizar()
+      .subscribe((resp:any)=>{
+        this.observadores = resp;
+        for(let i=0;i<resp.length;i++){
+          for(let x=0;x<resp[i].totales.length;x++){
+
+            let material = resp[i].totales[x]
+
+            if(material.grupo === 'Tinta'){
+              
+              console.log(material)
+              this.Lotes_por_analizar.push(
+                {
+                  lote:material.lote,
+                  nombre:material.producto,
+                  marca:material.marca,
+                  grupo:i
+                }
+              )
+
+              console.log(this.Lotes_por_analizar)
+
+            }
+
+          }
+        }
+      })
+  }
+
+  public FacturaSelected
+  public totales
+  public Actual
+  public Lote_
+  public material
+  _BuscarLote(e){
+    this.Actual = e;
+    let split = e.split('*')
+    
+    this.FacturaSelected = this.observadores[split[0]]
+    this.Lote_ = split[1]
+
+    let material = this.observadores[split[0]].productos.filter(x=>x.lote === split[1])
+    this.totales = this.observadores[split[0]].totales.filter(x=>x.lote === split[1])
+    this.totales = this.totales[0]
+    this.material = material
+
+    this.cantidad__ = this.totales.total
+    console.log(this.totales)
+    console.log(this.FacturaSelected)
+
+    this.f_fabricacion = this.material[0].fabricacion
+    this.presentacion_ = this.material[0].material.presentacion
+
+    this.api.getAnalisisTinta(this.Lote_)
+            .subscribe((resp_:any)=>{
+              if(resp_.empty){
+                for(let i=0;i<this.material.length;i++){
+                  let presentacion = this.cantidad.findIndex(x=> x.presentacion === this.material[i].material.presentacion && x.neto === this.material[i].capacidad)
+                  this.neto_total = Number(this.neto_total) + Number(this.material[i].cantidad);
+                  this.neto_total = Number(this.neto_total)
+                  if(presentacion <0){
+                    this.cantidad.push({presentacion:this.material[i].material.presentacion, cantidad:this.material[i].capacidad,neto:this.material[i].capacidad, unidades:1})
+                  }else{
+                    this.cantidad[presentacion].cantidad = Number(this.cantidad[presentacion].cantidad) + Number(this.material[i].capacidad)
+                    this.cantidad[presentacion].unidades++
+                    this.cantidad[presentacion].cantidad = (this.cantidad[presentacion].cantidad).toFixed(2)
+                  }
+                  this.material[i].material.presentacion
+                }
+                this.muestra__ = this.material[0]
+                console.log(this.muestra__, '-', this.cantidad)
+              }else{
+                this.sobre =  resp_.sobre
+                this.cantidad_(this.sobre);
+                this.papel_muestra(resp_.prueba_)
+                this.presentacion_ = resp_.presentacion
+                this.cantidad__ = resp_.total
+                this.muestra__ = {material:{nombre:resp_.producto, marca:resp_.marcar}, lote:resp_.lote}
+                this.cantidad = resp_.presentacion
+                this.f_fabricacion = resp_.f_fabricacion
+                this.f_vencimiento = resp_.f_vencimiento
+                this.estandar_utilizado = resp_.estandar
+                this.DrawDown_ = resp_.DrawDown
+                this.l1[0] = resp_.carton[0][0].lab_estandar[0]
+                this.a1[0] = resp_.carton[0][0].lab_estandar[1]
+                this.b1[0] = resp_.carton[0][0].lab_estandar[2]
+                this.l1[3] = resp_.carton[0][0].lab_muestra[0]
+                this.a1[3] = resp_.carton[0][0].lab_muestra[1]
+                this.b1[3] = resp_.carton[0][0].lab_muestra[2]
+                this.l1[6] = resp_.carton[0][0].lab_muestra[3]
+                this.a1[6] = resp_.carton[0][0].lab_muestra[4]
+                this.b1[6] = resp_.carton[0][0].lab_muestra[5]
+                this.d1[0] = resp_.carton[0][0].lab_muestra[6]
+
+                this.l1[1] = resp_.carton[1][0].lab_estandar[0]
+                this.a1[1] = resp_.carton[1][0].lab_estandar[1]
+                this.b1[1] = resp_.carton[1][0].lab_estandar[2]
+                this.l1[4] = resp_.carton[1][0].lab_muestra[0]
+                this.a1[4] = resp_.carton[1][0].lab_muestra[1]
+                this.b1[4] = resp_.carton[1][0].lab_muestra[2]
+                this.l1[7] = resp_.carton[1][0].lab_muestra[3]
+                this.a1[7] = resp_.carton[1][0].lab_muestra[4]
+                this.b1[7] = resp_.carton[1][0].lab_muestra[5]
+                this.d1[1] = resp_.carton[1][0].lab_muestra[6]
+
+                this.l1[2] = resp_.carton[2][0].lab_estandar[0]
+                this.a1[2] = resp_.carton[2][0].lab_estandar[1]
+                this.b1[2] = resp_.carton[2][0].lab_estandar[2]
+                this.l1[5] = resp_.carton[2][0].lab_muestra[0]
+                this.a1[5] = resp_.carton[2][0].lab_muestra[1]
+                this.b1[5] = resp_.carton[2][0].lab_muestra[2]
+                this.l1[8] = resp_.carton[2][0].lab_muestra[3]
+                this.a1[8] = resp_.carton[2][0].lab_muestra[4]
+                this.b1[8] = resp_.carton[2][0].lab_muestra[5]
+                this.d1[2] = resp_.carton[2][0].lab_muestra[6]
+
+                this.move()
+
+                this.l2[0] = resp_.papel[0][0].lab_estandar[0]
+                this.a2[0] = resp_.papel[0][0].lab_estandar[1]
+                this.b2[0] = resp_.papel[0][0].lab_estandar[2]
+                this.l2[3] = resp_.papel[0][0].lab_muestra[0]
+                this.a2[3] = resp_.papel[0][0].lab_muestra[1]
+                this.b2[3] = resp_.papel[0][0].lab_muestra[2]
+                this.l2[6] = resp_.papel[0][0].lab_muestra[3]
+                this.a2[6] = resp_.papel[0][0].lab_muestra[4]
+                this.b2[6] = resp_.papel[0][0].lab_muestra[5]
+                this.d1[3] = resp_.papel[0][0].lab_muestra[6]
+
+                this.l2[1] = resp_.papel[1][0].lab_estandar[0]
+                this.a2[1] = resp_.papel[1][0].lab_estandar[1]
+                this.b2[1] = resp_.papel[1][0].lab_estandar[2]
+                this.l2[4] = resp_.papel[1][0].lab_muestra[0]
+                this.a2[4] = resp_.papel[1][0].lab_muestra[1]
+                this.b2[4] = resp_.papel[1][0].lab_muestra[2]
+                this.l2[7] = resp_.papel[1][0].lab_muestra[3]
+                this.a2[7] = resp_.papel[1][0].lab_muestra[4]
+                this.b2[7] = resp_.papel[1][0].lab_muestra[5]
+                this.d1[4] = resp_.papel[1][0].lab_muestra[6]
+
+                this.l2[2] = resp_.papel[2][0].lab_estandar[0]
+                this.a2[2] = resp_.papel[2][0].lab_estandar[1]
+                this.b2[2] = resp_.papel[2][0].lab_estandar[2]
+                this.l2[5] = resp_.papel[2][0].lab_muestra[0]
+                this.a2[5] = resp_.papel[2][0].lab_muestra[1]
+                this.b2[5] = resp_.papel[2][0].lab_muestra[2]
+                this.l2[8] = resp_.papel[2][0].lab_muestra[3]
+                this.a2[8] = resp_.papel[2][0].lab_muestra[4]
+                this.b2[8] = resp_.papel[2][0].lab_muestra[5]
+                this.d1[5] = resp_.papel[2][0].lab_muestra[6]
+
+                this.move2()
+
+                this.l3[0] = resp_.prueba[0][0].lab[0]
+                this.a3[0] = resp_.prueba[0][0].lab[1]
+                this.b3[0] = resp_.prueba[0][0].lab[2]
+
+                this.l3[1] = resp_.prueba[1][0].lab[0]
+                this.a3[1] = resp_.prueba[1][0].lab[1]
+                this.b3[1] = resp_.prueba[1][0].lab[2]
+                
+                this.l3[2] = resp_.prueba[2][0].lab[0]
+                this.a3[2] = resp_.prueba[2][0].lab[1]
+                this.b3[2] = resp_.prueba[2][0].lab[2]
+
+                this.usuario_ = resp_.guardado
+                this.dia = resp_.dia
+                this.move3()
+                
+                if(resp_.img){
+                  this.img = resp_.img
+                  document.getElementsByClassName('file-name')[0].innerHTML = 'Se cargó archivo DrawDown';
+                }
+                this.Observacion_ = resp_.observaciones
+
+                this._tipo_ = resp_.tipo
+              }
+            })
   }
 
 
@@ -1261,7 +1446,93 @@ export class AnalisisTintaComponent implements OnInit {
     }
 
     GenerarCertificado()
-    this.getLote(analisis.lote)
+    this._BuscarLote(this.Actual)
+    this.QuitarDeObservacion(Resultado)
+    Resultado
+
+  }
+
+  PreFinalizacion(){
+    Swal.fire({
+      icon:'info',
+      title:'Notificación de resultados',
+      text:'Se realizará la notificación de los resultados obtenidos de este análisis',
+      showDenyButton: true,
+      showCancelButton:true,
+      confirmButtonText:'Confirmar',
+      denyButtonText:'Añadir a producción',
+      cancelButtonText:'Cancelar',
+      denyButtonColor:'#3e8ed0',
+      confirmButtonColor:'#48c78e',
+      cancelButtonColor:'#f14668',
+      allowOutsideClick: false
+    }).then((result)=>{
+      if (result.isConfirmed) {
+        this.GenerarPDF()
+        let data = {
+          resultado:this.Resultado,
+          correos:'calcurianandres@gmail.com',
+          observacion:this.Observacion_,
+          lote:this.Lote_,
+          tabla:`
+          <tr>
+            <td>${this.material[0].material.nombre} (${this.material[0].material.marca})</td>
+            <td>${this.Lote_}</td>
+            <td>${this.totales.total}</td>
+            <td>${this.Resultado}</td>
+          </tr>
+          `
+        }
+
+        this.api.enviarNotificacion(data)
+          .subscribe((resp:any)=>{
+            console.log('correo enviado')
+          })
+
+      } else if (result.isDenied) {
+        this.GenerarPDF()
+        let data = {
+          resultado:this.Resultado,
+          correos:'calcurianandres@gmail.com,zuleima.vela@poligraficaindustrial.com',
+          observacion:this.Observacion_,
+          lote:this.Lote_,
+          tabla:`
+          <tr>
+            <td>${this.material[0].material.nombre} (${this.material[0].material.marca})</td>
+            <td>${this.Lote_}</td>
+            <td>${this.totales.total}</td>
+            <td>${this.Resultado}</td>
+          </tr>
+          `
+        }
+
+        this.api.enviarNotificacion(data)
+          .subscribe((resp:any)=>{
+            console.log('correo enviado')
+          })
+      }
+    })
+  }
+
+  QuitarDeObservacion(Resultado){
+
+    for(let i=0;i<this.FacturaSelected.totales.length;i++){
+      if(this.FacturaSelected.totales[i].lote === this.Lote_){
+        this.FacturaSelected.totales[i].resultado = Resultado
+        
+      }
+      
+      if(i === this.FacturaSelected.totales.length -1){
+        
+        this.api.putFacturacion(this.FacturaSelected._id, this.FacturaSelected)
+          .subscribe((resp:any)=>{
+           this.api.FinalizarFacturacion(this.FacturaSelected._id)
+            .subscribe((resp:any)=>{
+              console.log(resp)
+            })
+          })
+      }
+    }
   }
 
   papel_muestra(e){
@@ -1384,6 +1655,7 @@ export class AnalisisTintaComponent implements OnInit {
           }else{
             this.api.getAnalisisTinta(lote)
             .subscribe((resp_:any)=>{
+              console.log(resp_)
               if(resp_.empty){
                 for(let i=0;i<resp.length;i++){
                   let presentacion = this.cantidad.findIndex(x=> x.presentacion === resp[i].material.presentacion && x.neto === resp[i].cantidad)

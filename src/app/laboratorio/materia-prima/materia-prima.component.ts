@@ -216,26 +216,46 @@ export class MateriaPrimaComponent implements OnInit {
 
   }
 
-  borrar_provedor(i){
-    this.proveedores__.splice(i,1)
-    this.proveedores_.splice(i,1)
+  public cuidad
+  origenes__(e){
+    this.cuidad = e;
+    this.InventarioForm.get('marca').setValue(`${this.proveedor} (${this.cuidad})`);
+    console.log(this.cuidad)
   }
+  
+  public exist_origenes = false;;
+  public origenes;
+  public proveedor;
   
   addProveedor(e){
     
     let one = this.proveedores.filter(x=>x._id === e)
-    let existe = this.proveedores__.find(x=>x === one[0].nombre)
-
-
-    if(!existe){
-      this.proveedores__.push(one[0].nombre)
-      this.proveedores_.push(one[0]._id)
-      console.log(this.proveedores__)
+    console.log(one[0].origenes)
+    if(one[0].origenes.length >0 && this.New_Sustrato){
+      this.exist_origenes = true;
+      this.origenes = one[0].origenes
+    }else{
+      this.exist_origenes = false;
     }
+
+    this.proveedor = one[0].alias
+    this.proveedores__.push(one[0].nombre)
+    this.proveedores_.push(one[0]._id)
+
+    if(!this.exist_origenes){
+      this.InventarioForm.get('marca').setValue(this.proveedor);
+    }
+
+    console.log(this.proveedores__)
     
   }
 
   Almacenar(){
+
+    this.cuidad = null;
+    this.exist_origenes = false;;
+    this.origenes = null;
+    this.proveedor = [];
 
     let grupo;
 

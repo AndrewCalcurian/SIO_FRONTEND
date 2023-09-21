@@ -21,6 +21,14 @@ export class FabricantesComponent implements OnInit {
   public proveedores = []
   public filas;
 
+  public contacto_n
+  public contacto_e
+  public contacto_t
+  public contacto = []
+
+  public Direccion_proveedor
+  public Rif_proveedor
+
   constructor(private api:RestApiService,
               private fb:FormBuilder,
               private subirArchivo:SubirArchivosService) { }
@@ -33,6 +41,7 @@ export class FabricantesComponent implements OnInit {
 
   FabricacionForm:FormGroup = this.fb.group({
     nombre:['', Validators.required],
+    alias:['', Validators.required],
     pais:[''],
     ciudad:[''],
     grupo:['', Validators.required],
@@ -41,6 +50,7 @@ export class FabricantesComponent implements OnInit {
 
   Edicion:FormGroup = this.fb.group({
     nombre:['', Validators.required],
+    alias:['', Validators.required],
     pais:[''],
     ciudad:[''],
     grupo:['', Validators.required],
@@ -56,7 +66,16 @@ export class FabricantesComponent implements OnInit {
     })
   }
 
+  AgregarContacto(){
+    this.contacto.push({nombre:this.contacto_n, email:this.contacto_e, telefono:this.contacto_t})
+    this.contacto_n = ''
+    this.contacto_e = ''
+    this.contacto_t = ''
+    console.log( this.contacto)
+  }
+
   NewFabricacion(){
+    
     if(this.FabricacionForm.invalid){
       Swal.fire({
         title:'Debes llenar los campos obligatorios',
@@ -73,8 +92,38 @@ export class FabricantesComponent implements OnInit {
 
     let data = {
       nombre:this.FabricacionForm.get('nombre').value,
+      alias:this.FabricacionForm.get('alias').value,
       origenes:this.Origenes,
       grupo:this.Grupos_,
+    }
+
+    if(this.proveedor){
+      let info = {
+        nombre:this.FabricacionForm.get('nombre').value,
+        direccion:this.Direccion_proveedor,
+        rif:this.Rif_proveedor,
+        grupo:this.Grupos_,
+        contactos:this.contacto,
+        fabricantes:this.FabricacionForm.get('nombre').value,
+      }
+
+      this.api.postProveedor(info)
+        .subscribe((resp:any)=>{
+          this.subirArchivo.actualizarFoto(this.ImgSubir,'proveedor',resp._id)
+        .then(logo => {
+          this.ImgSubir = null;
+          if(logo){
+          document.getElementsByClassName('file-name')[0].innerHTML = 'Sin archivo...';
+          console.log('img',logo)
+        }
+        });
+        })
+
+    }
+
+    if(this.proveedor){
+      (<HTMLInputElement>document.getElementById('dp')).checked = false;
+        this.proveedor_()
     }
 
     this.api.postFabricantes(data)
@@ -110,7 +159,9 @@ export class FabricantesComponent implements OnInit {
 
   nuevoFabricante_(){
     if(this.NuevoFabricante){
-      this.NuevoFabricante = false
+      this.NuevoFabricante = false;
+      (<HTMLInputElement>document.getElementById('dp')).checked = false;
+      this.proveedor_()
     }else{
       this.NuevoFabricante = true
       this.Grupos_ = []
@@ -124,6 +175,7 @@ export class FabricantesComponent implements OnInit {
       this.internacional = false
     }
   }
+
 
   CambiarImagen( event:any ){
     this.ImgSubir = (event.target).files[0];
@@ -246,6 +298,7 @@ export class FabricantesComponent implements OnInit {
   EdicionFabricacion(){
     let data = {
       nombre:this.Edicion.get('nombre').value,
+      alias:this.Edicion.get('alias').value,
       origenes:this.Origenes,
       grupo:this.Grupos_
     }

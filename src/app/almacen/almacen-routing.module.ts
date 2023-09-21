@@ -5,6 +5,8 @@ import { AlmacenComponent } from './almacen.component';
 import { MainComponent } from './main/main.component';
 import { ReportesComponent } from './reportes/reportes.component';
 import { RecepcionComponent } from './recepcion/recepcion.component';
+import { IndexComponent } from './index/index.component';
+import { InventarioComponent } from './inventario/inventario.component';
 
 const routes: Routes =[
   {
@@ -13,7 +15,7 @@ const routes: Routes =[
     children:[
       {
         path:'',
-        component:MainComponent
+        component:IndexComponent
       },
       {
         path:'reportes',
@@ -22,6 +24,14 @@ const routes: Routes =[
       {
         path:'recepcion',
         component:RecepcionComponent
+      },
+      {
+        path:'almacen',
+        component:MainComponent
+      },
+      {
+        path:'inventario',
+        component:InventarioComponent
       }
     ]
 }]
