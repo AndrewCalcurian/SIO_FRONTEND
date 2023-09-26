@@ -1,0 +1,127 @@
+<div class="modal is-active">
+    <div class="modal-background"></div>
+    <div class="modal-card">
+        <div class="modal-card-body">
+            <ng-container *ngFor="let orden of ordenes;index as i">
+                <span class="grupos">
+                    OP: {{orden.sort}} - {{orden.producto.producto}}
+                </span>
+                <br>
+                <span>
+                    <ng-container *ngIf="orden.motivo">
+                        motivo / Observación
+                    </ng-container>
+                    <ng-container *ngIf="!orden.motivo">
+                        <span><i class="far fa-folder-open"></i></span> Nueva Orden de producción
+                    </ng-container>
+                </span>
+                <br> <br>
+                <table class="table is-fullwidth">
+                    <tr>
+                        <th>Material</th>
+                        <th>Solicitado</th>
+                        <th>Acción</th>
+                    </tr>
+                    <tr *ngFor="let materiales of orden.producto.materiales[orden.montaje];index as n;">
+                        <td>{{materiales.producto.nombre}}
+                            <ng-container *ngIf="materiales.producto.ancho">
+                                {{materiales.producto.gramaje}}g Cal:{{materiales.producto.calibre}} {{materiales.producto.ancho}}x{{materiales.producto.largo}} 
+                            </ng-container>
+                            ({{materiales.producto.marca}})</td>
+                        <td>
+                            <ng-container *ngIf="materiales.producto.grupo.nombre == 'Tinta'">
+                                {{((materiales.cantidad * orden.paginas)/1000).toFixed(2)}} {{materiales.producto.unidad}}
+                            </ng-container>
+                            <ng-container *ngIf="materiales.producto.grupo.nombre == 'Sustrato'">
+                                {{Enterar(orden.paginas)}} {{materiales.producto.unidad}}
+                            </ng-container>
+                            <ng-container *ngIf="materiales.producto.grupo.nombre == 'Cajas Corrugadas'">
+                                <ng-container *ngIf="orden.motivo">
+                                    {{materiales.cantidad}} {{materiales.producto.unidad}}
+                                </ng-container>
+                                <ng-container *ngIf="!orden.motivo">
+                                    {{entero(orden.cantidad,materiales.cantidad)}} {{materiales.producto.unidad}}
+                                </ng-container>
+                            
+                            </ng-container>
+                        </td>
+                        <td><i class="fas fa-plus-circle curs" (click)="asignar(i,n)"></i></td>
+                    </tr>
+                </table>
+                <hr>
+                <button class="button is-success">
+                    <span class="icon">
+                        <i class="fas fa-pallet"></i>
+                    </span>
+                    <span>
+                        Asignar material
+                    </span>
+                </button> 
+                <button class="button is-danger">
+                    <span class="icon">
+                        <i class="fas fa-times"></i>
+                    </span>
+                    <span>
+                        Cancelar
+                    </span>
+                </button>
+                <br><br>
+            </ng-container>
+        </div>
+    </div>
+</div>
+
+
+<div class="modal" [ngClass]="{'is-active':Asignar}">
+    <div class="modal-background"></div>
+    <div class="modal-card">
+        <div class="modal-card-body">
+            <span class="loading" *ngIf="loading_">
+                <ng-container class="spin">
+                    <div class="spinner"></div> Buscando en el almacén...
+                </ng-container>
+            </span>
+            <br>
+            <ng-container *ngIf="!loading_">
+                <span class="info">
+                    <b>Material asignado: </b> <br><span class="italic_">{{sumando}}Kg/</span><span class="bold-italic">{{Total}}Kg</span>    <span class="check_" *ngIf="sumando>=Total"><i class="fas fa-check"></i></span>
+                </span>
+                <hr>
+                <table class="table is-fullwidth">
+                    <tr>
+                        <th>Asignar</th>
+                        <th>Nombre del material</th>
+                        <th>Lote</th>
+                        <th>Codigo</th>
+                        <th>Cantidad</th>
+                        <th>Restante</th>
+                    </tr>
+                    <tr *ngFor="let lotes of Lotes_encontrados;index as i">
+                        <td><input type="checkbox" name="" id="{{i}}" (click)="seleccionar(i)"></td>
+                        <td>{{lotes.material.nombre}} ({{lotes.material.marca}})</td>
+                        <td>{{lotes.lote}}</td>
+                        <td>{{lotes.codigo}}</td>
+                        <td>{{lotes.cantidad}}{{lotes.material.unidad}}</td>
+                        <td>
+                            <ng-container *ngIf="!restante[i]">
+                                {{lotes.cantidad}}{{lotes.material.unidad}}
+                            </ng-container>
+                            <ng-container *ngIf="restante[i]">
+                                {{restante[i]}}{{lotes.material.unidad}}
+                            </ng-container>
+                        </td>
+                    </tr>
+                </table>
+                <hr>
+                <button class="button is-info"  *ngIf="sumando>=Total">
+                    <span class="icon"><i class="fas fa-plus"></i></span>
+                    <span>Asignar lotes</span>
+                </button> 
+                <button class="button is-danger" (click)="asignar()">
+                    <span class="icon"><i class="fas fa-times"></i></span>
+                    <span>Cancelar</span>
+                </button> 
+            </ng-container>
+        </div>
+    </div>
+</div>

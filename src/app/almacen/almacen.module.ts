@@ -10,12 +10,13 @@ import { RecepcionComponent } from './recepcion/recepcion.component';
 import { IndexComponent } from './index/index.component';
 import { RouterModule } from '@angular/router';
 import { InventarioComponent } from './inventario/inventario.component';
+import { AsignacionNewComponent } from './asignacion-new/asignacion-new.component';
 
 
 
 
 @NgModule({
-  declarations: [MainComponent, ConfirmacionComponent, AsignacionComponent, ReportesComponent, RecepcionComponent, IndexComponent, InventarioComponent],
+  declarations: [MainComponent, ConfirmacionComponent, AsignacionComponent, ReportesComponent, RecepcionComponent, IndexComponent, InventarioComponent, AsignacionNewComponent],
   imports: [
     CommonModule,
     AlmacenRoutingModule,

@@ -7,6 +7,7 @@ import { ReportesComponent } from './reportes/reportes.component';
 import { RecepcionComponent } from './recepcion/recepcion.component';
 import { IndexComponent } from './index/index.component';
 import { InventarioComponent } from './inventario/inventario.component';
+import { AsignacionNewComponent } from './asignacion-new/asignacion-new.component';
 
 const routes: Routes =[
   {
@@ -32,6 +33,10 @@ const routes: Routes =[
       {
         path:'inventario',
         component:InventarioComponent
+      },
+      {
+        path:'asignacion',
+        component:AsignacionNewComponent
       }
     ]
 }]

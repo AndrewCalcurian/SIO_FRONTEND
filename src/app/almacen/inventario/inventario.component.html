@@ -1,5 +1,14 @@
 <div class="card mt-5">
     <div class="card-content">
+
+        <div class="select">
+            <select>
+                <option value="">Materiales Registrados</option>
+                <option value="">Almacén</option>
+            </select>
+        </div>
+
+        <hr>
         <span *ngFor="let grupo of SECCIONES">
             <span class="grupos" (click)="MostrarInfo(grupo.nombre)">
                 <div class="columns"></div>

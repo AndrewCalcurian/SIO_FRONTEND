@@ -838,4 +838,17 @@ export class RestApiService {
   }
 
 
+
+  GETORDENESPECIFICA(){
+    const url = `${this.api_url}/orden-especifica`
+    return this.http.get(url)
+  }
+
+  BUSCARENALMACENPRODUCTO(parametro){
+    const url = `${this.api_url}/buscar-en-almacen`
+    return this.http.post(url,parametro)
+    
+  }
+
+
 }
