@@ -850,5 +850,20 @@ export class RestApiService {
     
   }
 
+  GETALLALMACEN(){
+    const url = `${this.api_url}/buscar-por-nombre`
+    return this.http.get(url)
+  }
+
+  BUSCARCINTA(){
+    const url = `${this.api_url}/buscar-cinta`
+    return this.http.get(url)
+  }
+
+  DESCONTARLOTE(data){
+    const url = `${this.api_url}/descontar`
+    return this.http.post(url,data)
+  }
+
 
 }

@@ -251,7 +251,9 @@
                         <td>1</td>
                         <td>{{puntoYcoma(Escala.cantidad)}} <a (click)="modificarModal('escala')"><i class="fas fa-edit" style="color: #48c78e;"></i></a></td>
                         <td>{{puntoYcoma(Escala.precio)}} <a (click)="modificarModal('precio')"><i class="fas fa-edit" style="color: #48c78e;"></i></a></td>
-                        <td>{{Tasa}} <a href="https://www.bcv.org.ve/" target="_blank" (click)="habilitarBoton()"><i class="fas fa-globe"></i></a></td>
+                        <td>
+                            <input type="text" class="input is-small short___" [(ngModel)]="Tasa">
+                            {{Tasa}} <a href="https://www.bcv.org.ve/" target="_blank" (click)="habilitarBoton()"><i class="fas fa-globe"></i></a></td>
                         <td>
                             <button class="button is-small is-info" [disabled]="resumen" (click)="resumir()">
                                 <div class="icon">

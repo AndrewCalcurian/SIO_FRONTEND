@@ -32,7 +32,7 @@ export class PreFacturacionComponent implements OnInit {
     this.api.getDespachosYOrdenes()
       .subscribe((resp:any)=>{
         this.Despachos = resp.preFacuracion
-        console.log(this.Despachos,'AQUIIIIIIIIIIIIIIIII')
+        console.log(resp, 'TASAA')
         this.Tasa = resp.MonitorBCV
         // let split_dolar = resp.MonitorBCV.split(' ')
         // this.Tasa = Number(split_dolar[1])
