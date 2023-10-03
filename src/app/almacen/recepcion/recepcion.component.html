@@ -80,7 +80,7 @@
                         <span class="tag is-info is-medium etiqueta" *ngIf="Pedido.status === 'Notificado'">Notificado</span> 
                         <span class="tag is-warning is-medium etiqueta" *ngIf="Pedido.status === 'En Observacion'">En Observación</span> 
                         <button class="button is-small is-outlined" (click)="Notificar(Pedido._id)"  *ngIf="Pedido.status === 'Por notificar'">
-                            <span class="icon"><i class="fas fa-bell"></i></span>
+                            <span class="icon"><i class="fas fa-bell"></i></span> 
                         </button>
                         <button class="button is-small is-outlined" (click)="Alert_(Pedido._id)"  *ngIf="Pedido.status === 'Notificado' ">
                             <i class="far fa-check-circle"></i>
@@ -289,21 +289,47 @@
                 </div>
             </div>
 
-            <div class="field" *ngIf="Materia_prima_filtered.length > 0">
-                <label for="" class="label">Materia prima</label>
-                <div class="control">
-                    <div class="select is-small">
-                        <select (change)="Selected_Materia($event.target.value)">
-                            <option value="#">Materia Prima</option>
-                            <option value="{{Materia._id}}" *ngFor="let Materia of Materia_prima_filtered">{{Materia.nombre}} ({{Materia.marca}}) {{Materia.presentacion}} {{Materia.neto}}{{Materia.unidad}}</option>
-                        </select>
+            <div class="columns">
+                <div class="column">
+                    <div class="field" *ngIf="Materia_prima_filtered.length > 0">
+                        <label for="" class="label">Materia prima</label>
+                        <div class="control">
+                            <div class="select is-small">
+                                <select (change)="Selected_Materia($event.target.value)">
+                                    <option value="#">Materia Prima</option>
+                                    <option value="{{Materia._id}}" *ngFor="let Materia of Materia_prima_filtered">{{Materia.nombre}} ({{Materia.marca}}) {{Materia.presentacion}} {{Materia.neto}}{{Materia.unidad}}</option>
+                                </select>
+                            </div>
+                        </div>
                     </div>
+                </div>
+                <div class="column" *ngIf="cantidades">
+                    <div class="field">
+                        <label for="" class="label">Presentación</label>
+                        <input type="text" class="input is-small" placeholder="Presentación" [(ngModel)]="presentacion">
+                    </div>
+                </div>
+                <div class="column" *ngIf="presentacion">
+                    <div class="field has-addons">
+                        <p class="control">
+                          <span class="select">
+                            <select [(ngModel)]="u_medicion">
+                              <option value="Kg">Kg.</option>
+                              <option value="Und">Und.</option>
+                              <option value="L">L.</option>
+                            </select>
+                          </span>
+                        </p>
+                        <p class="control">
+                          <input class="input" type="text" placeholder="Neto" [(ngModel)]="cantidad___">
+                        </p>
+                      </div>
                 </div>
             </div>
 
-            <hr *ngIf="cantidades">
+            <hr *ngIf="cantidad___">
 
-            <div class="columns" *ngIf="cantidades">
+            <div class="columns" *ngIf="cantidad___">
                 <div class="column">
                     <div class="field">
                         <label for="" class="label">N° Lote</label>

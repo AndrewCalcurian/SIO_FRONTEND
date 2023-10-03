@@ -250,6 +250,17 @@ export class MateriaPrimaComponent implements OnInit {
     
   }
 
+  define_color(e){
+    if(e != 'Pantone'){
+      this.InventarioForm.get('color').setValue(e);
+      (<HTMLInputElement>document.getElementById('color')).value = e;
+    }else{
+      (<HTMLInputElement>document.getElementById('color')).value = '';
+      (<HTMLInputElement>document.getElementById('color')).disabled = false;
+    }
+  }
+
+
   Almacenar(){
 
     this.cuidad = null;

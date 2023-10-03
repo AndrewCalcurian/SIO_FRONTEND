@@ -218,6 +218,7 @@ export class MainComponent implements OnInit {
 
   cerrarAsignacion(){
     this.asignacion_ = false
+    this.buscarPendientes()
     this.getOrdenes();
   }
 

@@ -662,14 +662,15 @@
                                 <i class="fas fa-eye" (click)="modal_tintas(tinta._id)"></i>
                                 <!-- </ng-container> -->
                             </ng-container>
-                             <button class="button is-small is-info" *ngIf="tinta.color != 'Negro' && tinta.color != 'Amarillo' && tinta.color != 'Cyan' && tinta.color != 'Magenta' " (click)="modal_tintas_(tinta._id)">
+                            <i class="fas fa-eye" (click)="modal_tintas(tinta._id)"></i>
+                            <!--  <button class="button is-small is-info" *ngIf="tinta.color != 'Negro' && tinta.color != 'Amarillo' && tinta.color != 'Cyan' && tinta.color != 'Magenta' " (click)="modal_tintas_(tinta._id)">
                                 <span class="icon">
                                     <i class="fas fa-eye-dropper"></i>
                                 </span>
                                 <span>
                                     Preparación
                                 </span>
-                            </button>
+                            </button> -->
                         </td>
                     </tr>
                 </ng-container>

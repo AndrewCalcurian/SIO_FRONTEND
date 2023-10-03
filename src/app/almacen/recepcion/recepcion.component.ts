@@ -36,6 +36,9 @@ export class RecepcionComponent implements OnInit {
   public Lote = ''
   public F_fabricacion
   public codigo = ''
+  public presentacion = ''
+  public cantidad___ = ''
+  public u_medicion = ''
 
   public cantidades:boolean = false
 
@@ -126,25 +129,48 @@ export class RecepcionComponent implements OnInit {
 
   }
 
+
   Notificar(id){
 
-    console.log(id)
-
-    this.api.sendNotificacion(id)
-      .subscribe((resp:any)=>{
-        console.log(resp)
-        this.BuscarFacturas();
+    Swal.fire({
+      title:'¿Notificar recepción?',
+      text:'¿Quieres notificar la recepción de este material al equipo de calidad?',
+      showCancelButton:false,
+      showDenyButton:true,
+      denyButtonText:'Cancelar',
+      denyButtonColor:'#f14668',
+      confirmButtonColor:'#48c78e',
+      confirmButtonText:'Notificar',
+      icon:'question'
+    }).then((result) => {
+      /* Read more about isConfirmed, isDenied below */
+      if (result.isConfirmed) {
+        this.api.sendNotificacion(id)
+          .subscribe((resp:any)=>{
+          this.BuscarFacturas();
+          Swal.fire({
+            title:'Se ha enviado la notificación',
+            text:'La notificación del material fue enviada para su revisión',
+            icon:'success',
+            timer:5000,
+            timerProgressBar:true,
+            position:'top-end',
+            toast:true,
+            showConfirmButton:false
+          })
+        })
+      } else if (result.isDenied) {
         Swal.fire({
-          title:'Se ha enviado la notificación',
-          text:'La notificación del material fue enviada para su revisión',
-          icon:'success',
+          title:'Cancelado',
+          icon:'info',
           timer:5000,
           timerProgressBar:true,
-          position:'top-end',
+          showConfirmButton:false,
           toast:true,
-          showConfirmButton:false
+          position:'top-end'
         })
-      })
+      }
+    })
   }
 
   abrirDetalles_(i,n, producto, marca){

@@ -47,6 +47,9 @@
                                         <ng-container *ngIf="materiales.producto.grupo.nombre == 'Sustrato'">
                                             {{Enterar(orden.paginas)}} {{materiales.producto.unidad}}
                                         </ng-container>
+                                        <ng-container *ngIf="materiales.producto.grupo.nombre == 'Soportes de Embalaje'">
+                                            {{cantidad_cajas*materiales.cantidad}} {{materiales.producto.unidad}}
+                                        </ng-container>
                                         <ng-container *ngIf="materiales.producto.grupo.nombre == 'Cajas Corrugadas'">
                                             <ng-container *ngIf="orden.motivo">
                                                 {{materiales.cantidad}} {{materiales.producto.unidad}}
@@ -67,7 +70,7 @@
                         <td><i class="fas fa-plus-circle curs" (click)="asignar(i,n)"></i></td>
                     </tr>
                     <tr *ngIf="!orden.motivo && cantidad_cinta">
-                        <td>Cinta de embalaje 3430 (Rela) {{orden.producto.materiales[orden.montaje].length}}</td>
+                        <td>Cinta de embalaje 3430 (Rela)</td>
                         <td>
                             <div class="columns">
                                 <div class="column is-5">
@@ -82,7 +85,7 @@
                     </tr>
                 </table>
                 <hr>
-                <button class="button is-success" *ngIf="this.material_cubierto > orden.producto.materiales[orden.montaje].length" (click)="Finalizar()">
+                <button class="button is-success" *ngIf="this.material_cubierto >= orden.producto.materiales[orden.montaje].length" (click)="Finalizar()">
                     <span class="icon">
                         <i class="fas fa-pallet"></i>
                     </span>
