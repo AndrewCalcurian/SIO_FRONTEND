@@ -1,7 +1,12 @@
-<div class="modal is-active">
+<div class="modal" [ngClass]="{'is-active':asignacion_}">
     <div class="modal-background"></div>
     <div class="modal-card">
         <div class="modal-card-body">
+            <span class="loading" *ngIf="ordenes.length < 1">
+                <ng-container class="spin">
+                    <div class="spinner"></div> Buscando ordenes por asignar...
+                </ng-container>
+            </span>
             <ng-container *ngFor="let orden of ordenes;index as i">
                 <span class="grupos">
                     OP: {{orden.sort}} - {{orden.producto.producto}}
@@ -9,7 +14,7 @@
                 <br>
                 <span>
                     <ng-container *ngIf="orden.motivo">
-                        motivo / Observación
+                        <span><i class="fas fa-clipboard"></i></span> {{orden.motivo}}
                     </ng-container>
                     <ng-container *ngIf="!orden.motivo">
                         <span><i class="far fa-folder-open"></i></span> Nueva Orden de producción
@@ -31,21 +36,28 @@
                         <td>
                             <div class="columns">
                                 <div class="column is-5">
-                                    <ng-container *ngIf="materiales.producto.grupo.nombre == 'Tinta'">
-                                        {{((materiales.cantidad * orden.paginas)/1000).toFixed(2)}} {{materiales.producto.unidad}}
+
+                                    <ng-container *ngIf="orden.motivo">
+                                        {{materiales.cantidad}} {{materiales.producto.unidad}}
                                     </ng-container>
-                                    <ng-container *ngIf="materiales.producto.grupo.nombre == 'Sustrato'">
-                                        {{Enterar(orden.paginas)}} {{materiales.producto.unidad}}
-                                    </ng-container>
-                                    <ng-container *ngIf="materiales.producto.grupo.nombre == 'Cajas Corrugadas'">
-                                        <ng-container *ngIf="orden.motivo">
-                                            {{materiales.cantidad}} {{materiales.producto.unidad}}
+                                    <ng-container *ngIf="!orden.motivo">
+                                        <ng-container *ngIf="materiales.producto.grupo.nombre == 'Tinta'">
+                                            {{((materiales.cantidad * orden.paginas)/1000).toFixed(2)}} {{materiales.producto.unidad}}
                                         </ng-container>
-                                        <ng-container *ngIf="!orden.motivo">
-                                            {{entero(orden.cantidad,materiales.cantidad)}} {{materiales.producto.unidad}}
+                                        <ng-container *ngIf="materiales.producto.grupo.nombre == 'Sustrato'">
+                                            {{Enterar(orden.paginas)}} {{materiales.producto.unidad}}
                                         </ng-container>
-                                    
+                                        <ng-container *ngIf="materiales.producto.grupo.nombre == 'Cajas Corrugadas'">
+                                            <ng-container *ngIf="orden.motivo">
+                                                {{materiales.cantidad}} {{materiales.producto.unidad}}
+                                            </ng-container>
+                                            <ng-container *ngIf="!orden.motivo">
+                                                {{entero(orden.cantidad,materiales.cantidad)}} {{materiales.producto.unidad}}
+                                            </ng-container>
+                                        
+                                        </ng-container>
                                     </ng-container>
+
                                 </div>
                                 <div class="column">
                                     <span class="check__" id="{{i}}_{{n}}" style="display: none;"><i class="fas fa-check"></i></span>
@@ -78,7 +90,7 @@
                         Asignar material
                     </span>
                 </button> 
-                <button class="button is-danger">
+                <button class="button is-danger" (click)="cerrarModal()">
                     <span class="icon">
                         <i class="fas fa-times"></i>
                     </span>

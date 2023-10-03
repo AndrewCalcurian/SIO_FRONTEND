@@ -102,6 +102,12 @@
         (onReset)="buscarPendientes()">
         </app-confirmacion>
 
+        <app-asignacion-new
+        [asignacion_]="asignacion_"
+        [necesario]="necesario"
+        (onCloseModal)="cerrarAsignacion()">
+        </app-asignacion-new>
+
         <div class="modal" [ngClass]="{'is-active':Dev_}">
             <div class="modal-background" (click)="Modal_Devolucion()"></div>
             <div class="modal-card">

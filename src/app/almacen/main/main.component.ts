@@ -103,6 +103,8 @@ export class MainComponent implements OnInit {
   asignacion:boolean = false;
   confirmacion:boolean = false;
 
+  public asignacion_:boolean = false
+
 
 
   public _Almacenado:boolean = true;
@@ -212,6 +214,11 @@ export class MainComponent implements OnInit {
       this.listFiltered = this.Almacenado
         .filter(item => item.material.nombre.toLowerCase().indexOf(term.toLowerCase()) >= 0);
     });
+  }
+
+  cerrarAsignacion(){
+    this.asignacion_ = false
+    this.getOrdenes();
   }
 
   CancelarDevolucion(id){
@@ -369,10 +376,12 @@ export class MainComponent implements OnInit {
   }
 
   modal_asignacion(){
-    if(this.asignacion){
-      this.asignacion = false
-    }else{
-      this.asignacion = true
+    if(this.necesario.length > 0){
+      if(this.asignacion_){
+        this.asignacion_ = false
+      }else{
+        this.asignacion_ = true
+      }
     }
   }
 

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { RestApiService } from 'src/app/services/rest-api.service';
 import Swal from 'sweetalert2';
 
@@ -9,10 +9,16 @@ import Swal from 'sweetalert2';
 })
 export class AsignacionNewComponent implements OnInit {
 
+
+  @Input() asignacion_:any
+  @Input() necesario:any
+  @Output() onCloseModal = new EventEmitter();
+
   constructor(private api:RestApiService) { }
 
   ngOnInit(): void {
-    this. BuscarUnaOrden();
+    this.BuscarUnaOrden();
+    this.buscarRequisicion();
   }
 
   public Asignar:boolean = false;
@@ -33,6 +39,19 @@ export class AsignacionNewComponent implements OnInit {
 
   public trabajando = []
   public cantidad_cinta
+
+  buscarRequisicion(){
+    this.api.getRequi()
+    .subscribe((resp:any)=>{
+      console.log(resp)
+      for(let i =0; i<resp.length;i++){
+        this.ordenes.push(resp[i])
+        // console.log(this.Almacenado, 'almacenado')
+      }
+      // this.onAgregarRequisicioes.emit(resp)
+    })
+  }
+
   asignar(i,n){
     this.trabajando = [i,n];
     console.log(i,n)
@@ -47,12 +66,15 @@ export class AsignacionNewComponent implements OnInit {
       }
       if(material.producto.grupo.nombre === 'Sustrato'){
         this.Total = (this.ordenes[i].paginas).toFixed(2)
-        this.Total = this.Total * 0;
         parametro = {material:material.producto._id, cantidad:{$gt:0}}
       }
       if(material.producto.grupo.nombre === 'Cajas Corrugadas'){
         this.Total = Math.ceil(this.ordenes[i].cantidad / material.cantidad)
         parametro = {material:material.producto._id, cantidad:{$gt:0}}
+      }
+
+      if(this.ordenes[i].motivo){
+        this.Total = material.cantidad
       }
 
       if(material.producto.grupo.nombre === 'Barniz' || material.producto.grupo.nombre === 'Cajas Corrugadas')
@@ -163,7 +185,8 @@ export class AsignacionNewComponent implements OnInit {
             }
           }else{
             if(this.trabajando[1] == 0 && i == 0){
-              this.restante[0] = Number(this.sumando) - Number(this.Total);;
+              this.restante[0] = Number(this.sumando) - Number(this.Total);
+              console.log(this.restante[0])
             }else{
               this.restante[`${this.trabajando[1]}${i}`] = Number(this.sumando) - Number(this.Total);
             }
@@ -193,7 +216,16 @@ export class AsignacionNewComponent implements OnInit {
       }
       let indice = this.momentaneos.findIndex(x=> x.id === this.Lotes_encontrados[i]._id && x.index === i)
       if(indice < 0){
-        this.momentaneos.push({unidad:this.Lotes_encontrados[i].material.unidad,EA_cantidad:this.Lotes_encontrados[i].cantidad,asignado,id:this.Lotes_encontrados[i]._id,codigo:this.Lotes_encontrados[i].codigo,lote:this.Lotes_encontrados[i].lote,marca:this.Lotes_encontrados[i].material.marca,material:this.Lotes_encontrados[i].material.nombre,restante:this.restante[`${this.trabajando[1]}${i}`],index:i,orden:this.trabajando[0],producto:this.trabajando[1]})
+
+        let resto
+        if(this.trabajando[1] == 0 && i == 0){
+          resto = this.restante[0]
+        }else{
+          resto = this.restante[`${this.trabajando[1]}${i}`]
+        }
+        this.momentaneos.push({unidad:this.Lotes_encontrados[i].material.unidad,EA_cantidad:this.Lotes_encontrados[i].cantidad,
+          asignado,id:this.Lotes_encontrados[i]._id,codigo:this.Lotes_encontrados[i].codigo,lote:this.Lotes_encontrados[i].lote,marca:this.Lotes_encontrados[i].material.marca,
+          material:this.Lotes_encontrados[i].material.nombre,restante:resto,index:i,orden:this.trabajando[0],producto:this.trabajando[1], id_m:this.Lotes_encontrados[i].material._id})
       }
     }else{
       this.sumando = Number(this.sumando) - Number(this.Lotes_encontrados[i].cantidad)
@@ -277,6 +309,10 @@ export class AsignacionNewComponent implements OnInit {
       })
   }
 
+  cerrarModal(){
+    this.onCloseModal.emit();
+  }
+
   Finalizar(){
     console.log(this.momentaneos)
 
@@ -284,6 +320,12 @@ export class AsignacionNewComponent implements OnInit {
     let materiales = []
     let lotes = []
     let cantidades = []
+    let cantidad = []
+    let ids = []
+    let restantes = []
+    let EA_cantidad = []
+    let codigos = []
+    let producto = []
     for(let i=0; i<this.momentaneos.length;i++){
       tabla = tabla + `
       <tr>
@@ -294,14 +336,37 @@ export class AsignacionNewComponent implements OnInit {
     
       materiales.push(`${this.momentaneos[i].material} (${this.momentaneos[i].marca}) - código:${this.momentaneos[i].codigo}`)
       lotes.push(`${this.momentaneos[i].lote}`)
+      codigos.push(`${this.momentaneos[i].codigo}`)
       cantidades.push(`${this.momentaneos[i].asignado} ${this.momentaneos[i].unidad}`)
+      cantidad.push(this.momentaneos[i].asignado)
+      ids.push(this.momentaneos[i].id)
+      restantes.push(this.momentaneos[i].restante)
+      EA_cantidad.push(this.momentaneos[i].EA_cantidad)
+      producto.push(this.momentaneos[i].id_m)
+
+      let requi:boolean = false;
+
+      if(this.ordenes[0].motivo){
+        requi = true
+      }else{
+        requi = false
+      }
 
       if(i == this.momentaneos.length -1){
         let data = {
           tabla,
           materiales,
           lotes,
-          cantidades
+          cantidades,
+          cantidad,
+          ids,
+          restantes,
+          EA_cantidad,
+          codigos,
+          producto,
+          orden:this.ordenes[this.trabajando[0]].sort,
+          requi,
+          orden_id:this.ordenes[this.trabajando[0]]._id
         }
 
         this.api.DESCONTARLOTE(data)
@@ -316,6 +381,10 @@ export class AsignacionNewComponent implements OnInit {
               timer:5000,
               timerProgressBar:true
             })
+            this.momentaneos = []
+            this.BuscarUnaOrden();
+            this.buscarRequisicion();
+            this.onCloseModal.emit();
           })
       }
     } 

@@ -15,7 +15,7 @@
           "options": {
             "allowedCommonJsDependencies": [
               "lodash"
-           ],
+            ],
             "outputPath": "dist/Poligrafica",
             "index": "src/index.html",
             "main": "src/main.ts",
@@ -123,6 +123,10 @@
           }
         }
       }
-    }},
-  "defaultProject": "Poligrafica"
+    }
+  },
+  "defaultProject": "Poligrafica",
+  "cli": {
+    "analytics": false
+  }
 }
