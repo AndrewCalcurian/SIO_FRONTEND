@@ -8,9 +8,20 @@
                 </ng-container>
             </span>
             <ng-container *ngFor="let orden of ordenes;index as i">
-                <span class="grupos">
-                    OP: {{orden.sort}} - {{orden.producto.producto}}
-                </span>
+                <div class="bar">
+                    <span class="logo">
+                        <i class="fas fa-pallet"></i>
+                    </span>
+                    <span class="grupos">
+                        <ng-container *ngIf="orden.sort != '#'">
+                               OP: {{orden.sort}} <ng-container *ngIf="orden.producto.producto">- {{orden.producto.producto}}</ng-container>
+                        </ng-container>
+                        <ng-container *ngIf="orden.sort === '#'">
+                               OP: Solicitud de material
+                        </ng-container>
+                    </span>
+                </div>
+                <hr>
                 <br>
                 <span>
                     <ng-container *ngIf="orden.motivo">

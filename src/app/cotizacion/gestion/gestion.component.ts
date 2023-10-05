@@ -267,6 +267,7 @@ export class GestionComponent implements OnInit {
         .subscribe((resp:any)=>{
           this.productos = resp.productos;
           this.carga_ordenes = false;
+          console.log(this.productos)
         })
     }
   }

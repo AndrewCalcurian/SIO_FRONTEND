@@ -306,7 +306,7 @@ export class FabricantesComponent implements OnInit {
     this.api.putFabricantes(this.edicion, data)
       .subscribe((resp:any)=>{
         Swal.fire({
-          title:'Se editó existosamente',
+          title:'Se editó exitosamente',
           icon:'success',
           timer:1500,
           showConfirmButton:false,

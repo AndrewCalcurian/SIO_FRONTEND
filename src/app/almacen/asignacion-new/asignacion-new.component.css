@@ -114,3 +114,16 @@
     font-size: 20px;
   }
   
+  .logo{
+    display: block;
+    background-color: #df0021;
+    width: 40px;
+    height: 40px;
+    position: relative;
+    float: left;
+    color: white;
+    padding: 10px;
+    padding-left: 10px;
+    font-size: medium;
+    border-radius: 5px 0px 0px 5px;
+}

@@ -10,6 +10,7 @@ import { EspecificacionComponent } from './especificacion/especificacion.compone
 import { AnalisisSustratoComponent } from './analisis-sustrato/analisis-sustrato.component';
 import { AnalisisMenuComponent } from './analisis-menu/analisis-menu.component';
 import { AnalisisTintaComponent } from './analisis-tinta/analisis-tinta.component';
+import { NuevoMaterialComponent } from './nuevo-material/nuevo-material.component';
 
 
 
@@ -49,6 +50,10 @@ const routes: Routes =[
       {
         path:'analisis',
         component:AnalisisMenuComponent
+      },
+      {
+        path:'pruebas',
+        component:NuevoMaterialComponent
       }
     ]
 }]

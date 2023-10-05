@@ -13,11 +13,12 @@ import { EspecificacionComponent } from './especificacion/especificacion.compone
 import { AnalisisSustratoComponent } from './analisis-sustrato/analisis-sustrato.component';
 import { AnalisisMenuComponent } from './analisis-menu/analisis-menu.component';
 import { AnalisisTintaComponent } from './analisis-tinta/analisis-tinta.component';
+import { NuevoMaterialComponent } from './nuevo-material/nuevo-material.component';
 
 
 
 @NgModule({
-  declarations: [LaboratorioComponent, MainComponent, MateriaPrimaComponent, ProductoTerminadoComponent, IndexComponent, EspecificacionComponent, AnalisisSustratoComponent, AnalisisMenuComponent, AnalisisTintaComponent],
+  declarations: [LaboratorioComponent, MainComponent, MateriaPrimaComponent, ProductoTerminadoComponent, IndexComponent, EspecificacionComponent, AnalisisSustratoComponent, AnalisisMenuComponent, AnalisisTintaComponent, NuevoMaterialComponent],
   imports: [
     CommonModule,
     LaboratorioRoutingModule,
