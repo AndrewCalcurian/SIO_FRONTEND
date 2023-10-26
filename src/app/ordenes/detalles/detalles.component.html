@@ -105,9 +105,10 @@
                         <table class="table is-fullwidth">
                             <thead>
                                 <tr>
-                                    <th>Producto</th>
                                     <th>Cantidad</th>
                                     <th>OC</th>
+                                    <th>Nº Documento</th>
+                                    <th>Nº Certificado</th>
                                     <th>Destino</th>
                                 </tr>
                             </thead>
@@ -115,14 +116,18 @@
                                 <ng-container *ngFor="let despacho of despachos; let even = even;">
                                     <ng-container *ngIf="even">
                                         <tr>
-                                            <td>{{despacho.producto}}</td>
                                             <td>{{despacho.cantidad}}</td>
                                             <td>{{despacho.oc}}</td>
+                                            <td>{{despacho.documento}}</td>
+                                            <td>{{despacho.certificado}}</td>
                                             <td>{{despacho.destino}}</td>
+                                        </tr>
+                                        <tr>
+                                            <td colspan="5">{{despacho.producto}}</td>
                                         </tr>
                                     </ng-container>
                                     <ng-container  *ngIf="!even">
-                                            <td>Fecha: <b>{{despacho.fecha}}</b></td>
+                                            <td colspan="2">Fecha: <b>{{despacho.fecha}}</b></td>
                                     </ng-container>
                                 </ng-container>
                             </tbody>

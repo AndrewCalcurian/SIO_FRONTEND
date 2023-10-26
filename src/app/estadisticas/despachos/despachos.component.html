@@ -12,6 +12,7 @@
                             <th>N°</th>
                             <th>Fecha</th>
                             <th>Documento</th>
+                            <th>Certificado</th>
                             <th>Cantidad</th>
                         </tr>
                         <ng-container *ngFor="let despachos of despachos_filtrado;index as i">
@@ -21,6 +22,9 @@
                                 <ng-container *ngFor="let orden of despachos.despacho;index as i">
                                     <td *ngIf="orden.op === despachos_orden">
                                         {{orden.documento}}
+                                    </td>
+                                    <td *ngIf="orden.op === despachos_orden">
+                                        {{orden.certificado}}
                                     </td>
                                     <td *ngIf="orden.op === despachos_orden">
                                         {{puntoYcoma(orden.cantidad)}}

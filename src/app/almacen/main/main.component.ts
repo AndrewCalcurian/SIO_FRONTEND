@@ -163,7 +163,7 @@ export class MainComponent implements OnInit {
   BobinaForm:FormGroup = this.fb.group({
     Nbobina:['', Validators.required],
     material:['', Validators.required],
-    // marca:['', Validators.required],
+    marca:[''],
     gramaje:['', Validators.required],
     calibre:['', Validators.required],
     ancho:['', Validators.required],
