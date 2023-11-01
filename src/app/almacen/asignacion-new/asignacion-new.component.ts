@@ -65,6 +65,10 @@ export class AsignacionNewComponent implements OnInit {
          this.Total = ((material.cantidad * this.ordenes[i].paginas)/1000).toFixed(2)
          parametro = {material:material.producto._id, $and:[{cantidad:{ $gt:0}}, {cantidad:{$ne:'0.00'}}]}
       }
+      if(material.producto.grupo.nombre === 'Barniz'){
+        this.Total = ((material.cantidad * this.ordenes[i].paginas)/1000).toFixed(2)
+        parametro = {material:material.producto._id, $and:[{cantidad:{ $gt:0}}, {cantidad:{$ne:'0.00'}}]}
+     }
       if(material.producto.grupo.nombre === 'Sustrato'){
         this.Total = (this.ordenes[i].paginas).toFixed(2)
         parametro = {material:material.producto._id, $and:[{cantidad:{ $gt:0}}, {cantidad:{$ne:'0.00'}}]}
@@ -182,7 +186,8 @@ export class AsignacionNewComponent implements OnInit {
           }
         }
       }else{
-        if(this.Lotes_encontrados[i].material.grupo.nombre == 'Barniz Acuoso'){
+
+        if(this.Lotes_encontrados[i].material.grupo.nombre == 'Barniz Acuoso' || this.Lotes_encontrados[i].material.grupo.nombre == 'Barniz'){
           if(this.trabajando[1] == 0 && i == 0){
             this.restante[0] = '0';
           }else{
@@ -191,9 +196,7 @@ export class AsignacionNewComponent implements OnInit {
             }else{
               this.restante[`${this.trabajando[1]}${i}`] = '0';
             }
-          }
-          
-        }else{
+        }}else{
           if(this.sumando <= this.Total){
             if(this.trabajando[1] == 0 && i == 0){
               this.restante[0] = '0';
@@ -263,7 +266,8 @@ export class AsignacionNewComponent implements OnInit {
         console.log(resto)
         this.momentaneos.push({unidad:this.Lotes_encontrados[i].material.unidad,EA_cantidad:this.Lotes_encontrados[i].cantidad,
           asignado,id:this.Lotes_encontrados[i]._id,codigo:this.Lotes_encontrados[i].codigo,lote:this.Lotes_encontrados[i].lote,marca:this.Lotes_encontrados[i].material.marca,
-          material:this.Lotes_encontrados[i].material.nombre,restante:resto,index:i,orden:this.trabajando[0],producto:this.trabajando[1], id_m:this.Lotes_encontrados[i].material._id})
+          material:this.Lotes_encontrados[i].material.nombre,restante:resto,index:i,orden:this.trabajando[0],producto:this.trabajando[1], id_m:this.Lotes_encontrados[i].material._id,
+          ancho:this.Lotes_encontrados[i].material.ancho,largo:this.Lotes_encontrados[i].material.largo,calibre:this.Lotes_encontrados[i].material.calibre,gramaje:this.Lotes_encontrados[i].material.gramaje,})
       }
     }else{
       this.sumando = Number(this.sumando) - Number(this.Lotes_encontrados[i].cantidad)
@@ -375,7 +379,7 @@ export class AsignacionNewComponent implements OnInit {
     for(let i=0; i<this.momentaneos.length;i++){
 
       let material__;
-      if(this.momentaneos[i].material.ancho){
+      if(this.momentaneos[i].ancho){
         material__ = `${this.momentaneos[i].material} ${this.momentaneos[i].gramaje}g Cal:${this.momentaneos[i].calibre} ${this.momentaneos[i].ancho}x${this.momentaneos[i].largo} (${this.momentaneos[i].marca}) - código:${this.momentaneos[i].codigo}`
       }else{
         material__ = `${this.momentaneos[i].material} (${this.momentaneos[i].marca}) - código:${this.momentaneos[i].codigo}`

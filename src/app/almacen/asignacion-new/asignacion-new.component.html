@@ -55,6 +55,9 @@
                                         <ng-container *ngIf="materiales.producto.grupo.nombre == 'Tinta'">
                                             {{((materiales.cantidad * orden.paginas)/1000).toFixed(2)}} {{materiales.producto.unidad}}
                                         </ng-container>
+                                        <ng-container *ngIf="materiales.producto.grupo.nombre == 'Barniz'">
+                                            {{((materiales.cantidad * orden.paginas)/1000).toFixed(2)}} {{materiales.producto.unidad}}
+                                        </ng-container>
                                         <ng-container *ngIf="materiales.producto.grupo.nombre == 'Sustrato'">
                                             {{Enterar(orden.paginas)}} {{materiales.producto.unidad}}
                                         </ng-container>

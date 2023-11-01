@@ -25,7 +25,7 @@
                     </thead>
                     <tbody>
                         <tr *ngFor="necesario of pendiente.producto.materiales[0];index as i">
-                            <td>{{pendiente.producto.materiales[0][i].producto.nombre}} ({{pendiente.producto.materiales[0][i].producto.marca}})</td>
+                            <td>{{pendiente.producto.materiales[0][i].producto.nombre}}<ng-container *ngIf="pendiente.producto.materiales[0][i].producto.gramaje"> {{pendiente.producto.materiales[0][i].producto.gramaje}}g</ng-container> (<ng-container *ngIf="pendiente.producto.materiales[0][i].producto.gramaje"> {{pendiente.producto.materiales[0][i].producto.ancho}}x{{pendiente.producto.materiales[0][i].producto.largo}}</ng-container>) {{pendiente.producto.materiales[0][i].producto.marca}} <ng-container *ngIf="pendiente.producto.materiales[0][i].producto.gramaje">Cal: {{pendiente.producto.materiales[0][i].producto.calibre}}</ng-container></td>
                             <td>{{pendiente.producto.materiales[0][i].cantidad}}{{pendiente.producto.materiales[0][i].producto.unidad}}</td>
                         </tr>
                     </tbody>
