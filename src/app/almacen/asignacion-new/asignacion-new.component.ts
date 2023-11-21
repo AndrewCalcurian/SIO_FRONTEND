@@ -100,7 +100,6 @@ export class AsignacionNewComponent implements OnInit {
            if(material.producto.grupo.nombre === 'Cajas Corrugadas'){
              this.cantidad_cinta = Number(this.Lotes_encontrados[0].material.cinta) * Number(this.cantidad_cajas)
            }
-          console.log(this.Lotes_encontrados)
           this.loading_ = false
           let ordenes = this.momentaneos.filter(x => x.orden === this.trabajando[0] && x.producto === this.trabajando[1])
           for(let y=0;y<ordenes.length;y++){
@@ -111,6 +110,25 @@ export class AsignacionNewComponent implements OnInit {
           }
 
          })
+      }else if(material.producto.grupo.nombre === 'Soportes de Embalaje'){
+        this.api.GETALLALMACEN()
+        .subscribe((resp:any)=>{
+
+          
+          this.Lotes_encontrados = resp.filter(x=>x.material.nombre === material.producto.nombre);
+          if(material.producto.grupo.nombre === 'Cajas Corrugadas'){
+            this.cantidad_cinta = Number(this.Lotes_encontrados[0].material.cinta) * Number(this.cantidad_cajas)
+          }
+         this.loading_ = false
+         let ordenes = this.momentaneos.filter(x => x.orden === this.trabajando[0] && x.producto === this.trabajando[1])
+         for(let y=0;y<ordenes.length;y++){
+          setTimeout(() => {
+            (<HTMLInputElement>document.getElementById(ordenes[y].index.toString())).checked = true;
+            this.seleccionar(ordenes[y].index)
+          }, 500);
+         }
+
+        })
       }else{        
         this.api.BUSCARENALMACENPRODUCTO(parametro)
          .subscribe((resp:any)=>{
@@ -323,7 +341,7 @@ export class AsignacionNewComponent implements OnInit {
 
 
   cinta(){
-    return Math.ceil(this.cantidad_cinta / 50)
+    return Math.ceil(this.cantidad_cinta / 100)
   }
 
 
@@ -342,7 +360,7 @@ export class AsignacionNewComponent implements OnInit {
   buscarCinta(n){
     this.trabajando = [this.trabajando[0],(this.ordenes[n].producto.materiales[this.ordenes[n].montaje].length)];
     this.Asignar = true
-    this.Total = Math.ceil(this.cantidad_cinta / 50)
+    this.Total = Math.ceil(this.cantidad_cinta / 100)
     this.api.BUSCARCINTA()
       .subscribe((resp:any)=>{
         this.Lotes_encontrados = resp;

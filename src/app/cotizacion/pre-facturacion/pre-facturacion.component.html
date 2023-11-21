@@ -10,7 +10,7 @@
             </div>
             <hr>
             <ng-container *ngFor="let despacho of Despachos;index as i">
-                <table class="table is-fullwidth is-bordered" *ngIf="despacho.despacho.documento === ''">
+                <table class="table is-fullwidth is-bordered" *ngIf="despacho.despacho.documento === '' || despacho.despacho.documento.charAt(0) === 'N'">
                     <thead>
                         <tr>
                             <td class="is-selected" colspan="2">

@@ -29,7 +29,7 @@
                     </div> -->
                 </div>
             </div>
-            <table class="table is-fullwidth" *ngIf="muestra__">
+            <table class="table is-fullwidth">
                 <tr>
                     <th class="is-selected standar">Producto:</th>
                     <td>{{muestra__.material.nombre}}</td>
@@ -61,7 +61,7 @@
         </div>
     </div>
     <br>
-    <div class="card" *ngIf="muestra__">
+    <div class="card">
         <div class="card-content">
             <hr>
             <!-- <table class="table is-fullwidth" *ngIf="cualitativo">
@@ -353,7 +353,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="column" *ngIf="_carton_ || _papel_">
+                        <div class="column">
                             <table class="table">
                                 <tr>
                                     <th class="is-selected" colspan="2">
@@ -361,7 +361,7 @@
                                     </th>
                                 </tr>
                                 <tr>
-                                    <th *ngIf="_carton_">
+                                    <th>
                                         Cartón:
                                     
                                         <input type="text" class="input is-small short" placeholder="Calibre (pt)" [(ngModel)]="_tipo_[0]">
@@ -373,7 +373,7 @@
                                 </tr>
                             </table>
                         </div>
-                        <div class="column" *ngIf="_carton_ || _papel_">
+                        <div class="column">
                             <table class="table">
                                 <tr>
                                     <th class="is-selected" colspan="2">
@@ -398,16 +398,16 @@
                 </div>
             </div>
             <br>
-            <div class="card" *ngIf="_carton_ || _papel_">
+            <div class="card">
                 <div class="card-content">
                     <div class="tabs">
                         <ul>
-                            <li [ngClass]="{'is-active':carton}" (click)="carton_()" *ngIf="_carton_"><a>Cartón</a></li>
-                            <li [ngClass]="{'is-active':sustrato}" (click)="sustrato_()" *ngIf="_papel_"><a>Papel</a></li>
-                            <li [ngClass]="{'is-active':muestra}" (click)="muestra_()" *ngIf="papel_muestra_ != 'Metalizado' "><a>Muestra</a></li>
+                            <li [ngClass]="{'is-active':carton}" (click)="carton_()"><a>Cartón</a></li>
+                            <li [ngClass]="{'is-active':sustrato}" (click)="sustrato_()"><a>Papel</a></li>
+                            <li [ngClass]="{'is-active':muestra}" (click)="muestra_()"><a>Muestra</a></li>
                         </ul>
                     </div>
-                    <table class="table is-fullwidth" *ngIf="carton">
+                    <table class="table is-fullwidth">
                         <tr>
                             <th class="is-selected" colspan="9">1° Descarga</th>
                         </tr>

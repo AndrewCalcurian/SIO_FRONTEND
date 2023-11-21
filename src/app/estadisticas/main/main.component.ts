@@ -863,7 +863,6 @@ export class MainComponent implements OnInit {
           this.CajasChart()
           this.PegaChart()
         },err => {
-          alert(err)
           console.log(err)
         })
 

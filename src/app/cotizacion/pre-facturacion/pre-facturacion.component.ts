@@ -40,6 +40,14 @@ export class PreFacturacionComponent implements OnInit {
       })
   }
 
+  startsWith(documento: string): boolean {
+    if (documento && documento.length > 0) {
+      console.log(documento.charAt(0) === 'N')
+      return documento.charAt(0) === 'N';
+    }
+    return false;
+  }
+
   Editar_Cantidad_en_OC(){
     (<HTMLInputElement>document.getElementById('Cantidad_en_OC')).disabled = false
   }
