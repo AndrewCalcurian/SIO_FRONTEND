@@ -11,12 +11,16 @@ import { IndexComponent } from './index/index.component';
 import { RouterModule } from '@angular/router';
 import { InventarioComponent } from './inventario/inventario.component';
 import { AsignacionNewComponent } from './asignacion-new/asignacion-new.component';
+import { RepuestosComponent } from './repuestos/repuestos.component';
+import { CategoriasComponent } from './repuestos/categorias/categorias.component';
+import { RegistroRepuestoComponent } from './repuestos/registro-repuesto/registro-repuesto.component';
+import { RepuestoAlmacenadoComponent } from './repuestos/repuesto-almacenado/repuesto-almacenado.component';
 
 
 
 
 @NgModule({
-  declarations: [MainComponent, ConfirmacionComponent, AsignacionComponent, ReportesComponent, RecepcionComponent, IndexComponent, InventarioComponent, AsignacionNewComponent],
+  declarations: [MainComponent, ConfirmacionComponent, AsignacionComponent, ReportesComponent, RecepcionComponent, IndexComponent, InventarioComponent, AsignacionNewComponent, RepuestosComponent, CategoriasComponent, RegistroRepuestoComponent, RepuestoAlmacenadoComponent],
   imports: [
     CommonModule,
     AlmacenRoutingModule,

@@ -1,0 +1,75 @@
+<div class="modal" [ngClass]="{'is-active':Repuesto}">
+    <div class="modal-background" (click)="cerrar()"></div>
+    <div class="modal-card">
+        <div class="modal-card-body">
+            <span class="subtitulo">Nuevo Repuesto</span>
+            <hr>
+            <div class="columns">
+                <div class="column">
+                    <div class="select">
+                        <select [(ngModel)]="nuevoMaterial.maquina">
+                            <option value="{{maquina._id}}" *ngFor="let maquina of Maquinas">{{maquina.nombre}}</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="column">
+                    <div class="select">
+                        <select [(ngModel)]="nuevoMaterial.categoria">
+                            <option value="{{categoria._id}}" *ngFor="let categoria of Categorias">{{categoria.nombre}}</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="column"></div>
+                <div class="column"></div>
+            </div>
+            <div class="columns">
+                <div class="column">
+                    <div class="field">
+                        <label for="" class="label">Nombre:</label>
+                        <div class="control">
+                            <input type="text" class="input" [(ngModel)]="nuevoMaterial.nombre">
+                        </div>
+                    </div>
+                </div>
+                <div class="column">
+                    <div class="field">
+                        <label for="" class="label">Nº parte:</label>
+                        <div class="control">
+                            <input type="text" class="input" [(ngModel)]="nuevoMaterial.parte">
+                        </div>
+                    </div>
+                </div>
+                <div class="column">
+                    <div class="field">
+                        <label for="" class="label"> </label>
+                        <div class="control">
+                            <div class="file is-success">
+                                <label class="file-label">
+                                  <input class="file-input" type="file" name="resume" (change)="SubirFoto($event)">
+                                  <span class="file-cta">
+                                    <span class="file-icon">
+                                      <i class="fas fa-upload"></i>
+                                    </span>
+                                    <span class="file-label">
+                                      Foto
+                                    </span>
+                                  </span>
+                                </label>
+                              </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="column"></div>
+            </div>
+            <hr>
+            <button class="button is-success" (click)="guardar()" *ngIf="!Edicion">
+                <span class="icon"><i class="fas fa-plus"></i></span>
+                <span>Agregar</span>
+            </button>
+            <button class="button is-success" (click)="editar()" *ngIf="Edicion">
+                <span class="icon"><i class="fas fa-edit"></i></span>
+                <span>Editar</span>
+            </button>
+        </div>
+    </div>
+</div>

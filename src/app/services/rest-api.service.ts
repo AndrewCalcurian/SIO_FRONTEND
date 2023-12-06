@@ -866,4 +866,45 @@ export class RestApiService {
   }
 
 
+  postCategoria(data){
+    const url = `${this.api_url}/categoria`
+    return this.http.post(url,data)
+  }
+
+  getCategorias(){
+    const url = `${this.api_url}/categoria`
+    return this.http.get(url)
+  }
+
+  postRepuesto(data){
+    const url = `${this.api_url}/repuesto`
+    return this.http.post(url,data)
+  }
+
+  getRepuesto(){
+    const url = `${this.api_url}/repuesto`
+    return this.http.get(url)
+  }
+
+  postpieza(data){
+    const url = `${this.api_url}/pieza`
+    return this.http.post(url,data)
+  }
+
+  getpieza(){
+    const url = `${this.api_url}/pieza`
+    return this.http.get(url)
+  }
+  
+  putRepuesto(data, id){
+    const url = `${this.api_url}/repuesto/${id}`
+    return this.http.put(url,data)
+  }
+
+  putPieza(data, id){
+    const url = `${this.api_url}/pieza/${id}`
+    return this.http.put(url,data)
+  }
+
+
 }

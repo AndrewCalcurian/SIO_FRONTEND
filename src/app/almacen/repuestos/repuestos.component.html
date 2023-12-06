@@ -1,0 +1,151 @@
+<app-categorias
+(onCloseModal)="Categoria = false"
+[categoria_]="Categoria">
+</app-categorias>
+<app-registro-repuesto
+[Maquinas]="Maquinas"
+[Categorias]="Categorias"
+[Repuesto]="Repuesto"
+[Edicion]="edicion"
+[nuevoMaterial]="nuevoMaterial"
+(onCloseModal)="cerrarRegistro()">
+</app-registro-repuesto>
+<app-repuesto-almacenado
+[Maquinas]="Maquinas"
+[Categorias]="Categorias"
+[Repuestos]="Repuestos"
+[Piezas]="Almacen"
+[Almacen]="Almacen__"
+[Edicion]="edicion"
+(onCloseModal)="cerrarPiezas()">
+</app-repuesto-almacenado>
+<div class="card">
+    <div class="card-content">
+        <div class="titulo">
+            <i class="fas fa-tools"></i> Repuestos
+        </div>
+
+        <button class="button is-primary" (click)="NuevoRepuesto()">
+            <span class="icon"><i class="fas fa-wrench"></i></span>
+            <span>Registro</span>
+        </button> 
+        <button class="button is-primary" (click)="NuevaPieza()">
+            <span class="icon"><i class="fas fa-toolbox"></i></span>
+            <span>Almacen</span>
+        </button> 
+        <button class="button is-primary">
+            <span class="icon"><i class="fas fa-map-marker-alt"></i></span>
+            <span>Ubicaciones</span>
+        </button> 
+        <button class="button is-primary" (click)="AbrirCategorias()">
+            <span class="icon"><i class="fas fa-fingerprint"></i></span>
+            <span>Categorias</span>
+        </button> <br>
+        <ng-container>
+
+        </ng-container>
+        <span class="toggle" *ngIf="Mostrar_registro" (click)="changeBeta()">
+            <i class="fas fa-toggle-off" ></i> Registro de repuestos
+        </span>
+        <ng-container>
+        <span class="toggle" *ngIf="!Mostrar_registro" (click)="changeBeta()">
+            <i class="fas fa-toggle-on" ></i> Stock de repuestos
+        </span>
+        </ng-container>
+        <hr>
+        <ng-container *ngIf="Mostrar_registro">
+            <ng-container *ngFor="let maquina of Maquinas">
+                <div class="subtitulo">{{maquina.nombre}}</div>
+                <hr>
+                <ng-container *ngFor="let categoria of Categorias">
+                    <div class="categoria_style" *ngIf="hasMatchingRepuesto(maquina._id, categoria._id)">
+                       {{categoria.nombre}}
+                       <table class="table is-fullwidth is-striped">
+                          <thead>
+                              <tr>
+                                  <th>Nombre</th>
+                                  <th>Nº parte</th>
+                                  <th>Foto</th>
+                                  <th>Editar</th>
+                              </tr>
+                          </thead>
+                          <tbody>
+                          <ng-container *ngFor="let repuesto of Repuestos">
+                            <tr *ngIf="repuesto.maquina == maquina._id && repuesto.categoria == categoria._id">
+                                <td>{{repuesto.nombre}}</td>
+                                <td>{{repuesto.parte}}</td>
+                                <td>
+                                    <img src="../../../assets/no-image.png" width="40px" alt="" (click)="verImagen(repuesto.foto, repuesto.nombre)" style="cursor: pointer;">
+                                </td>
+                                <td>
+                                    <button class="button is-outlined is-success is-small" (click)="editar(repuesto)">
+                                        <span class="icon"><i class="fas fa-edit"></i></span>
+                                    </button>
+                                </td>
+                            </tr>
+                          </ng-container>
+                          </tbody>
+                       </table>
+                    </div>
+                </ng-container>
+                <!-- <ng-container >
+                    <div class="mensaje">
+                        No hay repuestos para esta maquina
+                    </div>
+                </ng-container> -->
+                <br>
+            </ng-container>
+        </ng-container>
+        <ng-container *ngIf="!Mostrar_registro">
+            <ng-container *ngFor="let maquina of Maquinas;index as x">
+                <div class="subtitulo">{{maquina.nombre}}</div>
+                <ng-container *ngFor="let categoria of Categorias;index as y">
+                    <div class="categoria_style" *ngIf="hasMatchingRepuesto2(maquina._id, categoria._id)">
+                        <span (click)="showInfo(x,y)" style="cursor: pointer;" class="categoria">
+                            {{categoria.nombre}}
+                        </span>
+                        <table class="table is-fullwidth is-striped" *ngIf="equis[x] && ye[y]">
+                            <thead>
+                                <tr>
+                                    <th>Pieza</th>
+                                    <th>Nº parte</th>
+                                    <th>Fecha compra</th>
+                                    <th>Proveedor</th>
+                                    <th>Nº factura</th>
+                                    <th>Precio</th>
+                                    <th>Ubicación</th>
+                                    <th>Cantidad</th>
+                                    <th>foto</th>
+                                    <th>Editar</th>
+                                </tr>
+                            </thead>
+                            <tbody >
+                                <ng-container *ngFor="let pieza of Almacenes">
+                                    <tr *ngIf="pieza.maquina === maquina._id && pieza.categoria === categoria._id">
+                                        <td>{{pieza.repuesto.nombre}}</td>
+                                        <td>{{pieza.repuesto.parte}}</td>
+                                        <td>{{pieza.fecha | date: 'dd-MM-yyyy'}}</td>
+                                        <td>{{pieza.proveedor}}</td>
+                                        <td>{{pieza.factura}}</td>
+                                        <td>{{pieza.precio}}</td>
+                                        <td>{{pieza.ubicacion}}</td>
+                                        <td>{{pieza.cantidad}}</td>
+                                        <td>
+                                            <img src="../../../assets/no-image.png" width="40px" alt="" (click)="verImagen(pieza.repuesto.foto, pieza.repuesto.nombre)" style="cursor: pointer;">
+                                        </td>
+                                        <td>
+                                            <button class="button is-success is-outlined is-small" (click)="editarPieza(pieza)">
+                                                <span class="icon"><i class="fas fa-edit"></i></span>
+                                            </button>
+                                        </td>
+                                    </tr>
+                                </ng-container>
+                            </tbody>
+                        </table>
+                    </div>
+                </ng-container>
+                <hr> 
+            </ng-container>
+        </ng-container>
+    </div>
+</div>

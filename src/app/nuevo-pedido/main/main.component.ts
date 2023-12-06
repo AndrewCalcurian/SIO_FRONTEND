@@ -35,6 +35,8 @@ export class MainComponent implements OnInit {
   x; 
   y;
 
+  public cajas = 0;
+
 
 
   public TOTALES = [
@@ -340,6 +342,7 @@ export class MainComponent implements OnInit {
         let necesario
         if(caja === 'caja'){
           necesario = this.Cantidad_ejemplares / this.PRODUCTO.materiales[this.i_montajes][i].cantidad;
+          this.cajas = this.Cantidad_ejemplares / this.PRODUCTO.materiales[this.i_montajes][i].cantidad;
         }else{
           necesario = (this.PRODUCTO.materiales[this.i_montajes][i].cantidad * this.paginas)/1000;
         }
@@ -395,16 +398,18 @@ export class MainComponent implements OnInit {
           resto = this.restantes_(this.PRODUCTO.materiales[this.i_montajes][i].producto.nombre, this.PRODUCTO.materiales[this.i_montajes][i].producto.marca,i,'caja')
         }else if(this.PRODUCTO.materiales[this.i_montajes][i].producto.grupo.nombre === "Barniz"){
           resto = this.restantes_(this.PRODUCTO.materiales[this.i_montajes][i].producto.nombre, this.PRODUCTO.materiales[this.i_montajes][i].producto.marca,i,'barniz')
+        }else if(this.PRODUCTO.materiales[this.i_montajes][i].producto.grupo.nombre === "Soportes de Embalaje"){
+          resto = this.cajas * this.PRODUCTO.materiales[this.i_montajes][i].cantidad
         }else{
           resto = this.restantes_(this.PRODUCTO.materiales[this.i_montajes][i].producto.nombre, this.PRODUCTO.materiales[this.i_montajes][i].producto.marca,i)
         }
         resto = Number(resto)
         if(resto < 0){
-          // // console.log(this.PRODUCTO.materiales[this.i_montajes][i].producto.nombre, '<>', resto)
+          console.log(this.PRODUCTO.materiales[this.i_montajes][i].producto.nombre, '<>', resto)
             Swal.fire({
               icon:'error',
               title:'Oops!',
-              text:'No posees los materiales necesarios para realizar este producto',
+              text:'No posees los materiales necesarios para realizar este producto 1',
               showConfirmButton:false,
               // timer:2500
             })

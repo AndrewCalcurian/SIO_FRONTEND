@@ -13,7 +13,7 @@ export class SubirArchivosService {
 
   async actualizarFoto(
     archivo:File,
-    tipo:'usuarios'|'errors'|'producto'|'despacho'|'distribucion'|'aereo'|'analisis'|'fabricante'|'proveedor',
+    tipo:'usuarios'|'errors'|'producto'|'despacho'|'distribucion'|'aereo'|'analisis'|'fabricante'|'proveedor'|'repuestos',
     id:string
   ) {
     try{
@@ -33,7 +33,7 @@ export class SubirArchivosService {
       const data = await resp.json();
       if (data.ok && tipo != 'analisis' && tipo != 'fabricante'){
         if(tipo != 'proveedor'){
-          Swal.fire({title:'Excelente!', text:'Se ha actualizado la imagen', icon:'success', showConfirmButton:false, timer:2000, timerProgressBar:true});
+          // Swal.fire({title:'Excelente!', text:'Se ha actualizado la imagen', icon:'success', showConfirmButton:false, timer:2000, timerProgressBar:true});
           return data.img
         }
       }else{
@@ -47,7 +47,7 @@ export class SubirArchivosService {
 
 
     } catch(error){
-      // console.log(error)
+      console.log(error)
       return false;
     }
 
