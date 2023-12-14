@@ -16,16 +16,16 @@
         <!-- <div class="column"> -->
             <!-- <img src="../../../assets/BANNER-NUEVA-ORDEN.png" alt="" routerLink="/orden"> -->
         <!-- </div> -->
-        <div class="column">
+        <div class="column" *ngIf="usuario.Role != 'almacen'">
             <!-- <img src="../../../assets/BANNER-NUEVA-ORDEN.png" alt="" routerLink="/orden"> -->
         </div> 
-        <div class="column is-3">
+        <div class="column is-3" *ngIf="usuario.Role != 'almacen'">
             <img src="../../../assets/BANNER-RECEPCION-MATERIALES.png" alt="" routerLink="recepcion">
         </div>
-        <div class="column is-3">
+        <div class="column is-3" *ngIf="usuario.Role != 'almacen'">
             <img src="../../../assets/BANNER-INVENTARIO.png" alt="">
         </div>
-        <div class="column is-3">
+        <div class="column is-3" *ngIf="usuario.Role != 'almacen'">
             <img src="../../../assets/BANNER-ALMACEN-PRODUCTO-TERMINADO.png" alt="" routerLink="almacen">
         </div>
          <div class="column is-3">

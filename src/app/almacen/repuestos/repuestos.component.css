@@ -89,4 +89,13 @@
 
 }
 
+.modal .modal-card .modal-card-body .note {
+    background-color: #f5f5f5;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    padding: 10px;
+    font-style: italic;
+    text-align: center;
+  }
+
 

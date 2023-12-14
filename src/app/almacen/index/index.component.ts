@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { RestApiService } from 'src/app/services/rest-api.service';
 
 @Component({
   selector: 'app-index',
@@ -7,7 +8,10 @@ import { Component, OnInit } from '@angular/core';
 })
 export class IndexComponent implements OnInit {
 
-  constructor() { }
+  public usuario
+  constructor(private Usuario:RestApiService) { 
+    this.usuario = this.Usuario.usuario
+  }
 
   ngOnInit(): void {
   }

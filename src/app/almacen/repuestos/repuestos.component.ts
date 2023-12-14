@@ -24,6 +24,14 @@ export class RepuestosComponent implements OnInit {
   public equis = [];
   public ye = [];
   public edicion = false;
+  public notas = false;
+  public editar_nota = false;
+
+  public data = {
+    _id : '',
+    nota:''
+
+  }
 
   public nuevoMaterial = {
     maquina: '',
@@ -50,6 +58,21 @@ export class RepuestosComponent implements OnInit {
     this.buscarCategorias();
     this.buscarRepuestos();
     this.buscarPiezas();
+  }
+
+  verNotas(notas){
+    this.notas = true;
+    this.data._id = notas._id;
+    this.data.nota = notas.nota;
+  }
+
+  actualizarNota(){
+    console.log(this.data);
+    
+    this.api.putPieza(this.data, this.data._id)
+      .subscribe((resp:any)=>{
+        console.log(resp)
+      })
   }
 
   NuevaPieza(){

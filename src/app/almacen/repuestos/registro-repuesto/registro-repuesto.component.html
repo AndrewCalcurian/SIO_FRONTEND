@@ -6,17 +6,27 @@
             <hr>
             <div class="columns">
                 <div class="column">
-                    <div class="select">
-                        <select [(ngModel)]="nuevoMaterial.maquina">
-                            <option value="{{maquina._id}}" *ngFor="let maquina of Maquinas">{{maquina.nombre}}</option>
-                        </select>
+                    <div class="field">
+                        <label class="label">Maquina:</label>
+                        <div class="control">
+                            <div class="select">
+                                <select [(ngModel)]="nuevoMaterial.maquina">
+                                    <option value="{{maquina._id}}" *ngFor="let maquina of Maquinas">{{maquina.nombre}}</option>
+                                </select>
+                            </div>
+                        </div>
                     </div>
                 </div>
                 <div class="column">
-                    <div class="select">
-                        <select [(ngModel)]="nuevoMaterial.categoria">
-                            <option value="{{categoria._id}}" *ngFor="let categoria of Categorias">{{categoria.nombre}}</option>
-                        </select>
+                    <div class="field">
+                        <label for="" class="label">Categoria:</label>
+                        <div class="control">
+                            <div class="select">
+                                <select [(ngModel)]="nuevoMaterial.categoria">
+                                    <option value="{{categoria._id}}" *ngFor="let categoria of Categorias">{{categoria.nombre}}</option>
+                                </select>
+                            </div>
+                        </div>
                     </div>
                 </div>
                 <div class="column"></div>

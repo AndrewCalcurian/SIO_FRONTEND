@@ -19,6 +19,44 @@
 [Edicion]="edicion"
 (onCloseModal)="cerrarPiezas()">
 </app-repuesto-almacenado>
+
+
+<div class="container">
+    <div class="bucardor">
+        <input type="text" id="buscador" class="input" placeholder="Buscar pieza">
+        <button type="button" id="btnBuscar">Buscar</button>
+    </div>
+</div>
+
+
+<div class="modal" [ngClass]="{'is-active':notas}">
+    <div class="modal-background" (click)="notas = false"></div>
+    <div class="modal-card">
+        <div class="modal-card-body">
+            <div class="subtitulo">Nota</div>
+            <hr>
+            <ng-container *ngIf="!editar_nota">
+                <div class="note">
+                    <ng-container *ngIf="!data.nota">
+                        Aun no agregas una nota.
+                    </ng-container>
+                    {{data.nota}}
+                </div> <br>
+                <button class="button is-small is-success" (click)="editar_nota = true">
+                    <span class="icon"><i class="fas fa-edit"></i></span>
+                </button>
+            </ng-container>
+            <ng-container *ngIf="editar_nota">
+                <textarea class="textarea" placeholder="Agregar una nota" (change)="actualizarNota()" [(ngModel)]="data.nota"></textarea>
+                <br>
+                <button class="button is-success is-small" (click)="editar_nota = false">
+                    <span class="icon"><i class="fas fa-check"></i></span>
+                </button>
+            </ng-container>
+        </div>
+    </div>
+</div>
+
 <div class="card">
     <div class="card-content">
         <div class="titulo">
@@ -115,8 +153,9 @@
                                     <th>Precio</th>
                                     <th>Ubicación</th>
                                     <th>Cantidad</th>
-                                    <th>foto</th>
+                                    <th>Foto</th>
                                     <th>Editar</th>
+                                    <th>Nota</th>
                                 </tr>
                             </thead>
                             <tbody >
@@ -136,6 +175,11 @@
                                         <td>
                                             <button class="button is-success is-outlined is-small" (click)="editarPieza(pieza)">
                                                 <span class="icon"><i class="fas fa-edit"></i></span>
+                                            </button>
+                                        </td>
+                                        <td>
+                                            <button class="button is-info is-small is-outlined" (click)="verNotas(pieza)">
+                                                <i class="far fa-sticky-note"></i>
                                             </button>
                                         </td>
                                     </tr>
