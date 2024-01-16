@@ -369,7 +369,7 @@ export class PreFacturacionComponent implements OnInit {
               ],
               [
                 new Cell(new Txt('N°').alignment('center').end).end,
-                new Cell(new Txt(`C-23-${pre}`).bold().color('#FF0000').alignment('center').end).end,
+                new Cell(new Txt(`C-24-${pre}`).bold().color('#FF0000').alignment('center').end).end,
               ],
               [
                 new Cell(new Txt('Fecha').alignment('center').end).end,
@@ -560,7 +560,7 @@ export class PreFacturacionComponent implements OnInit {
         new Txt('email: info@poligraficaindustrial.com').italics().fontSize(9).alignment('center').end
       )
 
-      pdf.create().download(`${codigo_name}-C-23-${pre}`)
+      pdf.create().download(`${codigo_name}-C-24-${pre}`)
     }
   }
 

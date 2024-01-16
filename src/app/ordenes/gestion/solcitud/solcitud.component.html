@@ -14,7 +14,7 @@
                                 <select (change)="TraerMateriales($event.target.value)">
                                     <option value="">Selecciona OP</option>
                                     <option class="option" value="Otro">Otros Materiales</option>
-                                    <option class="option">Repuestos</option>
+                                    <option class="option" value="repuesto">Repuestos</option>
                                     <ng-container *ngIf="usuario.Gestiones != 5">
                                         <option class="option" value='{{Orden.sort}}' *ngFor="let Orden of orden.reverse()">{{Orden.sort}}</option>
                                     </ng-container>
@@ -22,6 +22,28 @@
                             </div>
                         </div>
                     </div>
+                    <ng-container *ngIf="Repuesto">
+                        <div class="column">
+                            <div class="field">
+                                <label class="label"><br>Maquina</label>
+                                    <div class="select">
+                                        <select [(ngModel)]="maquina_selected">
+                                            <option value="{{maquina._id}}" *ngFor="let maquina of Maquinas">{{maquina.nombre}}</option>
+                                        </select>
+                                    </div>
+                            </div>
+                        </div>
+                        <div class="column">
+                            <div class="field">
+                                <label class="label"><br>Categoria</label>
+                                <div class="select">
+                                    <select [(ngModel)]="categoria_selected">
+                                        <option value="{{categoria._id}}" *ngFor="let categoria of Categorias">{{categoria.nombre}}</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </ng-container>
                     <div class="column" *ngIf="Otro">
                         <div class="field">
                             <label class="label">Asociar a otra OP:</label>
@@ -36,6 +58,47 @@
                         </div>
                     </div>
                 </div>
+                <div class="columns" *ngIf="Repuesto">
+                    <div class="column">
+                        <div class="field">
+                            <label class="label">Repuesto</label>
+                            <div class="select">
+                                <select (change)="seleccionarRepuesto($event.target)">
+                                    <option value="#">Seleccionar repuesto</option>
+                                    <option value="{{repuesto.nombre}}*{{repuesto.parte}}*{{repuesto._id}}" *ngFor="let repuesto of cargarRepuestos()">{{repuesto.nombre}} - Nº{{repuesto.parte}}</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="column">
+                    </div>
+                    <div class="column">
+
+                    </div>
+                    <div class="column"></div>
+                </div>
+                <ng-container *ngIf="Repuesto">
+                    <table class="table is-fullwidth">
+                        <thead>
+                            <tr>
+                                <th>Repuesto</th>
+                                <th>Cantidad</th>
+                                <th>Eliminar</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let confirmar of RepuestosLista; index as i">
+                                <td>{{confirmar.nombre}} - Nº:{{confirmar.parte}}</td>
+                                <td>
+                                    <input type="number" class="input" (change)="cambiarCantidadesR(i,$event.target.value)">
+                                </td>
+                                <td>
+                                    <button class="button is-danger" (click)="quitarMaterialR(i)">Quitar</button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </ng-container>
                 <hr>
                 <table class="table is-fullwidth" *ngIf="Otro">
                     <div class="columns">
@@ -93,7 +156,7 @@
                     </div>
                     <hr>
                 </table>
-                <table class="table is-fullwidth" *ngIf="orden.length > 0 && materiales && !Otro">
+                <table class="table is-fullwidth" *ngIf="orden.length > 0 && materiales && !Otro && !Repuesto">
                     <thead>
                         <th>Material</th>
                         <th>Cantidad Solicitada</th>
@@ -143,8 +206,13 @@
 
                 <hr *ngIf="materiales">
 
-                <button class="button is-primary" (click)="FinalizarSolicitu()" *ngIf="Otro">Realizar Solicitud</button>
-                <button class="button is-primary" (click)="FinalizarSolicitud()" *ngIf="!Otro">Realizar Solicitud</button>
+                <ng-container *ngIf="!Repuesto">
+                    <button class="button is-primary" (click)="FinalizarSolicitu()" *ngIf="Otro">Realizar Solicitud</button>
+                    <button class="button is-primary" (click)="FinalizarSolicitud()" *ngIf="!Otro">Realizar Solicitud</button>
+                </ng-container>
+                <ng-container *ngIf="Repuesto">
+                    <button class="button is-primary" (click)="FinalizarSolicitudR()">Realizar Solicitud</button>
+                </ng-container>
         </div>
     </div>
 </div>

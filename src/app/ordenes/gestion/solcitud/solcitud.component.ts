@@ -12,12 +12,21 @@ export class SolcitudComponent implements OnInit {
   public materiales:any;
   public orden_selected;
   public Otro:boolean = false;
+  public Repuesto:boolean = false;
   public grupos;
   public almacenado
   public por_confirmar = []
   public _materiales = []
   public usuario
   public asociacion = '#'
+  public Maquinas:any;
+  public Categorias:any;
+  public Repuestos:any;
+  public RepuestosLista = []
+
+  public maquina_selected = "";
+  public categoria_selected = "";
+
 
 
 
@@ -31,6 +40,41 @@ export class SolcitudComponent implements OnInit {
    }
 
   ngOnInit(): void {
+    this.buscarRepuestos()
+  }
+buscarRepuestos(){
+  this.api.getRepuesto()
+    .subscribe((resp:any)=>{
+      this.Repuestos = resp.repuesto
+      console.log(this.Repuestos)
+    })
+}
+
+cargarRepuestos(){
+  return this.Repuestos.filter((x:any) => x.maquina === this.maquina_selected && x.categoria === this.categoria_selected)
+}
+  
+BuscarMaquinas(){
+  this.api.GetMaquinas()
+    .subscribe((resp:any)=>{
+      this.Maquinas = resp;
+      const maquinas = this.Maquinas;
+      const maquinasUnicas = maquinas.reduce((acc, maquina) => {
+      if (!acc.find((m) => m.nombre === maquina.nombre)) {
+        acc.push(maquina);
+      }
+      return acc;
+      }, []);
+        this.Maquinas = maquinasUnicas;
+    })
+  }
+
+  GetCategorias(){
+    this.api.getCategorias()
+      .subscribe((resp:any)=>{
+        this.Categorias = resp.categorias;
+        console.log(this.Categorias)
+      })
   }
 
   getGRupos(){
@@ -95,14 +139,21 @@ export class SolcitudComponent implements OnInit {
 
     if(e === 'Otro'){
       this.Otro = true;
+      this.Repuesto = false
       this.getGRupos();
+    }else if(e === "repuesto"){
+      this.Otro = false;
+      this.Repuesto = true;
+      this.BuscarMaquinas()
+      this.GetCategorias()
+      this.buscarRepuestos()
     }else{
       let Orden_seleccionada = this.orden.find(x => x.sort == e)
       this.orden_selected = Orden_seleccionada
       this.Otro = false;
+      this.Repuesto = false;
       if(Orden_seleccionada){
         this.materiales = Orden_seleccionada.producto.materiales[Orden_seleccionada.montaje]
-        console.log(this.materiales,'este')
         this.materiales.sort(function(a, b) {
           if(a.material.nombre.toLowerCase() < b.material.nombre.toLowerCase()) return -1
           if(a.material.nombre.toLowerCase() > b.material.nombre.toLowerCase()) return 1
@@ -212,6 +263,56 @@ export class SolcitudComponent implements OnInit {
 
   }
 
+  FinalizarSolicitudR(){
+
+    this.RepuestosLista = []
+
+    Swal.fire({
+      icon:'success',
+      title:'Nueva solicitud de repuesto',
+      text:'Se realizó la solicitud de un repuesto',
+      timerProgressBar:true,
+      timer:5000,
+      showConfirmButton:false
+    })
+    this.onCloseModal.emit();
+    // let data = {
+    //   orden:'Repuesto',
+    //   repuestos:this.RepuestosLista
+    // }
+    // this.api.postRequisicionRepuesto(data)
+    //   .subscribe((resp:any)=>{
+    //     console.log(resp)
+    //   })
+  }
+
+  seleccionarRepuesto(e){
+
+    if(e.value === "#"){
+      return
+    }else {
+      let repuestosSplitted = e.value.split('*')
+      let nombre = repuestosSplitted[0]
+      let parte = repuestosSplitted[1]
+      let repuesto = repuestosSplitted[2]
+  
+     this.RepuestosLista.push({
+      nombre,
+      parte,
+      repuesto,
+      cantidad:0
+     })
+    }
+    
+  }
+
+  cambiarCantidadesR(i,e){
+    this.RepuestosLista[i].cantidad = e;
+  }
+  quitarMaterialR(i){
+    this.RepuestosLista.splice(i,1);
+  }
+
   FinalizarSolicitud(){
 
     let iteration = 0
@@ -270,11 +371,9 @@ export class SolcitudComponent implements OnInit {
 
     //test
     for(let i=0;i<materiales_fr.length;i++){
-      console.log(materiales_fr[i],'aqui')
       this.api.getAlmacenadoID2(materiales_fr[i].producto)
         .subscribe((resp:any)=>{
           let cantidad = 0;
-          console.log(resp,'HABLAME DE TIII')
           for(let i=0;i<resp.length;i++){
             cantidad = cantidad + Number(resp[i].cantidad)
           }
