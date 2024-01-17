@@ -65,7 +65,7 @@
                             <div class="select">
                                 <select (change)="seleccionarRepuesto($event.target)">
                                     <option value="#">Seleccionar repuesto</option>
-                                    <option value="{{repuesto.nombre}}*{{repuesto.parte}}*{{repuesto._id}}" *ngFor="let repuesto of cargarRepuestos()">{{repuesto.nombre}} - Nº{{repuesto.parte}}</option>
+                                    <option value="{{repuesto._id}}" *ngFor="let repuesto of cargarRepuestos();index as i">{{repuesto.nombre}} - Nº{{repuesto.parte}}</option>
                                 </select>
                             </div>
                         </div>
@@ -87,7 +87,7 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr *ngFor="let confirmar of RepuestosLista; index as i">
+                            <tr *ngFor="let confirmar of temporal; index as i">
                                 <td>{{confirmar.nombre}} - Nº:{{confirmar.parte}}</td>
                                 <td>
                                     <input type="number" class="input" (change)="cambiarCantidadesR(i,$event.target.value)">
@@ -170,7 +170,7 @@
                                 </ng-container>
                                 ({{material.producto.marca}})
                             </td>
-                            <td>
+                            <td> 
                                 <input type="number" class="input" value="0" min="0" id="{{i}}" name="{{material.producto._id}}">
                             </td>
                         </tr>

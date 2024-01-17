@@ -34,6 +34,29 @@
             <button class="button is-success" (click)="aprobar(pendiente._id)">Aprobar Solicitud</button> <button class="button is-danger" (click)="rechazar(pendiente._id)">Rechazar Solicitud</button>
             <hr>
             </ng-container>
+            <ng-container *ngFor="let pendiente of Repuestos">
+                <p class="orden">Solicitud de repuesto por: ( usuario )</p>
+                <b>Motivo: </b>Motivo de prueba
+                <table class="table is-fullwidth" >
+                    <thead>
+                        <tr>
+                            <th>Repuesto</th>
+                            <th>Cantidad</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let necesario of pendiente.repuestos;index as i">
+                            <td><b>Pieza Nº:</b> {{necesario.repuesto.parte}} - {{necesario.repuesto.nombre}} <br>
+                                <b>Maquina:</b> {{necesario.repuesto.maquina.nombre}} ({{necesario.repuesto.categoria.nombre}})</td>
+                            <td>
+                                {{necesario.cantidad}}Und
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                <button class="button is-success" (click)="AprobarRepuesto(pendiente._id)">Aprobar Solicitud</button> <button class="button is-danger" (click)="RechazarRepuesto(pendiente._id)">Rechazar Solicitud</button>
+                <hr>
+            </ng-container>
         </div>
     </div>
 </div>

@@ -191,6 +191,7 @@ export class MainComponent implements OnInit {
     this.getbobinas();
     this.getOrdenes();
     this.buscarPendientes();
+    this.buscarRepuestos()
     this.getDevolucion();
     this.filterList();
   }
@@ -321,6 +322,14 @@ export class MainComponent implements OnInit {
     this.api.getRequiEspera()
       .subscribe((resp:any)=>{
         this.Pendiente = resp;
+      })
+  }
+
+  public Repuestos;
+  buscarRepuestos(){
+    this.api.getRequisicionRepuesto()
+      .subscribe((resp:any)=>{
+        this.Repuestos = resp
       })
   }
 

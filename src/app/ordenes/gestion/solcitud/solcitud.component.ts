@@ -26,7 +26,7 @@ export class SolcitudComponent implements OnInit {
 
   public maquina_selected = "";
   public categoria_selected = "";
-
+  public temporal = []
 
 
 
@@ -51,6 +51,7 @@ buscarRepuestos(){
 }
 
 cargarRepuestos(){
+  let info = this.Repuestos.filter((x:any) => x.maquina === this.maquina_selected && x.categoria === this.categoria_selected)
   return this.Repuestos.filter((x:any) => x.maquina === this.maquina_selected && x.categoria === this.categoria_selected)
 }
   
@@ -264,8 +265,18 @@ BuscarMaquinas(){
   }
 
   FinalizarSolicitudR(){
+    let data = {
+      orden: 'Repuesto',
+      repuestos:this.RepuestosLista
+    }
 
-    this.RepuestosLista = []
+    this.api.postRequisicionRepuesto(data)
+        .subscribe((resp:any)=>{
+          this.maquina_selected = '';
+          this.categoria_selected = '';
+          this.RepuestosLista = []
+          this.temporal = []
+        })
 
     Swal.fire({
       icon:'success',
@@ -291,17 +302,8 @@ BuscarMaquinas(){
     if(e.value === "#"){
       return
     }else {
-      let repuestosSplitted = e.value.split('*')
-      let nombre = repuestosSplitted[0]
-      let parte = repuestosSplitted[1]
-      let repuesto = repuestosSplitted[2]
-  
-     this.RepuestosLista.push({
-      nombre,
-      parte,
-      repuesto,
-      cantidad:0
-     })
+      this.temporal.push(this.cargarRepuestos().find(x=> x._id === e.value))
+      this.RepuestosLista.push({repuesto:e.value, cantidad:0})
     }
     
   }

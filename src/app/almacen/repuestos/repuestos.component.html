@@ -8,6 +8,7 @@
 [Repuesto]="Repuesto"
 [Edicion]="edicion"
 [nuevoMaterial]="nuevoMaterial"
+[Repuestos_]="Repuestos"
 (onCloseModal)="cerrarRegistro()">
 </app-registro-repuesto>
 <app-repuesto-almacenado
@@ -16,17 +17,10 @@
 [Repuestos]="Repuestos"
 [Piezas]="Almacen"
 [Almacen]="Almacen__"
+[almacenado]="Almacenes"
 [Edicion]="edicion"
 (onCloseModal)="cerrarPiezas()">
 </app-repuesto-almacenado>
-
-
-<div class="container">
-    <div class="bucardor">
-        <input type="text" id="buscador" class="input" placeholder="Buscar pieza">
-        <button type="button" id="btnBuscar">Buscar</button>
-    </div>
-</div>
 
 
 <div class="modal" [ngClass]="{'is-active':notas}">

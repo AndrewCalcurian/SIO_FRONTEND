@@ -18,6 +18,7 @@ export class RegistroRepuestoComponent implements OnInit {
   @Input() Repuesto:any;
   @Input() nuevoMaterial:any;
   @Input() Edicion:boolean;
+  @Input() Repuestos_:any
   @Output() onCloseModal = new EventEmitter();
 
   ngOnInit(): void {
@@ -53,9 +54,10 @@ export class RegistroRepuestoComponent implements OnInit {
             })
             return
           }
+          this.Repuestos_.push(resp.repuesto)
           this.cerrar()
           
-        })
+         })
   }
 
 

@@ -911,5 +911,15 @@ export class RestApiService {
     return this.http.post(url, data)
   }
 
+  getRequisicionRepuesto(){
+    const url = `${this.api_url}/solicitudrepuesto`;
+    return this.http.get(url)
+  }
+
+  putRequisicionRepuesto(data, id){
+    const url = `${this.api_url}/solicitudrepuesto/${id}`;
+    return this.http.put(url, data)
+  }
+
 
 }

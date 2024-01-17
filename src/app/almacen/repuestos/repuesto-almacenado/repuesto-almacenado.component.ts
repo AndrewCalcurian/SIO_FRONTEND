@@ -14,6 +14,7 @@ export class RepuestoAlmacenadoComponent implements OnInit {
   @Input() Piezas:any;
   @Input() Almacen:any;
   @Input() Edicion:any;
+  @Input() almacenado:any;
   @Output() onCloseModal = new EventEmitter();
   public hoy 
   constructor(private api:RestApiService) { }
@@ -36,6 +37,7 @@ export class RepuestoAlmacenadoComponent implements OnInit {
     this.api.postpieza(this.Almacen)
         .subscribe((resp:any)=>{
 
+          this.almacenado.push(resp.pieza)
           this.cerrar();
 
         })
