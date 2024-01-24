@@ -12,6 +12,8 @@ export class AsignacionNewComponent implements OnInit {
 
   @Input() asignacion_:any
   @Input() necesario:any
+  @Input() repuestos:any;
+  @Input() repuesto:any;
   @Output() onCloseModal = new EventEmitter();
 
   constructor(private api:RestApiService) { }
@@ -39,6 +41,27 @@ export class AsignacionNewComponent implements OnInit {
 
   public trabajando = []
   public cantidad_cinta
+
+  AsignarRepuesto(i){
+    this.api.putRepuestosAprobados(this.repuestos[i], this.repuestos[i]._id)
+      .subscribe((resp:any)=>{
+        this.api.getRepuestosAprobados()
+            .subscribe((resp:any)=>{
+            this.repuestos = resp;
+            Swal.fire({
+              title:'Se realizó la asignación del repuesto',
+              icon:'success',
+              showConfirmButton:false,
+              timer:5000,
+              timerProgressBar:true,
+              toast:true,
+              position:'top-end'
+            })
+            this.onCloseModal.emit();
+        })
+      })
+    
+  }
 
   buscarRequisicion(){
     this.api.getRequi()

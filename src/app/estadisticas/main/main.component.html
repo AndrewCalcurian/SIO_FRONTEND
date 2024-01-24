@@ -208,7 +208,12 @@
                                 <tr>
                                     <th>
                                         <span class="titulo_sustrato xlarge">
-                                            {{puntoYcoma(data.asignados.Papel)}}t
+                                            <ng-container *ngIf="data.asignados.Papel">
+                                                {{puntoYcoma(data.asignados.Papel)}}t
+                                            </ng-container>
+                                            <ng-container *ngIf="!data.asignados.Papel">
+                                                {{puntoYcoma(data.asignados.Papel)}}t
+                                            </ng-container>
                                         </span>
                                     </th>
                                     <th>

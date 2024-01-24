@@ -921,5 +921,15 @@ export class RestApiService {
     return this.http.put(url, data)
   }
 
+  getRepuestosAprobados(){
+    const url = `${this.api_url}/repuestos-aprobados`;
+    return this.http.get(url)
+  }
+
+  putRepuestosAprobados(data, id){
+    const url = `${this.api_url}/descuento-repuesto/${id}`;
+    return this.http.put(url, data)
+  }
+
 
 }

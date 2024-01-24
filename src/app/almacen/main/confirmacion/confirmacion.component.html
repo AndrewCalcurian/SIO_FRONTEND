@@ -35,8 +35,8 @@
             <hr>
             </ng-container>
             <ng-container *ngFor="let pendiente of Repuestos">
-                <p class="orden">Solicitud de repuesto por: ( usuario )</p>
-                <b>Motivo: </b>Motivo de prueba
+                <p class="orden">Solicitud de repuesto por: ( {{pendiente.usuario}} )</p>
+                <b>Motivo: </b>{{pendiente.motivo}}
                 <table class="table is-fullwidth" >
                     <thead>
                         <tr>

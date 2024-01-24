@@ -137,6 +137,9 @@ export class MainComponent implements OnInit {
   Pendiente;
 
   public Bobillas = true;
+
+  public RepuestosAprobados = []
+  public aprobadosRepuesto = false
   
   searchTerm$ = new BehaviorSubject<string>('')
   private OnDestroy$ = new Subject();
@@ -191,7 +194,8 @@ export class MainComponent implements OnInit {
     this.getbobinas();
     this.getOrdenes();
     this.buscarPendientes();
-    this.buscarRepuestos()
+    this.buscarRepuestos();
+    this.buscarRepuestosAprobados();
     this.getDevolucion();
     this.filterList();
   }
@@ -203,6 +207,25 @@ export class MainComponent implements OnInit {
   public usuario
 
   public orden;
+
+  buscarRepuestosAprobados(){
+    this.api.getRepuestosAprobados()
+      .subscribe((resp:any)=>{
+        this.RepuestosAprobados = resp;
+        console.log(this.RepuestosAprobados)
+      })
+  }
+  modal_asignacion_repuestos(){
+    if(this.RepuestosAprobados.length > 0){
+      if(this.asignacion_){
+        this.aprobadosRepuesto = false;
+        this.asignacion_ = false
+      }else{
+        this.asignacion_ = true
+        this.aprobadosRepuesto = true
+      }
+    }
+  }
 
   filterList(): void {
     this.searchTerm$
@@ -219,6 +242,7 @@ export class MainComponent implements OnInit {
 
   cerrarAsignacion(){
     this.asignacion_ = false
+    this.Repuestos = false
     this.buscarPendientes()
     this.getOrdenes();
   }
@@ -354,8 +378,6 @@ export class MainComponent implements OnInit {
       .subscribe((resp:any)=>{
         console.log('ok')
         this.necesario = resp;
-        console.log(resp)
-        console.log( this.necesario ,'AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA')
       })
   }
 

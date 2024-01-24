@@ -41,6 +41,38 @@ export class RegistroRepuestoComponent implements OnInit {
       })
   }
 
+  SNParte(e){
+    console.log(e.target.checked)
+    if(e.target.checked === true){
+      const fechaActual = Date.now();
+
+        // Convertir la fecha actual a una cadena
+        const fechaActualCadena = fechaActual.toString();
+
+        // Obtener los últimos 3 dígitos de la fecha actual
+        const ultimos3Digitos = fechaActualCadena.slice(-3);
+
+        // Obtener los segundos actuales
+        const segundosActuales = new Date().getSeconds();
+
+        // Convertir los segundos actuales a una cadena
+        const segundosActualesCadena = segundosActuales.toString();
+
+        // Obtener los últimos 2 dígitos de los segundos actuales
+        const ultimos2Digitos = segundosActualesCadena.slice(-2);
+
+        // Combinar los últimos 3 dígitos de la fecha actual y los últimos 2 dígitos de los segundos actuales
+        const idUnico = ultimos3Digitos + ultimos2Digitos;
+
+  // Devolver el ID único generado
+      this.nuevoMaterial.parte = `*${idUnico}`;
+      (<HTMLInputElement>document.getElementById('n_parte')).disabled = true;
+    }else{
+      this.nuevoMaterial.parte = '';
+      (<HTMLInputElement>document.getElementById('n_parte')).disabled = false;
+    }
+  }
+
   guardar(){
     this.api.postRepuesto(this.nuevoMaterial)
         .subscribe((resp:any)=>{

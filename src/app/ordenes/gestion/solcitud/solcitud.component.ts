@@ -52,7 +52,7 @@ buscarRepuestos(){
 
 cargarRepuestos(){
   let info = this.Repuestos.filter((x:any) => x.maquina === this.maquina_selected && x.categoria === this.categoria_selected)
-  return this.Repuestos.filter((x:any) => x.maquina === this.maquina_selected && x.categoria === this.categoria_selected)
+  return this.Repuestos.filter((x:any) => x.maquina === this.maquina_selected || x.maquina === '620d635af53de725bcfbe905' && x.categoria === this.categoria_selected)
 }
   
 BuscarMaquinas(){
@@ -265,9 +265,24 @@ BuscarMaquinas(){
   }
 
   FinalizarSolicitudR(){
+    let motivo = (<HTMLInputElement>document.getElementById('__motivo')).value;
+    if(!motivo || this.RepuestosLista.length < 1){
+      Swal.fire({
+        position:'top-end',
+        toast:true,
+        timer:3000,
+        text:'Debes llenar todos los campos',
+        icon:'error',
+        showConfirmButton:false,
+        timerProgressBar:true
+      })
+      return
+    }
     let data = {
       orden: 'Repuesto',
-      repuestos:this.RepuestosLista
+      repuestos:this.RepuestosLista,
+      motivo,
+      usuario:`${this.api.usuario.Nombre} ${this.api.usuario.Apellido}`
     }
 
     this.api.postRequisicionRepuesto(data)

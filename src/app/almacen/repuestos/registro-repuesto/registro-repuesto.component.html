@@ -11,7 +11,10 @@
                         <div class="control">
                             <div class="select">
                                 <select [(ngModel)]="nuevoMaterial.maquina">
-                                    <option value="{{maquina._id}}" *ngFor="let maquina of Maquinas">{{maquina.nombre}}</option>
+                                    <ng-container *ngFor="let maquina of Maquinas">
+                                        <option value="{{maquina._id}}" *ngIf="maquina.nombre != 'Proceso de Revisión'">{{maquina.nombre}}</option>
+                                        <option value="{{maquina._id}}" *ngIf="maquina.nombre == 'Proceso de Revisión'">Genericos</option>
+                                    </ng-container>
                                 </select>
                             </div>
                         </div>
@@ -33,7 +36,7 @@
                 <div class="column"></div>
             </div>
             <div class="columns">
-                <div class="column">
+                <div class="column is-5">
                     <div class="field">
                         <label for="" class="label">Nombre:</label>
                         <div class="control">
@@ -41,11 +44,21 @@
                         </div>
                     </div>
                 </div>
+            </div>
+            <div class="columns">
                 <div class="column">
                     <div class="field">
                         <label for="" class="label">Nº parte:</label>
                         <div class="control">
-                            <input type="text" class="input" [(ngModel)]="nuevoMaterial.parte">
+                            <input type="text" class="input" [(ngModel)]="nuevoMaterial.parte" id="n_parte">
+                        </div>
+                    </div>
+                </div>
+                <div class="column">
+                    <div class="field">
+                        <label for="" class="label">S/N de parte</label>
+                        <div class="control">
+                            <input type="checkbox" name="" id="" (change)="SNParte($event)">
                         </div>
                     </div>
                 </div>

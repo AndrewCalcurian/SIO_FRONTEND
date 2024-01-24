@@ -43,6 +43,27 @@
                         )
                 </span>
             </span>
+            
+        </button>
+        <button class="button is-primary edited" (click)='modal_asignacion_repuestos()' *ngIf="usuario.Almacen == 2">
+            <span class="icon">
+                <i class="fas fa-hand-holding edited"></i>
+            </span>
+            <span>
+
+                Repuesto <br>
+                <span class="down">
+                    necesario (
+                        <ng-container *ngIf="necesario">
+                            {{necesario.length}}
+                        </ng-container>
+                        <ng-container *ngIf="!necesario">
+                            0
+                        </ng-container>
+                        )
+                </span>
+            </span>
+            
         </button>
         <button class="button is-primary edited" (click)="Requisicion()">
             <span class="icon">
@@ -76,7 +97,7 @@
         <ng-containe *ngIf="Devoluciones">
             <ng-container *ngIf="Devoluciones.length > 0 && usuario.Almacen == 2">
                 <button class="button is-danger is-outlined" (click)="Modal_Devolucion()">
-                    <span>Devolución</span>
+                    <!-- <span>Devolución</span> -->
                     <span class="icon is-small">
                         <i class="fas fa-exclamation"></i>
                     </span>
@@ -105,6 +126,8 @@
         <app-asignacion-new
         [asignacion_]="asignacion_"
         [necesario]="necesario"
+        [repuesto]="aprobadosRepuesto"
+        [repuestos]="RepuestosAprobados"
         (onCloseModal)="cerrarAsignacion()">
         </app-asignacion-new>
 

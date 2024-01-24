@@ -38,7 +38,7 @@ export class ConfirmacionComponent implements OnInit {
   }
 
   AprobarRepuesto(id){
-    let data = {estado:'espera'}
+    let data = {estado:'Aprobado'}
 
     this.api.putRequisicionRepuesto(data, id)
       .subscribe((resp:any)=>{

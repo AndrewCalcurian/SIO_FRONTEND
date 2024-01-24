@@ -194,6 +194,7 @@ export class ConsultaFacturacionComponent implements OnInit {
     this.api.getDespachoCliente(cliente, desde, hasta)
       .subscribe((resp:any)=>{
         this.ORDENES = []
+        this.NOTAS = []
         this.Total_Bs = 0;
         this.Total_USD = 0;
         for(let i=0; i< resp.length;i++){

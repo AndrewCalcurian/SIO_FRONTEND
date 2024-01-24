@@ -16,6 +16,7 @@ export class RepuestoAlmacenadoComponent implements OnInit {
   @Input() Edicion:any;
   @Input() almacenado:any;
   @Output() onCloseModal = new EventEmitter();
+  @Output() onUpdate = new EventEmitter();
   public hoy 
   constructor(private api:RestApiService) { }
 
@@ -26,8 +27,12 @@ export class RepuestoAlmacenadoComponent implements OnInit {
 
 
   cargarRepuestos(){
-    return this.Repuestos.filter((x:any) => x.maquina === this.Almacen.maquina && x.categoria === this.Almacen.categoria)
-  }
+    if(this.Almacen.maquina != 'GENERICO'){
+      return this.Repuestos.filter((x:any) => x.maquina === this.Almacen.maquina && x.categoria === this.Almacen.categoria);
+    }else{
+    return this.Repuestos.filter((x:any) => x.maquina === 'GENERICO' && x.categoria === this.Almacen.categoria)
+    }
+}
 
   cerrar(){
     this.onCloseModal.emit();
@@ -37,7 +42,8 @@ export class RepuestoAlmacenadoComponent implements OnInit {
     this.api.postpieza(this.Almacen)
         .subscribe((resp:any)=>{
 
-          this.almacenado.push(resp.pieza)
+          this.onUpdate.emit();
+          console.log(resp)
           this.cerrar();
 
         })

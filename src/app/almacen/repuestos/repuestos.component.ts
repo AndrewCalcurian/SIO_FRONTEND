@@ -52,12 +52,36 @@ export class RepuestosComponent implements OnInit {
     cantidad: 0
   }
 
+  filteredParts: string[] = [];
+  filteredParts2: string[] = [];
+  public search = false
+  public showImage = false
+  public showImage2 = false
+
 
   ngOnInit(): void {
     this.buscarMaquinas();
     this.buscarCategorias();
     this.buscarRepuestos();
     this.buscarPiezas();
+  }
+
+  filterParts(searchTerm: string) {
+    this.filteredParts = this.Repuestos.filter(part => part.parte.toLowerCase().includes(searchTerm.toLowerCase()) || part.nombre.toLowerCase().includes(searchTerm.toLowerCase()));
+  }
+
+  filterParts2(searchTerm: string) {
+    this.filteredParts2 = this.Almacenes.filter(part => part.repuesto.parte.toLowerCase().includes(searchTerm.toLowerCase()) || part.repuesto.nombre.toLowerCase().includes(searchTerm.toLowerCase()));
+  }
+
+  scrollTo(parte){
+    const element = document.getElementById(parte);
+
+    // If the element exists, scroll to it
+    if (element) {
+      element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      element.classList.add('blink');
+    }
   }
 
   verNotas(notas){
@@ -131,8 +155,19 @@ export class RepuestosComponent implements OnInit {
     this.api.getpieza()
       .subscribe((resp:any) =>{
         this.Almacenes = resp.pieza
-        console.log(this.Almacenes);
         
+        const comparar = (a, b) => {
+          if (a['nombre'] < b['nombre']) {
+            return -1;
+          } else if (a['nombre'] > b['nombre']) {
+            return 1;
+          } else {
+            return 0;
+          }
+        };
+
+        this.Almacenes = this.Almacenes.sort(comparar)
+
       })
   }
 
@@ -140,6 +175,18 @@ export class RepuestosComponent implements OnInit {
     this.api.getRepuesto()
         .subscribe((resp:any)=>{
           this.Repuestos = resp.repuesto;
+
+          const comparar = (a, b) => {
+            if (a['nombre'] < b['nombre']) {
+              return -1;
+            } else if (a['nombre'] > b['nombre']) {
+              return 1;
+            } else {
+              return 0;
+            }
+          };
+  
+          this.Repuestos = this.Repuestos.sort(comparar)
         })
   }
 
@@ -151,19 +198,41 @@ export class RepuestosComponent implements OnInit {
         })
   }
 
-  verImagen(foto, nombre){
-
-    if(!foto){
-      foto = 'no-image'
-    }
-    Swal.fire({
-      title: nombre,
-      imageUrl: `http://192.168.0.23:8080/api/imagen/repuestos/${foto}`,
-      imageWidth: 400,
-      imageAlt:nombre,
-      showConfirmButton:false
-    });
+  onMouseMove(event: MouseEvent) {
+    const img = event.target as HTMLImageElement;
+    const x = (100 * event.offsetX / img.offsetWidth) + '%';
+    const y = (100 * event.offsetY / img.offsetHeight) + '%';
+    img.style.setProperty('--x', x);
+    img.style.setProperty('--y', y);
   }
+  // Function to display an image using SweetAlert2 library
+public foto = ''
+  verImagen(foto, nombre, n?) {
+
+  
+  if(n){
+    this.showImage = true
+  }else{
+    this.showImage2 = true
+  }
+
+  // Check if the 'foto' variable is empty or undefined
+  if (!foto) {
+    // If empty, assign a default 'no-image' value to 'foto'
+    this.foto = 'http://192.168.0.23:8080/api/imagen/repuestos/no-image';
+  }else{
+    this.foto = `http://192.168.0.23:8080/api/imagen/repuestos/${foto}`
+  }
+
+  // Use SweetAlert2 to display the image
+  // Swal.fire({
+  //   title: nombre, // Set the title of the dialog
+  //   imageUrl: `http://192.168.0.23:8080/api/imagen/repuestos/${foto}`, // Specify the URL of the image
+  //   imageWidth: 400, // Set the width of the image in pixels
+  //   imageAlt: nombre, // Set the alternative text for the image
+  //   showConfirmButton: false // Hide the confirmation button
+  // });
+}
 
   buscarMaquinas(){
     this.api.GetMaquinas()
