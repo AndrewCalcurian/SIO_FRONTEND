@@ -270,7 +270,7 @@
                 <b>Resumen:</b><br>
                 {{Despachos[INDEX].despacho.producto}} <br>
                 <b>Subtotal (USD): {{puntoYcoma(Despachos[INDEX].despacho.cantidad / 1000 * Escala.precio)}} </b><br>
-                <b>Subtotal (Bs): {{puntoYcoma((Despachos[INDEX].despacho.cantidad / 1000 * Escala.precio)*Tasa)}}</b><br>
+                <b>Subtotal (Bs): {{calcularSub(Despachos[INDEX].despacho.cantidad, Despachos[INDEX].despacho.precio, Despachos[INDEX].despacho.tasa)}}                </b><br>
     
                 <br>
                 <div class="field">
