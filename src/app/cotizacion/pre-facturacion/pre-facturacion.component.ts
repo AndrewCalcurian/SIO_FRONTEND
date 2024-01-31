@@ -34,9 +34,6 @@ export class PreFacturacionComponent implements OnInit {
         this.Despachos = resp.preFacuracion
         console.log(resp, 'TASAA')
         this.Tasa = resp.MonitorBCV
-        // let split_dolar = resp.MonitorBCV.split(' ')
-        // this.Tasa = Number(split_dolar[1])
-        console.log(this.Tasa)
       })
   }
 
@@ -311,7 +308,12 @@ export class PreFacturacionComponent implements OnInit {
         this.Validacion = false
         this.resumen = true
         this.resumido = false
+        this.api.getDespachosYOrdenes()
+      .subscribe((resp:any)=>{
+        this.Despachos = resp.preFacuracion
+        this.Tasa = resp.MonitorBCV
         generarPDF();
+      })
         // if(pre < 10){
         //   pre = `000${pre}`
         // }

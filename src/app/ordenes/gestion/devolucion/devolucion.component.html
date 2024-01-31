@@ -12,7 +12,8 @@
                         <select (change)="seleccionarMateriales()" id="ordens">
                             <option value="·">Seleccionar OP</option>
                             <option value="#">Otros materiales</option>
-                            <ng-container *ngIf="usuario.Gestiones != 5">
+                            <option value="Repuesto">Repuesto</option>
+                            <ng-container *ngIf="usuario.Gestiones != 5 && usuario.Gestiones != 9">
                                 <ng-container *ngFor="let orden of repeticion">
                                     <ng-container *ngIf="orden != '#'">
                                         <option value="{{orden}}">
@@ -24,6 +25,45 @@
                         </select>
                     </div>
                     <hr>
+                    <ng-container *ngIf="Repuesto">
+
+                        <div class="field">
+                            <label for="" class="label bigga">Nº Asignación</label>
+                            <div class="columns">
+                                <div class="column is-3">
+                                    <b class="ASIG">RP-ASG-24-</b>
+                                </div>
+                                <div class="column is-2">
+                                    <input type="text" class="input" placeholder="000" (change)="buscarAsignacion($event.target.value)">
+                                </div>
+                                <div class="column">
+
+                                </div>
+                            </div>
+                        </div>
+                        <hr>
+                        <table class="table is-fullwidth is-striped" *ngIf="RepuestoAprobados.repuestos.length > 0">
+                            <thead>
+                                <tr>
+                                    <th>Repuesto</th>
+                                    <th>Cantidad</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr *ngFor="let repuestos of RepuestoAprobados.repuestos">
+                                    <td>{{repuestos.repuesto.parte}} - {{repuestos.repuesto.nombre}}</td>
+                                    <td><input type="text" class="input" placeholder="{{repuestos.cantidad}}"></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <ng-container *ngIf="RepuestoAprobados.repuestos.length > 0">
+                        <textarea name="" class="textarea" rows="2" placeholder="Motivo"></textarea>
+                            <br>
+                                <button class="button is-primary" (click)="finalizarDevolucion(materiales[i]._id,Motivo)">
+                                    Realizar Devolución
+                                </button> 
+                        </ng-container>
+                    </ng-container>
                     <ng-container *ngFor="materiales of materiales;index as i">
                         <b class="Asignacion"> Asignación: AL-ASG-{{materiales[i].asignacion}}</b> <br>
                         <table class="table is-fullwidth is-striped">

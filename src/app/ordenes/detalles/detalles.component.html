@@ -127,7 +127,11 @@
                                         </tr>
                                     </ng-container>
                                     <ng-container  *ngIf="!even">
-                                            <td colspan="2">Fecha: <b>{{despacho.fecha}}</b></td>
+                                            <td colspan="2">
+                                                <ng-container>
+                                                    Fecha: <b>{{despacho.fecha}}</b>
+                                                </ng-container>
+                                            </td>
                                     </ng-container>
                                 </ng-container>
                             </tbody>

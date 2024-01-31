@@ -19,14 +19,14 @@ export class DevolucionComponent implements OnInit {
   public repeticion = [];
   public Data_devolucion = [];
   public usuario;
+  public RepuestoAprobados = []
+  public Repuesto = false;
 
   constructor(private api:RestApiService) {
     this.usuario = api.usuario
   }
 
   ngOnInit(): void {
-
-    
     this.api.getLotes()
     .subscribe((resp:any)=>{
       this.devoluciones = resp;
@@ -42,9 +42,23 @@ export class DevolucionComponent implements OnInit {
       
     })
   }
+
+
+  getRepuestosAceptados(asignacion){
+    this.api.getRepuestosFinalizados(asignacion) 
+      .subscribe((resp:any)=>{
+        this.RepuestoAprobados = resp;
+        console.log(this.RepuestoAprobados)
+      })
+  }
   
   seleccionarMateriales(){
     let orden_ = (<HTMLInputElement>document.getElementById('ordens')).value
+    if(orden_ === 'Repuesto'){
+      this.Repuesto = true;
+    }else{
+      this.Repuesto = false;
+    }
     this.materiales = this.devoluciones.filter(devoluciones => devoluciones.orden === orden_);
     console.log(this.materiales)
     for(let i=0;i<this.materiales.length;i++){
@@ -177,6 +191,12 @@ export class DevolucionComponent implements OnInit {
 
     // console.log(this.Data_devolucion)
 
+  }
+
+  buscarAsignacion(e){
+    let asignacion = '24';
+    asignacion = asignacion + e;
+    this.getRepuestosAceptados(asignacion)
   }
 
   CerrarDevolucion(id){

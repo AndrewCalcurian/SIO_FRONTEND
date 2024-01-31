@@ -124,7 +124,7 @@
         <div class="card-content">
             <div class="columns">
                 <div class="column is-4">
-                    <div class="tabs" *ngIf="ORDENES.length > 0">
+                    <div class="tabs" *ngIf="ORDENES.length > 0 || NOTAS.length > 0">
                         <ul>
                           <li class="is-active" id="FA_" (click)="FA()"><a>Facturas</a></li>
                           <li (click)="NE()" id="NE_"><a>Notas de entrega</a></li>
@@ -136,7 +136,7 @@
                 </div>
             </div>
             <ng-container *ngIf="Facturas">
-                <table class="table is-fullwidth tablas" *ngIf="ORDENES.length > 0">
+                <table class="table is-fullwidth tablas" *ngIf="ORDENES.length > 0 || NOTAS.length > 0">
                     <thead>
                         <!-- <tr>
                             <th colspan="4" class="is-selected">Est. Display Konga Sabores (Máquina) / 30-05-2023</th>
@@ -175,7 +175,7 @@
                 </table>
             </ng-container>
             <ng-container *ngIf="Notas">
-                <table class="table is-fullwidth tablas" *ngIf="ORDENES.length > 0">
+                <table class="table is-fullwidth tablas" *ngIf="ORDENES.length > 0  || NOTAS.length > 0">
                     <thead>
                         <!-- <tr>
                             <th colspan="4" class="is-selected">Est. Display Konga Sabores (Máquina) / 30-05-2023</th>
@@ -196,7 +196,17 @@
                         <tr *ngFor="let despacho of NOTAS">
                             <td class="data__">{{despacho.producto}}</td>
                             <td style="text-align: center;" class="data__">{{despacho.op}}</td>
-                            <td style="text-align: center;" class="data__">{{despacho.fecha}}</td>
+                            <td style="text-align: center;" class="data__">
+                                {{despacho.fecha}}
+                                <ng-container *ngIf="!despacho.fecha">
+                                    <ng-container *ngIf="!despacho.parcial">
+                                        {{despacho.status}}
+                                    </ng-container>
+                                    <ng-container *ngIf="despacho.parcial">
+                                        {{despacho.parcial}}
+                                    </ng-container>
+                                </ng-container>
+                            </td>
                             <td style="text-align: center;" class="data__">{{puntoYcoma(despacho.tasa)}}</td>
                             <td style="text-align: center;" class="data__">{{puntoYcoma(despacho.cantidad)}}</td>
                             <td style="text-align: center;" class="data__">{{puntoYcoma(despacho.precio)}}</td>

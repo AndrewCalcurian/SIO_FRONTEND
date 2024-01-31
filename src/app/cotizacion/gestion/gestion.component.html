@@ -201,13 +201,13 @@
                                 {{i +1}}
                             </div>
                             <div class="column is-1">
-                                <a id="Edit{{i}}" (click)="Edit(i)"><i class="fas fa-edit" style="color: #b6eba2;"></i></a> 
+                                <a id="Edit{{i}}_{{n}}" (click)="Edit(i, n)"><i class="fas fa-edit" style="color: #b6eba2;"></i></a> 
                             </div>
                             <div class="column is-1">
-                                <a id="Confirm{{i}}" (click)="Confirm(i, n)" style="display:none"><i class="fas fa-check" style="color: #b6eba2;"></i></a> 
+                                <a id="Confirm{{i}}_{{n}}" (click)="Confirm(i, n)" style="display:none"><i class="fas fa-check" style="color: #b6eba2;"></i></a> 
                             </div>
                             <div class="column is-1">
-                                <a id="Delete{{i}}" (click)="Delete(i, n)"><i class="fas fa-trash-alt" style="color: #ff0000;"></i></a>
+                                <a id="Delete{{i}}_{{n}}" (click)="Delete(i, n)"><i class="fas fa-trash-alt" style="color: #ff0000;"></i></a>
                             </div>
                         </div>
                         </td>
@@ -216,12 +216,12 @@
                     <tr>
                         <th class="is-selected">Cantidad (Und) <i class="fas fa-caret-right"></i></th>
                         <td *ngFor="let escala of intervalo.escalas;index as i">
-                            <span id="cant_{{i}}">
+                            <span id="cant_{{i}}_{{n}}">
                                 {{puntoYcoma(escala.cantidad)}} 
                             </span>
                             <div class="columns">
                                 <div class="column is-6">
-                                    <input type="text" class="input" [(ngModel)]="intervalos[n].escalas[i].cantidad" id="Cantidad{{i}}" style="display: none;" width="100px">
+                                    <input type="text" class="input" [(ngModel)]="intervalos[n].escalas[i].cantidad" id="Cantidad{{i}}_{{n}}" style="display: none;" width="100px">
                                 </div>
                             </div>
                         </td>
@@ -229,12 +229,12 @@
                     <tr>
                         <th class="is-selected">Precio (USD) <i class="fas fa-caret-right"></i></th>
                         <td *ngFor="let escala of intervalo.escalas;index as i">
-                            <span id="precio_{{i}}">
+                            <span id="precio_{{i}}_{{n}}">
                                 {{puntoYcoma(escala.precio)}}
                             </span>
                             <div class="columns">
                                 <div class="column is-6">
-                                    <input type="text" class="input" [(ngModel)]="intervalos[n].escalas[i].precio" id="Precio{{i}}" style="display: none;" width="100px">
+                                    <input type="text" class="input" [(ngModel)]="intervalos[n].escalas[i].precio" id="Precio{{i}}_{{n}}" style="display: none;" width="100px">
                                 </div>
                             </div>
                         </td>

@@ -29,14 +29,14 @@ export class GestionComponent implements OnInit {
   }
 
   Confirm(i,n){
-    document.getElementById(`Confirm${i}`).style.display = 'none';
-    document.getElementById(`Cantidad${i}`).style.display = 'none';
-    document.getElementById(`Precio${i}`).style.display = 'none';
+    document.getElementById(`Confirm${i}_${n}`).style.display = 'none';
+    document.getElementById(`Cantidad${i}_${n}`).style.display = 'none';
+    document.getElementById(`Precio${i}_${n}`).style.display = 'none';
 
-    document.getElementById(`Edit${i}`).style.display = 'block';
-    document.getElementById(`Delete${i}`).style.display = 'block';
-    document.getElementById(`cant_${i}`).style.display = 'block';
-    document.getElementById(`precio_${i}`).style.display = 'block';
+    document.getElementById(`Edit${i}_${n}`).style.display = 'block';
+    document.getElementById(`Delete${i}_${n}`).style.display = 'block';
+    document.getElementById(`cant_${i}_${n}`).style.display = 'block';
+    document.getElementById(`precio_${i}_${n}`).style.display = 'block';
 
 
     this.api.putIntervalo(this.intervalos[n])
@@ -84,16 +84,16 @@ export class GestionComponent implements OnInit {
     }
   }
 
-  Edit(i){
+  Edit(i, n){
 
-    document.getElementById(`Confirm${i}`).style.display = 'block';
-    document.getElementById(`Cantidad${i}`).style.display = 'block';
-    document.getElementById(`Precio${i}`).style.display = 'block';
+    document.getElementById(`Confirm${i}_${n}`).style.display = 'block';
+    document.getElementById(`Cantidad${i}_${n}`).style.display = 'block';
+    document.getElementById(`Precio${i}_${n}`).style.display = 'block';
 
-    document.getElementById(`Edit${i}`).style.display = 'none';
-    document.getElementById(`Delete${i}`).style.display = 'none';
-    document.getElementById(`cant_${i}`).style.display = 'none';
-    document.getElementById(`precio_${i}`).style.display = 'none';
+    document.getElementById(`Edit${i}_${n}`).style.display = 'none';
+    document.getElementById(`Delete${i}_${n}`).style.display = 'none';
+    document.getElementById(`cant_${i}_${n}`).style.display = 'none';
+    document.getElementById(`precio_${i}_${n}`).style.display = 'none';
 
   }
 

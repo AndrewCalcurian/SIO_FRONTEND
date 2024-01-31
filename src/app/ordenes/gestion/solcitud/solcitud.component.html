@@ -100,7 +100,13 @@
                     </table>
                     <div class="field">
                         <label class="label">Motivo</label>
-                        <textarea class="textarea" placeholder="Motivo" rows="2" id="__motivo"></textarea>
+                        <div class="select">
+                            <select id="__motivo">
+                                <option value="Mantenimiento correctivo">Mantenimiento correctivo</option>
+                                <option value="Mantenimiento preventivo">Mantenimiento preventivo</option>
+                                <option value="Realización de prueba">Realización de prueba</option>
+                            </select>
+                        </div>
                     </div>
                 </ng-container>
                 <hr>
@@ -187,7 +193,7 @@
                     </tbody>
                 </table>
 
-                <div class="field" *ngIf="materiales && !Otro">
+                <div class="field" *ngIf="materiales && !Otro && !Repuesto">
                     <div class="select">
                       <!-- <textarea class="textarea is-small has-fixed-size" placeholder="Motivo de la solicitud"></textarea> -->
                         <select name="" id="razon" class="selevt">

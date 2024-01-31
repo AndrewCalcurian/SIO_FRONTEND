@@ -151,23 +151,26 @@ export class RepuestosComponent implements OnInit {
     }
   }
 
+  ordenarPorNombre(matriz, propiedad) {
+    // Comparar dos objetos en función de la propiedad especificada
+    const comparar = (a, b) => {
+      if (a[propiedad] < b[propiedad]) {
+        return -1;
+      } else if (a[propiedad] > b[propiedad]) {
+        return 1;
+      } else {
+        return 0;
+      }
+    };
+  
+    // Ordenar la matriz utilizando la función de comparación
+    return matriz.sort(comparar);
+  }
+
   buscarPiezas(){
     this.api.getpieza()
       .subscribe((resp:any) =>{
         this.Almacenes = resp.pieza
-        
-        const comparar = (a, b) => {
-          if (a['nombre'] < b['nombre']) {
-            return -1;
-          } else if (a['nombre'] > b['nombre']) {
-            return 1;
-          } else {
-            return 0;
-          }
-        };
-
-        this.Almacenes = this.Almacenes.sort(comparar)
-
       })
   }
 

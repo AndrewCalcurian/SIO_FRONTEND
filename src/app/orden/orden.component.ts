@@ -48,7 +48,6 @@ export class OrdenComponent implements OnInit {
         // this.PRODUCTO.demasia = this.PRODUCTO.producto.ejemplares[this.PRODUCTO.montaje]
         // console.log(this.PRODUCTO, 'este es el Producto');
         this.loading = false;
-        console.log(this.PRODUCTO)
       })
   }
 
@@ -159,9 +158,14 @@ export class OrdenComponent implements OnInit {
     let hojas_imprimir = this.hojas_imprimir
     // console.log(this.PRODUCTO)
     
-    PRODUCTO.fecha_o = moment(PRODUCTO.fecha_o).utc().format('DD/MM/yyyy');
-    PRODUCTO.fecha_s = moment(PRODUCTO.fecha_s).utc().format('DD/MM/yyyy');
-    PRODUCTO.fecha = moment(PRODUCTO.fecha).format('DD/MM/yyyy');
+    // PRODUCTO.fecha_o = moment(PRODUCTO.fecha_o).format('DD/MM/yyyy');
+    // PRODUCTO.fecha_s = moment(PRODUCTO.fecha_s).format('DD/MM/yyyy');
+    // PRODUCTO.fecha = moment(PRODUCTO.fecha).format('DD/MM/yyyy');
+
+    PRODUCTO.fecha_o = new Date(PRODUCTO.fecha_o).toLocaleDateString('es-ES');
+    PRODUCTO.fecha_s = new Date(PRODUCTO.fecha_s).toLocaleDateString('es-ES');
+    PRODUCTO.fecha = new Date(PRODUCTO.fecha).toLocaleDateString('es-ES');
+
     PRODUCTO.cantidad_ = new Intl.NumberFormat('de-DE').format(PRODUCTO.cantidad)
 
     if(!PRODUCTO.usuario){
@@ -762,7 +766,22 @@ export class OrdenComponent implements OnInit {
     }
 
     generarPDF();
-
+    this.api.getOrdenById(this.id)
+      .subscribe((resp:any)=>{
+        this.loading = true;
+        this.PRODUCTO = resp;
+        this.getMaquinas(this.PRODUCTO._id)
+        this.cantidad = new Intl.NumberFormat('de-DE').format(this.PRODUCTO.cantidad)
+        this.demasia = Math.ceil(this.PRODUCTO.demasia * 100 / this.PRODUCTO.paginas);
+        let ejemplares_montados = this.PRODUCTO.producto.ejemplares[this.PRODUCTO.montaje]
+        let paginas_sin_demasia = this.PRODUCTO.cantidad /  ejemplares_montados;
+        this.hojas_imprimir = Math.ceil(this.PRODUCTO.cantidad / this.PRODUCTO.producto.ejemplares[this.PRODUCTO.montaje])
+        this.hojas_demasia = Math.ceil(this.PRODUCTO.demasia * this.hojas_imprimir / 100)
+        // this.PRODUCTO.demasia = Math.ceil(this.demasia * paginas_sin_demasia / 100);
+        // this.PRODUCTO.demasia = this.PRODUCTO.producto.ejemplares[this.PRODUCTO.montaje]
+        // console.log(this.PRODUCTO, 'este es el Producto');
+        this.loading = false;
+      })
   }
 
 }

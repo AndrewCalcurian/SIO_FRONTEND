@@ -74,14 +74,22 @@
     display: block;
     background-color: rgb(211, 211, 211);
     border: solid 1px white;
-    padding: 3px;
+    padding: 5px;
     border-radius: 5px;
+    font-size: 15px;
 }
 
 .toggle{
     color: green;
     font-size: xx-large;
     cursor: pointer;
+}
+
+.categoria{
+    padding: 5px;
+    border-radius: 5px;
+    font-size: 20px;
+
 }
 
 .categoria:hover{

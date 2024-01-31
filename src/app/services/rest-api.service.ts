@@ -931,5 +931,10 @@ export class RestApiService {
     return this.http.put(url, data)
   }
 
+  getRepuestosFinalizados(asignacion){
+    const url = `${this.api_url}/solicitud-repuestos-asignadas/${asignacion}`;
+    return this.http.get(url)
+  }
+
 
 }

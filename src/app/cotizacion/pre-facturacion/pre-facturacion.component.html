@@ -10,52 +10,54 @@
             </div>
             <hr>
             <ng-container *ngFor="let despacho of Despachos;index as i">
-                <table class="table is-fullwidth is-bordered" *ngIf="despacho.despacho.documento === '' || despacho.despacho.documento.charAt(0) === 'N'">
-                    <thead>
-                        <tr>
-                            <td class="is-selected" colspan="2">
-                                <b>Fecha: </b>{{despacho.fecha}}
-                            </td>
-                            <td *ngIf="despacho.despacho.documento[0] === 'N'" class="red">
-                                <b>Nota de entrega: </b>{{despacho.despacho.documento}}
-                            </td>
-                        </tr>
-                        <tr>
-                            <th width="70px">OP</th>
-                            <th width="300px">Cliente</th>
-                            <th width="300px">Producto</th>
-                            <th width="125px">OC</th>
-                            <th width="100px">Cantidad</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td>{{despacho.orden.sort}}</td>
-                            <td>{{despacho.orden.cliente.nombre}}</td>
-                            <td>{{despacho.despacho.producto}}</td>
-                            <td>{{despacho.orden.orden}}</td>
-                            <td>{{despacho.despacho.cantidad}}</td>
-                            <td>
-                                <button class="button is-info is-small" (click)="ValidarDatos(i)">
-                                <div class="icon">
-                                    <i class="far fa-calendar-check"></i>
-                                </div>
-                                <span>
-                                    Validar Datos
-                                </span>
-                                </button> 
-                                <button class="button is-success is-small" (click)="openFacturacion(i)" *ngIf="despacho.despacho.precio">
+                <ng-container *ngIf="despacho.despacho.status != 'NE'">
+                    <table class="table is-fullwidth is-bordered" *ngIf="despacho.despacho.documento === '' || despacho.despacho.documento.charAt(0) === 'N'">
+                        <thead>
+                            <tr>
+                                <td class="is-selected" colspan="2">
+                                    <b>Fecha: </b>{{despacho.fecha}}
+                                </td>
+                                <td *ngIf="despacho.despacho.documento[0] === 'N'" class="red">
+                                    <b>Nota de entrega: </b>{{despacho.despacho.documento}}
+                                </td>
+                            </tr>
+                            <tr>
+                                <th width="70px">OP</th>
+                                <th width="300px">Cliente</th>
+                                <th width="300px">Producto</th>
+                                <th width="125px">OC</th>
+                                <th width="100px">Cantidad</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>{{despacho.orden.sort}}</td>
+                                <td>{{despacho.orden.cliente.nombre}}</td>
+                                <td>{{despacho.despacho.producto}}</td>
+                                <td>{{despacho.orden.orden}}</td>
+                                <td>{{despacho.despacho.cantidad}}</td>
+                                <td>
+                                    <button class="button is-info is-small" (click)="ValidarDatos(i)">
                                     <div class="icon">
                                         <i class="far fa-calendar-check"></i>
                                     </div>
                                     <span>
-                                        Facturado
+                                        Validar Datos
                                     </span>
-                                    </button>
-                        </td>
-                        </tr>
-                    </tbody>
-                </table>
+                                    </button> 
+                                    <button class="button is-success is-small" (click)="openFacturacion(i)" *ngIf="despacho.despacho.precio">
+                                        <div class="icon">
+                                            <i class="far fa-calendar-check"></i>
+                                        </div>
+                                        <span>
+                                            Facturado
+                                        </span>
+                                        </button>
+                            </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </ng-container>
             </ng-container>
         </div>
     </div>

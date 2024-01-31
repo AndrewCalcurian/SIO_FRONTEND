@@ -251,11 +251,15 @@
                 <ng-container *ngFor="let categoria of Categorias;index as y">
                     <div class="categoria_style" *ngIf="hasMatchingRepuesto2(maquina._id, categoria._id)">
                         <span (click)="showInfo(x,y)" style="cursor: pointer;" class="categoria">
-                            {{categoria.nombre}}
+                            <i class="fas fa-angle-down" *ngIf="equis[x] && ye[y]"></i>
+                            <i class="fas fa-angle-up" *ngIf="!equis[x] || !ye[y]"></i>
+                            <b>
+                                {{categoria.nombre}}
+                            </b>
                         </span>
                         <table class="table is-fullwidth is-striped" *ngIf="equis[x] && ye[y]">
                             <thead>
-                                <tr>
+                                <tr class="is-selected">
                                     <th>Pieza</th>
                                     <th>Nº parte</th>
                                     <th>Ubicación</th>

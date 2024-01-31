@@ -197,6 +197,8 @@ export class ConsultaFacturacionComponent implements OnInit {
         this.NOTAS = []
         this.Total_Bs = 0;
         this.Total_USD = 0;
+        this.Total_Bs_N = 0;
+        this.Total_USD_N = 0;
         console.log(resp)
         for(let i=0; i< resp.length;i++){
             if(resp[i].tasa){

@@ -159,9 +159,13 @@ export class DetallesComponent implements OnInit {
             if(resp[i].despacho[y].op === this.orden_detalle)
             {
               this.despachos.push(resp[i].despacho[y])
-              this.despachos.push({fecha:resp[i].fecha})
+              if(resp[i].despacho[y].parcial){
+                this.despachos.push({fecha:resp[i].despacho[y].parcial})
+              }else{
+                this.despachos.push({fecha:resp[i].fecha})
+              }
               this.despacho = this.despacho + resp[i].despacho[y].cantidad
-              // console.log(this.despachos)
+              console.log(this.despachos, 'aquiiii!!')
             }
           }
         }
