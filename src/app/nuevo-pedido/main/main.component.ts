@@ -158,7 +158,6 @@ export class MainComponent implements OnInit {
   cliente_selected(e){
 
     this.ordenesFiltered = this.OrdenesDeCompra.filter(x=>x.cliente._id === e)
-    console.log(this.ordenesFiltered,'esta es la que es que frao que frinchi que pao')
     this.ps = false
     this.oc_ = ''
     this.fo_ = ''

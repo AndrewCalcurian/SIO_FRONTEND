@@ -55,6 +55,9 @@ export class PreFacturacionComponent implements OnInit {
 
 
   calcularSub(x,y,z){
+    let SubtotalBS
+    let precio_millar_Bs:any = ( this.Despachos[this.INDEX].despacho.precio*this.Despachos[this.INDEX].despacho.tasa).toFixed(3)
+    return SubtotalBS = this.puntoYcoma(this.Despachos[this.INDEX].despacho.cantidad / 1000 * precio_millar_Bs)
     let sub_bs:any = (y*z).toFixed(3)
     x = x / 1000;
     return this.puntoYcoma(x*sub_bs)

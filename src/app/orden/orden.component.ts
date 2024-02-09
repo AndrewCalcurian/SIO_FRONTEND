@@ -231,7 +231,18 @@ export class OrdenComponent implements OnInit {
     }
     let cantidad_cajas = Math.ceil(cant_cajas)
     let cinta = materiales.filter(x => x.producto.grupo.nombre === 'Cinta de Embalaje')
-    let Nombre_sustrato = `${sustrato[0].producto.nombre} ${sustrato[0].producto.marca} (Calibre:${sustrato[0].producto.calibre}, Gramaje:${sustrato[0].producto.gramaje})`
+    let Medida_Sustrato = ``;
+    let Nombre_sustrato = ``
+    let direccion_fibra = ``
+    if(!sustrato[0]){
+      Nombre_sustrato  = 'N/A'
+      Medida_Sustrato = 'N/A'
+      direccion_fibra = 'N/A'
+    }else{
+      direccion_fibra = `${sustrato[0].producto.largo}`
+      Medida_Sustrato = `${sustrato[0].producto.ancho} x ${sustrato[0].producto.largo}`
+      Nombre_sustrato = `${sustrato[0].producto.nombre} ${sustrato[0].producto.marca} (Calibre:${sustrato[0].producto.calibre}, Gramaje:${sustrato[0].producto.gramaje})`
+    }
     let tintas_color = []
     let tintas_marca = []
     
@@ -501,14 +512,14 @@ export class OrdenComponent implements OnInit {
                                 ],
                                 [
                                   new Cell(new Txt(Nombre_sustrato).end).fontSize(11).end,
-                                  new Cell(new Txt(`${sustrato[0].producto.ancho} x ${sustrato[0].producto.largo}`).end).alignment('center').fontSize(11).end,
+                                  new Cell(new Txt(Medida_Sustrato).end).alignment('center').fontSize(11).end,
                                 ],
                                 [
                                   new Cell(new Txt('DIRECCIÓN DE FIBRA').end).alignment('center').fillColor('#dedede').fontSize(9).end,
                                   new Cell(new Txt('TAMAÑO A IMPRIMIR').end).alignment('center').fillColor('#dedede').fontSize(9).end,
                                 ],
                                 [
-                                  new Cell(new Txt(sustrato[0].producto.largo).end).alignment('center').fontSize(11).end,
+                                  new Cell(new Txt(direccion_fibra).end).alignment('center').fontSize(11).end,
                                   new Cell(new Txt(`${PRODUCTO.i_ancho} x ${PRODUCTO.i_largo}`).end).alignment('center').fontSize(11).end,
                                 ]
 

@@ -184,15 +184,17 @@
                     <div class="columns">
                         <div class="column">
                             <div class="columns">
-                                <ng-container *ngFor='let materiales of PRODUCTO.materiales[i_montajes]'>
-                                    <ng-container *ngIf='materiales.producto.grupo.nombre === "Sustrato"'>
+                                <ng-container >
+                                    <!-- <ng-container *ngFor='let materiales of PRODUCTO.materiales[i_montajes]'> -->
+                                    <!-- <ng-container *ngIf='materiales.producto.grupo.nombre === "Sustrato"'> -->
+                                        <ng-container>
                                 <div class="column">
                                     <label class="label">ancho:</label>
-                                    <input type="number" min="10" class="input" value="{{materiales.producto.ancho}}" id="ancho_imprimir">
+                                    <input type="number" min="10" class="input" value="0" id="ancho_imprimir">
                                 </div>
                                 <div class="column">
                                     <label class="label">largo:</label>
-                                    <input type="number"  min="10" class="input" value="{{materiales.producto.largo}}" id="largo_imprimir">
+                                    <input type="number"  min="10" class="input" value="0" id="largo_imprimir">
                                 </div>
                                     </ng-container>
                                 </ng-container>
