@@ -54,7 +54,7 @@ export class ConsultaFacturacionComponent implements OnInit {
   public Notas:boolean = false
 
   ObtenerClientes(){
-    console.log('work')
+    // console.log('work')
     this.api.GetClientes()
       .subscribe((resp:any)=>{
         this.Clientes = resp.clientes
@@ -98,13 +98,21 @@ export class ConsultaFacturacionComponent implements OnInit {
     this.Total_USD_N = 0;
     this.api.getDespachosbyOrden(op)
       .subscribe((resp:any)=>{
-        for(let i=0; i< resp[0].despacho.length;i++){
-          if(resp[0].despacho[i].op === op){
-            resp[0].despacho[i].fecha = resp[0].fecha
-            this.INDEX = i;
-            this.ORDENES.push(resp[0].despacho[i])
-            this.Total_USD = this.Total_USD + (( resp[0].despacho[i].cantidad / 1000)* resp[0].despacho[i].precio);
-              this.Total_Bs = this.Total_Bs + ((( resp[0].despacho[i].cantidad / 1000)* resp[0].despacho[i].precio)*resp[0].despacho[i].tasa);
+        for(let i=0; i< resp.length;i++){
+          for(let x=0; x< resp[i].despacho.length;x++){
+            if(resp[i].despacho[x].tasa){
+              if(resp[i].despacho[x].documento.charAt(0) === 'F'){
+                resp[i].despacho[x].fecha = resp[i].fecha
+                this.ORDENES.push(resp[i].despacho[x])
+                this.Total_USD = this.Total_USD + (( resp[i].despacho[x].cantidad / 1000)* resp[i].despacho[x].precio);
+                this.Total_Bs = this.Total_Bs + ((( resp[i].despacho[x].cantidad / 1000)* resp[i].despacho[x].precio)*resp[i].despacho[x].tasa);
+              }else{
+                resp[i].despacho[x].fecha = resp[i].fecha
+                this.NOTAS.push(resp[i].despacho[x])
+                this.Total_USD_N = this.Total_USD_N + (( resp[i].despacho[x].cantidad / 1000)* resp[i].despacho[x].precio);
+                this.Total_Bs_N = this.Total_Bs_N + ((( resp[i].despacho[x].cantidad / 1000)* resp[i].despacho[x].precio)*resp[i].despacho[x].tasa);
+              }
+            }
           }
         }
 
@@ -167,7 +175,7 @@ export class ConsultaFacturacionComponent implements OnInit {
 
   BuscarCliente(cliente, desde, hasta){
 
-    console.log(cliente, '*', desde, '*', hasta)
+    // console.log(cliente, '*', desde, '*', hasta)
 
     if(cliente === '#'){
       Swal.fire({
@@ -199,7 +207,7 @@ export class ConsultaFacturacionComponent implements OnInit {
         this.Total_USD = 0;
         this.Total_Bs_N = 0;
         this.Total_USD_N = 0;
-        console.log(resp)
+        // console.log(resp)
         for(let i=0; i< resp.length;i++){
             if(resp[i].tasa){
               if(resp[i].documento.charAt(0) === 'F'){

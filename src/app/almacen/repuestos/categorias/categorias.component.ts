@@ -32,7 +32,7 @@ export class CategoriasComponent implements OnInit {
     if(categ){
       this.api.postCategoria({nombre:categ})
         .subscribe((resp:any)=>{
-          console.log(resp)
+          // console.log(resp)
           this.cerrar();
         })
     }

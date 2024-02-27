@@ -48,7 +48,7 @@ export class InventarioComponent implements OnInit {
     this.api.getMateriaPrima()
       .subscribe((resp:any)=>{
         this.Materia_Prima = resp;
-        console.log(this.Materia_Prima)
+        // console.log(this.Materia_Prima)
       })
   }
 
@@ -89,7 +89,7 @@ export class InventarioComponent implements OnInit {
     (<HTMLInputElement>document.getElementById(`${i}_7`)).style.display = 'none';
     (<HTMLInputElement>document.getElementById(`${i}_8`)).style.display = 'none';
 
-    console.log(id)
+    // console.log(id)
   }
 
 }

@@ -47,7 +47,7 @@ export class SubirArchivosService {
 
 
     } catch(error){
-      console.log(error)
+      // console.log(error)
       return false;
     }
 

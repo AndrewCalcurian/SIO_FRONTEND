@@ -75,7 +75,7 @@ export class MainComponent implements OnInit {
       .subscribe((resp:any)=>{
         this.despachos_filtrado = resp;
         this.despachos_orden = op
-        console.log(this.despachos_filtrado)
+        // console.log(this.despachos_filtrado)
       })
   }
 
@@ -95,7 +95,7 @@ export class MainComponent implements OnInit {
           return
         })
     }
-    console.log(this.Producto_select)
+    // console.log(this.Producto_select)
   }
 
   descuento(grupo,Nombre,Marca){
@@ -310,7 +310,7 @@ export class MainComponent implements OnInit {
   Cliente_Selected(e){
     this.api.getById(e)
     .subscribe((resp:any)=>{
-      console.log(resp)
+      // console.log(resp)
       this.producto_form = true;
       this.Productos_by_client = resp
       })
@@ -475,7 +475,7 @@ export class MainComponent implements OnInit {
 
           if(existe < 0){
             this.Sustratos_suma.push(data)
-            // console.log(this.Sustratos_suma)
+            // // console.log(this.Sustratos_suma)
           }else{
             this.Sustratos_suma[existe].Cantidad = Number(this.Sustratos_suma[existe].Cantidad) + Number(data.Cantidad)
           }
@@ -533,7 +533,7 @@ export class MainComponent implements OnInit {
 
   devuelto__(Nombre, Marca){
     let devoluciones = this.data.devoluciones_totales.find(x=> x.Nombre === Nombre && x.Marca === Marca)
-    console.log(devoluciones)
+    // console.log(devoluciones)
     return devoluciones[0].Cantidad
   }
   sumaTinta(){
@@ -567,7 +567,7 @@ export class MainComponent implements OnInit {
               this.Otros_c = this.Otros_c + this.data.Lotes[i].material[x].EA_Cantidad
               break;
           }
-          // console.log(this.Lotes[i].material[x].material.color)
+          // // console.log(this.Lotes[i].material[x].material.color)
           let data = {
             Nombre: this.Lotes[i].material[x].material.nombre,
             Marca:this.Lotes[i].material[x].material.marca,
@@ -610,7 +610,7 @@ export class MainComponent implements OnInit {
     this.g_gestiones = this.data.Gestiones.filter(x => x.op === id)
     this.modal_gestiones = true;
 
-    console.log(this.g_trabajos)
+    // console.log(this.g_trabajos)
 
   }
 
@@ -622,7 +622,7 @@ export class MainComponent implements OnInit {
     this.lote_mayor = []
     this.c_devoluciones = []
     this.c_devoluciones = this.data.devoluciones.filter(x=> x.orden === op)
-    console.log(this.c_devoluciones)
+    // console.log(this.c_devoluciones)
 
     this.c_lotes = this.data.Lotes.filter(x => x.orden === op)
 
@@ -630,7 +630,7 @@ export class MainComponent implements OnInit {
       for(let n=0; n<this.c_lotes[i].material.length;n++)
       {
 
-        // console.log(this.c_lotes[i].material[n].material.calibre)
+        // // console.log(this.c_lotes[i].material[n].material.calibre)
         let index = this.lote_mayor.find(x=> x.nombre === this.c_lotes[i].material[n].material.nombre && x.ancho === this.c_lotes[i].material[n].material.ancho && x.largo === this.c_lotes[i].material[n].material.largo && x.calibre === this.c_lotes[i].material[n].material.calibre && x.gramaje === this.c_lotes[i].material[n].material.gramaje)
 
         if(!index){
@@ -716,7 +716,7 @@ export class MainComponent implements OnInit {
           this.requisiciones = resp.requisiciones
           this.trabajos = resp.trabajos
           this.adicionales = resp.Adicionales
-          // console.log(resp)
+          // // console.log(resp)
           this.cargando = false
           this.Sustrato_load = false;
           this.Barniz_load = false;
@@ -735,7 +735,7 @@ export class MainComponent implements OnInit {
     }
 
     if(this.clientes_form){
-      console.log(desde,'/',hasta)
+      // console.log(desde,'/',hasta)
       let data;
       let cliente = (<HTMLInputElement>document.getElementById('cliente_select')).value
       if(cliente === '#'){
@@ -789,7 +789,7 @@ export class MainComponent implements OnInit {
           this.requisiciones = resp.requisiciones
           this.trabajos = resp.trabajos
           this.adicionales = resp.Adicionales
-          console.log(resp)
+          // console.log(resp)
           this.cargando = false
           this.Sustrato_load = false;
           this.Barniz_load = false;
@@ -853,7 +853,7 @@ export class MainComponent implements OnInit {
           this.Barniz_load = false;
           this.Cajas_loading = false;
           this.Pega_loading = false;
-          console.log(this.data)
+          // console.log(this.data)
           // this.sumaTinta();
           // this.sumaSustrato();
           this.sumaDevoluciones(this.devoluciones)
@@ -863,7 +863,7 @@ export class MainComponent implements OnInit {
           this.CajasChart()
           this.PegaChart()
         },err => {
-          console.log(err)
+          // console.log(err)
         })
 
   }
@@ -935,7 +935,7 @@ export class MainComponent implements OnInit {
           y++;
           if(this.c_devoluciones[i].filtrado[n].material == id){
             data = data + this.c_devoluciones[i].filtrado[n].cantidad;
-            // console.log(this.c_devoluciones[i].filtrado[n])
+            // // console.log(this.c_devoluciones[i].filtrado[n])
           }
           if(x == this.c_devoluciones.length && y == len.length){
             if(data > 0){
@@ -948,7 +948,7 @@ export class MainComponent implements OnInit {
       }
 
       // let dev_filtered = this.c_devoluciones.filter(x=> x.filtrado.material === id)
-      // console.log(dev_filtered)
+      // // console.log(dev_filtered)
       // if(dev_filtered.length > 0){
       //   return '150'
       // }else{

@@ -40,19 +40,19 @@ export class ConsumoComponent implements OnInit {
       let len = this.c_devoluciones[i].filtrado
       for(let n=0;n<len.length;n++){
         y++;
-        // console.log(this.c_devoluciones[i].filtrado[n].material.grupo)
+        // // console.log(this.c_devoluciones[i].filtrado[n].material.grupo)
         if(this.c_devoluciones[i].filtrado[n].material.grupo === '63625feecd436f1a90a1ea7d'){
           if(this.c_devoluciones[i].filtrado[n].material.nombre === nombre){
             data = data + this.c_devoluciones[i].filtrado[n].cantidad;
           }
         }else if(this.c_devoluciones[i].filtrado[n].material.grupo === '61fd7a8ed9115415a4416f74' || this.c_devoluciones[i].filtrado[n].material.grupo === '61fd6300d9115415a4416f60'){
-          // console.log(this.c_devoluciones[i].filtrado[n].material)
+          // // console.log(this.c_devoluciones[i].filtrado[n].material)
           if(this.c_devoluciones[i].filtrado[n].material.nombre === nombre){
             data = data + this.c_devoluciones[i].filtrado[n].cantidad;
           }
         }else if(this.c_devoluciones[i].filtrado[n].material._id == id){
           data = data + this.c_devoluciones[i].filtrado[n].cantidad;
-          // console.log(this.c_devoluciones[i].filtrado[n])
+          // // console.log(this.c_devoluciones[i].filtrado[n])
         }
         if(i == this.c_devoluciones.length -1  && n == len.length -1){
           if(data > 0){
@@ -65,7 +65,7 @@ export class ConsumoComponent implements OnInit {
     }
 
     // let dev_filtered = this.c_devoluciones.filter(x=> x.filtrado.material === id)
-    // console.log(dev_filtered)
+    // // console.log(dev_filtered)
     // if(dev_filtered.length > 0){
     //   return '150'
     // }else{

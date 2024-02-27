@@ -46,7 +46,7 @@ export class OrdenComponent implements OnInit {
         this.hojas_demasia = Math.ceil(this.PRODUCTO.demasia * this.hojas_imprimir / 100)
         // this.PRODUCTO.demasia = Math.ceil(this.demasia * paginas_sin_demasia / 100);
         // this.PRODUCTO.demasia = this.PRODUCTO.producto.ejemplares[this.PRODUCTO.montaje]
-        // console.log(this.PRODUCTO, 'este es el Producto');
+        // // console.log(this.PRODUCTO, 'este es el Producto');
         this.loading = false;
       })
   }
@@ -70,7 +70,7 @@ export class OrdenComponent implements OnInit {
         return fetch(`//localhost:8080/api/orden/cancelar/${this.PRODUCTO._id}/${login}`)
           .then(response => {
             if (!response.ok) {
-              console.log(response)
+              // console.log(response)
               throw new Error('Debes indicar un motivo')
             }
             return response.json()
@@ -156,15 +156,15 @@ export class OrdenComponent implements OnInit {
     let PRODUCTO = this.PRODUCTO
     let hojas_demasia = this.hojas_demasia
     let hojas_imprimir = this.hojas_imprimir
-    // console.log(this.PRODUCTO)
+    // // console.log(this.PRODUCTO)
     
-    // PRODUCTO.fecha_o = moment(PRODUCTO.fecha_o).format('DD/MM/yyyy');
-    // PRODUCTO.fecha_s = moment(PRODUCTO.fecha_s).format('DD/MM/yyyy');
-    // PRODUCTO.fecha = moment(PRODUCTO.fecha).format('DD/MM/yyyy');
+    PRODUCTO.fecha_o = moment(PRODUCTO.fecha_o).utc().format('DD/MM/yyyy');
+    PRODUCTO.fecha_s = moment(PRODUCTO.fecha_s).utc().format('DD/MM/yyyy');
+    PRODUCTO.fecha = moment(PRODUCTO.fecha).format('DD/MM/yyyy');
 
-    PRODUCTO.fecha_o = new Date(PRODUCTO.fecha_o).toLocaleDateString('es-ES');
-    PRODUCTO.fecha_s = new Date(PRODUCTO.fecha_s).toLocaleDateString('es-ES');
-    PRODUCTO.fecha = new Date(PRODUCTO.fecha).toLocaleDateString('es-ES');
+    // PRODUCTO.fecha_o = new Date(PRODUCTO.fecha_o).toLocaleDateString('es-ES');
+    // PRODUCTO.fecha_s = new Date(PRODUCTO.fecha_s).toLocaleDateString('es-ES');
+    // PRODUCTO.fecha = new Date(PRODUCTO.fecha).toLocaleDateString('es-ES');
 
     PRODUCTO.cantidad_ = new Intl.NumberFormat('de-DE').format(PRODUCTO.cantidad)
 
@@ -205,7 +205,7 @@ export class OrdenComponent implements OnInit {
     }
 
     let pega = materiales.filter(x => x.producto.grupo.nombre === 'Pega')
-    // console.log(pega,'pegaa')
+    // // console.log(pega,'pegaa')
     let cantidad_pega;
     let pega_nombre = '';
     let pega_marca = '';
@@ -790,7 +790,7 @@ export class OrdenComponent implements OnInit {
         this.hojas_demasia = Math.ceil(this.PRODUCTO.demasia * this.hojas_imprimir / 100)
         // this.PRODUCTO.demasia = Math.ceil(this.demasia * paginas_sin_demasia / 100);
         // this.PRODUCTO.demasia = this.PRODUCTO.producto.ejemplares[this.PRODUCTO.montaje]
-        // console.log(this.PRODUCTO, 'este es el Producto');
+        // // console.log(this.PRODUCTO, 'este es el Producto');
         this.loading = false;
       })
   }

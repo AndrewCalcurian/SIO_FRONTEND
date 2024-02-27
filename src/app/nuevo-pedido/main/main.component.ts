@@ -99,7 +99,7 @@ export class MainComponent implements OnInit {
     this.api.getOrdenesDeCompra()
       .subscribe((resp:any)=>{
         this.OrdenesDeCompra = resp
-        console.log(this.OrdenesDeCompra)
+        // console.log(this.OrdenesDeCompra)
       })
   }
 
@@ -128,7 +128,7 @@ export class MainComponent implements OnInit {
       this.restantes.push(aja)
     }
 
-    // // console.log(this.restantes)
+    // // // console.log(this.restantes)
   }
 
   modal_nueva_orden(){
@@ -172,7 +172,7 @@ export class MainComponent implements OnInit {
     this.api.getById(e)
       .subscribe((resp:any)=>{
         this.PRODUCTOS = resp.productos;
-        // // console.log(this.PRODUCTOS)
+        // // // console.log(this.PRODUCTOS)
       })
   }
 
@@ -198,7 +198,9 @@ export class MainComponent implements OnInit {
   public ProductodeProductos
   producto_selected(e){
 
-    let indexOF = this.OrdenSelected.productos.findIndex(x=> x.producto._id == e.target.value)
+    let splitted = e.target.value.split('*')
+
+    let indexOF = this.OrdenSelected.productos.findIndex(x=> x.producto._id == splitted[0] && x.fecha == splitted[1])
     this.ProductodeProductos = indexOF
     this.Cantidad_de_orden = this.OrdenSelected.productos[indexOF].cantidad
     this.Fecha_solicitada = this.OrdenSelected.productos[indexOF].fecha
@@ -212,10 +214,10 @@ export class MainComponent implements OnInit {
       this.fo_ = this.OrdenSelected.fecha_recepcion
     }
 
-    this.api.getOneById(e.target.value)
+    this.api.getOneById(splitted[0])
       .subscribe((resp:any)=>{
         this.PRODUCTO = resp.producto;
-        // // console.log(this.PRODUCTO,'PRODUCTO')
+        // // // console.log(this.PRODUCTO,'PRODUCTO')
         this.montajes = this.PRODUCTO.montajes
         this.Ejemplares_montados = this.PRODUCTO.ejemplares[this.i_montajes];
         this.Ejemplares(this.Ejemplares_montados)
@@ -226,7 +228,7 @@ export class MainComponent implements OnInit {
         for(let i=0; i<x; i++){
           let respuesta = this._CANTIDAD.find(x => x.material.nombre == this.PRODUCTO[this.i_montajes].materiales[i].producto.nombre && x.material.marca == this.PRODUCTO.materiales[i].producto.marca && x.material.grupo.nombre)
           
-          // // console.log(this.PRODUCTO)
+          // // // console.log(this.PRODUCTO)
           if(!respuesta){
             this.SinMaterial = true;
             return
@@ -262,7 +264,7 @@ export class MainComponent implements OnInit {
 
   Cantidad(e){
     this.Cantidad_ejemplares = e.target.value
-    // // console.log(e.target.value)
+    // // // console.log(e.target.value)
     this.paginas = Math.ceil(this.Cantidad_ejemplares / this.Ejemplares_montados)
     let demasia = (<HTMLInputElement>document.getElementById('demasia_input')).value;
     this.Demasia(demasia)
@@ -276,7 +278,7 @@ export class MainComponent implements OnInit {
     this.paginas = Math.ceil(this.Cantidad_ejemplares / this.Ejemplares_montados) 
     this.paginas = this.paginas + this.demasia
     this.Demasia(this.demasia_)
-    // // console.log(this.Cantidad_ejemplares, '/', this.Ejemplares_montados, '/ ', this.demasia ,'-', this.paginas)
+    // // // console.log(this.Cantidad_ejemplares, '/', this.Ejemplares_montados, '/ ', this.demasia ,'-', this.paginas)
     // this.paginas = (this.paginas)
   }
   public demasia_ = 0;
@@ -287,7 +289,7 @@ export class MainComponent implements OnInit {
     this.demasia_ = e
     this.paginas = this.paginas + this.demasia
 
-    // // console.log(this.Cantidad_ejemplares, '/', this.Ejemplares_montados, '/ ', this.demasia ,'-', this.paginas)
+    // // // console.log(this.Cantidad_ejemplares, '/', this.Ejemplares_montados, '/ ', this.demasia ,'-', this.paginas)
     // this.paginas = (this.paginas)
 
   }
@@ -404,7 +406,7 @@ export class MainComponent implements OnInit {
         }
         resto = Number(resto)
         if(resto < 0){
-          console.log(this.PRODUCTO.materiales[this.i_montajes][i].producto.nombre, '<>', resto)
+          // console.log(this.PRODUCTO.materiales[this.i_montajes][i].producto.nombre, '<>', resto)
             Swal.fire({
               icon:'error',
               title:'Oops!',
@@ -469,7 +471,7 @@ export class MainComponent implements OnInit {
 
             let after = moment(fecha_).isAfter(hoy, 'day');
 
-            // // console.log(fecha_,'/',hoy,'/',after)
+            // // // console.log(fecha_,'/',hoy,'/',after)
 
             if(!after){
               fecha = hoy;
@@ -523,7 +525,7 @@ export class MainComponent implements OnInit {
   }
 
   // test(){
-  //   // console.log()
+  //   // // console.log()
   // }
 
   
@@ -555,7 +557,7 @@ export class MainComponent implements OnInit {
         for(let x=0; x<fases; x++){
           
           let fase = this.PRODUCTO.grupo.tipos[x]
-          // // console.log(this.PRODUCTO.grupo.tipos[x])
+          // // // console.log(this.PRODUCTO.grupo.tipos[x])
           let maquina = (<HTMLInputElement>document.getElementById(`${fase}-maquina`)).value
           let fechaI = (<HTMLInputElement>document.getElementById(`${fase}`)).value
           let fecha = (<HTMLInputElement>document.getElementById(`${fase}-C`)).value
@@ -570,7 +572,7 @@ export class MainComponent implements OnInit {
 
           this.api.postOrden2(Data)
             .subscribe((respuesta:any)=>{
-              // // console.log(respuesta)
+              // // // console.log(respuesta)
             })
 
         }

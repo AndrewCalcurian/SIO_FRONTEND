@@ -25,12 +25,12 @@ export class ConsultaOrdenComponent implements OnInit {
     this.api.getOrdenesDeCompra()
       .subscribe((resp:any)=>{
         this.Ordenes = resp
-        console.log(this.Ordenes)
+        // console.log(this.Ordenes)
       })
   }
   MostarOrden(e){
     if(e != 'all'){
-      console.log(e)
+      // console.log(e)
       this.all_ = false;
       this.Orden = this.Ordenes[e]
       this.selected = true;
@@ -50,7 +50,7 @@ export class ConsultaOrdenComponent implements OnInit {
     this.api.getById(id)
         .subscribe((resp:any)=>{
           this.PRODUCTOS = resp.productos;
-          // // console.log(this.PRODUCTOS)
+          // // // console.log(this.PRODUCTOS)
       })
   }
 
@@ -60,7 +60,7 @@ export class ConsultaOrdenComponent implements OnInit {
       this.PRODUCTO = e
       let produc = this.PRODUCTOS.find(x=> x._id == e)
       this.producto__ = produc.producto
-      console.log(produc.producto)
+      // console.log(produc.producto)
     }else{
       this.PRODUCTO = []
     }
@@ -91,7 +91,7 @@ export class ConsultaOrdenComponent implements OnInit {
     this.api.getById(this.Orden.cliente._id)
       .subscribe((resp:any)=>{
         this.PRODUCTOS = resp.productos
-        console.log(this.PRODUCTOS)
+        // console.log(this.PRODUCTOS)
       })
   }
 
@@ -123,7 +123,7 @@ export class ConsultaOrdenComponent implements OnInit {
   
   AgregarNuevo(){
     let id = this.Orden._id
-    console.log(this.Orden)
+    // console.log(this.Orden)
     this.Orden.productos.push(
       {
         producto:this.PRODUCTO,
@@ -153,7 +153,7 @@ export class ConsultaOrdenComponent implements OnInit {
     this.api.getById(this.Orden.cliente._id)
       .subscribe((resp:any)=>{
         this.PRODUCTOS = resp.productos
-        console.log(this.PRODUCTOS)
+        // console.log(this.PRODUCTOS)
       })
   }
 

@@ -58,7 +58,7 @@ export class ReportesComponent implements OnInit {
 
   tipo(e){
     this.tipo_ = e;
-    console.log(this.tipo_)
+    // console.log(this.tipo_)
   }
 
   puntoYcoma(n){
@@ -92,7 +92,7 @@ export class ReportesComponent implements OnInit {
                     if(this.asignaciones.length < 1){
                       this.asignaciones = resp;
                     }
-                    console.log(this.asignaciones)
+                    // console.log(this.asignaciones)
                     this.api.postBuscarDevolucionesPorFecha(ordenes, desde, hasta)
                       .subscribe((resp:any)=>{
                         this.devoluciones = resp;
@@ -100,10 +100,10 @@ export class ReportesComponent implements OnInit {
                         for(let n=0;n<this.devoluciones.length;n++){
                           let index = this.asignaciones.findIndex(x=>x.orden === this.devoluciones[n].orden && x.material._id === this.devoluciones[n].material._id)
                           if(index >= 0){
-                            console.log(this.devoluciones[n].cantidad)
-                            console.log(this.asignaciones[index].devolucion)
+                            // console.log(this.devoluciones[n].cantidad)
+                            // console.log(this.asignaciones[index].devolucion)
                             this.asignaciones[index].devolucion = Number(this.asignaciones[index].devolucion) + Number(this.devoluciones[n].cantidad)
-                            console.log(this.asignaciones[index])
+                            // console.log(this.asignaciones[index])
                           }
                         
                           if(n === this.devoluciones.length -1){
@@ -112,7 +112,7 @@ export class ReportesComponent implements OnInit {
 
                               if(index__ < 0){
                                 this.general.push({material:this.asignaciones[iterator].material, total:(this.asignaciones[iterator].cantidad - this.asignaciones[iterator].devolucion).toFixed(2)})
-                                console.log(this.general)
+                                // console.log(this.general)
                               }
                               else{
                                 this.general[index__].total = Number(this.general[index__].total) + Number((this.asignaciones[iterator].cantidad - this.asignaciones[iterator].devolucion).toFixed(2))
@@ -187,7 +187,7 @@ export class ReportesComponent implements OnInit {
     this.api.putBuscarAlmacen(data)
       .subscribe((resp:any)=>{
         let materials__ = resp;
-        console.log( materials__)
+        // console.log( materials__)
         for(let i=0;i<materials__.length;i++){
           if(materials__[i].grupo === this.grupo){
             let index = this.materiales.findIndex(x=> x.nombre === materials__[i].nombre && x.marca === materials__[i].marca && x.ancho === materials__[i].ancho && x.largo === materials__[i].largo && x.calibre === materials__[i].calibre && x.gramaje === materials__[i].gramaje)
@@ -275,7 +275,7 @@ export class ReportesComponent implements OnInit {
                               }
                               }
                             }
-                            // console.log(this.entradas_hasta_hoy)
+                            // // console.log(this.entradas_hasta_hoy)
                             this.materiales = this.materiales.sort(function(a, b) {
                               if(a.nombre.toLowerCase() < b.nombre.toLowerCase()) return -1
                               if(a.nombre.toLowerCase() > b.nombre.toLowerCase()) return 1
@@ -287,10 +287,10 @@ export class ReportesComponent implements OnInit {
                               let iHasta_hoy
                                 almacenado = this.almacen_detallado.find(x => x.nombre === this.materiales[i].nombre && x.marca === this.materiales[i].marca && x.ancho === this.materiales[i].ancho && x.largo === this.materiales[i].largo && x.gramaje === this.materiales[i].gramaje && x.calibre === this.materiales[i].calibre)
                                 iHasta_hoy = this.entradas_hasta_hoy.findIndex(x=> x.nombre === this.materiales[i].nombre && x.marca === this.materiales[i].marca && x.ancho === this.materiales[i].ancho && x.largo === this.materiales[i].largo && x.gramaje === this.materiales[i].gramaje && x.calibre === this.materiales[i].calibre)
-                              console.log(iHasta_hoy)
+                              // console.log(iHasta_hoy)
                               if(iHasta_hoy <0){
-                                console.log(this.materiales[i].nombre,'_-_',this.materiales[i].marca)
-                                console.log(this.entradas_hasta_hoy)
+                                // console.log(this.materiales[i].nombre,'_-_',this.materiales[i].marca)
+                                // console.log(this.entradas_hasta_hoy)
                               }
                               if(!almacenado){
                                 this.saldos_iniciales[i] = (0 + Number(this.entradas_hasta_hoy[iHasta_hoy].salida)) - (Number(this.entradas_hasta_hoy[iHasta_hoy].cantidad) + Number(this.entradas_hasta_hoy[iHasta_hoy].devoluciones))
@@ -310,10 +310,10 @@ export class ReportesComponent implements OnInit {
                                 this.saldos_finales[i] = this.saldos_finales[i].toFixed(2)
                                 this.unidades[i] = almacenado.unidad
                               }
-                              // console.log(this.saldos_iniciales[i],'i:',i)
+                              // // console.log(this.saldos_iniciales[i],'i:',i)
                             }
-                            console.log(this.materiales)
-                            console.log(this.entradas_hasta_hoy)
+                            // console.log(this.materiales)
+                            // console.log(this.entradas_hasta_hoy)
                             this.cargando = false;
                           })
                       })

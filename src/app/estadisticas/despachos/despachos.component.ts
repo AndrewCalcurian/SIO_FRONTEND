@@ -32,7 +32,7 @@ export class DespachosComponent implements OnInit {
 
     for(let i=0;i<this.despachos_filtrado.length;i++){
       for(let x=0;x<this.despachos_filtrado[i].despacho.length;x++){
-        console.log(this.despachos_filtrado[i].despacho[x].op,'/',this.despachos_orden)
+        // console.log(this.despachos_filtrado[i].despacho[x].op,'/',this.despachos_orden)
         if(this.despachos_filtrado[i].despacho[x].op === this.despachos_orden){
           this.Total_Despachado = Number(this.Total_Despachado) + Number(this.despachos_filtrado[i].despacho[x].cantidad)
         }
@@ -106,7 +106,7 @@ export class DespachosComponent implements OnInit {
   showPercent(){
     let hojas = 0
     let descuentos = 0;
-    console.log(this.c_devoluciones)
+    // console.log(this.c_devoluciones)
     for(let i=0;i<this.lote_mayor.length;i++){
       if(this.lote_mayor[i].ancho){
         hojas = Number(hojas)+ this.lote_mayor[i].cantidad
@@ -118,7 +118,7 @@ export class DespachosComponent implements OnInit {
             let _material_ = this.c_devoluciones[x].filtrado[y].material;
             if(_material_.ancho){
               descuentos = Number(descuentos) + Number(this.c_devoluciones[x].filtrado[y].cantidad)
-              console.log(this.c_devoluciones[x].filtrado[y])
+              // console.log(this.c_devoluciones[x].filtrado[y])
             }
           }
         }
@@ -135,7 +135,7 @@ export class DespachosComponent implements OnInit {
   closemodal(){
     this.ids = []
     this.Total_Despachado = null;
-    console.log(this.Total_Despachado)
+    // console.log(this.Total_Despachado)
     this.asignadas = 0;
     this.producto = 0
     if(this.chart_rendimiento){

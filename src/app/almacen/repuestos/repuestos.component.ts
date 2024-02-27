@@ -91,11 +91,11 @@ export class RepuestosComponent implements OnInit {
   }
 
   actualizarNota(){
-    console.log(this.data);
+    // console.log(this.data);
     
     this.api.putPieza(this.data, this.data._id)
       .subscribe((resp:any)=>{
-        console.log(resp)
+        // console.log(resp)
       })
   }
 
@@ -255,7 +255,7 @@ public foto = ''
   AbrirCategorias(){
     
     this.Categoria = true
-    console.log(this.Categoria);
+    // console.log(this.Categoria);
   }
 
   NuevoRepuesto(){

@@ -30,7 +30,7 @@ export class ProductoTerminadoComponent implements OnInit {
     this.api.getById(e)
       .subscribe((resp:any)=>{
        this.productos = resp.productos
-       console.log(this.productos)
+       // console.log(this.productos)
       })
   }
 

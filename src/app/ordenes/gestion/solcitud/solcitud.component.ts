@@ -46,7 +46,7 @@ buscarRepuestos(){
   this.api.getRepuesto()
     .subscribe((resp:any)=>{
       this.Repuestos = resp.repuesto
-      console.log(this.Repuestos)
+      // console.log(this.Repuestos)
     })
 }
 
@@ -74,7 +74,7 @@ BuscarMaquinas(){
     this.api.getCategorias()
       .subscribe((resp:any)=>{
         this.Categorias = resp.categorias;
-        console.log(this.Categorias)
+        // console.log(this.Categorias)
       })
   }
 
@@ -82,7 +82,7 @@ BuscarMaquinas(){
     this.api.GetGrupoMp()
       .subscribe((resp:any)=>{
         this.grupos = resp;
-        // console.log(this.grupos)
+        // // console.log(this.grupos)
       })
   }
 
@@ -93,7 +93,7 @@ BuscarMaquinas(){
 
   cambiarCantidades(i,e){
     this._materiales[i].cantidad = e;
-    // console.log(this._materiales)
+    // // console.log(this._materiales)
   }
 
   AdjuntarMaterial(e){
@@ -103,7 +103,7 @@ BuscarMaquinas(){
       producto:almacen.material._id,
       cantidad:0
     })
-    // console.log(this._materiales)
+    // // console.log(this._materiales)
   }
 
   mostrarMaterial(e){
@@ -136,7 +136,7 @@ BuscarMaquinas(){
 
   TraerMateriales(e){
 
-    // console.log(e)
+    // // console.log(e)
 
     if(e === 'Otro'){
       this.Otro = true;
@@ -172,97 +172,68 @@ BuscarMaquinas(){
     this.onCloseModal.emit();
   }
 
-  FinalizarSolicitu(){
-
-    let motivo = (<HTMLInputElement>document.getElementById('_motivo')).value;
-
-    if(!motivo){
-      Swal.fire({
-        title:'Debes agregar un motivo',
-        text:'Es necesario agregar un motivo a la solicitud de material',
-        icon:'error',
-        timerProgressBar:true,
-        timer:5000,
-        showConfirmButton:false
-      })
-
-      return
-    }
-
-    let requisicion = {
-      sort:this.asociacion,
-      motivo:(<HTMLInputElement>document.getElementById('_motivo')).value,
-      usuario:`${this.api.usuario.Nombre} ${this.api.usuario.Apellido}`,
-      producto:{
-        producto:'N/A',
-        materiales:[[]]
-      }
-    }
-
-    requisicion.producto.materiales[0] = this._materiales
-
-    let aprobado = true
-
-    for(let i=0;i<this._materiales.length;i++){
-      this.api.getAlmacenadoID2(this._materiales[i].producto)
-        .subscribe((resp:any)=>{
-          let cantidad = 0;
-          for(let i=0;i<resp.length;i++){
-            cantidad = cantidad + Number(resp[i].cantidad)
-          }
-
-          if(cantidad < Number(this._materiales[i].cantidad)){
-            Swal.fire({
-              title:'Cantidad excedida',
-              text:`la cantidad solicitada de ${resp[0].material.nombre} es mayor a la cantidad de producto en el almacen,
-              existe en almacen: ${cantidad.toFixed(2)}`,
-              icon:'warning',
-              showConfirmButton:false
-            })
-            i = 1000
-          }else if(i === this._materiales.length -1){
-            this.api.postReq(requisicion)
-               .subscribe((resp:any)=>{
-                Swal.fire(
-                {
-                  showConfirmButton:false,
-                   title:'Hecho!',
-                  text:'Se realizó la solicitud correctamente',
-                  icon:'success',
-                  timer:5000
-                }
-              )
-              this._materiales = []
-              this.por_confirmar = []
-              this.onClose()
-            })
-          }
-        })
-
-        // if(i === this._materiales.length -1){
-        //   if(aprobado){
-        //     this.api.postReq(requisicion)
-        //        .subscribe((resp:any)=>{
-        //         Swal.fire(
-        //         {
-        //           showConfirmButton:false,
-        //            title:'Hecho!',
-        //           text:'Se realizó la solicitud correctamente',
-        //           icon:'success',
-        //           timer:5000
-        //         }
-        //       )
-        //       this._materiales = []
-        //       this.onClose()
-        //     })
-        //   }
-        // }
-    }
-
-
-
-
+  public motivo__ = '';
+FinalizarSolicitu = async () => {
+  const motivo = this.motivo__
+  
+  if (!motivo) {
+    Swal.fire({
+      title: 'Debes agregar un motivo',
+      text: 'Es necesario agregar un motivo a la solicitud de material',
+      icon: 'error',
+      timerProgressBar: true,
+      timer: 5000,
+      showConfirmButton: false
+    });
+    return;
   }
+
+  const requisicion = {
+    sort: this.asociacion,
+    motivo: motivo,
+    usuario: `${this.api.usuario.Nombre} ${this.api.usuario.Apellido}`,
+    producto: {
+      producto: 'N/A',
+      materiales: [[]]
+    }
+  };
+
+  requisicion.producto.materiales[0] = this._materiales
+
+  try {
+    await Promise.all(this._materiales.map(async (material) => {
+      const resp:any = await this.api.getAlmacenadoID2(material.producto).toPromise();
+      const cantidad = resp.reduce((acc, curr) => acc + Number(curr.cantidad), 0);
+
+      console.log(resp)
+
+      if (cantidad < Number(material.cantidad)) {
+        throw new Error(`Cantidad excedida: la cantidad solicitada de ${resp[0].material.nombre} es mayor a la cantidad de producto en el almacén, existe en almacén: ${cantidad.toFixed(2)}`);
+      }
+    }));
+
+    await this.api.postReq(requisicion).toPromise();
+    
+    Swal.fire({
+      showConfirmButton: false,
+      title: 'Hecho!',
+      text: 'Se realizó la solicitud correctamente',
+      icon: 'success',
+      timer: 5000
+    });
+
+    this._materiales = [];
+    this.por_confirmar = [];
+    this.onClose();
+  } catch (error) {
+    Swal.fire({
+      title: 'Error',
+      text: error.message,
+      icon: 'error',
+      showConfirmButton: false
+    });
+  }
+}
 
   FinalizarSolicitudR(){
     let motivo = (<HTMLInputElement>document.getElementById('__motivo')).value;
@@ -308,7 +279,7 @@ BuscarMaquinas(){
     // }
     // this.api.postRequisicionRepuesto(data)
     //   .subscribe((resp:any)=>{
-    //     console.log(resp)
+    //     // console.log(resp)
     //   })
   }
 
@@ -363,7 +334,7 @@ BuscarMaquinas(){
     }
 
 
-    // console.log(requisicion)
+    // // console.log(requisicion)
 
 
   }

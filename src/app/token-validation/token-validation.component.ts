@@ -13,7 +13,7 @@ export class TokenValidationComponent implements OnInit {
   constructor(private api:RestApiService,
               private router:Router) { 
     this.usuario = this.api.usuario
-    console.log(this.usuario)
+    // console.log(this.usuario)
   }
 
 
@@ -67,7 +67,7 @@ export class TokenValidationComponent implements OnInit {
       localStorage.setItem('token_two', resp.token_two);
       this.router.navigateByUrl('/ventas')
     }, (err) => {
-      // console.log(err)
+      // // console.log(err)
       Swal.fire({title:'Error', text:err.error.err.message,icon:'error',showConfirmButton:false})
     })
   }

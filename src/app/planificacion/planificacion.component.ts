@@ -129,7 +129,7 @@ export class PlanificacionComponent implements OnInit {
   obtenerOrdenes(){
     this.api.getOrden()
       .subscribe((resp:any)=>{
-        console.log(resp)
+        // console.log(resp)
       })
   }
 
@@ -158,7 +158,7 @@ export class PlanificacionComponent implements OnInit {
     if(funcion === 'DESPACHO'){
       let funcion_:any = this.Despachos.filter(x => x.fecha === `${fecha}-${mes}-${ano}`)
       if(funcion_.length>0){
-        // console.log(funcion_)
+        // // console.log(funcion_)
         for(let i=0;i<funcion_.length;i++){
           for(let x=0;x<funcion_[i].despacho.length;x++){
             despach.push(funcion_[i].despacho[x])
@@ -185,9 +185,9 @@ export class PlanificacionComponent implements OnInit {
       return final;
       
     }
-    // // console.log(nuevo)
+    // // // console.log(nuevo)
   }
-    // // console.log(this.TRABAJOS.length )
+    // // // console.log(this.TRABAJOS.length )
 
     // fecha = '2021-08-20'
     // funcion = "IMPRESION"
@@ -200,12 +200,12 @@ export class PlanificacionComponent implements OnInit {
     //   let fecha_Inicial = moment(nuevo.fechaI).format('yyyy-MM-DD')
     //   let fecha_actual = moment(fecha).format('yyyy-MM-DD')
 
-    //   // console.log(nuevo)
+    //   // // console.log(nuevo)
 
       // let MI:boolean = fecha_actual >= fecha_Inicial;
       // if(MI){
       //   let MF:boolean = fecha_actual <= fecha_final;
-      //   // console.log(MF)
+      //   // // console.log(MF)
       // }
 
 
@@ -219,7 +219,7 @@ export class PlanificacionComponent implements OnInit {
     //   if(MI){
     //     let MF:boolean = fecha_actual <= fecha_final;
     //     if(MF){
-    //       // console.log(nuevo,'_',funcion)
+    //       // // console.log(nuevo,'_',funcion)
     //       return `${nuevo._id.slice(3,6)}`
     //     }
     //   }
@@ -238,7 +238,7 @@ export class PlanificacionComponent implements OnInit {
     //   if(MI){
     //     let MF:boolean = fecha_actual <= fecha_final;
     //     if(MF){
-    //       // console.log('aqui',nuevo)
+    //       // // console.log('aqui',nuevo)
     //        return `${nuevo._id.slice(3,6)}`
     //     }
     //   }
@@ -250,7 +250,7 @@ export class PlanificacionComponent implements OnInit {
 
     // if(nuevo){
     //   let nuevo2 = nuevo.find(x => x.fecha <= fecha)
-    //   // console.log(nuevo2)
+    //   // // console.log(nuevo2)
     // }
 
 
@@ -261,7 +261,7 @@ export class PlanificacionComponent implements OnInit {
       .subscribe((resp:any)=>{
         this.cargado = false;
         this.TRABAJOS = resp;
-        // console.log(this.TRABAJOS)
+        // // console.log(this.TRABAJOS)
         this.cargado = true;
       })
   }

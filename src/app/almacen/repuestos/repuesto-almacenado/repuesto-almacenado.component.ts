@@ -43,7 +43,7 @@ export class RepuestoAlmacenadoComponent implements OnInit {
         .subscribe((resp:any)=>{
 
           this.onUpdate.emit();
-          console.log(resp)
+          // console.log(resp)
           this.cerrar();
 
         })

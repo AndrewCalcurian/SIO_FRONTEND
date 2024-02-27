@@ -22,7 +22,7 @@ export class GestionComponent implements OnInit {
     this.api.GetClientes()
       .subscribe((resp:any)=>{
         this.clientes = resp.clientes
-        console.log(this.clientes)
+        // console.log(this.clientes)
         this.carga_clientes = false;
 
       })
@@ -167,7 +167,7 @@ export class GestionComponent implements OnInit {
   public newTable:boolean = false
   New_table(){
     if(!this.newTable){
-      console.log('aqui')
+      // console.log('aqui')
       this.newTable = true
     }else{
       this.newTable = false
@@ -262,12 +262,12 @@ export class GestionComponent implements OnInit {
   select_cliente(e){
     if(e != '#'){
       this.Cliente_selected = e;
-      console.log(this.Cliente_selected)
+      // console.log(this.Cliente_selected)
       this.api.getById(e)
         .subscribe((resp:any)=>{
           this.productos = resp.productos;
           this.carga_ordenes = false;
-          console.log(this.productos)
+          // console.log(this.productos)
         })
     }
   }
@@ -288,7 +288,7 @@ export class GestionComponent implements OnInit {
               }
             }
           }
-          console.log(this.Despachos)
+          // console.log(this.Despachos)
           this.cargar_despachos = false;
         })
     }
@@ -334,7 +334,7 @@ export class GestionComponent implements OnInit {
       this.api.getById(this.Cliente_selected)
         .subscribe((resp:any)=>{
           this.productos = resp.productos;
-          console.log(this.productos)
+          // console.log(this.productos)
           this.cargo_productos = false;
           this.api.getEscala(this.Cliente_selected)
             .subscribe((resp:any)=>{

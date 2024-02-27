@@ -463,7 +463,7 @@ export class RestApiService {
   }
 
   BuscarAlmacenes(producto){
-    console.log(producto,'kakaka')
+    // console.log(producto,'kakaka')
     const url = `${this.api_url}/despacho/almacen`
     return this.http.post(url, {producto})
   }

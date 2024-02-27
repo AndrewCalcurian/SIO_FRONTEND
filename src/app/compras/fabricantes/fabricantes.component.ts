@@ -62,7 +62,7 @@ export class FabricantesComponent implements OnInit {
     this.api.GetGrupoMp()
     .subscribe((resp:any)=>{
       this.Grupos = resp
-      console.log(this.Grupos)
+      // console.log(this.Grupos)
     })
   }
 
@@ -71,7 +71,7 @@ export class FabricantesComponent implements OnInit {
     this.contacto_n = ''
     this.contacto_e = ''
     this.contacto_t = ''
-    console.log( this.contacto)
+    // console.log( this.contacto)
   }
 
   NewFabricacion(){
@@ -114,7 +114,7 @@ export class FabricantesComponent implements OnInit {
           this.ImgSubir = null;
           if(logo){
           document.getElementsByClassName('file-name')[0].innerHTML = 'Sin archivo...';
-          console.log('img',logo)
+          // console.log('img',logo)
         }
         });
         })
@@ -145,7 +145,7 @@ export class FabricantesComponent implements OnInit {
           this.ImgSubir = null;
           if(logo){
           document.getElementsByClassName('file-name')[0].innerHTML = 'Sin archivo...';
-          console.log('img',logo)
+          // console.log('img',logo)
         }
         });
         this.FabricacionForm.get('nombre').setValue('');
@@ -180,7 +180,7 @@ export class FabricantesComponent implements OnInit {
   CambiarImagen( event:any ){
     this.ImgSubir = (event.target).files[0];
     document.getElementsByClassName('file-name')[0].innerHTML = this.ImgSubir.name;
-    console.log((event.target).files[0])
+    // console.log((event.target).files[0])
 
         const file = event.target.files[0];
 
@@ -193,7 +193,7 @@ export class FabricantesComponent implements OnInit {
   CambiarImagenE( event:any ){
     this.ImgSubir = (event.target).files[0];
     document.getElementsByClassName('file-name')[0].innerHTML = this.ImgSubir.name;
-    console.log((event.target).files[0])
+    // console.log((event.target).files[0])
 
         const file = event.target.files[0];
 
@@ -217,7 +217,7 @@ export class FabricantesComponent implements OnInit {
         this.proveedores = resp;
         this.filas = this.proveedores.length / 4
         this.filas = Math.ceil(this.filas)
-        console.log(this.proveedores)
+        // console.log(this.proveedores)
       })
   }
 
@@ -250,7 +250,7 @@ export class FabricantesComponent implements OnInit {
       this.inter = true;
       this.origen_('i')
     }else if(el_proveedor.origenes.length === 0){
-      console.log(el_proveedor.origenes.length)
+      // console.log(el_proveedor.origenes.length)
       this.inter = false;
       this.origen_('n')
     }
@@ -273,7 +273,7 @@ export class FabricantesComponent implements OnInit {
 
     if(!existe){
       this.Grupos_.push(e)
-      console.log(this.Grupos_)
+      // console.log(this.Grupos_)
     }
   }
 
@@ -291,7 +291,7 @@ export class FabricantesComponent implements OnInit {
   }
 
   deleteOrigen(i){
-    console.log(i)
+    // console.log(i)
     this.Origenes.splice(i, 1)
   }
 
@@ -321,7 +321,7 @@ export class FabricantesComponent implements OnInit {
             if(logo){
             document.getElementsByClassName('file-name')[0].innerHTML = 'Sin archivo...';
             this.ImgSubir = null;
-            console.log('img',logo)
+            // console.log('img',logo)
           }
           });
         }

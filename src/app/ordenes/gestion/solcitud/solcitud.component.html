@@ -101,7 +101,7 @@
                     <div class="field">
                         <label class="label">Motivo</label>
                         <div class="select">
-                            <select id="__motivo">
+                            <select id="__motivo" [(ngModel)]="motivo__">
                                 <option value="Mantenimiento correctivo">Mantenimiento correctivo</option>
                                 <option value="Mantenimiento preventivo">Mantenimiento preventivo</option>
                                 <option value="Realización de prueba">Realización de prueba</option>
@@ -162,7 +162,7 @@
                     </table>
                     <div class="field">
                         <label class="label">Motivo</label>
-                        <textarea class="textarea" placeholder="Motivo" rows="2" id="_motivo"></textarea>
+                        <textarea class="textarea" placeholder="Motivo" rows="2" id="_motivo" [(ngModel)]="motivo__"></textarea>
                     </div>
                     <hr>
                 </table>

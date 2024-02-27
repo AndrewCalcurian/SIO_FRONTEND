@@ -161,26 +161,26 @@ export class MateriaPrimaComponent implements OnInit {
         }
         if(this.Materiales[i].grupo.nombre === 'Quimicos'){
           let existe = this.Quimicos.find(x=>x.nombre === this.Materiales[i].nombre && x.marca === this.Materiales[i].marca )
-          console.log(existe)
+          // console.log(existe)
           if(!existe){
             this.Quimicos.push(this.Materiales[i])
-            console.log(this.Quimicos)
+            // console.log(this.Quimicos)
           }
         }
         if(this.Materiales[i].grupo.nombre === 'Cajas Corrugadas'){
           let existe = this.Cajas.find(x=>x.nombre === this.Materiales[i].nombre)
-          console.log(existe)
+          // console.log(existe)
           if(!existe){
             this.Cajas.push(this.Materiales[i])
-            console.log(this.Cajas)
+            // console.log(this.Cajas)
           }
         }
         if(this.Materiales[i].grupo.nombre === 'Otros materiales'){
           let existe = this.Planchas.find(x=>x.nombre === this.Materiales[i].nombre)
-          console.log(existe)
+          // console.log(existe)
           if(!existe){
             this.Planchas.push(this.Materiales[i])
-            console.log(this.Cajas)
+            // console.log(this.Cajas)
           }
         }
       }
@@ -220,7 +220,7 @@ export class MateriaPrimaComponent implements OnInit {
   origenes__(e){
     this.cuidad = e;
     this.InventarioForm.get('marca').setValue(`${this.proveedor} (${this.cuidad})`);
-    console.log(this.cuidad)
+    // console.log(this.cuidad)
   }
   
   public exist_origenes = false;;
@@ -230,7 +230,7 @@ export class MateriaPrimaComponent implements OnInit {
   addProveedor(e){
     
     let one = this.proveedores.filter(x=>x._id === e)
-    console.log(one[0].origenes)
+    // console.log(one[0].origenes)
     if(one[0].origenes.length >0 && this.New_Sustrato){
       this.exist_origenes = true;
       this.origenes = one[0].origenes
@@ -246,7 +246,7 @@ export class MateriaPrimaComponent implements OnInit {
       this.InventarioForm.get('marca').setValue(this.proveedor);
     }
 
-    console.log(this.proveedores__)
+    // console.log(this.proveedores__)
     
   }
 
@@ -302,7 +302,7 @@ export class MateriaPrimaComponent implements OnInit {
 
     }
 
-    // // console.log(this.InventarioForm.get('color').value)
+    // // // console.log(this.InventarioForm.get('color').value)
 
     if(this.InventarioForm.invalid){
       return
@@ -339,7 +339,7 @@ export class MateriaPrimaComponent implements OnInit {
 
     this.fuente_modal = true
     this.fuente_selected = this.Materiales.find(x=> x._id === producto)
-    console.log(this.fuente_selected)
+    // console.log(this.fuente_selected)
   }
 
   modal_caja(producto){
@@ -349,7 +349,7 @@ export class MateriaPrimaComponent implements OnInit {
     }
     this.caja_modal = true
     this.caja_selected = this.Materiales.find(x=> x._id === producto)
-    console.log(this.caja_selected)
+    // console.log(this.caja_selected)
 
   }
 
@@ -361,7 +361,7 @@ export class MateriaPrimaComponent implements OnInit {
 
     this.plancha_modal = true
     this.plancha_selected = this.Materiales.find(x=> x._id === producto)
-    console.log(this.plancha_selected)
+    // console.log(this.plancha_selected)
   }
 
   editar_plancha(){
@@ -380,7 +380,7 @@ export class MateriaPrimaComponent implements OnInit {
 
     this.api.updateManyMateriales(this.plancha_selected._id, info)
       .subscribe((resp:any)=>{
-        console.log('done')
+        // console.log('done')
       })
   }
 
@@ -402,7 +402,7 @@ export class MateriaPrimaComponent implements OnInit {
 
     this.api.updateManyMateriales(this.caja_selected._id, info)
       .subscribe((resp:any)=>{
-        console.log('done')
+        // console.log('done')
       })
 
   }
@@ -425,7 +425,7 @@ export class MateriaPrimaComponent implements OnInit {
 
     this.api.updateManyMateriales(this.fuente_selected._id, info)
       .subscribe((resp:any)=>{
-        console.log('done')
+        // console.log('done')
       })
   }
 
@@ -437,7 +437,7 @@ export class MateriaPrimaComponent implements OnInit {
 
     this.sustrato_modal = true
     this.sustrato_selected = this.Materiales.find(x=> x._id === producto)
-    console.log(this.sustrato_selected)
+    // console.log(this.sustrato_selected)
   }
 
 
@@ -459,7 +459,7 @@ export class MateriaPrimaComponent implements OnInit {
     this.Edited_sustrato = false;
     this.api.putMateriaPrima(this.sustrato_selected._id, info)
       .subscribe((resp:any)=>{
-        console.log('done')
+        // console.log('done')
       })
   }
 
@@ -483,11 +483,11 @@ export class MateriaPrimaComponent implements OnInit {
     this.preparacion_tinta = true;
     this.tinta_selected = this.Materiales.find(x=> x._id === producto)
     this.preparacion_pendiente = this.tinta_selected.preparacion
-    console.log(this.preparacion_pendiente)
+    // console.log(this.preparacion_pendiente)
   }
 
   delete_formula(i){
-    console.log(i)
+    // console.log(i)
     this.preparacion_pendiente.splice(i,1)
   }
 
@@ -499,18 +499,18 @@ export class MateriaPrimaComponent implements OnInit {
     this.preparacion_pendiente.push({nombre:`${nombre.nombre} (${nombre.marca})`,id:nombre._id,cantidad})
 
 
-    // console.log( this.preparacion_pendiente)
+    // // console.log( this.preparacion_pendiente)
 
   }
 
   Finalizar_formula(id){
     let preparacion = this.preparacion_pendiente;
     this.preparacion_pendiente = [];
-    console.log(id, preparacion)
+    // console.log(id, preparacion)
 
     this.api.putAgregarformula(id, preparacion)
       .subscribe((resp:any)=>{
-        console.log(resp)
+        // console.log(resp)
         Swal.fire({
           icon:'success',
           title:'Preparación actualizada',

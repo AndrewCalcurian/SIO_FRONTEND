@@ -32,14 +32,14 @@ export class PreFacturacionComponent implements OnInit {
     this.api.getDespachosYOrdenes()
       .subscribe((resp:any)=>{
         this.Despachos = resp.preFacuracion
-        console.log(resp, 'TASAA')
+        // console.log(resp, 'TASAA')
         this.Tasa = resp.MonitorBCV
       })
   }
 
   startsWith(documento: string): boolean {
     if (documento && documento.length > 0) {
-      console.log(documento.charAt(0) === 'N')
+      // console.log(documento.charAt(0) === 'N')
       return documento.charAt(0) === 'N';
     }
     return false;
@@ -94,16 +94,16 @@ export class PreFacturacionComponent implements OnInit {
 
   public Escala = {cantidad:0, precio:0};
   buscarEscala(precio,nueva?){
-    console.log(precio,'PRECIOOOO')
+    // console.log(precio,'PRECIOOOO')
     let escalas = this.Despachos[this.INDEX].escala.escalas
     for(let i=0;i<escalas.length;i++){
       escalas[i].cantidad = Number(escalas[i].cantidad)
     }
-    console.log(escalas,'ESCALAAAAAAAAAAAAAAAAAAAS')
+    // console.log(escalas,'ESCALAAAAAAAAAAAAAAAAAAAS')
     let search = escalas.findLast(x=> x.cantidad <= precio)
-    console.log(search,'SEARCH')
+    // console.log(search,'SEARCH')
     if(!search && !nueva){
-      console.log('fail')
+      // console.log('fail')
       search = escalas[0]
     }
     this.Escala = search  
@@ -188,7 +188,7 @@ export class PreFacturacionComponent implements OnInit {
         )
         this.api.facturado(this.Despachos[this.INDEX].despacho)
           .subscribe((resp:any)=>{
-            console.log('donde')
+            // console.log('donde')
           })
       } else if (result.isDenied) {
         Swal.fire({title:'Nada cambió', text:'Ningún cambio fue realizado.', icon:'info',showConfirmButton:false})
@@ -220,7 +220,7 @@ export class PreFacturacionComponent implements OnInit {
     this.Despachos[this.INDEX].despacho.tasa = this.Tasa
     this.Despachos[this.INDEX].despacho.precio = this.Escala.precio
     this.Despachos[this.INDEX].despacho.escala = this.Escala.cantidad
-    console.log(this.Despachos[this.INDEX])
+    // console.log(this.Despachos[this.INDEX])
 
 
     let cliente = this.Despachos[this.INDEX].orden.cliente.nombre
@@ -277,7 +277,7 @@ export class PreFacturacionComponent implements OnInit {
 
     for(let i=0;i<this.Despachos[this.INDEX].orden.cliente.contactos.length;i++){
       if(i === 0){
-        console.log(this.Despachos[this.INDEX].orden.cliente.contactos[i].trato)
+        // console.log(this.Despachos[this.INDEX].orden.cliente.contactos[i].trato)
         contactos = `${this.Despachos[this.INDEX].orden.cliente.contactos[i].trato} ${this.Despachos[this.INDEX].orden.cliente.contactos[i].nombre}`
         cargos = `${this.Despachos[this.INDEX].orden.cliente.contactos[i].cargo}`
       }
@@ -287,14 +287,14 @@ export class PreFacturacionComponent implements OnInit {
         cargos = cargos + ` \n\n\n ${this.Despachos[this.INDEX].orden.cliente.contactos[i].cargo}`
       }
     }
-    console.log(this.Despachos[this.INDEX].orden.cliente)
+    // console.log(this.Despachos[this.INDEX].orden.cliente)
     for(let i=0;i<this.Despachos[this.INDEX].orden.producto.post.length;i++){
       procesos = procesos +', '+this.Despachos[this.INDEX].orden.producto.post[i];
     }
     for(let i=0;i<this.Despachos[this.INDEX].orden.producto.materiales[this.Despachos[this.INDEX].orden.montaje].length;i++)
     {
       let material = this.Despachos[this.INDEX].orden.producto.materiales[this.Despachos[this.INDEX].orden.montaje][i]
-      console.log(material.producto.grupo.nombre)
+      // console.log(material.producto.grupo.nombre)
       if(material.producto.grupo.nombre === 'Sustrato'){
         sustrato = `${material.producto.nombre} ${material.producto.gramaje}g, calibre:${material.producto.calibre}`
       }else if(material.producto.grupo.nombre === 'Tinta'){

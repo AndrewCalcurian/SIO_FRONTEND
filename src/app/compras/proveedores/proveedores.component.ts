@@ -51,12 +51,12 @@ export class ProveedoresComponent implements OnInit {
         this.Proveedores = resp
         this.filas = this.Proveedores.length / 4
         this.filas = Math.ceil(this.filas)
-        console.log(this.filas)
+        // console.log(this.filas)
       })
   }
 
   origen_(n){
-    console.log(n)
+    // console.log(n)
   }
 
   nuevoProveedor_(){
@@ -71,7 +71,7 @@ export class ProveedoresComponent implements OnInit {
     this.api.GetGrupoMp()
     .subscribe((resp:any)=>{
       this.Grupos = resp
-      console.log(this.Grupos)
+      // console.log(this.Grupos)
     })
   }
 
@@ -80,7 +80,7 @@ export class ProveedoresComponent implements OnInit {
 
     if(!existe){
       this.Grupos_.push(e)
-      console.log(this.Grupos_)
+      // console.log(this.Grupos_)
     }
   }
 
@@ -91,7 +91,7 @@ export class ProveedoresComponent implements OnInit {
   CambiarImagen(event:any){
     this.ImgSubir = (event.target).files[0];
     document.getElementsByClassName('file-name')[0].innerHTML = this.ImgSubir.name;
-    console.log((event.target).files[0])
+    // console.log((event.target).files[0])
 
         const file = event.target.files[0];
 
@@ -106,7 +106,7 @@ export class ProveedoresComponent implements OnInit {
     this.contacto_n = ''
     this.contacto_e = ''
     this.contacto_t = ''
-    console.log( this.contacto)
+    // console.log( this.contacto)
   }
 
   deleteContacto(i){
@@ -145,7 +145,7 @@ export class ProveedoresComponent implements OnInit {
     }
 
 
-    console.log(data)
+    // console.log(data)
 
     this.api.postProveedor(data)
       .subscribe((resp:any)=>{
@@ -169,7 +169,7 @@ export class ProveedoresComponent implements OnInit {
           this.ImgSubir = null;
           if(logo){
           document.getElementsByClassName('file-name')[0].innerHTML = 'Sin archivo...';
-          console.log('img',logo)
+          // console.log('img',logo)
         }
         });
 
@@ -223,7 +223,7 @@ export class ProveedoresComponent implements OnInit {
       fabricantes:this.Fabricantes__,      
     }
 
-    console.log(this.ImgSubir)
+    // console.log(this.ImgSubir)
     this.api.putProveedores(this.id_proveedor, data)
       .subscribe((resp:any)=>{
         this.AvailableEdition = false;
@@ -243,7 +243,7 @@ export class ProveedoresComponent implements OnInit {
             if(logo){
             document.getElementsByClassName('file-name')[0].innerHTML = 'Sin archivo...';
             this.ImgSubir = null;
-            console.log('img',logo)
+            // console.log('img',logo)
           }
           });
         }

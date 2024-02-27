@@ -66,10 +66,10 @@ export class AsignacionNewComponent implements OnInit {
   buscarRequisicion(){
     this.api.getRequi()
     .subscribe((resp:any)=>{
-      console.log(resp)
+      // console.log(resp)
       for(let i =0; i<resp.length;i++){
         this.ordenes.push(resp[i])
-        // console.log(this.Almacenado, 'almacenado')
+        // // console.log(this.Almacenado, 'almacenado')
       }
       // this.onAgregarRequisicioes.emit(resp)
     })
@@ -77,7 +77,7 @@ export class AsignacionNewComponent implements OnInit {
 
   asignar(i,n){
     this.trabajando = [i,n];
-    console.log(i,n)
+    // console.log(i,n)
     if(!this.Asignar){
       this.Asignar = true
 
@@ -156,7 +156,7 @@ export class AsignacionNewComponent implements OnInit {
         this.api.BUSCARENALMACENPRODUCTO(parametro)
          .subscribe((resp:any)=>{
            this.Lotes_encontrados = resp;
-           console.log(this.Lotes_encontrados)
+           // console.log(this.Lotes_encontrados)
            this.loading_ = false
 
            let ordenes = this.momentaneos.filter(x => x.orden === this.trabajando[0] && x.producto === this.trabajando[1])
@@ -190,7 +190,7 @@ export class AsignacionNewComponent implements OnInit {
         for(let i=0;i<resp.length;i++){
           this.ordenes.push(resp[i])
         }
-        console.log(this.ordenes)
+        // console.log(this.ordenes)
       })
   }
 
@@ -210,7 +210,7 @@ export class AsignacionNewComponent implements OnInit {
   seleccionar(i){
 
     
-    console.log(this.Lotes_encontrados[i].cantidad)
+    // console.log(this.Lotes_encontrados[i].cantidad)
 
     // (<HTMLInputElement>document.getElementById(i.toString())).checked
     if((<HTMLInputElement>document.getElementById(i.toString())).checked){
@@ -251,7 +251,7 @@ export class AsignacionNewComponent implements OnInit {
           }else{
             if(this.trabajando[1] == 0 && i == 0){
               this.restante[0] = Number(this.sumando) - Number(this.Total);
-              console.log(this.restante[0])
+              // console.log(this.restante[0])
             }else{
               if(this.trabajando[1] == 0){
                 this.restante[`${i}`] = Number(this.sumando) - Number(this.Total);
@@ -291,20 +291,20 @@ export class AsignacionNewComponent implements OnInit {
       if(indice < 0){
 
         let resto
-        console.log(this.trabajando[1],i)
+        // console.log(this.trabajando[1],i)
         if(this.trabajando[1] == 0 && i == 0){
           resto = this.restante[0]
-          console.log('aqui')
+          // console.log('aqui')
         }else{
           if(this.trabajando[1] == 0){
             resto = this.restante[`${i}`]
           }else{
             resto = this.restante[`${this.trabajando[1]}${i}`]
           }
-          console.log('aqui')
+          // console.log('aqui')
         }
 
-        console.log(resto)
+        // console.log(resto)
         this.momentaneos.push({unidad:this.Lotes_encontrados[i].material.unidad,EA_cantidad:this.Lotes_encontrados[i].cantidad,
           asignado,id:this.Lotes_encontrados[i]._id,codigo:this.Lotes_encontrados[i].codigo,lote:this.Lotes_encontrados[i].lote,marca:this.Lotes_encontrados[i].material.marca,
           material:this.Lotes_encontrados[i].material.nombre,restante:resto,index:i,orden:this.trabajando[0],producto:this.trabajando[1], id_m:this.Lotes_encontrados[i].material._id,
@@ -347,7 +347,7 @@ export class AsignacionNewComponent implements OnInit {
     this.sumando = 0;
     this.Asignar = false;
     this.material_cubierto++;
-    console.log(this.material_cubierto)
+    // console.log(this.material_cubierto)
     for(let x=0;x<this.Lotes_encontrados.length;x++){
       (<HTMLInputElement>document.getElementById(x.toString())).disabled = false;
       (<HTMLInputElement>document.getElementById(x.toString())).checked = false;
@@ -387,7 +387,7 @@ export class AsignacionNewComponent implements OnInit {
     this.api.BUSCARCINTA()
       .subscribe((resp:any)=>{
         this.Lotes_encontrados = resp;
-        console.log(this.Lotes_encontrados)
+        // console.log(this.Lotes_encontrados)
         this.loading_ = false
 
         let ordenes = this.momentaneos.filter(x => x.orden === this.trabajando[0] && x.producto === this.trabajando[1])
@@ -405,7 +405,7 @@ export class AsignacionNewComponent implements OnInit {
   }
 
   Finalizar(){
-    console.log(this.momentaneos)
+    // console.log(this.momentaneos)
 
     let tabla = '';
     let materiales = []

@@ -144,7 +144,7 @@ export class AnalisisSustratoComponent implements OnInit {
     this.totales = this.observadores[split[0]].totales.filter(x=>x.lote === split[1])
     this.totales = this.totales[0]
     this.material = material
-    console.log(this.totales)
+    // console.log(this.totales)
     
     this.api.getLotesUsados(split[1])
           .subscribe((resp:any)=>{
@@ -179,7 +179,7 @@ export class AnalisisSustratoComponent implements OnInit {
               this.calibre = resp.calibre.mm
               this.Um_calibre = resp.calibre.um
               this.pt_calibre = resp.calibre.pt
-              console.log(resp)
+              // console.log(resp)
 
               this.promedio_calibre = Number(resp.calibre.promedio)
               this.desviacion_calibre = Number(resp.calibre.desviacion)
@@ -291,7 +291,7 @@ export class AnalisisSustratoComponent implements OnInit {
 
             if(material.grupo === 'Sustrato'){
               
-              console.log(material)
+              // console.log(material)
               this.Lotes_por_analizar.push(
                 {
                   lote:material.lote,
@@ -510,7 +510,7 @@ export class AnalisisSustratoComponent implements OnInit {
               let split = str.split('.')
               let decimales = split[1]
 
-              console.log('PTTTTTTTTTTTT', this.desviacion_calibre_pt)
+              // console.log('PTTTTTTTTTTTT', this.desviacion_calibre_pt)
 
               if(decimales){
                 for(let i=0;i<decimales.length;i++){
@@ -609,7 +609,7 @@ export class AnalisisSustratoComponent implements OnInit {
           if(x === this.muestras -1){
             varianza = varianza / (this.muestras-1)
             this.desviacion_contra_escuadra = Math.sqrt(varianza)
-            console.log(this.desviacion_contra_escuadra, '/', this.promedio_contra_escuadra )
+            // console.log(this.desviacion_contra_escuadra, '/', this.promedio_contra_escuadra )
             // if(this.desviacion_contra_escuadra > 0){
             //   this.contra_escuadra_nf = 0
             // }
@@ -758,7 +758,7 @@ export class AnalisisSustratoComponent implements OnInit {
               let split = str.split('.')
               let decimales = split[1]
 
-              console.log(split[1])
+              // console.log(split[1])
               if(decimales){
                 for(let i=0;i<decimales.length;i++){
                   if(decimales[i] != '0'){
@@ -978,7 +978,7 @@ export class AnalisisSustratoComponent implements OnInit {
           .subscribe((resp:any)=>{
            this.api.FinalizarFacturacion(this.FacturaSelected._id)
             .subscribe((resp:any)=>{
-              console.log(resp)
+              // console.log(resp)
             })
           })
       }
@@ -1020,7 +1020,7 @@ export class AnalisisSustratoComponent implements OnInit {
 
         this.api.enviarNotificacion(data)
           .subscribe((resp:any)=>{
-            console.log('correo enviado')
+            // console.log('correo enviado')
           })
 
       } else if (result.isDenied) {
@@ -1042,7 +1042,7 @@ export class AnalisisSustratoComponent implements OnInit {
 
         this.api.enviarNotificacion(data)
           .subscribe((resp:any)=>{
-            console.log('correo enviado')
+            // console.log('correo enviado')
           })
       }
     })
@@ -1700,7 +1700,7 @@ export class AnalisisSustratoComponent implements OnInit {
               this.calibre = resp.calibre.mm
               this.Um_calibre = resp.calibre.um
               this.pt_calibre = resp.calibre.pt
-              console.log(resp)
+              // console.log(resp)
 
               this.promedio_calibre = Number(resp.calibre.promedio)
               this.desviacion_calibre = Number(resp.calibre.desviacion)

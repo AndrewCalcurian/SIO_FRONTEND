@@ -39,10 +39,10 @@ export class AsignacionComponent implements OnInit {
   buscarRequisicion(){
     this.api.getRequi()
     .subscribe((resp:any)=>{
-      console.log(resp)
+      // console.log(resp)
       for(let i =0; i<resp.length;i++){
         this.necesario.push(resp[i])
-        // console.log(this.Almacenado, 'almacenado')
+        // // console.log(this.Almacenado, 'almacenado')
       }
       // this.onAgregarRequisicioes.emit(resp)
     })
@@ -56,22 +56,22 @@ export class AsignacionComponent implements OnInit {
 
   Caja_(caja:number, cinta:number, index){
 
-    console.log()
+    // console.log()
     caja = Math.ceil(caja);
     this.cintas_.push({
       cantidad:Number(cinta * caja),
       index
     })
 
-    // console.log(this.cintas_)
+    // // console.log(this.cintas_)
     // this.cintas_= Number(cinta * caja)
-    // // console.log(this.cintas_.length)
+    // // // console.log(this.cintas_.length)
     return caja
   }
 
   _cinta_(index){
     let exist = this.cintas_.find(x => x.index == index)
-    // console.log(exist)
+    // // console.log(exist)
     if(exist){
       return true
     }
@@ -108,7 +108,7 @@ export class AsignacionComponent implements OnInit {
       index:i
     })
 
-    console.log(this.cintas_[i].cantidad)
+    // console.log(this.cintas_[i].cantidad)
     return this.cintas_[i].cantidad
   }
 
@@ -116,7 +116,7 @@ export class AsignacionComponent implements OnInit {
 
     // alert(index)
 
-    // // console.log({
+    // // // console.log({
     //   e:e,
     //   material,
     //   i,
@@ -137,7 +137,7 @@ export class AsignacionComponent implements OnInit {
     //     for(let i=0; i<descuentos.length; i++){
     //       if(descuentos[i].necesaria){
     //         descuento = descuento + Number(descuentos[i].cantidad)
-    //         // console.log('descuento', descuento)
+    //         // // console.log('descuento', descuento)
     //       }
     //       descuentos[i].necesaria
 
@@ -153,11 +153,11 @@ export class AsignacionComponent implements OnInit {
 
     // BuscarDescuento
     //   .then(function(descuento){
-    //     // console.log(descuento,'*/*')
+    //     // // console.log(descuento,'*/*')
 
     //   })
 
-    console.log(i)
+    // console.log(i)
 
     let splited = e.split('*')
     e = splited[1]
@@ -165,7 +165,7 @@ export class AsignacionComponent implements OnInit {
 
     
     let EnAlmacen = this.Almacenado.find(x => x.material.nombre === material && x.lote === e && x.codigo === codigo)
-    console.log(EnAlmacen, 'aqui')
+    // console.log(EnAlmacen, 'aqui')
     let Mname = EnAlmacen.material._id
     let _cantidad;
 
@@ -176,7 +176,7 @@ export class AsignacionComponent implements OnInit {
       // if(m_cantidad < 1){
       //   _cantidad = 0;
       // }
-      // // console.log(m_cantidad,'m_cantidad')
+      // // // console.log(m_cantidad,'m_cantidad')
     }else if(grupo === 'Barniz' || grupo === 'Barniz Acuoso'){
       _cantidad = (m_cantidad * hojas) / 1000;
     }else if(grupo === 'Pega' || grupo === 'Quimicos'){
@@ -190,19 +190,19 @@ export class AsignacionComponent implements OnInit {
         _cantidad = (m_cantidad * hojas) / 1000;
     }else if(grupo === 'Cajas Corrugadas' || grupo === 'Insumos'){
       _cantidad =  cantidad / m_cantidad;
-      console.log(_cantidad,'-',cantidad,'/', m_cantidad)
+      // console.log(_cantidad,'-',cantidad,'/', m_cantidad)
       if(cantidad === 1){
         _cantidad = m_cantidad
       }
-      // // console.log(cantidad,'/////',m_cantidad,'/',grupo,'0',_cantidad)
+      // // // console.log(cantidad,'/////',m_cantidad,'/',grupo,'0',_cantidad)
       // cinta  = cinta * _cantidad;
     }else if(grupo === 'Aceites'){
       _cantidad =  cantidad / m_cantidad;
-      console.log(_cantidad,'-',cantidad,'/', m_cantidad)
+      // console.log(_cantidad,'-',cantidad,'/', m_cantidad)
       if(cantidad === 1){
         _cantidad = m_cantidad
       }
-      // // console.log(cantidad,'/////',m_cantidad,'/',grupo,'0',_cantidad)
+      // // // console.log(cantidad,'/////',m_cantidad,'/',grupo,'0',_cantidad)
       // cinta  = cinta * _cantidad;
     }else if(grupo === 'CINTA DE EMBALAJE' || grupo === 'Cinta de Embalaje'){
       if(!this._cinta_(index)){
@@ -216,7 +216,7 @@ export class AsignacionComponent implements OnInit {
 
     _cantidad = Number(_cantidad).toFixed(2)
 
-    console.log(cantidad)
+    // console.log(cantidad)
 
 
     // alert(_cantidad)
@@ -228,15 +228,15 @@ export class AsignacionComponent implements OnInit {
       unidad_necesaria = (_cantidad / EnAlmacen.material.neto) - (this.Descuentos(material)/ EnAlmacen.material.neto)
     }else if(grupo === 'Cajas Corrugadas'){
       unidad_necesaria = _cantidad - this.Descuentos(material)
-      console.log(unidad_necesaria,'/',_cantidad)
+      // console.log(unidad_necesaria,'/',_cantidad)
     }
-    // console.log(_cantidad,'_cantidad')
-    // console.log(EnAlmacen.material.neto,'Neto')
-    // console.log(this.Descuentos(material),'Descuento')
-    // console.log(unidad_necesaria,'Unidad necesaria')
-    // // console.log(_cantidad,'-',EnAlmacen.material.neto)
+    // // console.log(_cantidad,'_cantidad')
+    // // console.log(EnAlmacen.material.neto,'Neto')
+    // // console.log(this.Descuentos(material),'Descuento')
+    // // console.log(unidad_necesaria,'Unidad necesaria')
+    // // // console.log(_cantidad,'-',EnAlmacen.material.neto)
 
-    // // console.log( unidad_necesaria )
+    // // // console.log( unidad_necesaria )
 
 
     unidad_necesaria = (Number(unidad_necesaria)).toFixed(2)
@@ -256,14 +256,14 @@ export class AsignacionComponent implements OnInit {
 
     if(EnAlmacen.material.grupo.nombre === 'Cajas Corrugadas' && orden.cliente){
       unidad_necesaria =_cantidad - this.Descuentos(material);
-      console.log(unidad_necesaria)
+      // console.log(unidad_necesaria)
     }else if(EnAlmacen.material.grupo.nombre === 'Sustrato' && orden.cliente){
       unidad_necesaria = hojas - this.Descuentos(material)
       // alert(this.Descuentos(material))
     }
     else if(EnAlmacen.material.grupo.nombre === 'Sustrato' && !orden.cliente){
         unidad_necesaria = m_cantidad - this.Descuentos(material);
-        // // console.log('aqui')
+        // // // console.log('aqui')
     }
     if(EnAlmacen.material.grupo.nombre === 'Tinta' || EnAlmacen.material.grupo.nombre === 'Quimicos'){
       unidad_necesaria = _cantidad - this.Descuentos(material); 
@@ -334,7 +334,7 @@ export class AsignacionComponent implements OnInit {
         this.LOTES.push({index,Mname,EA_Cantidad,lote:e,codigo,resta:restante,i,almacenado:EnAlmacen.cantidad,solicitado:cantidad_solicitada,unidad})
       }
 
-      console.log(this.LOTES)
+      // console.log(this.LOTES)
     }
 
 
@@ -347,7 +347,7 @@ export class AsignacionComponent implements OnInit {
 
       if(!existe){
         this.LOTES.push({index,Mname,EA_Cantidad,lote,codigo,resta:resto,i,almacenado,restante:restante,solicitado,unidad,cantidad,material})
-        // // console.log(this.LOTES)
+        // // // console.log(this.LOTES)
       }
      else{
       this.LOTES.push({index,Mname,EA_Cantidad,lote,codigo,resta:resto,i,almacenado,restante:restante,solicitado,unidad,cantidad,material})
@@ -355,7 +355,7 @@ export class AsignacionComponent implements OnInit {
       //   this.LOTES.push({lote,codigo,resta:resto,i,almacenado,restante:restante,solicitado,unidad,cantidad,material})
       }
 
-      console.log(this.LOTES)
+      // console.log(this.LOTES)
 
   }
 
@@ -382,7 +382,7 @@ export class AsignacionComponent implements OnInit {
 
   Restar(orden, solicitud,index,n,requi?){
 
-    console.log(this.LOTES)
+    // console.log(this.LOTES)
 
     let largo = solicitud.length;
     let ceros = []
@@ -410,10 +410,10 @@ export class AsignacionComponent implements OnInit {
       if(n == En_Almacen.length-1){
         for(let i = 0; i<En_Almacen.length; i++){
           let existe = this.LOTES.find(x => x.i === i);
-          console.log(existe)
+          // console.log(existe)
           if(!existe){
             let existencia = ceros.find(x=> x === i)
-            console.log(existencia)
+            // console.log(existencia)
             if(!existencia){
               Swal.fire({
                 icon: 'error',
@@ -426,11 +426,11 @@ export class AsignacionComponent implements OnInit {
             }
           }else{
             // alert('2')
-            // // console.log(En_Almacen[0][i],'i')
+            // // // console.log(En_Almacen[0][i],'i')
             if(En_Almacen[i].producto.grupo.nombre === 'Cajas Corrugadas' && !requi){
               let _existe = this.LOTES.find(x => x.i === 100);
               if(!_existe){
-                // // console.log(this.LOTES)
+                // // // console.log(this.LOTES)
                 Swal.fire({
                   icon: 'error',
                   title: 'Oops...',
@@ -456,8 +456,8 @@ export class AsignacionComponent implements OnInit {
           requi
         }
     
-        console.log(this.LOTES)
-        // // console.log('data lotes',data.lotes)
+        // console.log(this.LOTES)
+        // // // console.log('data lotes',data.lotes)
         // alert('asignado')
         this.api.realizarDescuentoAlmacen(data)
          .subscribe(resp=> {
@@ -475,7 +475,7 @@ export class AsignacionComponent implements OnInit {
         })
       }
     }
-    console.log(En_Almacen,'almacen')
+    // console.log(En_Almacen,'almacen')
     let Cargados = this.LOTES.length
 
   }

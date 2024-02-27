@@ -28,7 +28,7 @@ export class RegistroRepuestoComponent implements OnInit {
     let image = (e.target).files[0]
     this.upload.actualizarFoto(image,'repuestos','id')
       .then(img =>{
-        console.log(img)
+        // console.log(img)
         this.nuevoMaterial.foto = img;
       })
   }
@@ -36,13 +36,13 @@ export class RegistroRepuestoComponent implements OnInit {
   editar(){
     this.api.putRepuesto(this.nuevoMaterial, this.nuevoMaterial._id)
       .subscribe((resp:any)=>{
-        console.log(resp)
+        // console.log(resp)
         this.cerrar();
       })
   }
 
   SNParte(e){
-    console.log(e.target.checked)
+    // console.log(e.target.checked)
     if(e.target.checked === true){
       const fechaActual = Date.now();
 

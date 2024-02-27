@@ -48,7 +48,7 @@ export class GestionComponent implements OnInit {
       .subscribe((resp:any)=>{
 
         this.GRUPOS = resp.grupos
-        // console.log(this.GRUPOS,'___________________________________________*')
+        // // console.log(this.GRUPOS,'___________________________________________*')
       })
   }
 
@@ -64,10 +64,10 @@ export class GestionComponent implements OnInit {
   public Almacenes_edicion = []
   public almacen__ = false;
   BuscarAlmacen(producto){
-    console.log(producto)
+    // console.log(producto)
     this.api.BuscarAlmacenes(producto)
       .subscribe((resp:any)=>{
-        // console.log(resp)
+        // // console.log(resp)
         this.Almacenes_edicion.push(resp)
         this.almacen__ = true;
         return resp;
@@ -79,7 +79,7 @@ export class GestionComponent implements OnInit {
     this.Despachos[x].despacho[y].destino = e;
     this.api.PutDespachos(this.Despachos[x]._id, this.Despachos[x])
     .subscribe((resp:any)=>{
-      // console.log('done')
+      // // console.log('done')
     })
   }
 
@@ -94,7 +94,7 @@ export class GestionComponent implements OnInit {
 
     this.api.PutDespachos(this.Despachos[x]._id, this.Despachos[x])
     .subscribe((resp:any)=>{
-      // console.log('done')
+      // // console.log('done')
     })
 
   }
@@ -125,11 +125,11 @@ export class GestionComponent implements OnInit {
         this.Despachos[x].despacho[y].parcial = hoy;
         this.api.PutDespachos(this.Despachos[x]._id, this.Despachos[x])
           .subscribe((resp:any)=>{
-      // console.log('done')
+      // // console.log('done')
       let iterator = 0;
       for(let i=0;i<this.Despachos[x].despacho.length;i++){
-        // console.log(i,'iterator', this.Despachos[x].despacho.length)
-        console.log(this.Despachos[x].despacho[i].parcial)
+        // // console.log(i,'iterator', this.Despachos[x].despacho.length)
+        // console.log(this.Despachos[x].despacho[i].parcial)
         if(!this.Despachos[x].despacho[i].parcial){
           iterator++
 
@@ -164,7 +164,7 @@ export class GestionComponent implements OnInit {
 
     this.api.PutDespachos(this.Despachos[x]._id, this.Despachos[x])
     .subscribe((resp:any)=>{
-      // console.log('done')
+      // // console.log('done')
     })
 
   }
@@ -175,9 +175,9 @@ export class GestionComponent implements OnInit {
 
     this.api.PutDespachos(this.Despachos[x]._id, this.Despachos[x])
     .subscribe((resp:any)=>{
-      // console.log('done')
+      // // console.log('done')
     })
-    // console.log(this.Despachos[x])
+    // // console.log(this.Despachos[x])
   }
 
   nuevo_despacho(){
@@ -186,7 +186,7 @@ export class GestionComponent implements OnInit {
 
   editar_cant(x){
     this.edit = x
-    console.log(this.Despachos[x])
+    // console.log(this.Despachos[x])
     for(let i=0;i<this.Despachos[x].despacho.length;i++){
       let almacenes = this.BuscarAlmacen(this.Despachos[x].despacho[i].producto)
     }
@@ -212,7 +212,7 @@ export class GestionComponent implements OnInit {
     }
     this.api.PutDespacho(id,this.Despachos[x])
       .subscribe((resp:any)=>{
-        // console.log(resp)
+        // // console.log(resp)
         if(resp.orden){
           Swal.fire({
             title:'Limite excedido',
@@ -236,7 +236,7 @@ export class GestionComponent implements OnInit {
     this.api.GetDespacho()
     .subscribe((resp:any)=>{
       this.Despachos = resp
-      // console.log(this.Despachos)
+      // // console.log(this.Despachos)
     })
   }
 
@@ -318,8 +318,8 @@ export class GestionComponent implements OnInit {
 
     const productos:any = value_hojas * Ejemplares.orden.producto.ejemplares[Ejemplares.orden.montaje];
 
-    // console.log(value_hojas,'value');
-    // console.log(Ejemplares,'Ejemplares');
+    // // console.log(value_hojas,'value');
+    // // console.log(Ejemplares,'Ejemplares');
 
     (<HTMLInputElement>document.getElementById('productos_input')).value = productos;
   }
@@ -352,7 +352,7 @@ export class GestionComponent implements OnInit {
 
     this.api.postRestrasar(data)
       .subscribe((resp:any)=>{
-        // console.log(resp)
+        // // console.log(resp)
         Swal.fire({
           icon:'info',
           title:'Se realizó un retraso en la planificación',
@@ -409,14 +409,14 @@ export class GestionComponent implements OnInit {
   }
 
   CompararTama(op, fase, grupo, hojas_, productos_,){
-    // // console.log(fase,'<>',grupo)
+    // // // console.log(fase,'<>',grupo)
     let group = this.GRUPOS.find(x=> x._id === grupo)
 
     let index = group.tipos.findIndex(x => x === fase)
 
     if(index > 0){
       let gest = this.GESTIONES.filter(x => x.maquina.tipo == group.tipos[index -1] && x.op == op)
-      console.log('gestiones',gest,'Grupos',group)
+      // console.log('gestiones',gest,'Grupos',group)
       let hojas = 0;
       let productos = 0;
       for(let i =0; i<gest.length; i++){
@@ -424,7 +424,7 @@ export class GestionComponent implements OnInit {
         productos = productos + Number(gest[i].productos);
       }
 
-      // console.log(hojas,'<->',productos)
+      // // console.log(hojas,'<->',productos)
       if(hojas < hojas_ || productos < productos_){
         Swal.fire({
           title:'Error!',
@@ -459,17 +459,17 @@ export class GestionComponent implements OnInit {
 
     let separator = orden.split('-')
 
-    // // console.log(separator[3]);
+    // // // console.log(separator[3]);
 
 
 
 
     orden = separator[1];
-    // // console.log(separator[0],'<>',separator[1])
+    // // // console.log(separator[0],'<>',separator[1])
 
     let Ejemplares = this.TRABAJOS.find(x => x._id == orden);
 
-    // console.log('EJEM',Ejemplares)
+    // // console.log('EJEM',Ejemplares)
 
     productos = (<HTMLInputElement>document.getElementById('productos_input')).value
     hojas = (<HTMLInputElement>document.getElementById('hojas_input')).value
@@ -486,13 +486,13 @@ export class GestionComponent implements OnInit {
     let _hojas = 0;
 
     if(long <= 0){
-      // // console.log(orden)
+      // // // console.log(orden)
       let Actual = this.TRABAJOS.find(x=> x._id == orden)
-      // // console.log(Actual)
+      // // // console.log(Actual)
       _productos = Actual.orden.cantidad - Number(productos);
       _hojas = this.redondear(Ejemplares.orden.cantidad, Ejemplares.orden.producto.ejemplares[Ejemplares.orden.montaje]) - Number(hojas)
 
-      // // console.log(Actual.orden.paginas_o,'-',Number(hojas))
+      // // // console.log(Actual.orden.paginas_o,'-',Number(hojas))
     }else{
       _productos = restante[long - 1].Rproductos-Number(productos)
       _hojas = restante[long - 1].Rhojas - Number(hojas)
@@ -528,7 +528,7 @@ export class GestionComponent implements OnInit {
     this.api.getGestiones()
       .subscribe((resp:any)=>{
         this.GESTIONES = resp
-        // console.log('all gestions', resp)
+        // // console.log('all gestions', resp)
       })
   }
 
@@ -594,7 +594,7 @@ export class GestionComponent implements OnInit {
               // }
               
               this.TRABAJOS.push(nuevo[i])
-              // // console.log(this.GRUPOS)
+              // // // console.log(this.GRUPOS)
             }
             
         }

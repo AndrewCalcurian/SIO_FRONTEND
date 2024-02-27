@@ -36,7 +36,7 @@ export class OrdenCompraComponent implements OnInit {
       this.api.getById(e.target.value)
         .subscribe((resp:any)=>{
           this.PRODUCTOS = resp.productos;
-          // // console.log(this.PRODUCTOS)
+          // // // console.log(this.PRODUCTOS)
       })
     }else{
       this.PRODUCTOS = []
@@ -50,7 +50,7 @@ export class OrdenCompraComponent implements OnInit {
       this.PRODUCTO = e
       let produc = this.PRODUCTOS.find(x=> x._id == e)
       this.producto__ = produc.producto
-      console.log(produc.producto)
+      // console.log(produc.producto)
     }else{
       this.PRODUCTO = []
     }

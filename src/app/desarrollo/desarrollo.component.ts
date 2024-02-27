@@ -15,7 +15,7 @@ export class DesarrolloComponent implements OnInit {
     this.api.getTodoslosProductos()
       .subscribe((resp:any)=>{
         this.productos = resp;
-        console.log(this.productos)
+        // console.log(this.productos)
       })
   }
 

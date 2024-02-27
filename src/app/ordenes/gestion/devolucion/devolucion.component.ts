@@ -48,7 +48,7 @@ export class DevolucionComponent implements OnInit {
     this.api.getRepuestosFinalizados(asignacion) 
       .subscribe((resp:any)=>{
         this.RepuestoAprobados = resp;
-        console.log(this.RepuestoAprobados)
+        // console.log(this.RepuestoAprobados)
       })
   }
   
@@ -60,10 +60,10 @@ export class DevolucionComponent implements OnInit {
       this.Repuesto = false;
     }
     this.materiales = this.devoluciones.filter(devoluciones => devoluciones.orden === orden_);
-    console.log(this.materiales)
+    // console.log(this.materiales)
     for(let i=0;i<this.materiales.length;i++){
       if(!this.materiales.nombre){
-        console.log(this.materiales[i])
+        // console.log(this.materiales[i])
         this.materiales.slice(i,1);
       }else{
         this.materiales[i].material.sort(function(a, b) {
@@ -79,7 +79,7 @@ export class DevolucionComponent implements OnInit {
     this.materiales = this.materiales.filter(materiales => materiales.material[0].material != null);
     }
 
-    console.log(this.materiales)
+    // console.log(this.materiales)
     this.materiales = this.materiales.reverse();
   // this.materiales = this.materiales.material
   
@@ -125,7 +125,7 @@ export class DevolucionComponent implements OnInit {
       let comparativa = lote.material.findIndex(x=> x.material._id == material && x.lote == _lote && x.codigo == _codigo);
       
     
-      console.log(data.filtrado[iter].cantidad,'>',lote.material[comparativa].cantidad)
+      // console.log(data.filtrado[iter].cantidad,'>',lote.material[comparativa].cantidad)
 
       if(data.filtrado[iter].cantidad > Number(lote.material[comparativa].cantidad)){
         Swal.fire({
@@ -164,7 +164,7 @@ export class DevolucionComponent implements OnInit {
   else if(n < 10){
     n = `000${n}`
   }
-    console.log(n)
+    // console.log(n)
     return `AL-ASG-${n}`
   }
 
@@ -187,9 +187,9 @@ export class DevolucionComponent implements OnInit {
       this.Data_devolucion[index] = data
     }
 
-    console.log(data)
+    // console.log(data)
 
-    // console.log(this.Data_devolucion)
+    // // console.log(this.Data_devolucion)
 
   }
 

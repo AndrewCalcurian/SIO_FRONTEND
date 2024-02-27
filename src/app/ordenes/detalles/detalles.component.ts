@@ -147,7 +147,7 @@ export class DetallesComponent implements OnInit {
         Swal.fire('La orden no fué cerrada', '', 'info')
       }
     })
-    // console.log(this.orden_id)
+    // // console.log(this.orden_id)
   }
 
   buscarDespachos(){
@@ -165,7 +165,7 @@ export class DetallesComponent implements OnInit {
                 this.despachos.push({fecha:resp[i].fecha})
               }
               this.despacho = this.despacho + resp[i].despacho[y].cantidad
-              console.log(this.despachos, 'aquiiii!!')
+              // console.log(this.despachos, 'aquiiii!!')
             }
           }
         }
@@ -176,7 +176,7 @@ export class DetallesComponent implements OnInit {
     this.api.getGestionesByOp(this.orden_id)
       .subscribe((resp:any)=>{
         this.gestiones_ = resp;
-        console.log(resp)
+        // console.log(resp)
       })
     // this.api.getGestiones()
     //   .subscribe((resp:any)=>{
@@ -257,7 +257,7 @@ export class DetallesComponent implements OnInit {
       .subscribe((resp:any)=>{
         this.Maquinas = resp
 
-        console.log(this.Maquinas)
+        // console.log(this.Maquinas)
       })
   }
 

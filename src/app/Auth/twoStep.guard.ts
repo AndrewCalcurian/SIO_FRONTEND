@@ -10,7 +10,7 @@ export class TwoStep implements CanActivate {
 
   constructor(private api:RestApiService,
               private router:Router){
-                console.log('work')
+                // console.log('work')
   }
 
   canActivate(

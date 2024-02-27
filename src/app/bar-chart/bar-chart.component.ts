@@ -67,14 +67,14 @@ export class BarChartComponent implements OnInit {
         }
 
       if(i === productos.length -1){
-        // console.log(this.Detallados)
+        // // console.log(this.Detallados)
         let total = 0;
         for(let n=0;n<this.Detallados.length;n++){
           total = Number(total) + Number(this.Detallados[n].capacidad)
           total = Number(total.toFixed(2));
 
-          console.log(total)
-          console.log(this.Pedido[this.index_])
+          // console.log(total)
+          // console.log(this.Pedido[this.index_])
           this.Pedido[this.index_].totales[this.index__].total = total
           this.Pedido[this.index_].productos.push(this.Detallados[n])
         }
@@ -96,11 +96,11 @@ export class BarChartComponent implements OnInit {
 
   Notificar(id){
 
-    console.log(id)
+    // console.log(id)
 
     this.api.sendNotificacion(id)
       .subscribe((resp:any)=>{
-        console.log(resp)
+        // console.log(resp)
         this.BuscarFacturas();
         Swal.fire({
           title:'Se ha enviado la notificación',
@@ -149,7 +149,7 @@ export class BarChartComponent implements OnInit {
     }).then((result) => {
       if (result.isConfirmed) {
 
-        console.log(pedido)
+        // console.log(pedido)
 
         this.GenerarPDF(pedido);
       }else{
@@ -182,7 +182,7 @@ export class BarChartComponent implements OnInit {
           allowOutsideClick: () => !Swal.isLoading()          
         }).then((result) => {
           if (result.isConfirmed) {
-            console.log(result)
+            // console.log(result)
             Swal.fire({
               title:'Enviado',
               text: `${result.value}`,
@@ -318,7 +318,7 @@ export class BarChartComponent implements OnInit {
           allowOutsideClick: () => !Swal.isLoading()          
         }).then((result) => {
           if (result.isConfirmed) {
-            console.log(result)
+            // console.log(result)
             Swal.fire({
               title:'Enviado',
               text: `${result.value}`,
@@ -369,7 +369,7 @@ export class BarChartComponent implements OnInit {
     this.api.getMateriaPrima()
       .subscribe((resp:any)=>{
         this.Materia_prima = resp;
-        console.log(this.Materia_prima)
+        // console.log(this.Materia_prima)
       })  
   }
 
@@ -380,7 +380,7 @@ export class BarChartComponent implements OnInit {
     }
 
     let fabricante = this.proveedores.filter(x=> x._id === e)
-    console.log(fabricante)
+    // console.log(fabricante)
     this.proveedor_selected = e
     this.Fabricantes_ = fabricante[0].fabricantes
   }
@@ -396,12 +396,12 @@ export class BarChartComponent implements OnInit {
     this.grupo__ = e
     for(let i=0; i<this.Materia_prima.length;i++){
       for(let n=0; n<this.Materia_prima[i].proveedor.length;n++){
-        console.log(this.Materia_prima[i].proveedor[n],'-',this.fabricante_selected._id)
+        // console.log(this.Materia_prima[i].proveedor[n],'-',this.fabricante_selected._id)
         if(this.Materia_prima[i].proveedor[n] === this.fabricante_selected._id)
         {
           if(this.Materia_prima[i].grupo.nombre === e){
             this.Materia_prima_filtered.push(this.Materia_prima[i])
-            console.log(this.grupo__)
+            // console.log(this.grupo__)
           }
         }
       }
@@ -476,7 +476,7 @@ export class BarChartComponent implements OnInit {
     this.resto = 0;
     while(cantidad<e){
         let iteration = cantidad + this.Materia_prima_selected.neto
-        console.log(iteration)
+        // console.log(iteration)
         if(iteration<=e){
           cantidad = Number(iteration.toFixed(2));
           contador++
@@ -510,7 +510,7 @@ export class BarChartComponent implements OnInit {
           lote:this.Lote,
           numero:i+2
         })
-        console.log(this.envases)
+        // console.log(this.envases)
       }
     }
   }
@@ -646,7 +646,7 @@ export class BarChartComponent implements OnInit {
     
     this.Lote = null
     this.Materia_prima_selected = null;
-    console.log(this.Factura)
+    // console.log(this.Factura)
 
   }
 
@@ -714,7 +714,7 @@ export class BarChartComponent implements OnInit {
 
     let recepcion = moment(data.recepcion).format('DD/MM/YYYY')
     let hoy = moment().format('DD/MM/YYYY')
-    console.log(this.usuario)
+    // console.log(this.usuario)
     let usuario = `${this.usuario.Nombre} ${this.usuario.Apellido}`
 
     for(let i=0;i<data.productos.length;i++){
@@ -724,9 +724,9 @@ export class BarChartComponent implements OnInit {
       if(info < 0){
         data_.push({lote:data.productos[i].lote,fabricacion:data.productos[i].fabricacion,cantidad:0,presentacion:data.productos[i].material.presentacion,neto:data.productos[i].material.neto,unidad:data.productos[i].material.unidad})
       }else{
-        // console.log(data_)
+        // // console.log(data_)
         data_[info].cantidad = data_[info].cantidad + 1;
-        console.log(data_)
+        // console.log(data_)
       }
     }
 
@@ -914,7 +914,7 @@ export class BarChartComponent implements OnInit {
     pdf.pageSize('A4');
 
     async function generarPDF_(){
-      console.log('test')
+      // console.log('test')
 
       pdf.add(
         new Table([
@@ -1127,7 +1127,7 @@ export class BarChartComponent implements OnInit {
         this.Factura = null;
         this.Fabricantes_ = null
         this.Edicion = false;
-        console.log(this.Pedido)
+        // console.log(this.Pedido)
         this.BuscarFacturas();
       })
   }
@@ -1164,7 +1164,7 @@ export class BarChartComponent implements OnInit {
   public Id;
   EditarPedido(i){
     this.NuevaRecepcion_()
-    console.log(this.Pedido[i])
+    // console.log(this.Pedido[i])
 
     this.N_factura = this.Pedido[i].factura;
     this.N_OC = this.Pedido[i].orden;

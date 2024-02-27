@@ -31,7 +31,7 @@ export class DespachosComponent implements OnInit {
   }
 
   Orden_Selected(orden){
-    // console.log()
+    // // console.log()
     let select = this.ORDENES.find(x => x.sort === orden)
     if(select){
       let existe = this.Ordenes_seleccionadas.find(x => x.op === orden)
@@ -56,7 +56,7 @@ export class DespachosComponent implements OnInit {
 
   change_value(e, i){
     this.Ordenes_seleccionadas[i].cantidad = e;
-    // console.log(this.Ordenes_seleccionadas)
+    // // console.log(this.Ordenes_seleccionadas)
   }
 
   fecha(e){
@@ -70,7 +70,7 @@ export class DespachosComponent implements OnInit {
   public observacion;
   Observar(e){
     this.observacion = e;
-    console.log(this.observacion)
+    // console.log(this.observacion)
   }
 
   public Almacenes_edicion = []
@@ -82,9 +82,9 @@ export class DespachosComponent implements OnInit {
     this.Selected = i;
     this.api.BuscarAlmacenes(producto)
       .subscribe((resp:any)=>{
-        console.log(resp)
+        // console.log(resp)
         this.Almacenes_edicion.push(resp.almacenes)
-        console.log(this.Almacenes_edicion)
+        // console.log(this.Almacenes_edicion)
         return resp;
       })
   }

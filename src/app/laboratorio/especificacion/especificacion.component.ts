@@ -42,7 +42,7 @@ export class EspecificacionComponent implements OnInit {
   ngOnInit(): void {
     this.buscarAlmacen();
     this.GetOneProducto(this.producto)
-    console.log(this.api.usuario)
+    // console.log(this.api.usuario)
   }
 
   Editar_Especificacion(){
@@ -58,7 +58,7 @@ export class EspecificacionComponent implements OnInit {
     .subscribe((resp:any)=>{
       this.productos = resp
       this.montajes = this.productos.producto.montajes
-      console.log(this.productos)
+      // console.log(this.productos)
       this.Ejemplares = this.productos.producto.ejemplares[this.i_montajes]
       for(let i=0;i<resp.producto.materiales[this.i_montajes].length;i++){
         let grupo = resp.producto.materiales[this.i_montajes][i].producto.grupo.nombre
@@ -71,17 +71,17 @@ export class EspecificacionComponent implements OnInit {
         }
         if(grupo === 'Barniz' || grupo === 'Barniz Acuoso'){
           this.barniz.push(resp.producto.materiales[this.i_montajes][i].producto.nombre)
-          console.log(this.barniz)
+          // console.log(this.barniz)
         }
         if(grupo === 'Pega'){
           this.pega.push(resp.producto.materiales[this.i_montajes][i].producto.nombre)
-          console.log(this.pega)
+          // console.log(this.pega)
         }
         if(grupo === 'Cajas Corrugadas'){
           this.caja = resp.producto.materiales[this.i_montajes][i]
         }
       }
-      console.log(this.productos)
+      // console.log(this.productos)
     })
   }
 
@@ -94,7 +94,7 @@ export class EspecificacionComponent implements OnInit {
       let show = i + this.inicio;
       this.registros.push({color,show})
       this.inicio++
-      console.log(this.registros)
+      // console.log(this.registros)
       return show
     }
 
@@ -119,7 +119,7 @@ export class EspecificacionComponent implements OnInit {
     let array = this.productos.producto.impresora_aprobada
     let existe = array.find(x => x === e)
 
-    console.log(e)
+    // console.log(e)
 
     if(!existe && e != '#'){
       this.productos.producto.impresora_aprobada.push(e)
@@ -132,7 +132,7 @@ export class EspecificacionComponent implements OnInit {
     let array = this.productos.producto.troqueladora_aprobada
     let existe = array.find(x => x === e)
 
-    console.log(e)
+    // console.log(e)
 
     if(!existe && e != '#'){
       this.productos.producto.troqueladora_aprobada.push(e)
@@ -144,7 +144,7 @@ export class EspecificacionComponent implements OnInit {
     let array = this.productos.producto.guillotina_aprobada
     let existe = array.find(x => x === e)
 
-    console.log(e)
+    // console.log(e)
     if(this.productos.producto.guillotina_aprobada[0] === 'No aplica'){
       this.productos.producto.guillotina_aprobada = []
     }
@@ -163,7 +163,7 @@ export class EspecificacionComponent implements OnInit {
     let array = this.productos.producto.pegadora_aprobada
     let existe = array.find(x => x === e)
 
-    console.log(e)
+    // console.log(e)
     if(this.productos.producto.pegadora_aprobada[0] === 'No aplica'){
       this.productos.producto.pegadora_aprobada = []
     }
@@ -198,8 +198,8 @@ export class EspecificacionComponent implements OnInit {
   }
 
   Finalizar_edicion(){
-    console.log(this.producto)
-    console.log(this.productos.producto)
+    // console.log(this.producto)
+    // console.log(this.productos.producto)
     this.api.updateProducto(this.productos.producto, this.producto)
       .subscribe((resp:any)=>{
         this.Edicion = false;
@@ -218,7 +218,7 @@ export class EspecificacionComponent implements OnInit {
   public formato_ = 'ai'
   aprobacion(e){
     let fecha = e.split('-')
-    console.log(`${fecha[2]}${fecha[1]}${fecha[0]}`)
+    // console.log(`${fecha[2]}${fecha[1]}${fecha[0]}`)
     this.productos.producto.diseno_producto[0] = `${fecha[2]}${fecha[1]}${fecha[0]}`
   }
   __formato(e){
@@ -227,7 +227,7 @@ export class EspecificacionComponent implements OnInit {
 
   monateje(e,i){
     let fecha = e.split('-')
-    console.log(`${fecha[2]}${fecha[1]}${fecha[0]}`)
+    // console.log(`${fecha[2]}${fecha[1]}${fecha[0]}`)
     if(i === 0){
       this.productos.producto.diseno_montaje[0] = `${fecha[2]}${fecha[1]}${fecha[0]}`
     }else{
@@ -262,7 +262,7 @@ export class EspecificacionComponent implements OnInit {
         paginas = Math.trunc(paginas)
         this.unidades_tonelada = this.Ejemplares * paginas;
         return  c * paginas
-      // console.log(paginas,'<------------>')
+      // // console.log(paginas,'<------------>')
 
   }
 
@@ -288,7 +288,7 @@ export class EspecificacionComponent implements OnInit {
 
     this.Desperdicio = porcentaje.toFixed(2)
 
-    console.log(porcentaje)
+    // console.log(porcentaje)
   }
 
   public Materiales = [];
@@ -302,7 +302,7 @@ export class EspecificacionComponent implements OnInit {
     .subscribe((resp:any)=>{
       this.Materiales = resp.materiales;
       for(let i=0;i<this.Materiales.length;i++){
-        // console.log(i)
+        // // console.log(i)
         if(this.Materiales[i].grupo.nombre === 'Sustrato'){
           let existe = this.Sustrato__.find(x=>x.nombre === this.Materiales[i].nombre && x.marca === this.Materiales[i].marca && x.calibre === this.Materiales[i].calibre && x.gramaje === this.Materiales[i].gramaje)
           if(!existe){
@@ -317,26 +317,26 @@ export class EspecificacionComponent implements OnInit {
         }
         if(this.Materiales[i].grupo.nombre === 'Quimicos'){
           let existe = this.Quimicos.find(x=>x.nombre === this.Materiales[i].nombre && x.marca === this.Materiales[i].marca )
-          console.log(existe)
+          // console.log(existe)
           if(!existe){
             this.Quimicos.push(this.Materiales[i])
-            // console.log(this.Quimicos)
+            // // console.log(this.Quimicos)
           }
         }
         if(this.Materiales[i].grupo.nombre === 'Cajas Corrugadas'){
           let existe = this.Cajas.find(x=>x.nombre === this.Materiales[i].nombre)
-          console.log(existe)
+          // console.log(existe)
           if(!existe){
             this.Cajas.push(this.Materiales[i])
-            // console.log(this.Cajas)
+            // // console.log(this.Cajas)
           }
         }
         if(this.Materiales[i].grupo.nombre === 'Otros materiales'){
           let existe = this.Planchas.find(x=>x.nombre === this.Materiales[i].nombre)
-          console.log(existe)
+          // console.log(existe)
           if(!existe){
             this.Planchas.push(this.Materiales[i])
-            // console.log(this.Planchas)
+            // // console.log(this.Planchas)
           }
         }
       }
@@ -421,7 +421,7 @@ export class EspecificacionComponent implements OnInit {
     .then(img => {
       if(img){
 
-        console.log(img)
+        // console.log(img)
         this.productos.producto.paletizado = img
         // this.usuario.img = img;
         document.getElementsByClassName('file-name')[0].innerHTML = 'Sin archivo...';
@@ -529,7 +529,7 @@ export class EspecificacionComponent implements OnInit {
 
         for(let n=0; n<this.colores[i].preparacion.length;n++){
           necesario = necesario + `${this.colores[i].preparacion[n].cantidad}g ${this.colores[i].preparacion[n].nombre}\n       `
-          console.log(necesario)
+          // console.log(necesario)
         }
 
         tintas.push(`•${this.colores[i].nombre} (${this.colores[i].marca})
@@ -577,7 +577,7 @@ export class EspecificacionComponent implements OnInit {
 
     for(let i =0; i< producto.impresora_aprobada.length; i++){
       tamano_pinza.push(`${producto.impresora_aprobada[i].text} (${producto.tamano_pinza[i]})`)
-      console.log(producto.impresora_aprobada[i])
+      // console.log(producto.impresora_aprobada[i])
     }
 
     if(producto.tamano_cerrado[2]){

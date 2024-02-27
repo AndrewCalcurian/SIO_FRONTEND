@@ -52,7 +52,7 @@ export class MainComponent implements OnInit {
     this.orden_id = id;
     this.cantidad_d = x;
     this.cantidad_do = y;
-    // console.log(y)
+    // // console.log(y)
   }
 
   despacho_(){
@@ -67,7 +67,7 @@ export class MainComponent implements OnInit {
     let estado = this.TRABAJOS.find(x => x.orden._id == id && x.maquina.tipo === 'IMPRIMIR')
     let hoy = moment().format('yyyy-MM-DD');
 
-    // // console.log(estado)
+    // // // console.log(estado)
     if(estado){
       if(hoy < estado.fechaI){
         let date = moment(estado.fechaI).format('yyyy-MM-DD')
@@ -78,7 +78,7 @@ export class MainComponent implements OnInit {
 
       let estado2 = this.TRABAJOS.find(x => x.orden._id == id && x.fechaI<= hoy && x.fecha >= hoy)
     if(estado2){
-      // console.log(estado2, 'this is')
+      // // console.log(estado2, 'this is')
         return `En proceso de: ${estado2.maquina.tipo}`
     }else{
       return `ORDEN FINALIZADA`
@@ -90,7 +90,7 @@ export class MainComponent implements OnInit {
     this.api.getTrabajos()
       .subscribe((resp:any)=>{
         this.TRABAJOS = resp;
-        // console.log(this.TRABAJOS)
+        // // console.log(this.TRABAJOS)
         this.loading = false;
       })
   }

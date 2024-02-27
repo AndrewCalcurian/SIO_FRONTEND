@@ -112,7 +112,7 @@ export class AnalisisTintaComponent implements OnInit {
 
             if(material.grupo === 'Tinta'){
               
-              console.log(material)
+              // console.log(material)
               this.Lotes_por_analizar.push(
                 {
                   lote:material.lote,
@@ -122,7 +122,7 @@ export class AnalisisTintaComponent implements OnInit {
                 }
               )
 
-              console.log(this.Lotes_por_analizar)
+              // console.log(this.Lotes_por_analizar)
 
             }
 
@@ -149,8 +149,8 @@ export class AnalisisTintaComponent implements OnInit {
     this.material = material
 
     this.cantidad__ = this.totales.total
-    console.log(this.totales)
-    console.log(this.FacturaSelected)
+    // console.log(this.totales)
+    // console.log(this.FacturaSelected)
 
     this.f_fabricacion = this.material[0].fabricacion
     this.presentacion_ = this.material[0].material.presentacion
@@ -172,7 +172,7 @@ export class AnalisisTintaComponent implements OnInit {
                   this.material[i].material.presentacion
                 }
                 this.muestra__ = this.material[0]
-                console.log(this.muestra__, '-', this.cantidad)
+                // console.log(this.muestra__, '-', this.cantidad)
               }else{
                 this.sobre =  resp_.sobre
                 this.cantidad_(this.sobre);
@@ -1486,7 +1486,7 @@ export class AnalisisTintaComponent implements OnInit {
 
         this.api.enviarNotificacion(data)
           .subscribe((resp:any)=>{
-            console.log('correo enviado')
+            // console.log('correo enviado')
           })
 
       } else if (result.isDenied) {
@@ -1508,7 +1508,7 @@ export class AnalisisTintaComponent implements OnInit {
 
         this.api.enviarNotificacion(data)
           .subscribe((resp:any)=>{
-            console.log('correo enviado')
+            // console.log('correo enviado')
           })
       }
     })
@@ -1528,7 +1528,7 @@ export class AnalisisTintaComponent implements OnInit {
           .subscribe((resp:any)=>{
            this.api.FinalizarFacturacion(this.FacturaSelected._id)
             .subscribe((resp:any)=>{
-              console.log(resp)
+              // console.log(resp)
             })
           })
       }
@@ -1542,14 +1542,14 @@ export class AnalisisTintaComponent implements OnInit {
 
   cualitativo(n,e){
     this.DrawDown_[n] = e
-    console.log(this.DrawDown_)
-    console.log(this._tipo_)
+    // console.log(this.DrawDown_)
+    // console.log(this._tipo_)
   }
 
   Guardar_(){
 
 
-    console.log(this.usuario)
+    // console.log(this.usuario)
     let hoy = moment().format('DD/MM/YYYY')
     let analisis = {
       producto:this.muestra__.material.nombre,
@@ -1655,7 +1655,7 @@ export class AnalisisTintaComponent implements OnInit {
           }else{
             this.api.getAnalisisTinta(lote)
             .subscribe((resp_:any)=>{
-              console.log(resp_)
+              // console.log(resp_)
               if(resp_.empty){
                 for(let i=0;i<resp.length;i++){
                   let presentacion = this.cantidad.findIndex(x=> x.presentacion === resp[i].material.presentacion && x.neto === resp[i].cantidad)
@@ -1671,7 +1671,7 @@ export class AnalisisTintaComponent implements OnInit {
                   resp[i].material.presentacion
                 }
                 this.muestra__ = resp[0]
-                console.log(this.muestra__, '-', this.cantidad)
+                // console.log(this.muestra__, '-', this.cantidad)
               }else{
                 this.sobre =  resp_.sobre
                 this.cantidad_(this.sobre);
@@ -1794,7 +1794,7 @@ export class AnalisisTintaComponent implements OnInit {
   }
 
 big(n){
-  console.log(n)
+  // console.log(n)
   switch(n){
     case 'p1':
       this.Big_e = this.papel_e1

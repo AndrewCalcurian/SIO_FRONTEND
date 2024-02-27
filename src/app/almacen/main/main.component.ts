@@ -212,7 +212,7 @@ export class MainComponent implements OnInit {
     this.api.getRepuestosAprobados()
       .subscribe((resp:any)=>{
         this.RepuestosAprobados = resp;
-        console.log(this.RepuestosAprobados)
+        // console.log(this.RepuestosAprobados)
       })
   }
   modal_asignacion_repuestos(){
@@ -260,7 +260,7 @@ export class MainComponent implements OnInit {
       cancelButtonColor: '#d33',
     }).then((result) => {
       if (result.isConfirmed) {
-        // // console.log(id);
+        // // // console.log(id);
 
         this.api.DeleteDevolucion(id)
           .subscribe((resp:any)=>{
@@ -303,8 +303,8 @@ export class MainComponent implements OnInit {
     }).then((result) => {
       if (result.isConfirmed) {
 
-        // // console.log(data);
-        // // console.log(id);
+        // // // console.log(data);
+        // // // console.log(id);
 
         this.api.putDevolucion(id,data)
           .subscribe((resp:any)=>{
@@ -363,7 +363,7 @@ export class MainComponent implements OnInit {
   }
 
   showOrden(){
-    // // console.log(this.orden)
+    // // // console.log(this.orden)
   }
 
   agregarRequisicion(e){
@@ -373,10 +373,10 @@ export class MainComponent implements OnInit {
   public necesario = [];
 
   porConfirmar(){
-    console.log('WHAAT')
+    // console.log('WHAAT')
     this.api.getMaterialesPorConfirmar()
       .subscribe((resp:any)=>{
-        console.log('ok')
+        // console.log('ok')
         this.necesario = resp;
       })
   }
@@ -459,8 +459,8 @@ export class MainComponent implements OnInit {
           ...Test_UniqueObjectNewMap_values
         ]
 
-        // console.log(this.Test_UniqueObjectNewMap_valuesAsArr)
-        // console.log(this._sustratos_)
+        // // console.log(this.Test_UniqueObjectNewMap_valuesAsArr)
+        // // console.log(this._sustratos_)
 
       }
     }
@@ -473,7 +473,7 @@ export class MainComponent implements OnInit {
     let e1 = splitted[0];
     let marca = splitted[1].split('(')
     let sustratos = this.ALMACEN.filter(x =>x.nombre == e1 && x.marca == marca[1].slice(0,-1) && x.gramaje == e)
-    // // console.log(sustratos,'15515151515151515151515151515151')
+    // // // console.log(sustratos,'15515151515151515151515151515151')
     for(let i=0; i<sustratos.length; i++){
       let calibre = this._calibre_.find(x=> x.calibre == sustratos[i].calibre);
       if(!calibre){
@@ -495,7 +495,7 @@ export class MainComponent implements OnInit {
         this._gramajes_.push(sustratos[i])
         }
     }
-    // // console.log(this._gramajes_,'GRAMAGRAMAGRAMA')
+    // // // console.log(this._gramajes_,'GRAMAGRAMAGRAMA')
   }
 
   public _ancho_ = []
@@ -535,7 +535,7 @@ export class MainComponent implements OnInit {
         if(resp.grupo.nombre === 'Cajas Corrugadas'){
           this.caja_ = true;
         }
-        // // console.log(this.MaterialID,'ok')
+        // // // console.log(this.MaterialID,'ok')
       })
   }
 
@@ -544,7 +544,7 @@ export class MainComponent implements OnInit {
 
     this.MaterialID.grupo = grupo;
 
-    // // console.log(this.MaterialID)
+    // // // console.log(this.MaterialID)
 
     this.api.putMaterialID(this.MaterialID._id, this.MaterialID)
           .subscribe((resp:any)=>{
@@ -569,7 +569,7 @@ export class MainComponent implements OnInit {
     this.api.getAlmacenadoID(id)
       .subscribe((resp:any)=>{
         this.AlmacenadoId = resp;
-        console.log(this.AlmacenadoId)
+        // console.log(this.AlmacenadoId)
         this.selecciona_producto(this.AlmacenadoId.material.grupo.nombre)
         this.codigoID = this.AlmacenadoId.codigo;
         this.loteID = this.AlmacenadoId.lote;
@@ -649,7 +649,7 @@ export class MainComponent implements OnInit {
           return 0
 
         })
-        // // console.log(this.Almacenado)
+        // // // console.log(this.Almacenado)
         // this.listFiltered = this.Almacenado
         this.filterList();
         this.totalizar_materiales();
@@ -782,7 +782,7 @@ export class MainComponent implements OnInit {
     this.api.getAlmacen()
       .subscribe((resp:any) => {
         this.ALMACEN = resp.materiales;
-        // console.log('666666666666666666666666',this.ALMACEN)
+        // // console.log('666666666666666666666666',this.ALMACEN)
         this.filterList();
         this.totalizar_materiales()
         this.loading = false;
@@ -837,7 +837,7 @@ export class MainComponent implements OnInit {
     document.getElementById(`5${i}${n}`).style.display = 'block'
     document.getElementById(`6${i}${n}`).style.display = 'block'
 
-    console.log(this.BOBINAS_[i]._id,'/',this.BOBINAS_[i])
+    // console.log(this.BOBINAS_[i]._id,'/',this.BOBINAS_[i])
 
     this.api.putBobinas(this.BOBINAS_[i]._id, this.BOBINAS_[i])
       .subscribe((resp:any)=>{
@@ -937,7 +937,7 @@ export class MainComponent implements OnInit {
 
     }
 
-    // // console.log(this.InventarioForm.get('color').value)
+    // // // console.log(this.InventarioForm.get('color').value)
 
     if(this.InventarioForm.invalid){
       return
@@ -1043,14 +1043,14 @@ export class MainComponent implements OnInit {
     this.SUSTRATO_CONVERSION = [];
     this.Convertidora = e;
     let BobinasEnConvertidora = this.BOBINAS_.filter(x => x.convertidora === e)
-    // console.log(BobinasEnConvertidora)
+    // // console.log(BobinasEnConvertidora)
     for(let i = 0; i<BobinasEnConvertidora.length; i++){
       let bobina = BobinasEnConvertidora[i]
-      // console.log(bobina)
+      // // console.log(bobina)
       // let sustrato = this.ALMACEN.filter(x => x.nombre == bobina.material && x.marca == bobina.marca && x.ancho == bobina.ancho && x.gramaje == bobina.gramaje && x.calibre == bobina.calibre)
       let sustrato = this.ALMACEN.filter(x => x.nombre == bobina.material &&  x.ancho == bobina.ancho)
 
-          // console.log(sustrato,'aja')
+          // // console.log(sustrato,'aja')
           if(sustrato){
           for(let i =0; i<sustrato.length;i++){
   
@@ -1099,11 +1099,11 @@ export class MainComponent implements OnInit {
               this.BobinasSencillas[sumada].peso = peso
           }
 
-          // console.log(this.BobinasSencillas)
+          // // console.log(this.BobinasSencillas)
 
           let sustrato = this.ALMACEN.find(x => x.nombre == bobina.material && x.marca == bobina.marca && x.ancho == bobina.ancho && x.gramaje == bobina.gramaje)
 
-          // console.log(sustrato)
+          // // console.log(sustrato)
           if(sustrato){
 
             let existe = this.SUSTRATO_CONVERSION.find(x => x._id == sustrato._id)
@@ -1113,9 +1113,9 @@ export class MainComponent implements OnInit {
           }
 
           // let sustrato = this.ALMACEN.find(x => x.nombre == bobina.material && x.gramaje == bobina.gramaje && x.ancho == bobina.ancho)
-          // console.log(sustrato, 'bobina')
+          // // console.log(sustrato, 'bobina')
           // if(sustrato){
-          //   console.log( this.SUSTRATO_CONVERSION,'bOBINAS')
+          //   // console.log( this.SUSTRATO_CONVERSION,'bOBINAS')
 
           // }
         }
@@ -1145,7 +1145,7 @@ export class MainComponent implements OnInit {
       // (<HTMLInputElement>document.getElementById('_ancho')).value = TheBobina.ancho
       // }
       // if(TheBobina){
-      //   // console.log(TheBobina)
+      //   // // console.log(TheBobina)
       //   this.Mat_Selected = TheBobina.material;
       //   this.Num_Bobina = TheBobina.Nbobina;
       // }
@@ -1340,7 +1340,7 @@ export class MainComponent implements OnInit {
   // getSustratos(){
   //   this.api.getSustratos()
   //     .subscribe((resp:any)=>{
-  //       // console.log(resp)
+  //       // // console.log(resp)
   //       if(resp.length>0){
   //         this.boolean_sustrato = true;
   //         this.Sustratos = resp;
@@ -1435,12 +1435,12 @@ export class MainComponent implements OnInit {
         this.getbobinas();
         // this.getSustratos();
         this.porConfirmar();
-        // // console.log(resp)
+        // // // console.log(resp)
       })
     }else{
       this.api.eliminarMaterial(this.id_p_e, motivo)
         .subscribe((resp:any)=>{
-          // // console.log(resp)
+          // // // console.log(resp)
           this.BuscarAlmacen();
           this.porConfirmar();
           this.modal_eliminacion();
@@ -1461,7 +1461,7 @@ export class MainComponent implements OnInit {
       .subscribe((resp:any)=>{
 
 
-        // // console.log('aqui es la broma:', resp)
+        // // // console.log('aqui es la broma:', resp)
 
         const pdf = new PdfMakeWrapper();
         PdfMakeWrapper.setFonts(pdfFonts);
@@ -1664,7 +1664,7 @@ export class MainComponent implements OnInit {
                     })
       }
       if(i === this.Almacenado.length - 1){
-        // console.log(this.TOTALES)
+        // // console.log(this.TOTALES)
       }
     }
 
