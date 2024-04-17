@@ -157,7 +157,14 @@
                         <tr *ngFor="let despacho of ORDENES">
                             <td class="data__">{{despacho.producto}}</td>
                             <td style="text-align: center;" class="data__">{{despacho.op}}</td>
-                            <td style="text-align: center;" class="data__">{{despacho.fecha}}</td>
+                            <td style="text-align: center;" class="data__">
+                                <ng-container *ngIf="!despacho.parcial">
+                                    {{despacho.fecha}}
+                                </ng-container>
+                                <ng-container *ngIf="despacho.parcial">
+                                    {{despacho.parcial}}
+                                </ng-container>
+                            </td>
                             <td style="text-align: center;" class="data__">{{puntoYcoma(despacho.tasa)}}</td>
                             <td style="text-align: center;" class="data__">{{puntoYcoma(despacho.cantidad)}}</td>
                             <td style="text-align: center;" class="data__">{{puntoYcoma(despacho.precio)}}</td>

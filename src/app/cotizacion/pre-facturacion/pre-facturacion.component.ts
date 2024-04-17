@@ -305,6 +305,7 @@ export class PreFacturacionComponent implements OnInit {
 
     
     let pre;
+    this.Despachos[this.INDEX].parcial = moment().format('DD-MM-yyyy')
     this.api.aumentoPre(this.Despachos[this.INDEX].despacho)
       .subscribe((resp:any)=>{
         pre = resp

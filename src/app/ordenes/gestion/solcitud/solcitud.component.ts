@@ -106,10 +106,15 @@ BuscarMaquinas(){
     // // console.log(this._materiales)
   }
 
+  public articulos_limpieza = false
   mostrarMaterial(e){
     if(e === "#"){
     (<HTMLInputElement>document.getElementById('_material_')).disabled = true
     }else{
+      console.error(e)
+      if(e === '6412e32738e497148025ee50'){
+        this.articulos_limpieza = true;
+      }
       this.api.getAlmacenado()
         .subscribe((resp:any)=>{
           (<HTMLInputElement>document.getElementById('_material_')).disabled = false
@@ -188,15 +193,34 @@ FinalizarSolicitu = async () => {
     return;
   }
 
-  const requisicion = {
-    sort: this.asociacion,
-    motivo: motivo,
-    usuario: `${this.api.usuario.Nombre} ${this.api.usuario.Apellido}`,
-    producto: {
-      producto: 'N/A',
-      materiales: [[]]
-    }
-  };
+  let requisicion:any = {}
+  if(this.articulos_limpieza){
+    requisicion = {
+      categoria:this.articulos_limpieza,
+      sort: this.asociacion,
+      motivo: motivo,
+      usuario: `${this.api.usuario.Nombre} ${this.api.usuario.Apellido}`,
+      producto: {
+        producto: this.api.usuario.Correo,
+        materiales: [[]]
+      }
+    };
+  }else{
+    requisicion = {
+      categoria:this.articulos_limpieza,
+      sort: this.asociacion,
+      motivo: motivo,
+      usuario: `${this.api.usuario.Nombre} ${this.api.usuario.Apellido}`,
+      producto: {
+        producto:'N/A',
+        materiales: [[]]
+      }
+    };
+  }
+
+
+
+  this.articulos_limpieza = false;
 
   requisicion.producto.materiales[0] = this._materiales
 

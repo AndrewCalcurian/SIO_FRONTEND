@@ -128,6 +128,8 @@ export class DevolucionComponent implements OnInit {
       // console.log(data.filtrado[iter].cantidad,'>',lote.material[comparativa].cantidad)
 
       if(data.filtrado[iter].cantidad > Number(lote.material[comparativa].cantidad)){
+        console.log(data.filtrado[iter],'___', data.filtrado[iter].cantidad)
+        console.log(lote.material[comparativa],'___', lote.material[comparativa].cantidad)
         Swal.fire({
           title:'Error',
           text:'La cantidad de material devuelto no puede ser mayor a la asignada',

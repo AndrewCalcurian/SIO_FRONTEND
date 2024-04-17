@@ -45,7 +45,7 @@
                                         Validar Datos
                                     </span>
                                     </button> 
-                                    <button class="button is-success is-small" (click)="openFacturacion(i)" *ngIf="despacho.despacho.precio">
+                                    <button class="button is-success is-small" (click)="openFacturacion(i)" *ngIf="despacho.despacho.precio >= 0">
                                         <div class="icon">
                                             <i class="far fa-calendar-check"></i>
                                         </div>
