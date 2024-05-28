@@ -726,28 +726,30 @@
                     </th>
                 </thead>
                 <tbody>
-                    <tr *ngFor="let TintaProducto of OneProduct.materiales[i_montajes]">
-                        <ng-container *ngIf="TintaProducto.producto.grupo.nombre === 'Sustrato'">
-                            <td>
-                                {{TintaProducto.producto.nombre}} ({{TintaProducto.producto.ancho}} x {{TintaProducto.producto.largo}})
-                                <br>
-                                <table class="table is-bordered">
-                                    <thead>
-                                        <th>Calibre (pt.)</th>
-                                        <th>Gramaje (g/m²):</th>
-                                        <th>Dirección de fibra:</th>
-                                    </thead>
-                                    <tbody>
-                                        <tr>
-                                            <td>{{TintaProducto.producto.calibre}}</td>
-                                            <td>{{TintaProducto.producto.gramaje}}</td>
-                                            <td>{{TintaProducto.producto.largo}}</td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </td>
-                        </ng-container>
-                    </tr>
+                    <ng-container *ngIf="this.OneProduct.materiales[this.i_montajes_]">
+                        <tr *ngFor="let TintaProducto of OneProduct.materiales[i_montajes]">
+                            <ng-container *ngIf="TintaProducto && TintaProducto.producto.grupo.nombre === 'Sustrato'">
+                                <td>
+                                    {{TintaProducto.producto.nombre}} ({{TintaProducto.producto.ancho}} x {{TintaProducto.producto.largo}})
+                                    <br>
+                                    <table class="table is-bordered">
+                                        <thead>
+                                            <th>Calibre (pt.)</th>
+                                            <th>Gramaje (g/m²):</th>
+                                            <th>Dirección de fibra:</th>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td>{{TintaProducto.producto.calibre}}</td>
+                                                <td>{{TintaProducto.producto.gramaje}}</td>
+                                                <td>{{TintaProducto.producto.largo}}</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </td>
+                            </ng-container>
+                        </tr>
+                    </ng-container>
                 </tbody>
             </table>
 
@@ -762,7 +764,7 @@
                 </thead>
                 <tbody>
                     <tr *ngFor="let TintaProducto of OneProduct.materiales[i_montajes]">
-                        <ng-container *ngIf="TintaProducto.producto.grupo.nombre === 'Tinta'">
+                        <ng-container *ngIf="TintaProducto && TintaProducto.producto.grupo.nombre === 'Tinta'">
                             <td>
                                 {{TintaProducto.producto.color}}
                             </td>
@@ -781,7 +783,7 @@
                 </thead>
                 <tbody>
                     <tr *ngFor="let TintaProducto of OneProduct.materiales[i_montajes]">
-                        <ng-container *ngIf="TintaProducto.producto.grupo.nombre === 'Barniz'">
+                        <ng-container *ngIf="TintaProducto && TintaProducto.producto.grupo.nombre === 'Barniz'">
                             {{TintaProducto.producto.nombre}} ({{TintaProducto.producto.marca}})
                         </ng-container>
                     </tr>
@@ -799,7 +801,7 @@
                     </th>
                     <td>
                         <ng-container tr *ngFor="let TintaProducto of OneProduct.materiales[i_montajes];let i = index">
-                            <ng-container *ngIf="TintaProducto.producto.grupo.nombre === 'Tinta'">
+                            <ng-container *ngIf="TintaProducto && TintaProducto.producto.grupo.nombre === 'Tinta'">
                                 <p *ngIf="TintaProducto.producto.color === 'Negro'"><b>Negro:</b>{{OneProduct.cliente.codigo}}-{{OneProduct.codigo}}-{{OneProduct.version}}-
                                     <!-- {{NumToLet(i_montajes)}} -->
                                     <ng-container *ngIf="i_montajes == 0">A</ng-container>
@@ -870,7 +872,7 @@
                             </thead>
                             <tbody>
                                 <tr *ngFor="let TintaProducto of OneProduct.materiales[i_montajes]">
-                                    <ng-container *ngIf="TintaProducto.producto.grupo.nombre === 'Sustrato'">
+                                    <ng-container *ngIf="TintaProducto && TintaProducto.producto.grupo.nombre === 'Sustrato'">
                                         <td>{{TintaProducto.producto.ancho}} cm.</td>
                                         <td>{{TintaProducto.producto.largo}} cm.</td>
                                     </ng-container>
@@ -890,22 +892,22 @@
             <table class="table is-fullwidth">
                 <thead>
                     <ng-container *ngFor="let TintaProducto of OneProduct.materiales[i_montajes]">
-                        <ng-container *ngIf="TintaProducto.producto.grupo.nombre === 'Pega'">
+                        <ng-container *ngIf="TintaProducto && TintaProducto.producto.grupo.nombre === 'Pega'">
                             <th>Pegamento aprobado</th>
                         </ng-container>
-                        <ng-container *ngIf="TintaProducto.producto.grupo.nombre === 'Cajas Corrugadas'">
+                        <ng-container *ngIf="TintaProducto && TintaProducto.producto.grupo.nombre === 'Cajas Corrugadas'">
                             <th>Cantidad de unidades por caja</th>
                         </ng-container>
                     </ng-container>
                 </thead>
                 <tbody>
                     <ng-container *ngFor="let TintaProducto of OneProduct.materiales[i_montajes]">
-                        <ng-container *ngIf="TintaProducto.producto.grupo.nombre === 'Pega'">
+                        <ng-container *ngIf="TintaProducto && TintaProducto.producto.grupo.nombre === 'Pega'">
                         <td>
                             {{TintaProducto.producto.nombre}} ({{TintaProducto.producto.marca}})
                         </td>
                         </ng-container>
-                        <ng-container *ngIf="TintaProducto.producto.grupo.nombre === 'Cajas Corrugadas'">
+                        <ng-container *ngIf="TintaProducto && TintaProducto.producto.grupo.nombre === 'Cajas Corrugadas'">
                             <td>{{TintaProducto.cantidad}}</td>
                         </ng-container>
                     </ng-container>
@@ -1061,37 +1063,41 @@
             </div>
 
             <div class="materiales" *ngFor="let e of [].constructor(OneProduct.montajes); let i = index">
-                <table class="table is-fullwidth" *ngIf="i == i_montajes_">
-                    <thead>
-                    <tr>
-                            <th>Materia</th>
-                            <th>Marca</th>
-                            <th>Cantidad</th>
-                            <th>Eliminar</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr *ngFor='let Material of OneProduct.materiales[i_montajes_];index as x'>
-                            <td>{{Material.producto.nombre}} 
-                                <ng-container *ngIf='Material.ancho'>
-                                    ({{Material.producto.ancho}} x {{Material.producto.ancho}})
-                                </ng-container>
-                            </td>
-                            <td>{{Material.producto.marca}}</td>
-                            <td>
-                                <input type="text" class="input" [(ngModel)]="OneProduct.materiales[i_montajes_][x].cantidad">
-                            </td>
-                            <td>
-                                <button class="button is-danger is-outlined is-small" (click)='Delete_Material2(Material.producto.nombre)'>
-                                    <span class="icon is-small">
-                                      <i class="fas fa-check"></i>
-                                    </span>
-                                    <span>Eliminar</span>
-                                  </button>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
+                <ng-container *ngIf="OneProduct.materiales[i_montajes_]">
+                    <table class="table is-fullwidth" *ngIf="i == i_montajes_">
+                        <thead>
+                        <tr>
+                                <th>Materia</th>
+                                <th>Marca</th>
+                                <th>Cantidad</th>
+                                <th>Eliminar</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <ng-container >
+                                <tr *ngFor='let Material of OneProduct.materiales[i_montajes_];index as x'>
+                                    <td>{{Material.producto.nombre}} 
+                                        <ng-container *ngIf='Material.ancho'>
+                                            ({{Material.producto.ancho}} x {{Material.producto.ancho}})
+                                        </ng-container>
+                                    </td>
+                                    <td>{{Material.producto.marca}}</td>
+                                    <td>
+                                        <input type="text" class="input" [(ngModel)]="OneProduct.materiales[i_montajes_][x].cantidad">
+                                    </td>
+                                    <td>
+                                        <button class="button is-danger is-outlined is-small" (click)='Delete_Material2(Material.producto.nombre)'>
+                                            <span class="icon is-small">
+                                              <i class="fas fa-check"></i>
+                                            </span>
+                                            <span>Eliminar</span>
+                                          </button>
+                                    </td>
+                                </tr>
+                            </ng-container>
+                        </tbody>
+                    </table>
+                </ng-container>
 
                 <div class="columns" *ngIf="i == i_montajes_">
                     <div class="column">

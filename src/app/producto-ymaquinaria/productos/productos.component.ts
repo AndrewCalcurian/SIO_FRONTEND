@@ -856,8 +856,10 @@ add_materia(producto, cantidad, id){
       this.EDITAR_PRODUCTO = false
     }else{
       this.EDITAR_PRODUCTO = true
-      if(this.OneProduct.materiales[this.i_montajes_].length > 0){
-        this.EDITAR_PRODUCTO = true
+      if(this.OneProduct.materiales[this.i_montajes_]){
+        if(this.OneProduct.materiales[this.i_montajes_].length > 0){
+          this.EDITAR_PRODUCTO = true
+        }
       }
     }
   }
