@@ -24,6 +24,9 @@
                             </ng-container>
                         </select>
                     </div>
+                      <button class="button is-info" *ngIf="materiales" (click)="DescargarFormato(materiales)">
+                        <span>Descargar formato</span>
+                    </button>
                     <hr>
                     <ng-container *ngIf="Repuesto">
 

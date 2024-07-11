@@ -4,6 +4,10 @@ import { UnicosPipe } from 'src/app/pipe/unicos.pipe';
 import { RestApiService } from 'src/app/services/rest-api.service';
 import Swal from 'sweetalert2';
 
+import { PdfMakeWrapper, Txt, Img, Table, Cell, Columns, Stack } from 'pdfmake-wrapper';
+import * as pdfFonts from "pdfmake/build/vfs_fonts";
+import * as moment from 'moment';
+
 @Component({
   selector: 'app-devolucion',
   templateUrl: './devolucion.component.html',
@@ -227,6 +231,53 @@ export class DevolucionComponent implements OnInit {
       })
     })
       })
+  }
+
+
+  DescargarFormato(materiales){
+    const pdf = new PdfMakeWrapper();
+    PdfMakeWrapper.setFonts(pdfFonts);
+
+    console.log(materiales)
+
+    async function generarPDF(){
+      for(let i=0;i<materiales.length;i++){
+        let material:any = materiales[i]
+        pdf.add(
+          new Table([
+            [
+              new Cell(new Txt(`AL-ASG-${material.asignacion}`).fontSize(6).end).border([false,false]).color('#ffffff').fillColor('#909090').end
+            ]
+          ]).widths(['100%']).end
+        )
+        // pdf.add(
+        //   new Table([
+        //     [
+        //       new Cell(new Txt(`Material`).bold().fontSize(6).end).end,
+        //       new Cell(new Txt(`Lote`).bold().fontSize(6).end).end,
+        //       new Cell(new Txt(`Devuelto`).bold().fontSize(6).end).end
+        //     ]
+        //   ]).widths(['70%','20%','10%']).end
+        // )
+        for(let x=0;x<material.material.length;x++){
+          let color = '#e0e0e0'
+          if(x % 2 === 0){
+            color = '#ffffff';
+          }
+          pdf.add(
+            new Table([
+              [
+                new Cell(new Txt(`${material.material[x].material.nombre} (${material.material[x].material.marca}) #${material.material[x].codigo}`).fontSize(6).end).border([false, false]).fillColor(color).end,
+                new Cell(new Txt(`${material.material[x].lote}`).fontSize(6).end).border([false, false]).fillColor(color).end,
+                new Cell(new Txt(``).fontSize(6).end).border([false, false]).fillColor(color).end
+              ]
+            ]).widths(['70%','20%','10%']).end
+          )
+        }
+      }
+      pdf.create().download(`test`)
+    }
+    generarPDF();
   }
 
 }

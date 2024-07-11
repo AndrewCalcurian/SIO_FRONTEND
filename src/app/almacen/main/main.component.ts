@@ -1050,7 +1050,7 @@ export class MainComponent implements OnInit {
       // let sustrato = this.ALMACEN.filter(x => x.nombre == bobina.material && x.marca == bobina.marca && x.ancho == bobina.ancho && x.gramaje == bobina.gramaje && x.calibre == bobina.calibre)
       let sustrato = this.ALMACEN.filter(x => x.nombre == bobina.material &&  x.ancho == bobina.ancho)
 
-          // // console.log(sustrato,'aja')
+          console.log(sustrato,'aja')
           if(sustrato){
           for(let i =0; i<sustrato.length;i++){
   
