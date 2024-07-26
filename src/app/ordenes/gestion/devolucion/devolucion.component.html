@@ -24,7 +24,7 @@
                             </ng-container>
                         </select>
                     </div>
-                      <button class="button is-info" *ngIf="materiales" (click)="DescargarFormato(materiales)">
+                      <button class="button is-info" *ngIf="materiales" (click)="DescargarFormato()">
                         <span>Descargar formato</span>
                     </button>
                     <hr>
@@ -77,14 +77,22 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr *ngFor="let material of materiales[i].material">
+                                <tr *ngFor="let material of materiales[i].material;index as x">
                                     <td>
-                                        {{material.material.nombre}}
-                                        <ng-container *ngIf="material.material.ancho">
-                                            {{material.material.ancho}} x {{material.material.largo}}
-                                        </ng-container>
-                                        ({{material.material.marca}})<br>
-                                    <b>Lote: </b>{{material.lote}} - <b>Código: </b>{{material.codigo}}</td>
+                                        <div class="columns">
+                                            <div class="column is-1">
+                                                <input type="checkbox" (click)="agregarAFormato(i,x)">
+                                            </div>
+                                            <div class="column">
+                                                {{material.material.nombre}}
+                                                <ng-container *ngIf="material.material.ancho">
+                                                    {{material.material.ancho}} x {{material.material.largo}}
+                                                </ng-container>
+                                                ({{material.material.marca}})<br>
+                                            <b>Lote: </b>{{material.lote}} - <b>Código: </b>{{material.codigo}}
+                                            </div>
+                                        </div>
+                                    </td>
                                     <td>
                                         <div class="field has-addons">
                                             <p class="control">

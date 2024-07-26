@@ -7,6 +7,7 @@ import Swal from 'sweetalert2';
 import { PdfMakeWrapper, Txt, Img, Table, Cell, Columns, Stack } from 'pdfmake-wrapper';
 import * as pdfFonts from "pdfmake/build/vfs_fonts";
 import * as moment from 'moment';
+import { Usuario } from 'src/app/models/usuario.model';
 
 @Component({
   selector: 'app-devolucion',
@@ -25,6 +26,7 @@ export class DevolucionComponent implements OnInit {
   public usuario;
   public RepuestoAprobados = []
   public Repuesto = false;
+  public FormatoMateriales = []
 
   constructor(private api:RestApiService) {
     this.usuario = api.usuario
@@ -56,12 +58,14 @@ export class DevolucionComponent implements OnInit {
       })
   }
   
+  public orden_selected
   seleccionarMateriales(){
     let orden_ = (<HTMLInputElement>document.getElementById('ordens')).value
     if(orden_ === 'Repuesto'){
       this.Repuesto = true;
     }else{
       this.Repuesto = false;
+      this.orden_selected = orden_
     }
     this.materiales = this.devoluciones.filter(devoluciones => devoluciones.orden === orden_);
     // console.log(this.materiales)
@@ -234,19 +238,98 @@ export class DevolucionComponent implements OnInit {
   }
 
 
-  DescargarFormato(materiales){
+  DescargarFormato(){
+
+    let hoy = moment().format('DD/MM/YYYY')
+    let orden = this.orden_selected;
+    let usuario = this.usuario
     const pdf = new PdfMakeWrapper();
     PdfMakeWrapper.setFonts(pdfFonts);
+    pdf.pageOrientation('landscape')
+
+    // Objeto para almacenar los materiales agrupados por asignación
+    let materialesAgrupados = {};
+
+    // Iterar sobre cada material y agruparlo por asignación
+    this.FormatoMateriales.forEach(material => {
+        // Verificar si ya existe la asignación en el objeto materialesAgrupados
+        if (materialesAgrupados.hasOwnProperty(material.asignacion)) {
+            // Si ya existe, agregar el material al array correspondiente
+            materialesAgrupados[material.asignacion].push(material);
+        } else {
+            // Si no existe, crear un nuevo array con este material
+            materialesAgrupados[material.asignacion] = [material];
+        }
+    });
+
+    // Convertir el objeto en un array de objetos con la estructura deseada
+    let materiales = Object.keys(materialesAgrupados).map(asignacion => {
+        return {
+            asignacion: asignacion,
+            material: materialesAgrupados[asignacion]
+        };
+    });
 
     console.log(materiales)
 
     async function generarPDF(){
+      pdf.add(
+        new Table([
+          [
+            new Cell(await new Img('../../assets/poli_cintillo.png').width(85).margin([20, 5]).build()).rowSpan(4).end,
+            new Cell(new Txt(`
+            FORMATO DEVOLUCIÓN DE MATERIAL`).bold().end).alignment('center').fontSize(13).rowSpan(4).end,
+            new Cell(new Txt('Código: FPR-006').end).fillColor('#dedede').fontSize(7).alignment('center').end,
+          ],
+          [
+            new Cell(new Txt('').end).end,
+            new Cell(new Txt('').end).end,
+            new Cell(new Txt('N° de Revisión: 0').end).fillColor('#dedede').fontSize(7).alignment('center').end,
+          ],
+          [
+            new Cell(new Txt('').end).end,
+            new Cell(new Txt('').end).end,
+            new Cell(new Txt('Fecha de Revision: 11/10/2022').end).fillColor('#dedede').fontSize(7).alignment('center').end,
+          ],
+          [
+            new Cell(new Txt('').end).end,
+            new Cell(new Txt('').end).end,
+            new Cell(new Txt('Página: 1 de 1').end).fillColor('#dedede').fontSize(7).alignment('center').end,
+          ],
+        ]).widths(['25%','50%','25%']).end
+      )
+
+      pdf.add(
+        pdf.ln(1)
+      )
+
+      pdf.add(
+        new Table([
+          [
+            new Cell(new Txt('Fecha de Devolución').end).fillColor('#dedede').end,
+            new Cell(new Txt(hoy).end).end,
+            new Cell(new Txt('Nº Devolución').end).fillColor('#dedede').end,
+            new Cell(new Txt('').end).end,
+          ],
+          [
+            new Cell(new Txt('Unidad administrativa').end).fillColor('#dedede').end,
+            new Cell(new Txt('GERENCIA DE OPERACIONES').end).end,
+            new Cell(new Txt('Orden de producción').end).fillColor('#dedede').end,
+            new Cell(new Txt(orden).end).end,
+          ]
+        ]).widths(['25%','30%','25%','20%']).end
+      )
+
+      pdf.add(
+        pdf.ln(1)
+      )
+
       for(let i=0;i<materiales.length;i++){
         let material:any = materiales[i]
         pdf.add(
           new Table([
             [
-              new Cell(new Txt(`AL-ASG-${material.asignacion}`).fontSize(6).end).border([false,false]).color('#ffffff').fillColor('#909090').end
+              new Cell(new Txt(`AL-ASG-${material.asignacion}`).end).border([false,false]).color('#ffffff').fillColor('#909090').end
             ]
           ]).widths(['100%']).end
         )
@@ -267,17 +350,56 @@ export class DevolucionComponent implements OnInit {
           pdf.add(
             new Table([
               [
-                new Cell(new Txt(`${material.material[x].material.nombre} (${material.material[x].material.marca}) #${material.material[x].codigo}`).fontSize(6).end).border([false, false]).fillColor(color).end,
-                new Cell(new Txt(`${material.material[x].lote}`).fontSize(6).end).border([false, false]).fillColor(color).end,
-                new Cell(new Txt(``).fontSize(6).end).border([false, false]).fillColor(color).end
+                new Cell(new Txt(`${material.material[x].material.nombre} (${material.material[x].material.marca}) #${material.material[x].codigo}`).end).border([false, false]).fillColor(color).end,
+                new Cell(new Txt(`${material.material[x].lote}`).end).border([false, false]).fillColor(color).end,
+                new Cell(new Txt(``).end).border([false, false]).fillColor(color).end
               ]
             ]).widths(['70%','20%','10%']).end
           )
         }
       }
+
+      pdf.add(
+        pdf.ln(1)
+      )
+  
+      pdf.add(
+        new Table([
+          [
+            new Cell(new Txt(`MOTIVO`).alignment('center').end).color('#ffffff').fillColor('#909090').end,
+            new Cell(new Txt(`DEVUELTO POR:`).alignment('center').end).color('#ffffff').fillColor('#909090').end,
+            new Cell(new Txt(`RECIBIDO POR:`).alignment('center').end).color('#ffffff').fillColor('#909090').end,
+          ],
+          [
+            new Cell(new Txt(``).end).end,
+            new Cell(new Txt(`FIRMA: ${usuario.Nombre} ${usuario.Apellido}
+            
+            FECHA: ${hoy}`).end).fontSize(9).end,
+            new Cell(new Txt(`FIRMA:
+            
+            FECHA:`).end).fontSize(9).end
+          ]
+        ]).widths(['50%','25%','25%']).end
+      )
+
       pdf.create().download(`test`)
     }
     generarPDF();
   }
+
+
+  agregarAFormato(x, y) {
+    let material = this.materiales[x].material[y];
+    let index = this.FormatoMateriales.indexOf(material);
+
+    if (index === -1) {
+        this.FormatoMateriales.push(material);
+        console.log(this.FormatoMateriales);
+    } else {
+        this.FormatoMateriales.splice(index, 1);
+        console.log(this.FormatoMateriales);
+        console.log(this.materiales, 'Here is the materials')
+    }
+}
 
 }

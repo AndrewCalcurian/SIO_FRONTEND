@@ -7,12 +7,13 @@ import { OrdenCompraComponent } from './orden-compra/orden-compra.component';
 import { ConsultaOrdenComponent } from './consulta-orden/consulta-orden.component';
 import { IndexComponent } from './index/index.component';
 import { RouterModule } from '@angular/router';
+import { VistaDespachosComponent } from './consulta-orden/vista-despachos/vista-despachos.component';
 
 
 
 
 @NgModule({
-  declarations: [MainComponent, OrdenCompraComponent, ConsultaOrdenComponent, IndexComponent],
+  declarations: [MainComponent, OrdenCompraComponent, ConsultaOrdenComponent, IndexComponent, VistaDespachosComponent],
   imports: [
     CommonModule,
     NuevoPedidoRoutingModule,

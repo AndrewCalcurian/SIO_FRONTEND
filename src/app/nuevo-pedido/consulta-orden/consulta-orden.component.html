@@ -1,3 +1,9 @@
+<app-vista-despachos
+[Despachos]="Despachos"
+[despachos]="despacho"
+(onCloseModal)="Despachos = false;">
+
+</app-vista-despachos>
 <div class="ml-5 mt-5">
     <div class="subtitulos">
         <i class="fas fa-file-alt"></i> Órdenes de compra
@@ -23,12 +29,22 @@
             <div class="card">
                 <div class="card-content">
                     <div class="field">
-                        <label class="label">Ver órdenes de compra</label>
                         <div class="control">
+                            <label for="" class="label">Clientes:</label>
+                            <div class="select">
+                                <select (change)="filtrarCliente($event.target.value)">
+                                    <option value="#">Todos los clientes</option>
+                                    <option value="{{cliente._id}}" *ngFor="let cliente of CLIENTES">{{cliente.nombre}}</option>
+                                </select>
+                            </div>
+                        </div>
+                        <br>
+                        <div class="control">
+                            <label class="label">Ver órdenes de compra</label>
                             <div class="select">
                                 <select (change)="MostarOrden($event.target.value)">
                                     <option value="#">Seleccionar orden de compra</option>
-                                    <option value="all">Todas las órdenes</option>
+                                    <!-- <option value="all">Todas las órdenes</option> -->
                                     <option value="{{i}}" *ngFor="let orden of Ordenes;index as i">OC: {{orden.orden}} - {{orden.cliente.nombre}}</option>
                                 </select>
                             </div>
@@ -201,6 +217,20 @@
             </div>
 
             <ng-container *ngIf="all_">
+            <div class="field is-grouped">
+                <div class="control" *ngIf="PRODUCTOS.length > 0">
+                    <label for="" class="label">Producto:</label>
+                    <div class="select">
+                        <select (change)="FiltrarPorProducto($event.target.value)">
+                            <option value="#">Todos los productos</option>
+                            <option value="{{producto._id}}" *ngFor="let producto of PRODUCTOS">{{producto.producto}}</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="loader" *ngIf="loading">
+                <i class="fas fa-circle-notch"></i> Buscando ordenes...
+            </div>
             <div class="card" *ngFor="let Orden of Ordenes;index as i">
                 <div class="card-content">
                     <table class="table is-fullwidth">
@@ -230,14 +260,6 @@
                                         Listo
                                     </span>
                                 </button>
-                                <!-- <button class="button is-small is-success is-outlined" id="editionButton_{{i}}" (click)="edicionOC(i)">
-                                    <span class="icon">
-                                        <i class="fas fa-edit"></i>
-                                    </span>
-                                    <span>
-                                        Editar
-                                    </span>
-                                </button> -->
                             </td>
                         </tr>
                         <tr>
@@ -248,6 +270,7 @@
                                         <td class="is-selected">Cantidad</td>
                                         <td class="is-selected">Fecha solicitada</td>
                                         <td class="is-selected" width="250px" id="status_">Orden de producción</td>
+                                        <td class="is-selected">Despachos</td>
                                         <!-- <td class="is-selected">Editar</td> -->
                                     </tr>
                                     <tr *ngFor="let producto of Orden.productos;index as n">
@@ -281,6 +304,13 @@
                                             </ng-container>
                                         </td>
                                         <td>
+                                            <ng-container *ngIf="producto.status">
+                                                <button class="button" style="border: none; background-color: transparent;" (click)="Despachos = true;BuscarDespacho(producto.status)">
+                                                    <span class="icon"><i class="fas fa-eye"></i></span>
+                                                </button>
+                                            </ng-container>
+                                        </td>
+                                        <td>
                                             <button class="button is-small is-success is-outlined" id="listo_{{i}}" style="display:none" (click)="Terminar(i,Orden._id)">
                                                 <span class="icon">
                                                     <i class="fas fa-check"></i>
@@ -289,23 +319,7 @@
                                                     Listo
                                                 </span>
                                             </button>
-                                            <!-- <button class="button is-small is-success is-outlined" id='edit_{{i}}' (click)="Edicion(i,Orden)">
-                                                <span class="icon">
-                                                    <i class="fas fa-edit"></i>
-                                                </span>
-                                                <span>
-                                                    Editar
-                                                </span>
-                                            </button>  -->
                                             <br>
-                                            <!-- <button class="button is-small is-danger is-outlined" id='dele_{{i}}'>
-                                                <span class="icon">
-
-                                                </span>
-                                                <span>
-                                                    Eliminar
-                                                </span>
-                                            </button> -->
                                         </td>
                                     </tr>
                                 </table>

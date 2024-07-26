@@ -448,6 +448,7 @@ export class RestApiService {
   }
 
   GetDespachoByOrden(orden){
+    console.log(orden)
     const url = `${this.api_url}/despacho/${orden}`
     return this.http.get(url)
   }

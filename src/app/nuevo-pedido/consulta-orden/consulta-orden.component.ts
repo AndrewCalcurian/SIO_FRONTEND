@@ -13,21 +13,122 @@ export class ConsultaOrdenComponent implements OnInit {
 
   ngOnInit(): void {
     this.GetOrdens()
+    this.obtenerClientes()
   }
 
   public Ordenes = []
   public Orden;
   public selected = false;
-  public all_ = false;
+  public all_ = true;
   public PRODUCTO = []
+  public CLIENTES = []
+  public loading = false;
+  public Despachos = false;
+  public despacho:any = []
+
+
+  obtenerClientes(){
+    this.api.GetClientes()
+      .subscribe((resp:any)=>{
+        this.CLIENTES = resp.clientes
+      })
+  }
 
   GetOrdens(){
     this.api.getOrdenesDeCompra()
       .subscribe((resp:any)=>{
         this.Ordenes = resp
+        this.Ordenes.reverse();
         // console.log(this.Ordenes)
       })
   }
+
+  BuscarDespacho(orden_detalle){
+    console.log(orden_detalle)
+    // Expresión regular para buscar números de orden que siguen el formato 'Nº Orden'
+    const regex = /(\d+)\s+por/g;
+
+    // Array para almacenar los números de orden encontrados
+    const numerosOrden = [];
+
+    // Buscar coincidencias en el texto usando la expresión regular
+    let match;
+    while ((match = regex.exec(orden_detalle)) !== null) {
+      // El número de orden está en el primer grupo capturado por la expresión regular
+      numerosOrden.push(match[1]);
+    }
+
+    // Mostrar el resultado
+    console.log("Números de orden encontrados:", numerosOrden);
+
+    this.despacho = []
+    for(let x=0;x<numerosOrden.length;x++){
+      this.api.GetDespachoByOrden(numerosOrden[x])
+      .subscribe((resp:any)=>{
+        console.log(resp)
+        for(let i=0; i<resp.length; i++){
+          for(let y=0; y<resp[i].despacho.length; y++){
+  
+            if(resp[i].despacho[y].op === numerosOrden[x])
+            {
+              console.log(resp[i].despacho[y].op,'/',numerosOrden[x])
+              this.despacho.push(resp[i].despacho[y])
+              console.log(this.despacho)
+              if(resp[i].despacho[y].parcial){
+                this.despacho.push({fecha:resp[i].despacho[y].parcial})
+              }else{
+                this.despacho.push({fecha:resp[i].fecha})
+              }
+              // this.despacho = this.despacho + resp[i].despacho[y].cantidad
+            }
+          }
+        }
+      })
+      if(x == numerosOrden.length -1){
+      }
+    }
+
+  }
+
+  public CLIENTES_ACTUAL = ''
+  filtrarCliente(cliente_id){
+    if(cliente_id === '#'){
+      this.GetOrdens();
+      this.PRODUCTOS = []
+      this.all_ = true;
+      this.selected = false;
+    }else{
+      this.GetOrdens();
+      this.loading = true;
+      setTimeout(() => {
+        this.BuscarProductos(cliente_id)
+        let filtered = this.Ordenes.filter((x:any)=> x.cliente._id === cliente_id)
+        this.Ordenes = filtered;
+        this.CLIENTES_ACTUAL = cliente_id;
+        this.PRODUCTOS = []
+        this.loading = false;
+      }, 1000);
+    }
+  }
+
+  FiltrarPorProducto(e){
+    if(e != '#'){
+      this.loading = true;
+      setTimeout(() => {
+        console.log(this.Ordenes)
+        let filtered = this.Ordenes.filter((orden: any) => {
+          return orden.productos.some((producto: any) => {
+            return producto.producto._id === e;
+          });
+        });
+        this.Ordenes = filtered;
+        this.loading = false;
+      }, 1000);
+    }else{
+      this.filtrarCliente(this.CLIENTES_ACTUAL)
+    }
+  }
+
   MostarOrden(e){
     if(e != 'all'){
       // console.log(e)
