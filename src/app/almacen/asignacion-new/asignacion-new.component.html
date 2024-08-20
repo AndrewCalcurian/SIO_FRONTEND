@@ -100,14 +100,31 @@
                         </tr>
                     </table>
                     <hr>
-                    <button class="button is-success" *ngIf="this.material_cubierto >= orden.producto.materiales[orden.montaje].length" (click)="Finalizar()">
-                        <span class="icon">
-                            <i class="fas fa-pallet"></i>
-                        </span>
-                        <span>
-                            Asignar material
-                        </span>
-                    </button> 
+                    <ng-container *ngIf="this.material_cubierto >= orden.producto.materiales[orden.montaje].length">
+                        <ng-container *ngIf="!orden.motivo">
+                            <ng-container *ngIf="this.material_cubierto >= (orden.producto.materiales[orden.montaje].length + 1)">
+                                <button class="button is-success" (click)="Finalizar()">
+                                    <span class="icon">
+                                        <i class="fas fa-pallet"></i>
+                                    </span>
+                                    <span>
+                                        Asignar material
+                                    </span>
+                                </button>
+                            </ng-container>
+                        </ng-container>
+                        <ng-container *ngIf="orden.motivo">
+                            <button class="button is-success" (click)="Finalizar()">
+                                <span class="icon">
+                                    <i class="fas fa-pallet"></i>
+                                </span>
+                                <span>
+                                    Asignar material
+                                </span>
+                            </button>
+                        </ng-container>
+                    </ng-container>
+                     
                     <button class="button is-danger" (click)="cerrarModal()">
                         <span class="icon">
                             <i class="fas fa-times"></i>

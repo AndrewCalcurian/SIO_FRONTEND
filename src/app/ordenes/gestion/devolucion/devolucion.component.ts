@@ -27,6 +27,8 @@ export class DevolucionComponent implements OnInit {
   public RepuestoAprobados = []
   public Repuesto = false;
   public FormatoMateriales = []
+  public _Motivo = ''
+  public cantidades:any = []
 
   constructor(private api:RestApiService) {
     this.usuario = api.usuario
@@ -35,6 +37,7 @@ export class DevolucionComponent implements OnInit {
   ngOnInit(): void {
     this.api.getLotes()
     .subscribe((resp:any)=>{
+      this.getAlmacen();
       this.devoluciones = resp;
       for(let i = 0; i< resp.length; i++){
         this.repeticion.push(resp[i].orden)
@@ -49,6 +52,13 @@ export class DevolucionComponent implements OnInit {
     })
   }
 
+  public Almacen = [];
+  getAlmacen(){
+    this.api.getAlmacen()
+      .subscribe((resp:any)=>{
+        this.Almacen = resp.materiales;
+      })
+  }
 
   getRepuestosAceptados(asignacion){
     this.api.getRepuestosFinalizados(asignacion) 
@@ -98,56 +108,45 @@ export class DevolucionComponent implements OnInit {
     this.onCloseModal.emit();
   }
 
-  finalizarDevolucion(id,motivo){
+  finalizarDevolucion(){
 
-    if(motivo.value.length < 1){
-      let id_ = String(id)
-      document.getElementById(id_).focus();
-      document.getElementById(`${id_}_error`).style.display = "block";
+    if(this._Motivo.length < 1){
+      // let id_ = String(id)
+      document.getElementById('Motivo__').focus();
+      document.getElementById(`_error`).style.display = "block";
       return
     }
 
-    let filtrado = this.Data_devolucion.filter(x => x.id === id && x.cantidad > 0)
+    let filtrado = this.Data_devolucion.filter(x => x.cantidad > 0)
     let orden = (<HTMLInputElement>document.getElementById('ordens')).value
     let data = {
       orden,
-      filtrado,
-      motivo:motivo.value,
-      id,
+      filtrado, 
+      motivo:this._Motivo,
       usuario:`${this.usuario.Nombre} ${this.usuario.Apellido}`
     }
 
+    let motivo;
 
-    let lote = this.devoluciones.find(x=> x._id == data.id)
-
-    
-    
-    
-    for(let iter=0;iter<data.filtrado.length;iter++){
-      
-      let material = data.filtrado[iter].material
-      let _lote = data.filtrado[iter].lote
-      let _codigo = data.filtrado[iter].codigo
-
-
-      let comparativa = lote.material.findIndex(x=> x.material._id == material && x.lote == _lote && x.codigo == _codigo);
-      
-    
-      // console.log(data.filtrado[iter].cantidad,'>',lote.material[comparativa].cantidad)
-
-      if(data.filtrado[iter].cantidad > Number(lote.material[comparativa].cantidad)){
-        console.log(data.filtrado[iter],'___', data.filtrado[iter].cantidad)
-        console.log(lote.material[comparativa],'___', lote.material[comparativa].cantidad)
-        Swal.fire({
-          title:'Error',
-          text:'La cantidad de material devuelto no puede ser mayor a la asignada',
-          icon:'error',
-          showConfirmButton:false
-        })
-
-        return
-      }
-    }
+    // let lote = this.devoluciones.find(x=> x._id == data.id)
+    // for(let iter=0;iter<data.filtrado.length;iter++){
+    //   let material = data.filtrado[iter].material
+    //   let _lote = data.filtrado[iter].lote
+    //   let _codigo = data.filtrado[iter].codigo
+    //   let comparativa = lote.material.findIndex(x=> x.material._id == material && x.lote == _lote && x.codigo == _codigo);
+    //   // console.log(data.filtrado[iter].cantidad,'>',lote.material[comparativa].cantidad)
+    //   if(data.filtrado[iter].cantidad > Number(lote.material[comparativa].cantidad)){
+    //     console.log(data.filtrado[iter],'___', data.filtrado[iter].cantidad)
+    //     console.log(lote.material[comparativa],'___', lote.material[comparativa].cantidad)
+    //     Swal.fire({
+    //       title:'Error',
+    //       text:'La cantidad de material devuelto no puede ser mayor a la asignada',
+    //       icon:'error',
+    //       showConfirmButton:false
+    //     })
+    //     return
+    //   }
+    // }
 
     this.api.postDevolucion(data)
       .subscribe((resp:any)=>{
@@ -158,6 +157,9 @@ export class DevolucionComponent implements OnInit {
         timer:3000,
         showConfirmButton:false
     }),
+    motivo = this._Motivo;
+    this._Motivo = ''
+    this.DescargarFormato(motivo, filtrado);
     (<HTMLInputElement>document.getElementById('ordens')).value = "·"
     this.onClose();
     })
@@ -178,7 +180,7 @@ export class DevolucionComponent implements OnInit {
     return `AL-ASG-${n}`
   }
 
-  agregarMaterial(id, cantidad, material,lote,codigo){
+  agregarMaterial(id, cantidad, material,lote,codigo,i,x){
     
     let data = 
     {
@@ -200,6 +202,8 @@ export class DevolucionComponent implements OnInit {
     // console.log(data)
 
     // // console.log(this.Data_devolucion)
+
+    this.agregarAFormato(i,x, cantidad.value);
 
   }
 
@@ -238,7 +242,7 @@ export class DevolucionComponent implements OnInit {
   }
 
 
-  DescargarFormato(){
+  DescargarFormato(motivo, filtrado){
 
     let hoy = moment().format('DD/MM/YYYY')
     let orden = this.orden_selected;
@@ -247,9 +251,25 @@ export class DevolucionComponent implements OnInit {
     PdfMakeWrapper.setFonts(pdfFonts);
     pdf.pageOrientation('landscape')
 
+    console.log(filtrado)
+
+    const filtradasConMateriales = filtrado.map(item => {
+      // Encuentra el material correspondiente en el array materiales
+      console.log(this.Almacen)
+      const material = this.Almacen.find(mat => mat._id === item.material);
+      
+      // Retorna un nuevo objeto con el material reemplazado
+      return {
+        ...item,         // Copia las propiedades originales de item
+        material: material || null // Reemplaza el ID del material con el objeto del material o null si no se encuentra
+      };
+    });
+
+    console.log(filtradasConMateriales)
+
     // Objeto para almacenar los materiales agrupados por asignación
     let materialesAgrupados = {};
-
+    console.log(this.FormatoMateriales)
     // Iterar sobre cada material y agruparlo por asignación
     this.FormatoMateriales.forEach(material => {
         // Verificar si ya existe la asignación en el objeto materialesAgrupados
@@ -270,133 +290,259 @@ export class DevolucionComponent implements OnInit {
         };
     });
 
-    console.log(materiales)
+    materiales = materiales.reverse();
+
+    let cantidad = [];
+    // let cantidad = this.cantidades;
+    let materiales_ = []
+    let lotes_ = []
+    let indiceUnidad = 0;
+    // for(let i=0;i<materiales.length;i++){
+    //   let material:any = materiales[i]
+    //   for(let x=0;x<material.material.length;x++){
+    //     materiales_.push(`${material.material[x].material.nombre} (${material.material[x].material.marca}) - código: ${material.material[x].codigo}`);
+    //     lotes_.push(`${material.material[x].lote}`);
+    //     cantidad[indiceUnidad] =  `${cantidad[indiceUnidad]} ${material.material[x].material.unidad}`
+    //     indiceUnidad++;
+    //   }
+    // }
+
+    for(let i=0;i<filtradasConMateriales.length;i++){
+      materiales_.push(`${filtradasConMateriales[i].material.nombre} (${filtradasConMateriales[i].material.marca}) - código: ${filtradasConMateriales[i].codigo}`)
+      lotes_.push(filtradasConMateriales[i].lote)
+      cantidad.push(`${filtradasConMateriales[i].cantidad} ${filtradasConMateriales[i].material.unidad}`)
+    }
 
     async function generarPDF(){
-      pdf.add(
-        new Table([
-          [
-            new Cell(await new Img('../../assets/poli_cintillo.png').width(85).margin([20, 5]).build()).rowSpan(4).end,
-            new Cell(new Txt(`
-            FORMATO DEVOLUCIÓN DE MATERIAL`).bold().end).alignment('center').fontSize(13).rowSpan(4).end,
-            new Cell(new Txt('Código: FPR-006').end).fillColor('#dedede').fontSize(7).alignment('center').end,
-          ],
-          [
-            new Cell(new Txt('').end).end,
-            new Cell(new Txt('').end).end,
-            new Cell(new Txt('N° de Revisión: 0').end).fillColor('#dedede').fontSize(7).alignment('center').end,
-          ],
-          [
-            new Cell(new Txt('').end).end,
-            new Cell(new Txt('').end).end,
-            new Cell(new Txt('Fecha de Revision: 11/10/2022').end).fillColor('#dedede').fontSize(7).alignment('center').end,
-          ],
-          [
-            new Cell(new Txt('').end).end,
-            new Cell(new Txt('').end).end,
-            new Cell(new Txt('Página: 1 de 1').end).fillColor('#dedede').fontSize(7).alignment('center').end,
-          ],
-        ]).widths(['25%','50%','25%']).end
-      )
-
-      pdf.add(
-        pdf.ln(1)
-      )
 
       pdf.add(
         new Table([
-          [
-            new Cell(new Txt('Fecha de Devolución').end).fillColor('#dedede').end,
-            new Cell(new Txt(hoy).end).end,
-            new Cell(new Txt('Nº Devolución').end).fillColor('#dedede').end,
-            new Cell(new Txt('').end).end,
-          ],
-          [
-            new Cell(new Txt('Unidad administrativa').end).fillColor('#dedede').end,
-            new Cell(new Txt('GERENCIA DE OPERACIONES').end).end,
-            new Cell(new Txt('Orden de producción').end).fillColor('#dedede').end,
-            new Cell(new Txt(orden).end).end,
-          ]
-        ]).widths(['25%','30%','25%','20%']).end
-      )
-
-      pdf.add(
-        pdf.ln(1)
-      )
-
-      for(let i=0;i<materiales.length;i++){
-        let material:any = materiales[i]
-        pdf.add(
-          new Table([
-            [
-              new Cell(new Txt(`AL-ASG-${material.asignacion}`).end).border([false,false]).color('#ffffff').fillColor('#909090').end
-            ]
-          ]).widths(['100%']).end
-        )
-        // pdf.add(
-        //   new Table([
-        //     [
-        //       new Cell(new Txt(`Material`).bold().fontSize(6).end).end,
-        //       new Cell(new Txt(`Lote`).bold().fontSize(6).end).end,
-        //       new Cell(new Txt(`Devuelto`).bold().fontSize(6).end).end
-        //     ]
-        //   ]).widths(['70%','20%','10%']).end
-        // )
-        for(let x=0;x<material.material.length;x++){
-          let color = '#e0e0e0'
-          if(x % 2 === 0){
-            color = '#ffffff';
-          }
-          pdf.add(
-            new Table([
+             [
+                new Cell(await new Img('../../assets/poli_cintillo.png').width(85).margin([20, 5]).build()).rowSpan(4).end,
+                new Cell(new Txt(`
+                FORMATO DEVOLUCIÓN DE MATERIAL`).bold().end).alignment('center').fontSize(13).rowSpan(4).end,
+                new Cell(new Txt('Código: FPR-006').end).fillColor('#dedede').fontSize(7).alignment('center').end,
+              ],
               [
-                new Cell(new Txt(`${material.material[x].material.nombre} (${material.material[x].material.marca}) #${material.material[x].codigo}`).end).border([false, false]).fillColor(color).end,
-                new Cell(new Txt(`${material.material[x].lote}`).end).border([false, false]).fillColor(color).end,
-                new Cell(new Txt(``).end).border([false, false]).fillColor(color).end
-              ]
-            ]).widths(['70%','20%','10%']).end
-          )
-        }
-      }
-
-      pdf.add(
-        pdf.ln(1)
-      )
-  
-      pdf.add(
+                new Cell(new Txt('').end).end,
+                new Cell(new Txt('').end).end,
+                new Cell(new Txt('N° de Revisión: 0').end).fillColor('#dedede').fontSize(7).alignment('center').end,
+              ],
+              [
+                new Cell(new Txt('').end).end,
+                new Cell(new Txt('').end).end,
+                new Cell(new Txt('Fecha de Revision: 11/10/2022').end).fillColor('#dedede').fontSize(7).alignment('center').end,
+              ],
+              [
+                new Cell(new Txt('').end).end,
+                new Cell(new Txt('').end).end,
+                new Cell(new Txt('Página: 1 de 1').end).fillColor('#dedede').fontSize(7).alignment('center').end,
+              ],
+            ]).widths(['25%','50%','25%']).end
+    );
+    
+    pdf.add(
+        '\n'
+    )
+    
+    pdf.add(
         new Table([
           [
-            new Cell(new Txt(`MOTIVO`).alignment('center').end).color('#ffffff').fillColor('#909090').end,
-            new Cell(new Txt(`DEVUELTO POR:`).alignment('center').end).color('#ffffff').fillColor('#909090').end,
-            new Cell(new Txt(`RECIBIDO POR:`).alignment('center').end).color('#ffffff').fillColor('#909090').end,
+            new Cell(new Txt('FECHA DE DEVOLUCIÓN').end).fillColor('#dedede').fontSize(10).alignment('center').end,
+            new Cell(new Txt(`${hoy}`).end).end,
+            new Cell(new Txt('N° DEVOLUCIÓN').end).fillColor('#dedede').fontSize(10).alignment('center').end,
+            new Cell(new Txt(``).end).fontSize(15).alignment('center').end,
           ],
           [
-            new Cell(new Txt(``).end).end,
-            new Cell(new Txt(`FIRMA: ${usuario.Nombre} ${usuario.Apellido}
-            
-            FECHA: ${hoy}`).end).fontSize(9).end,
-            new Cell(new Txt(`FIRMA:
-            
-            FECHA:`).end).fontSize(9).end
+            new Cell(new Txt('UNIDAD ADMINISTRATIVA').end).fillColor('#dedede').fontSize(10).alignment('center').end,
+            new Cell(new Txt('GERENCIA DE OPERACIONES').end).end,
+            new Cell(new Txt('ORDEN DE PRODUCCIÓN').end).fillColor('#dedede').fontSize(10).alignment('center').end,
+            new Cell(new Txt(`${orden}`).end).alignment('center').end,
           ]
-        ]).widths(['50%','25%','25%']).end
+        ]).widths(['25%','25%','25%','25%']).end
       )
+    
+    pdf.add(
+        '\n'
+    )
+    
+    pdf.add(
+        new Table([
+            [
+                new Cell(new Txt('DESCRIPCIÓN DEL MATERIAL').end).fillColor('#dedede').fontSize(9).alignment('center').end,
+                new Cell(new Txt('N° DE LOTE').end).fillColor('#dedede').fontSize(9).alignment('center').end,
+                new Cell(new Txt('CANTIDAD DEVUELTA').end).fillColor('#dedede').fontSize(9).alignment('center').end,
+            ],
+            [
+                new Cell(new Stack(materiales_).end).end,
+                new Cell(new Stack(lotes_).end).end,
+                new Cell(new Stack(cantidad).end).end
+            ]
+        ]).widths(['50%','25%','25%']).end
+    )
+    
+    pdf.add(
+        '\n'
+    )
+    
+    pdf.add(
+        new Table([
+            [
+                new Cell(new Txt('MOTIVO').end).fillColor('#dedede').fontSize(9).alignment('center').end,
+                new Cell(new Txt('DEVUELTO POR:').end).fillColor('#dedede').fontSize(9).alignment('center').end,
+                new Cell(new Txt('RECIBIDO POR:').end).fillColor('#dedede').fontSize(9).alignment('center').end,
+            ],
+            [
+                new Cell(new Txt(motivo).end).fontSize(11).end,
+                new Cell(new Txt(`
+                FIRMA: ${usuario.Nombre} ${usuario.Apellido}
+    
+                FECHA:${hoy}
+                `).end).fontSize(9).end,
+                new Cell(new Txt(`
+                FIRMA: YRAIDA BAPTISTA
+    
+                FECHA:${hoy}
+                `).end).fontSize(9).end,
+    
+            ]
+    
+        ]).widths(['50%','25%','25%']).end
+    )
+    
+    pdf.add(
+        new Txt('Si usted esta consultando una versión de este documento, Asegúrese que sea la vigente').alignment('right').fontSize(8).end
+    )
 
-      pdf.create().download(`test`)
+
+      // pdf.add(
+      //   new Table([
+      //     [
+      //       new Cell(await new Img('../../assets/poli_cintillo.png').width(85).margin([20, 5]).build()).rowSpan(4).end,
+      //       new Cell(new Txt(`
+      //       FORMATO DEVOLUCIÓN DE MATERIAL`).bold().end).alignment('center').fontSize(13).rowSpan(4).end,
+      //       new Cell(new Txt('Código: FPR-006').end).fillColor('#dedede').fontSize(7).alignment('center').end,
+      //     ],
+      //     [
+      //       new Cell(new Txt('').end).end,
+      //       new Cell(new Txt('').end).end,
+      //       new Cell(new Txt('N° de Revisión: 0').end).fillColor('#dedede').fontSize(7).alignment('center').end,
+      //     ],
+      //     [
+      //       new Cell(new Txt('').end).end,
+      //       new Cell(new Txt('').end).end,
+      //       new Cell(new Txt('Fecha de Revision: 11/10/2022').end).fillColor('#dedede').fontSize(7).alignment('center').end,
+      //     ],
+      //     [
+      //       new Cell(new Txt('').end).end,
+      //       new Cell(new Txt('').end).end,
+      //       new Cell(new Txt('Página: 1 de 1').end).fillColor('#dedede').fontSize(7).alignment('center').end,
+      //     ],
+      //   ]).widths(['25%','50%','25%']).end
+      // )
+
+      // pdf.add(
+      //   pdf.ln(1)
+      // )
+
+      // pdf.add(
+      //   new Table([
+      //     [
+      //       new Cell(new Txt('Fecha de Devolución').end).fillColor('#dedede').end,
+      //       new Cell(new Txt(hoy).end).colSpan(3).end,
+      //       new Cell(new Txt('Nº Devolución').end).fillColor('#dedede').end,
+      //       new Cell(new Txt('').end).end,
+      //     ],
+      //     [
+      //       new Cell(new Txt('Unidad administrativa').end).fillColor('#dedede').end,
+      //       new Cell(new Txt('GERENCIA DE OPERACIONES').end).end,
+      //       new Cell(new Txt('Orden de producción').end).fillColor('#dedede').end,
+      //       new Cell(new Txt(orden).end).end,
+      //     ]
+      //   ]).widths(['25%','30%','25%','20%']).end
+      // )
+
+      // pdf.add(
+      //   pdf.ln(1)
+      // )
+      
+      // pdf.add(
+      //   new Table([
+      //     [
+      //       new Cell(new Txt(`Material`).bold().fontSize(10).end).fillColor('#616161').end,
+      //       new Cell(new Txt(`Código`).bold().fontSize(10).end).fillColor('#616161').end,
+      //       new Cell(new Txt(`Lote`).bold().fontSize(10).end).fillColor('#616161').end,
+      //       new Cell(new Txt(`Devuelto`).bold().fontSize(10).end).fillColor('#616161').end
+      //     ]
+      //   ]).widths(['50%','20%','20%','10%']).end
+      //  )
+      // for(let i=0;i<materiales.length;i++){
+      //   let material:any = materiales[i]
+      //   pdf.add(
+      //     new Table([
+      //       [
+      //         new Cell(new Txt(`AL-ASG-${material.asignacion}`).end).border([false,false]).color('#ffffff').fillColor('#909090').end
+      //       ]
+      //     ]).widths(['100%']).end
+      //   )
+      //   for(let x=0;x<material.material.length;x++){
+      //     let color = '#e0e0e0'
+      //     if(x % 2 === 0){
+      //       color = '#ffffff';
+      //     }
+      //     pdf.add(
+      //       new Table([
+      //         [
+      //           new Cell(new Txt(`${material.material[x].material.nombre} (${material.material[x].material.marca})`).end).fillColor(color).end,
+      //           new Cell(new Txt(`${material.material[x].codigo}`).end).fillColor(color).end,
+      //           new Cell(new Txt(`${material.material[x].lote}`).end).fillColor(color).end,
+      //           new Cell(new Txt(`${cantidad[x]}`).end).fillColor(color).end
+      //         ]
+      //       ]).widths(['50%','20%','20%','10%']).end
+      //     )
+      //   }
+      // }
+
+      // pdf.add(
+      //   pdf.ln(1)
+      // )
+  
+      // pdf.add(
+      //   new Table([
+      //     [
+      //       new Cell(new Txt(`MOTIVO`).alignment('center').end).color('#ffffff').fillColor('#909090').end,
+      //       new Cell(new Txt(`DEVUELTO POR:`).alignment('center').end).color('#ffffff').fillColor('#909090').end,
+      //       new Cell(new Txt(`RECIBIDO POR:`).alignment('center').end).color('#ffffff').fillColor('#909090').end,
+      //     ],
+      //     [
+      //       new Cell(new Txt(`${motivo}`).end).end,
+      //       new Cell(new Txt(`FIRMA: ${usuario.Nombre} ${usuario.Apellido}
+            
+      //       FECHA: ${hoy}`).end).fontSize(9).end,
+      //       new Cell(new Txt(`FIRMA:
+            
+      //       FECHA:`).end).fontSize(9).end
+      //     ]
+      //   ]).widths(['50%','25%','25%']).end
+      // )
+
+      pdf.create().download(`DEVOLUCION DE MATERIAL`)
     }
     generarPDF();
   }
 
 
-  agregarAFormato(x, y) {
+  agregarAFormato(x, y ,cantidad) {
     let material = this.materiales[x].material[y];
     let index = this.FormatoMateriales.indexOf(material);
 
-    if (index === -1) {
+    if (index === -1 && cantidad > 0) {
         this.FormatoMateriales.push(material);
+        this.cantidades.push(cantidad)
         console.log(this.FormatoMateriales);
     } else {
         this.FormatoMateriales.splice(index, 1);
+        this.cantidades.splice(index, 1);
         console.log(this.FormatoMateriales);
         console.log(this.materiales, 'Here is the materials')
     }

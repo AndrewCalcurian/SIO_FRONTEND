@@ -208,6 +208,165 @@ export class MainComponent implements OnInit {
 
   public orden;
 
+  generarPdf_(){
+    let grupos = this.SECCIONES;
+    let productos = this.listFiltered;
+
+    function generar_pdf(){
+          const pdf = new PdfMakeWrapper();
+          PdfMakeWrapper.setFonts(pdfFonts);
+          pdf.pageOrientation('landscape');
+
+          for(let i=0;i<grupos.length;i++){
+            pdf.add(
+              new Table([
+                [
+                  new Cell(new Txt(grupos[i].nombre).end).fillColor('#000000').color('#ffffff').end,
+                ]
+              ]).widths(['100%']).end
+            )
+
+            pdf.add(
+              new Table([
+                [
+                  new Cell(new Txt('Material').end).fillColor('#696969').end,
+                  new Cell(new Txt('Marca').end).fillColor('#696969').end,
+                  new Cell(new Txt('Presentación').end).fillColor('#696969').end,
+                  new Cell(new Txt('Código').end).fillColor('#696969').end,
+                  new Cell(new Txt('Lote').end).fillColor('#696969').end,
+                  new Cell(new Txt('Gramaje').end).fillColor('#696969').end,
+                  new Cell(new Txt('Calibre').end).fillColor('#696969').end,
+                  new Cell(new Txt('Total').end).fillColor('#696969').end,
+                ]
+              ]).widths(['24%','16%','17%','9%','9%','8%','7%','10%']).end
+            )
+            for(let n=0;n<productos.length;n++){
+              if(productos[n].material.grupo.nombre === grupos[i].nombre && productos[n].cantidad > 0){
+                let producto = (productos[n].material.neto * productos[n].cantidad).toFixed(2);
+                if(grupos[i].nombre === 'Sustrato'){
+                  pdf.add(
+                    new Table([
+                      [
+                        new Cell(new Txt(`${productos[n].material.nombre} (${productos[n].material.ancho} x ${productos[n].material.largo})`).end).end,
+                        new Cell(new Txt(productos[n].material.marca).end).end,
+                        new Cell(new Txt(`${productos[n].material.presentacion} ${productos[n].material.neto} ${productos[n].material.unidad}`).end).end,
+                        new Cell(new Txt(productos[n].codigo).end).end,
+                        new Cell(new Txt(productos[n].lote).end).end,
+                        new Cell(new Txt(productos[n].material.gramaje).end).end,
+                        new Cell(new Txt(productos[n].material.calibre).end).end,
+                        new Cell(new Txt(`${producto} ${productos[n].material.unidad}`).end).end,
+                      ]
+                    ]).widths(['24%','16%','17%','9%','9%','8%','7%','10%']).end
+                  )
+                }else{
+                  pdf.add(
+                    new Table([
+                      [
+                        new Cell(new Txt(`${productos[n].material.nombre}`).end).end,
+                        new Cell(new Txt(productos[n].material.marca).end).end,
+                        new Cell(new Txt(`${productos[n].material.presentacion} ${productos[n].material.neto} ${productos[n].material.unidad}`).end).end,
+                        new Cell(new Txt(productos[n].codigo).end).end,
+                        new Cell(new Txt(productos[n].lote).end).end,
+                        new Cell(new Txt('N/A').end).end,
+                        new Cell(new Txt('N/A').end).end,
+                        new Cell(new Txt(`${producto} ${productos[n].material.unidad}`).end).end,
+                      ]
+                    ]).widths(['24%','16%','17%','9%','9%','8%','7%','10%']).end
+                  )
+                }
+              }
+              
+            }
+          }
+
+      pdf.create().download()
+    }
+    generar_pdf();
+  }
+
+  generarPdf(){
+    let bobinas = this.BOBINAS_
+    function generar_reporte(){
+          const pdf = new PdfMakeWrapper();
+          PdfMakeWrapper.setFonts(pdfFonts);
+          pdf.pageOrientation('portrait');
+
+          pdf.add(
+            new Table([
+              [
+                new Cell(new Txt('Nº').end).fillColor('#000000').color('#ffffff').end,
+                new Cell(new Txt('Material').end).fillColor('#000000').color('#ffffff').end,
+                new Cell(new Txt('Gramaje (g/m²)').end).fillColor('#000000').color('#ffffff').end,
+                new Cell(new Txt('Calibre').end).fillColor('#000000').color('#ffffff').end,
+                new Cell(new Txt('Ancho (cm)').end).fillColor('#000000').color('#ffffff').end,
+                new Cell(new Txt('Peso').end).fillColor('#000000').color('#ffffff').end,
+                new Cell(new Txt('Lote').end).fillColor('#000000').color('#ffffff').end,
+              ],
+              [
+                new Cell(new Txt('Convertidora Finlandia, C.A.').end).colSpan(7).fillColor('#696969').color('#ffffff').end,
+                new Cell(new Txt('Material').end).fillColor('#000000').color('#ffffff').end,
+                new Cell(new Txt('Gramaje (g/m²)').end).fillColor('#000000').color('#ffffff').end,
+                new Cell(new Txt('Calibre').end).fillColor('#000000').color('#ffffff').end,
+                new Cell(new Txt('Ancho (cm)').end).fillColor('#000000').color('#ffffff').end,
+                new Cell(new Txt('Peso').end).fillColor('#000000').color('#ffffff').end,
+                new Cell(new Txt('Lote').end).fillColor('#000000').color('#ffffff').end,
+              ]
+            ]).widths(['12%','40%','10%','9%','9%','9%','11%']).end
+          )
+
+          for(let i=0;i<bobinas.length;i++){
+            if(bobinas[i].convertidora === 'Convertidora Finlandia, C.A.'){
+              pdf.add(
+                new Table([
+                  [
+                    new Cell(new Txt(bobinas[i].Nbobina).end).end,
+                    new Cell(new Txt(`${bobinas[i].material}(${bobinas[i].marca})`).end).end,
+                    new Cell(new Txt(bobinas[i].gramaje).end).end,
+                    new Cell(new Txt(bobinas[i].calibre).end).end,
+                    new Cell(new Txt(bobinas[i].ancho).end).end,
+                    new Cell(new Txt(bobinas[i].peso).end).end,
+                    new Cell(new Txt(bobinas[i].lote).end).end,
+                  ]
+                ]).widths(['12%','40%','10%','9%','9%','9%','11%']).end
+              )
+            }
+          }
+          pdf.add(
+            new Table([
+              [
+                new Cell(new Txt('Convertidora Finlandia, C.A.').end).colSpan(7).fillColor('#696969').color('#ffffff').end,
+                new Cell(new Txt('Material').end).fillColor('#000000').color('#ffffff').end,
+                new Cell(new Txt('Gramaje (g/m²)').end).fillColor('#000000').color('#ffffff').end,
+                new Cell(new Txt('Calibre').end).fillColor('#000000').color('#ffffff').end,
+                new Cell(new Txt('Ancho (cm)').end).fillColor('#000000').color('#ffffff').end,
+                new Cell(new Txt('Peso').end).fillColor('#000000').color('#ffffff').end,
+                new Cell(new Txt('Lote').end).fillColor('#000000').color('#ffffff').end,
+              ]
+            ]).widths(['12%','40%','10%','9%','9%','9%','11%']).end
+          )
+          for(let i=0;i<bobinas.length;i++){
+            if(bobinas[i].convertidora === 'Redispaca Distribuidora de Papel, C.A.'){
+              pdf.add(
+                new Table([
+                  [
+                    new Cell(new Txt(bobinas[i].Nbobina).end).end,
+                    new Cell(new Txt(`${bobinas[i].material}(${bobinas[i].marca})`).end).end,
+                    new Cell(new Txt(bobinas[i].gramaje).end).end,
+                    new Cell(new Txt(bobinas[i].calibre).end).end,
+                    new Cell(new Txt(bobinas[i].ancho).end).end,
+                    new Cell(new Txt(bobinas[i].peso).end).end,
+                    new Cell(new Txt(bobinas[i].lote).end).end,
+                  ]
+                ]).widths(['12%','40%','10%','9%','9%','9%','11%']).end
+              )
+            }
+          }
+        pdf.create().download()
+    }
+    generar_reporte();
+
+  }
+
   buscarRepuestosAprobados(){
     this.api.getRepuestosAprobados()
       .subscribe((resp:any)=>{

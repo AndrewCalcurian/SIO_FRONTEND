@@ -159,7 +159,7 @@
                               </span>
                             </p>
                             <p class="control">
-                              <input class="input" type="text" placeholder="N° documento" (change)="editDocumento($event.target.value)">
+                              <input class="input" type="text" placeholder="N° documento" id="factura_number" (change)="editDocumento($event.target.value)">
                             </p>
                           </div>  
 
@@ -168,7 +168,7 @@
                 <div class="column">
                     <div class="field">
                         <label for="" class="label">Fecha</label>
-                        <input type="date" class="input" (change)="fecha_modificacion($event.target.value)" [disabled]="!numero_facturacion">
+                        <input type="date" class="input" id="fecha_factura" (change)="fecha_modificacion($event.target.value)" [disabled]="!numero_facturacion">
                     </div>
                 </div>
                 <div class="column">

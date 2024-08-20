@@ -24,9 +24,9 @@
                             </ng-container>
                         </select>
                     </div>
-                      <button class="button is-info" *ngIf="materiales" (click)="DescargarFormato()">
+                    <!--   <button class="button is-info" *ngIf="materiales" (click)="DescargarFormato()">
                         <span>Descargar formato</span>
-                    </button>
+                    </button> -->
                     <hr>
                     <ng-container *ngIf="Repuesto">
 
@@ -80,9 +80,9 @@
                                 <tr *ngFor="let material of materiales[i].material;index as x">
                                     <td>
                                         <div class="columns">
-                                            <div class="column is-1">
+                                            <!-- <div class="column is-1">
                                                 <input type="checkbox" (click)="agregarAFormato(i,x)">
-                                            </div>
+                                            </div> -->
                                             <div class="column">
                                                 {{material.material.nombre}}
                                                 <ng-container *ngIf="material.material.ancho">
@@ -96,7 +96,7 @@
                                     <td>
                                         <div class="field has-addons">
                                             <p class="control">
-                                                <input class="input" type="number" placeholder="Devolución" (change)="agregarMaterial(materiales[i]._id,cantidad,material.material._id,material.lote,material.codigo)" #cantidad>
+                                                <input class="input" type="number" placeholder="Devolución" (change)="agregarMaterial(materiales[i]._id,cantidad,material.material._id,material.lote,material.codigo,i,x)" #cantidad>
                                             </p>
                                             <p class="control">
                                                 <a class="button is-static">
@@ -107,18 +107,18 @@
                                     </td>
                                 </tr>
                             </tbody> 
-                            <br>
-                            <textarea class="textarea has-fixed-size" row="2" placeholder="Motivo" id="{{materiales[i]._id}}" #Motivo></textarea>
-                            <p class="error" id="{{materiales[i]._id}}_error">Debe ingresar un motivo</p>
-                            <br>
-                            <button class="button is-primary" (click)="finalizarDevolucion(materiales[i]._id,Motivo)">
-                                Realizar Devolución
-                            </button> 
                             <button class="button is-danger" (click)="CerrarDevolucion(materiales[i]._id)">
                                 Cerrar
                             </button>
                         </table>
                     </ng-container>
+                    <br>
+                    <textarea *ngIf="materiales" class="textarea has-fixed-size" row="2" placeholder="Motivo" id='Motivo__' [(ngModel)]="_Motivo"></textarea>
+                    <p class="error" id="_error">Debe ingresar un motivo</p>
+                    <br>
+                    <button class="button is-primary" (click)="finalizarDevolucion()" *ngIf="materiales">
+                        Realizar Devolución
+                    </button> 
 
         </div>
     </div>

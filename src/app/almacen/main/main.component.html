@@ -185,9 +185,11 @@
             </div> 
             <button class="button is-success" *ngIf='resumido && _Almacenado' (click)='changeView()'>Detallado</button>
             <button class="button is-success" *ngIf='detallado && _Almacenado' (click)='changeView()'>Sencillo</button>
+            <button class="button is-success" *ngIf='detallado && _Almacenado' (click)='generarPdf_()'><i class="fas fa-download"></i></button>
             <!-- SENCILLO Y DETALLADO EN BOBINAS -->
             <button class="button is-success" *ngIf='Bobillas && _bobina' (click)='changeView_()'>Detallado</button>
             <button class="button is-success" *ngIf='!Bobillas && _bobina' (click)='changeView_()'>Sencillo</button>
+            <button class="button is-success" *ngIf='!Bobillas && _bobina' (click)='generarPdf()'><i class="fas fa-download"></i></button>
             
         </div>
         <div class="card" *ngIf='loading'>

@@ -186,6 +186,17 @@ export class PreFacturacionComponent implements OnInit {
         icon:'info',
         showConfirmButton:false}
         )
+        this.numero_facturacion = false;
+        this.fecha_facturacion = false;
+        this.confirmed = false;
+        const inputFacturaNumber = document.getElementById('factura_number') as HTMLInputElement;
+        if (inputFacturaNumber) {
+            inputFacturaNumber.value = ''; // Establece el valor en blanco
+        }
+        const inputFechaFactura = document.getElementById('fecha_factura') as HTMLInputElement;
+        if(inputFechaFactura) {
+          inputFechaFactura.value = ''
+        }
         this.api.facturado(this.Despachos[this.INDEX].despacho)
           .subscribe((resp:any)=>{
             // console.log('donde')
